@@ -37,49 +37,6 @@ body {
     top: 0 !important;
 }
 
-/* Skip Link for Accessibility */
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: #FF6600;
-    color: white;
-    padding: 8px 16px;
-    text-decoration: none;
-    z-index: 10000;
-    font-weight: 600;
-    border-radius: 0 0 4px 0;
-}
-
-.skip-link:focus {
-    top: 0;
-    outline: 3px solid #FF6600;
-    outline-offset: 2px;
-}
-
-/* Improved Focus Styles for Accessibility */
-a:focus,
-button:focus,
-input:focus,
-select:focus,
-textarea:focus {
-    outline: 3px solid #FF6600;
-    outline-offset: 2px;
-    border-radius: 2px;
-}
-
-/* Remove outline for mouse users, keep for keyboard */
-a:focus:not(:focus-visible),
-button:focus:not(:focus-visible) {
-    outline: none;
-}
-
-a:focus-visible,
-button:focus-visible {
-    outline: 3px solid #FF6600;
-    outline-offset: 2px;
-}
-
 /* Header */
 .main-header {
     position: fixed;
