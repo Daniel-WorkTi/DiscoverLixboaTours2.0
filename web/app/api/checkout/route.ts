@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { resolveStripePriceId } from "@/lib/stripe-prices";
+import {
+  getStripePriceMapParseError,
+  getTourStripeMapping,
+  resolveStripePriceId,
+} from "@/lib/stripe-prices";
 import { getSiteBaseUrl } from "@/lib/site-url";
 import { toursBooking } from "@/lib/tours-booking";
 
@@ -42,7 +46,10 @@ export async function POST(req: Request) {
   try {
     body = (await req.json()) as Body;
   } catch {
-    return NextResponse.json({ error: "JSON inválido." }, { status: 400 });
+    return NextResponse.json(
+      { error: "JSON inválido.", code: "INVALID_JSON" },
+      { status: 400 },
+    );
   }
 
   const tourId = String(body.tourId ?? "").trim();
@@ -60,25 +67,57 @@ export async function POST(req: Request) {
     toursBooking.find((t) => t.id === tourId)?.label ?? tourId;
 
   if (!tourId || !toursBooking.some((t) => t.id === tourId)) {
-    return NextResponse.json({ error: "Tour inválido." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Tour inválido.", code: "INVALID_TOUR" },
+      { status: 400 },
+    );
   }
 
   if (!preferredDate) {
     return NextResponse.json(
-      { error: "Indica a data preferida para o tour." },
+      {
+        error: "Indica a data preferida para o tour.",
+        code: "MISSING_DATE",
+      },
       { status: 400 },
     );
   }
 
   if (customerName.length < 2) {
     return NextResponse.json(
-      { error: "Indica o teu nome completo." },
+      { error: "Indica o teu nome completo.", code: "INVALID_NAME" },
       { status: 400 },
     );
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return NextResponse.json({ error: "Email inválido." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Email inválido.", code: "INVALID_EMAIL" },
+      { status: 400 },
+    );
+  }
+
+  const mapParseErr = getStripePriceMapParseError();
+  if (process.env.STRIPE_PRICE_MAP?.trim() && mapParseErr) {
+    return NextResponse.json(
+      {
+        error:
+          "STRIPE_PRICE_MAP na Netlify não é JSON válido (uma linha, aspas duplas). Vê os logs de deploy ou corrige o valor.",
+        code: "STRIPE_PRICE_MAP_INVALID",
+      },
+      { status: 400 },
+    );
+  }
+
+  if (!getTourStripeMapping(tourId)) {
+    return NextResponse.json(
+      {
+        error:
+          "Pagamento ainda não configurado para este destino. Contacta-nos ou tenta mais tarde.",
+        code: "STRIPE_TOUR_NOT_CONFIGURED",
+      },
+      { status: 400 },
+    );
   }
 
   const priceId = await resolveStripePriceId(stripe, tourId);
@@ -86,7 +125,8 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error:
-          "Não foi possível preparar o pagamento para este tour. Contacta-nos ou tenta outro destino.",
+          "Não foi possível preparar o pagamento para este tour. Verifica as chaves Stripe no servidor ou contacta-nos.",
+        code: "STRIPE_PRICE_RESOLVE_FAILED",
       },
       { status: 400 },
     );

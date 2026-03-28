@@ -7,21 +7,54 @@
 import type Stripe from "stripe";
 
 let cached: Record<string, string> | null = null;
+let lastParseError: string | null = null;
+
+/** Aspas “curvas”, BOM e valor guardado como string JSON dupla na Netlify. */
+function normalizeStripePriceMapRaw(raw: string): string {
+  let s = raw.trim();
+  if (s.charCodeAt(0) === 0xfeff) s = s.slice(1);
+  s = s.replace(/[\u201c\u201d\u2018\u2019]/g, '"');
+  if (s.length >= 2 && s.startsWith('"') && s.endsWith('"')) {
+    try {
+      const inner = JSON.parse(s) as unknown;
+      if (typeof inner === "string") return inner.trim();
+    } catch {
+      /* manter s */
+    }
+  }
+  return s;
+}
 
 function loadMap(): Record<string, string> {
   if (cached) return cached;
   const raw = process.env.STRIPE_PRICE_MAP?.trim();
   if (!raw) {
+    lastParseError = null;
     cached = {};
     return cached;
   }
+  const normalized = normalizeStripePriceMapRaw(raw);
   try {
-    const parsed = JSON.parse(raw) as Record<string, string>;
+    const parsed = JSON.parse(normalized) as Record<string, string>;
+    lastParseError = null;
     cached = typeof parsed === "object" && parsed !== null ? parsed : {};
-  } catch {
+  } catch (e) {
+    lastParseError = e instanceof Error ? e.message : "JSON inválido";
+    console.error(
+      "[stripe-prices] STRIPE_PRICE_MAP não é JSON válido.",
+      lastParseError,
+      "Início:",
+      normalized.slice(0, 120),
+    );
     cached = {};
   }
   return cached;
+}
+
+/** Se o valor em env existe mas o JSON falhou ao dar parse (vês isto nos logs Netlify). */
+export function getStripePriceMapParseError(): string | null {
+  loadMap();
+  return lastParseError;
 }
 
 /** Valor bruto no mapa (price_ ou prod_), se existir e for válido. */

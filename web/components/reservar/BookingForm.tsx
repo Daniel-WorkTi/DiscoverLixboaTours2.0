@@ -183,14 +183,19 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         }),
       });
       const rawText = await res.text();
-      let data: { url?: string; error?: string };
+      let data: { url?: string; error?: string; code?: string };
       try {
-        data = rawText ? (JSON.parse(rawText) as { url?: string; error?: string }) : {};
+        data = rawText
+          ? (JSON.parse(rawText) as { url?: string; error?: string; code?: string })
+          : {};
       } catch {
         setError("Resposta inválida do servidor. Tenta novamente.");
         return;
       }
       if (!res.ok) {
+        if (typeof console !== "undefined" && console.error) {
+          console.error("[checkout]", res.status, data.code ?? "", data.error ?? "");
+        }
         setError(data.error ?? "Não foi possível iniciar o pagamento.");
         return;
       }
