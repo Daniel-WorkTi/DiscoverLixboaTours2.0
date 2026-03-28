@@ -5,18 +5,11 @@ import {
   getTourStripeMapping,
   resolveStripePriceId,
 } from "@/lib/stripe-prices";
+import { getStripe } from "@/lib/stripe-server";
 import { getSiteBaseUrl } from "@/lib/site-url";
 import { toursBooking } from "@/lib/tours-booking";
 
-function getStripe(): Stripe {
-  const key = process.env.STRIPE_SECRET_KEY;
-  if (!key?.startsWith("sk_")) {
-    throw new Error("STRIPE_SECRET_KEY em falta ou inválida.");
-  }
-  return new Stripe(key, {
-    apiVersion: "2026-03-25.dahlia",
-  });
-}
+export const runtime = "nodejs";
 
 type Body = {
   tourId?: string;
@@ -32,7 +25,11 @@ export async function POST(req: Request) {
   let stripe: Stripe;
   try {
     stripe = getStripe();
-  } catch {
+  } catch (e) {
+    console.error(
+      "[checkout] Stripe não inicializou (confirma STRIPE_SECRET_KEY na Vercel):",
+      e,
+    );
     return NextResponse.json(
       {
         error:
@@ -125,7 +122,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error:
-          "Não foi possível preparar o pagamento para este tour. Verifica as chaves Stripe no servidor ou contacta-nos.",
+          "Não foi possível preparar o pagamento: no Stripe, o tour precisa de um preço de pagamento único (one-time) ou de um price_... correto em STRIPE_PRICE_MAP. A chave secreta (teste/live) tem de ser do mesmo ambiente que os IDs. Vê os logs do servidor em caso de dúvida.",
         code: "STRIPE_PRICE_RESOLVE_FAILED",
       },
       { status: 400 },

@@ -127,16 +127,41 @@ export async function resolveStripePriceId(
     const dp = product.default_price;
     if (typeof dp === "string") return dp;
     if (dp && typeof dp === "object" && "id" in dp) {
-      return (dp as Stripe.Price).id;
+      const priceObj = dp as Stripe.Price;
+      if (priceObj.type === "one_time") return priceObj.id;
+      console.error(
+        "[stripe-prices] default_price do produto não é pagamento único (one-time):",
+        raw,
+        "→ usa um price_... de one-time no STRIPE_PRICE_MAP ou corrige o produto no Stripe.",
+      );
     }
     const prices = await stripe.prices.list({
       product: raw,
       active: true,
-      limit: 10,
+      limit: 20,
     });
     const oneTime = prices.data.find((p) => p.type === "one_time");
-    return oneTime?.id ?? prices.data[0]?.id;
-  } catch {
+    if (oneTime?.id) return oneTime.id;
+    if (prices.data.length > 0) {
+      console.error(
+        "[stripe-prices] Produto tem preços ativos mas nenhum é one-time (Checkout atual exige pagamento único):",
+        raw,
+        tourId,
+      );
+    } else {
+      console.error(
+        "[stripe-prices] Produto sem preços ativos listados:",
+        raw,
+        tourId,
+      );
+    }
+    return undefined;
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(
+      "[stripe-prices] Erro ao resolver produto/preço (test/live e conta Stripe têm de coincidir):",
+      { tourId, productId: raw, message: msg },
+    );
     return undefined;
   }
 }

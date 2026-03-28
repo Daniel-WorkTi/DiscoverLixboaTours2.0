@@ -4,19 +4,10 @@ import {
   createBookingCalendarEvent,
   isGoogleCalendarConfigured,
 } from "@/lib/google-calendar";
+import { getStripe } from "@/lib/stripe-server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function getStripe(): Stripe {
-  const key = process.env.STRIPE_SECRET_KEY;
-  if (!key?.startsWith("sk_")) {
-    throw new Error("STRIPE_SECRET_KEY em falta ou inválida.");
-  }
-  return new Stripe(key, {
-    apiVersion: "2026-03-25.dahlia",
-  });
-}
 
 /**
  * Webhook Stripe: após pagamento concluído, cria evento no Google Calendar.
