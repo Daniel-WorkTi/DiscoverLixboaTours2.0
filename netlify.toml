@@ -12,3 +12,33 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Rotas bonitas /tours/* → HTML em public/. O runtime Next na Netlify devolvia 404 sem isto.
+[[redirects]]
+  from = "/tours/sintra-cascais"
+  to = "/tour-sintra-cascais.html"
+  status = 200
+[[redirects]]
+  from = "/tours/3-destinos"
+  to = "/tour-3-destinos.html"
+  status = 200
+[[redirects]]
+  from = "/tours/lisboa"
+  to = "/tour-lisboa.html"
+  status = 200
+[[redirects]]
+  from = "/tours/porto"
+  to = "/tour-porto.html"
+  status = 200
+[[redirects]]
+  from = "/tours/arraabida"
+  to = "/tour-arraabida.html"
+  status = 200
+[[redirects]]
+  from = "/tours/alentejo"
+  to = "/tour-alentejo.html"
+  status = 200
+[[redirects]]
+  from = "/tours/algarve"
+  to = "/tour-algarve.html"
+  status = 200
