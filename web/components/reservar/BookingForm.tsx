@@ -5,6 +5,28 @@ import { createPortal } from "react-dom";
 import { toursBooking } from "@/lib/tours-booking";
 
 const MAX_TRAVELERS = 7;
+const MAX_NAME_LEN = 120;
+const MAX_PHONE_DIGITS = 15;
+const MAX_NOTES_LEN = 500;
+
+/** Indicativo só com bandeira + código (sem nome do país por extenso). */
+const PHONE_DIAL_OPTIONS = [
+  { flag: "🇵🇹", dial: "+351" },
+  { flag: "🇪🇸", dial: "+34" },
+  { flag: "🇫🇷", dial: "+33" },
+  { flag: "🇬🇧", dial: "+44" },
+  { flag: "🇩🇪", dial: "+49" },
+  { flag: "🇮🇹", dial: "+39" },
+  { flag: "🇨🇭", dial: "+41" },
+  { flag: "🇳🇱", dial: "+31" },
+  { flag: "🇧🇪", dial: "+32" },
+  { flag: "🇧🇷", dial: "+55" },
+  { flag: "🇺🇸", dial: "+1" },
+] as const;
+
+function digitsOnly(s: string, max: number): string {
+  return s.replace(/\D/g, "").slice(0, max);
+}
 
 function defaultTourId(): string {
   return toursBooking[0]?.id ?? "";
@@ -65,7 +87,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const [quantity, setQuantity] = useState(1);
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phoneDial, setPhoneDial] = useState("+351");
+  const [phoneNational, setPhoneNational] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -168,6 +191,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    const nat = digitsOnly(phoneNational, MAX_PHONE_DIGITS);
+    const phone =
+      nat.length > 0 ? `${phoneDial} ${nat}` : "";
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -176,10 +202,10 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           tourId,
           quantity,
           preferredDate,
-          customerName,
-          email,
+          customerName: customerName.trim().slice(0, MAX_NAME_LEN),
+          email: email.trim().slice(0, 254),
           phone,
-          notes,
+          notes: notes.slice(0, MAX_NOTES_LEN),
         }),
       });
       const rawText = await res.text();
@@ -336,22 +362,45 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     <input
                       className="br-input"
                       value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
+                      onChange={(e) =>
+                        setCustomerName(e.target.value.slice(0, MAX_NAME_LEN))
+                      }
                       autoComplete="name"
                       required
                       minLength={2}
+                      maxLength={MAX_NAME_LEN}
                     />
                   </label>
                   <label className="br-label">
-                    Telefone
-                    <input
-                      className="br-input"
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      autoComplete="tel"
-                      placeholder="+351 …"
-                    />
+                    Telefone (opcional)
+                    <div className="br-phone-row">
+                      <select
+                        className="br-input br-dial-select"
+                        value={phoneDial}
+                        onChange={(e) => setPhoneDial(e.target.value)}
+                        aria-label="Indicativo"
+                      >
+                        {PHONE_DIAL_OPTIONS.map((o) => (
+                          <option key={o.dial} value={o.dial}>
+                            {o.flag} {o.dial}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        className="br-input br-phone-national"
+                        type="tel"
+                        inputMode="numeric"
+                        value={phoneNational}
+                        onChange={(e) =>
+                          setPhoneNational(
+                            digitsOnly(e.target.value, MAX_PHONE_DIGITS),
+                          )
+                        }
+                        autoComplete="tel-national"
+                        placeholder="912 345 678"
+                        maxLength={MAX_PHONE_DIGITS}
+                      />
+                    </div>
                   </label>
                 </div>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
@@ -360,9 +409,10 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     className="br-input"
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value.slice(0, 254))}
                     autoComplete="email"
                     required
+                    maxLength={254}
                   />
                 </label>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
@@ -370,10 +420,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   <textarea
                     className="br-input br-textarea"
                     value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
+                    onChange={(e) => setNotes(e.target.value.slice(0, MAX_NOTES_LEN))}
                     placeholder="Pickup, alergias…"
-                    maxLength={500}
+                    maxLength={MAX_NOTES_LEN}
                   />
+                  <span className="br-char-hint">
+                    {notes.length}/{MAX_NOTES_LEN}
+                  </span>
                 </label>
               </div>
 
@@ -409,7 +462,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           >
             {toursBooking.map((t) => (
               <option key={t.id} value={t.id}>
-                {t.label}
+                {t.icon} {t.label}
               </option>
             ))}
           </select>

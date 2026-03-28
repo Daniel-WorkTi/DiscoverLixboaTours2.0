@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import {
+  sendOwnerBookingNotification,
+  isBookingEmailConfigured,
+} from "@/lib/booking-notify-email";
+import {
   createBookingCalendarEvent,
   isGoogleCalendarConfigured,
 } from "@/lib/google-calendar";
@@ -75,30 +79,39 @@ export async function POST(req: Request) {
       return NextResponse.json({ received: true });
     }
 
-    if (!isGoogleCalendarConfigured()) {
+    const notifyPayload = {
+      tourLabel,
+      customerName: customerName || "Cliente",
+      email,
+      phone,
+      notes,
+      quantity,
+      preferredDate,
+      stripeSessionId: session.id,
+    };
+
+    if (isGoogleCalendarConfigured()) {
+      try {
+        await createBookingCalendarEvent(notifyPayload);
+      } catch (e) {
+        console.error("[stripe-webhook] Erro ao criar evento no Google Calendar:", e);
+        return NextResponse.json(
+          { received: false, error: "calendar_insert_failed" },
+          { status: 500 },
+        );
+      }
+    } else {
       console.warn(
-        "[stripe-webhook] Google Calendar não configurado; ignora criação de evento.",
+        "[stripe-webhook] Google Calendar não configurado; sem evento no calendário.",
       );
-      return NextResponse.json({ received: true });
     }
 
-    try {
-      await createBookingCalendarEvent({
-        tourLabel,
-        customerName: customerName || "Cliente",
-        email,
-        phone,
-        notes,
-        quantity,
-        preferredDate,
-        stripeSessionId: session.id,
-      });
-    } catch (e) {
-      console.error("[stripe-webhook] Erro ao criar evento no Google Calendar:", e);
-      return NextResponse.json(
-        { received: false, error: "calendar_insert_failed" },
-        { status: 500 },
-      );
+    if (isBookingEmailConfigured()) {
+      try {
+        await sendOwnerBookingNotification(notifyPayload);
+      } catch (e) {
+        console.error("[stripe-webhook] Erro ao enviar email de notificação:", e);
+      }
     }
   }
 

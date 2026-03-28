@@ -1,0 +1,6 @@
+# Colar na Vercel → STRIPE_PRICE_MAP (só a linha JSON abaixo, sem #).
+#
+# Sintra: €0 (teste) — price_1TFvdE...  |  Para produção com €75 volta a: price_1TFiCaJHhZTyY7F2ALxH70D5
+# 3 destinos: €100 — price_1TFiCE...
+
+{"sintra-cascais":"price_1TFvdEJHhZTyY7F2qx1Cv90R","3-destinos":"price_1TFiCEJHhZTyY7F2cEnp3toW","lisboa":"price_1TFiBsJHhZTyY7F2geVyDwCS","porto":"price_1TFiBYJHhZTyY7F23K6E75vv","arraabida":"price_1TFiBDJHhZTyY7F2CiykSa5T","alentejo":"price_1TFiApJHhZTyY7F275U27YNS","algarve":"price_1TFi9bJHhZTyY7F2WkqxqZnS"}

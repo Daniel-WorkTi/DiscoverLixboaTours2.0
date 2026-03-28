@@ -55,9 +55,11 @@ export async function POST(req: Request) {
     Math.max(1, Number(body.quantity) || 1),
   );
   const preferredDate = String(body.preferredDate ?? "").trim();
-  const customerName = String(body.customerName ?? "").trim();
-  const email = String(body.email ?? "").trim().toLowerCase();
-  const phone = String(body.phone ?? "").trim().slice(0, 40);
+  const customerName = String(body.customerName ?? "")
+    .trim()
+    .slice(0, 120);
+  const email = String(body.email ?? "").trim().toLowerCase().slice(0, 254);
+  const phone = String(body.phone ?? "").trim().slice(0, 48);
   const notes = String(body.notes ?? "").trim().slice(0, 500);
 
   const tourLabel =
@@ -155,7 +157,7 @@ export async function POST(req: Request) {
       custom_text: {
         submit: {
           message:
-            "Após o pagamento recebes confirmação por email. A data combinada será confirmada connosco.",
+            "Após o pagamento, a confirmação pode incluir recibo da Stripe (conforme as tuas definições). A data do tour confirma-se connosco.",
         },
       },
     });
