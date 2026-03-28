@@ -1,0 +1,2 @@
+# Dependências na raiz (monorepo com package.json na raiz)
+node_modules/
