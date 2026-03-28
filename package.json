@@ -1,0 +1,12 @@
+{
+  "name": "discover-portugal-monorepo-root",
+  "private": true,
+  "description": "O app Next.js está em web/ — usa npm run dev na raiz ou cd web && npm run dev",
+  "scripts": {
+    "dev": "npm run dev --prefix web",
+    "build": "npm run build --prefix web",
+    "start": "npm run start --prefix web",
+    "lint": "npm run lint --prefix web",
+    "install:web": "npm install --prefix web"
+  }
+}
