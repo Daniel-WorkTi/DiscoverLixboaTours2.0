@@ -1,11 +1,9 @@
 {
   "name": "discover-portugal-monorepo-root",
   "private": true,
-  "description": "O app Next.js está em web/ — usa npm run dev na raiz ou cd web && npm run dev",
+  "description": "Monorepo: app Next.js em web/",
   "dependencies": {
-    "next": "16.2.1",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "next": "16.2.1"
   },
   "scripts": {
     "dev": "npm run dev --prefix web",
