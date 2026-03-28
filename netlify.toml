@@ -4,6 +4,8 @@
 [build]
   base = "web"
   command = "npm run build"
+  # Relativo ao base. Não pode ser igual ao base (erro do plugin). Sobrepõe "Publish directory" = web na UI.
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
