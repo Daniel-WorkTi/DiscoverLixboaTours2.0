@@ -11,7 +11,7 @@ let lastParseError: string | null = null;
 
 /** Aspas “curvas”, BOM e valor guardado como string JSON dupla na Netlify. */
 function normalizeStripePriceMapRaw(raw: string): string {
-  let s = raw.trim();
+  let s = raw.trim().replace(/[\u200b-\u200d\ufeff]/g, "");
   if (s.charCodeAt(0) === 0xfeff) s = s.slice(1);
   s = s.replace(/[\u201c\u201d\u2018\u2019]/g, '"');
   if (s.length >= 2 && s.startsWith('"') && s.endsWith('"')) {
@@ -25,6 +25,43 @@ function normalizeStripePriceMapRaw(raw: string): string {
   return s;
 }
 
+/**
+ * Erros comuns ao colar na Netlify: falta `{`/`}`, vírgula a mais, quebras de linha.
+ */
+function repairStripePriceMapJson(s: string): string {
+  let t = s.replace(/\r\n|\r|\n/g, "").trim();
+  t = t.replace(/,\s*([}])/g, "$1");
+  if (!t.startsWith("{")) {
+    if (/^[\w-]+"\s*:\s*"(?:price_|prod_)/i.test(t)) {
+      t = `{${t}`;
+    }
+  }
+  if (!t.endsWith("}")) {
+    t = t.replace(/,\s*$/, "");
+    if (!t.endsWith("}")) t = `${t}}`;
+  }
+  return t;
+}
+
+function tryParseMapJson(s: string): Record<string, string> | null {
+  const attempts = [s, repairStripePriceMapJson(s)];
+  const seen = new Set<string>();
+  for (const attempt of attempts) {
+    const key = attempt;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    try {
+      const parsed = JSON.parse(attempt) as Record<string, string>;
+      if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+        return parsed;
+      }
+    } catch {
+      /* próximo */
+    }
+  }
+  return null;
+}
+
 function loadMap(): Record<string, string> {
   if (cached) return cached;
   const raw = process.env.STRIPE_PRICE_MAP?.trim();
@@ -34,17 +71,15 @@ function loadMap(): Record<string, string> {
     return cached;
   }
   const normalized = normalizeStripePriceMapRaw(raw);
-  try {
-    const parsed = JSON.parse(normalized) as Record<string, string>;
+  const parsed = tryParseMapJson(normalized);
+  if (parsed) {
     lastParseError = null;
-    cached = typeof parsed === "object" && parsed !== null ? parsed : {};
-  } catch (e) {
-    lastParseError = e instanceof Error ? e.message : "JSON inválido";
+    cached = parsed;
+  } else {
+    lastParseError = "JSON inválido após normalização";
     console.error(
-      "[stripe-prices] STRIPE_PRICE_MAP não é JSON válido.",
-      lastParseError,
-      "Início:",
-      normalized.slice(0, 120),
+      "[stripe-prices] STRIPE_PRICE_MAP não é JSON válido. Início:",
+      normalized.slice(0, 160),
     );
     cached = {};
   }
