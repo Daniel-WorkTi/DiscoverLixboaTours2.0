@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { estimateFromTable } from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
 
 const MAX_TRAVELERS = 7;
@@ -31,245 +32,14 @@ function digitsOnly(s: string, max: number): string {
   return s.replace(/\D/g, "").slice(0, max);
 }
 
-type PriceEstimate =
-  | {
-      kind: "per_person";
-      centsPerPerson: number;
-      totalCents: number;
-      label: string;
-    }
-  | {
-      kind: "per_group";
-      totalCents: number;
-      label: string;
-    }
-  | null;
-
 function formatEurFromCents(cents: number): string {
   return new Intl.NumberFormat("pt-PT", {
     style: "currency",
     currency: "EUR",
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    /** Evita 0,50 € aparecer como "1 €" (arredondamento com 0 casas). */
+    maximumFractionDigits: 2,
   }).format(cents / 100);
-}
-
-function estimateFromTable(tourId: string, quantity: number): PriceEstimate {
-  const q = Math.max(1, Math.min(MAX_TRAVELERS, quantity));
-
-  if (tourId === "sintra-cascais") {
-    if (q === 1)
-      return {
-        kind: "per_person",
-        centsPerPerson: 7500,
-        totalCents: 7500 * q,
-        label: "1 pessoa",
-      };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 6000,
-        totalCents: 6000 * q,
-        label: "2 pessoas",
-      };
-    if (q >= 3 && q <= 4)
-      return {
-        kind: "per_person",
-        centsPerPerson: 5500,
-        totalCents: 5500 * q,
-        label: "3–4 pessoas",
-      };
-    return {
-      kind: "per_person",
-      centsPerPerson: 5000,
-      totalCents: 5000 * q,
-      label: "5–7 pessoas",
-    };
-  }
-
-  if (tourId === "3-destinos") {
-    if (q === 1)
-      return {
-        kind: "per_person",
-        centsPerPerson: 10000,
-        totalCents: 10000 * q,
-        label: "1 pessoa",
-      };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 7000,
-        totalCents: 7000 * q,
-        label: "2 pessoas",
-      };
-    if (q >= 3 && q <= 5)
-      return {
-        kind: "per_person",
-        centsPerPerson: 6500,
-        totalCents: 6500 * q,
-        label: "3–5 pessoas",
-      };
-    return {
-      kind: "per_person",
-      centsPerPerson: 6000,
-      totalCents: 6000 * q,
-      label: "6–7 pessoas",
-    };
-  }
-
-  if (tourId === "lisboa") {
-    if (q === 1)
-      return {
-        kind: "per_person",
-        centsPerPerson: 9000,
-        totalCents: 9000 * q,
-        label: "1 pessoa",
-      };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 6000,
-        totalCents: 6000 * q,
-        label: "2 pessoas",
-      };
-    if (q === 3)
-      return {
-        kind: "per_person",
-        centsPerPerson: 5500,
-        totalCents: 5500 * q,
-        label: "3 pessoas",
-      };
-    if (q >= 4 && q <= 5)
-      return {
-        kind: "per_person",
-        centsPerPerson: 5000,
-        totalCents: 5000 * q,
-        label: "4–5 pessoas",
-      };
-    return {
-      kind: "per_person",
-      centsPerPerson: 4500,
-      totalCents: 4500 * q,
-      label: "6–7 pessoas",
-    };
-  }
-
-  if (tourId === "arraabida") {
-    if (q === 1)
-      return {
-        kind: "per_person",
-        centsPerPerson: 13000,
-        totalCents: 13000 * q,
-        label: "1 pessoa",
-      };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 6500,
-        totalCents: 6500 * q,
-        label: "2 pessoas",
-      };
-    if (q >= 3 && q <= 5)
-      return {
-        kind: "per_person",
-        centsPerPerson: 6000,
-        totalCents: 6000 * q,
-        label: "3–5 pessoas",
-      };
-    return {
-      kind: "per_person",
-      centsPerPerson: 5500,
-      totalCents: 5500 * q,
-      label: "6–7 pessoas",
-    };
-  }
-
-  if (tourId === "aveiro") {
-    if (q === 1)
-      return {
-        kind: "per_person",
-        centsPerPerson: 14000,
-        totalCents: 14000 * q,
-        label: "1 pessoa",
-      };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 14000,
-        totalCents: 14000 * q,
-        label: "2 pessoas",
-      };
-    if (q >= 3 && q <= 5)
-      return {
-        kind: "per_person",
-        centsPerPerson: 12000,
-        totalCents: 12000 * q,
-        label: "3–5 pessoas",
-      };
-    return {
-      kind: "per_person",
-      centsPerPerson: 11000,
-      totalCents: 11000 * q,
-      label: "6–7 pessoas",
-    };
-  }
-
-  if (tourId === "monsanto") {
-    if (q === 1)
-      return {
-        kind: "per_person",
-        centsPerPerson: 13000,
-        totalCents: 13000 * q,
-        label: "1 pessoa",
-      };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 13000,
-        totalCents: 13000 * q,
-        label: "2 pessoas",
-      };
-    if (q >= 3 && q <= 5)
-      return {
-        kind: "per_person",
-        centsPerPerson: 11500,
-        totalCents: 11500 * q,
-        label: "3–5 pessoas",
-      };
-    return {
-      kind: "per_person",
-      centsPerPerson: 10000,
-      totalCents: 10000 * q,
-      label: "6–7 pessoas",
-    };
-  }
-
-  if (tourId === "algarve") {
-    const cents = q <= 3 ? 60000 : 70000;
-    return { kind: "per_group", totalCents: cents, label: q <= 3 ? "até 3 pessoas" : "até 7 pessoas" };
-  }
-
-  if (tourId === "porto") {
-    const cents = q <= 3 ? 80000 : 90000;
-    return { kind: "per_group", totalCents: cents, label: q <= 3 ? "até 3 pessoas" : "até 7 pessoas" };
-  }
-
-  if (tourId === "alentejo") {
-    if (q >= 1 && q <= 4) {
-      return {
-        kind: "per_group",
-        totalCents: 40000,
-        label: "1–4 pessoas (grupo)",
-      };
-    }
-    return {
-      kind: "per_group",
-      totalCents: 54000,
-      label: "5–7 pessoas (grupo)",
-    };
-  }
-
-  return null;
 }
 
 function defaultTourId(): string {
@@ -336,6 +106,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const [phoneNational, setPhoneNational] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
+  /** Evita dois pedidos em paralelo (duplo clique antes do re-render com loading=true). */
+  const checkoutInFlight = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [tourPickerOpen, setTourPickerOpen] = useState(false);
@@ -434,10 +206,23 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     const cell = new Date(viewYear, viewMonth, day);
     if (cell < today) return;
     setPreferredDate(toYMD(cell));
+    setError(null);
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!preferredDate) {
+      setError(
+        "Escolhe um dia no calendário em cima («Data do tour») antes de continuar para o pagamento.",
+      );
+      document.getElementById("br-booking-cal")?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (checkoutInFlight.current) return;
+    checkoutInFlight.current = true;
     setError(null);
     setLoading(true);
     const nat = digitsOnly(phoneNational, MAX_PHONE_DIGITS);
@@ -449,8 +234,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
       controller.abort();
     }, CHECKOUT_FETCH_TIMEOUT_MS);
 
+    const apiCheckout =
+      typeof window !== "undefined"
+        ? new URL("/api/checkout", window.location.origin).href
+        : "/api/checkout";
+
     try {
-      const res = await fetch("/api/checkout", {
+      const res = await fetch(apiCheckout, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: controller.signal,
@@ -466,10 +256,20 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         }),
       });
       const rawText = await res.text();
-      let data: { url?: string; error?: string; code?: string };
+      let data: {
+        url?: string;
+        error?: string;
+        code?: string;
+        stripeCode?: string;
+      };
       try {
         data = rawText
-          ? (JSON.parse(rawText) as { url?: string; error?: string; code?: string })
+          ? (JSON.parse(rawText) as {
+              url?: string;
+              error?: string;
+              code?: string;
+              stripeCode?: string;
+            })
           : {};
       } catch {
         setError("Resposta inválida do servidor. Tenta novamente.");
@@ -477,7 +277,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
       }
       if (!res.ok) {
         if (typeof console !== "undefined" && console.error) {
-          console.error("[checkout]", res.status, data.code ?? "", data.error ?? "");
+          console.error(
+            "[checkout]",
+            res.status,
+            data.code ?? "",
+            data.stripeCode ?? "",
+            data.error ?? "",
+          );
         }
         setError(data.error ?? "Não foi possível iniciar o pagamento.");
         return;
@@ -494,13 +300,14 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
         setError(
-          "O servidor demorou demasiado a responder (timeout). Verifica a ligação, se a chave Stripe está configurada no Netlify/Vercel e tenta de novo.",
+          "O servidor demorou demasiado a responder (timeout). Verifica a ligação, se a chave Stripe está na Vercel (Environment Variables) e tenta de novo.",
         );
       } else {
         setError("Erro de rede. Tenta novamente.");
       }
     } finally {
       window.clearTimeout(timeoutId);
+      checkoutInFlight.current = false;
       setLoading(false);
     }
   }
@@ -605,7 +412,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           </div>
 
           <div className="br-modal-body">
-            <div>
+            <div id="br-booking-cal">
               <p className="br-section-title">Data do tour</p>
               <div className="br-cal-nav">
                 <button
@@ -817,10 +624,18 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
               {error ? <p className="br-error">{error}</p> : null}
 
+              {!preferredDate && !loading ? (
+                <p className="br-submit-hint" role="status">
+                  Toca num dia no calendário (secção «Data do tour») para ativar o
+                  pagamento.
+                </p>
+              ) : null}
+
               <button
                 type="submit"
                 className="br-submit"
-                disabled={loading || !preferredDate}
+                disabled={loading}
+                aria-busy={loading}
               >
                 {loading
                   ? "A redirecionar para o pagamento…"

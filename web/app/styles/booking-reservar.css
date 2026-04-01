@@ -692,7 +692,8 @@
 .br-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  /* Acima do indicador de dev do Next.js / extensões, para o botão de pagamento receber cliques */
+  z-index: 999999;
   background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(6px);
   display: flex;
@@ -746,7 +747,7 @@
 
 /* Picker de destino (substitui <select> — mesma altura que Data/Viajantes) */
 .br-backdrop--tour {
-  z-index: 2100;
+  z-index: 1000010;
 }
 
 .br-modal--tour {
@@ -1273,8 +1274,20 @@
 }
 
 .br-submit:disabled {
-  opacity: 0.75;
+  opacity: 0.88;
   cursor: wait;
+}
+
+.br-submit-hint {
+  margin: 0 0 0.5rem;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 10px;
+  line-height: 1.35;
 }
 
 .br-error {

@@ -5,8 +5,7 @@ const nextConfig: NextConfig = {
    * Serve o HTML estático completo (sem iframe). Sem isto, /tours/* ficava só no iframe e podia aparecer em branco.
    */
   /**
-   * beforeFiles: corre antes da resolução de rotas App Router. Na Netlify, rewrites só em
-   * "afterFiles" (array simples) não bastavam — /tours/* devolvia 404 do runtime Next.
+   * beforeFiles: corre antes da resolução de rotas App Router (necessário para /tours/* → HTML em public).
    */
   async rewrites() {
     return {

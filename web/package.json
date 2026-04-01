@@ -9,6 +9,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify": "npm run lint && npm run test && npm run build",
     "lint": "eslint",
     "patch-tours": "node scripts/patch-tour-html.mjs",
     "sync-tours-strip-cal": "node scripts/strip-cal-tours.mjs"
@@ -29,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }
