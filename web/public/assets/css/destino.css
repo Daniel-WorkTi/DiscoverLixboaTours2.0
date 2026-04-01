@@ -385,6 +385,13 @@
 a.btn-reservar {
     text-decoration: none;
     box-sizing: border-box;
+    color: #ffffff;
+}
+
+a.btn-reservar:visited,
+a.btn-reservar:hover,
+a.btn-reservar:active {
+    color: #ffffff;
 }
 
 .btn-reservar {
@@ -589,6 +596,24 @@ a.btn-reservar {
     font-size: 0.82rem;
     line-height: 1.35;
     text-align: left;
+}
+
+/* Ligações no bloco de pacote: preto (não azul por defeito / :visited) */
+.package-pricing a:not(.btn-reservar),
+.package-pricing a:not(.btn-reservar):visited,
+.package-hint a,
+.package-hint a:visited {
+    color: #111111;
+    text-decoration: none;
+}
+
+.package-pricing a:not(.btn-reservar):hover,
+.package-pricing a:not(.btn-reservar):active,
+.package-hint a:hover,
+.package-hint a:active {
+    color: #000000;
+    text-decoration: underline;
+    text-underline-offset: 2px;
 }
 
 /* Mobile-first adjustments for package selector */

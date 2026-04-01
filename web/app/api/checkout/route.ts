@@ -71,7 +71,13 @@ function ruleFromTable(tourId: string, qty: number): PricingRule | null {
     return null;
   }
 
-  // Évora & Alentejo Premium ainda sem tabela: usa fallback (STRIPE_PRICE_MAP)
+  // Alentejo (preço fixo por grupo; desconto para 5–7 vs 1–4)
+  if (tourId === "alentejo") {
+    if (q >= 1 && q <= 4) return { kind: "per_group", centsTotal: 40000 };
+    if (q >= 5 && q <= 7) return { kind: "per_group", centsTotal: 54000 };
+    return null;
+  }
+
   return null;
 }
 

@@ -191,6 +191,21 @@ function estimateFromTable(tourId: string, quantity: number): PriceEstimate {
     return { kind: "per_group", totalCents: cents, label: q <= 3 ? "até 3 pessoas" : "até 7 pessoas" };
   }
 
+  if (tourId === "alentejo") {
+    if (q >= 1 && q <= 4) {
+      return {
+        kind: "per_group",
+        totalCents: 40000,
+        label: "1–4 pessoas (grupo)",
+      };
+    }
+    return {
+      kind: "per_group",
+      totalCents: 54000,
+      label: "5–7 pessoas (grupo)",
+    };
+  }
+
   return null;
 }
 
