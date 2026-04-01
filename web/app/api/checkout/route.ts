@@ -11,6 +11,70 @@ import { toursBooking } from "@/lib/tours-booking";
 
 export const runtime = "nodejs";
 
+type PricingRule =
+  | { kind: "per_person"; centsPerPerson: number }
+  | { kind: "per_group"; centsTotal: number };
+
+function ruleFromTable(tourId: string, qty: number): PricingRule | null {
+  const q = Math.max(1, Math.min(7, qty));
+
+  // Sintra & Cascais
+  if (tourId === "sintra-cascais") {
+    // Preço base (1 pessoa)
+    if (q === 1) return { kind: "per_person", centsPerPerson: 7500 };
+    // Desconto por quantidade
+    if (q === 2) return { kind: "per_person", centsPerPerson: 6000 };
+    if (q >= 3 && q <= 4) return { kind: "per_person", centsPerPerson: 5500 };
+    if (q >= 5 && q <= 7) return { kind: "per_person", centsPerPerson: 5000 };
+    return null;
+  }
+
+  // Nazaré / Tour 3 Destinos
+  if (tourId === "3-destinos") {
+    if (q === 1) return { kind: "per_person", centsPerPerson: 10000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 7000 };
+    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 6500 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 6000 };
+    return null;
+  }
+
+  // Lisboa (tabela tinha "100–110" e "90–"; usamos regra determinística)
+  if (tourId === "lisboa") {
+    if (q === 1) return { kind: "per_person", centsPerPerson: 9000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 6000 };
+    if (q === 3) return { kind: "per_person", centsPerPerson: 5500 };
+    if (q >= 4 && q <= 5) return { kind: "per_person", centsPerPerson: 5000 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 4500 };
+    return null;
+  }
+
+  // Arrábida • Setúbal • Sesimbra
+  if (tourId === "arraabida") {
+    if (q === 1) return { kind: "per_person", centsPerPerson: 13000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 6500 };
+    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 6000 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 5500 };
+    return null;
+  }
+
+  // Algarve (preço por grupo)
+  if (tourId === "algarve") {
+    if (q <= 3) return { kind: "per_group", centsTotal: 60000 };
+    if (q <= 7) return { kind: "per_group", centsTotal: 70000 };
+    return null;
+  }
+
+  // Porto (preço por grupo)
+  if (tourId === "porto") {
+    if (q <= 3) return { kind: "per_group", centsTotal: 80000 };
+    if (q <= 7) return { kind: "per_group", centsTotal: 90000 };
+    return null;
+  }
+
+  // Évora & Alentejo Premium ainda sem tabela: usa fallback (STRIPE_PRICE_MAP)
+  return null;
+}
+
 type Body = {
   tourId?: string;
   quantity?: number;
@@ -96,52 +160,87 @@ export async function POST(req: Request) {
     );
   }
 
-  const mapParseErr = getStripePriceMapParseError();
-  if (process.env.STRIPE_PRICE_MAP?.trim() && mapParseErr) {
-    return NextResponse.json(
-      {
-        error:
-          "STRIPE_PRICE_MAP na Netlify não é JSON válido (uma linha, aspas duplas). Vê os logs de deploy ou corrige o valor.",
-        code: "STRIPE_PRICE_MAP_INVALID",
-      },
-      { status: 400 },
-    );
-  }
+  // 1) Primeiro tenta tabela fixa (desconto por quantidade)
+  const tableRule = ruleFromTable(tourId, quantity);
 
-  if (!getTourStripeMapping(tourId)) {
-    return NextResponse.json(
-      {
-        error:
-          "Pagamento ainda não configurado para este destino. Contacta-nos ou tenta mais tarde.",
-        code: "STRIPE_TOUR_NOT_CONFIGURED",
-      },
-      { status: 400 },
-    );
-  }
+  // 2) Se não houver tabela, cai para STRIPE_PRICE_MAP (modo antigo)
+  let fallbackPriceId: string | undefined;
+  if (!tableRule) {
+    const mapParseErr = getStripePriceMapParseError();
+    if (process.env.STRIPE_PRICE_MAP?.trim() && mapParseErr) {
+      return NextResponse.json(
+        {
+          error:
+            "STRIPE_PRICE_MAP não é JSON válido (uma linha, aspas duplas). Corrige o valor no servidor.",
+          code: "STRIPE_PRICE_MAP_INVALID",
+        },
+        { status: 400 },
+      );
+    }
 
-  const priceId = await resolveStripePriceId(stripe, tourId);
-  if (!priceId) {
-    return NextResponse.json(
-      {
-        error:
-          "Não foi possível preparar o pagamento: no Stripe, o tour precisa de um preço de pagamento único (one-time) ou de um price_... correto em STRIPE_PRICE_MAP. A chave secreta (teste/live) tem de ser do mesmo ambiente que os IDs. Vê os logs do servidor em caso de dúvida.",
-        code: "STRIPE_PRICE_RESOLVE_FAILED",
-      },
-      { status: 400 },
-    );
+    if (!getTourStripeMapping(tourId)) {
+      return NextResponse.json(
+        {
+          error:
+            "Pagamento ainda não configurado para este destino. Contacta-nos ou tenta mais tarde.",
+          code: "STRIPE_TOUR_NOT_CONFIGURED",
+        },
+        { status: 400 },
+      );
+    }
+
+    fallbackPriceId = await resolveStripePriceId(stripe, tourId, quantity);
+    if (!fallbackPriceId) {
+      return NextResponse.json(
+        {
+          error:
+            "Não foi possível preparar o pagamento (Stripe). Confirma STRIPE_PRICE_MAP e se os IDs são do mesmo modo (teste/live) da chave secreta.",
+          code: "STRIPE_PRICE_RESOLVE_FAILED",
+        },
+        { status: 400 },
+      );
+    }
   }
 
   const base = getSiteBaseUrl();
 
   try {
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = tableRule
+      ? tableRule.kind === "per_person"
+        ? [
+            {
+              price_data: {
+                currency: "eur",
+                product_data: {
+                  name: `${tourLabel} — Tour privado`,
+                },
+                unit_amount: tableRule.centsPerPerson,
+              },
+              quantity,
+            },
+          ]
+        : [
+            {
+              price_data: {
+                currency: "eur",
+                product_data: {
+                  name: `${tourLabel} — Grupo privado`,
+                },
+                unit_amount: tableRule.centsTotal,
+              },
+              quantity: 1,
+            },
+          ]
+      : [
+          {
+            price: fallbackPriceId!,
+            quantity,
+          },
+        ];
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: [
-        {
-          price: priceId,
-          quantity,
-        },
-      ],
+      line_items: lineItems,
       success_url: `${base}/reservar/obrigado?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${base}/reservar?cancelado=1`,
       customer_email: email,
@@ -150,6 +249,8 @@ export async function POST(req: Request) {
         tour_label: tourLabel,
         preferred_date: preferredDate,
         quantity: String(quantity),
+        pricing_source: tableRule ? "table" : "stripe_price_map",
+        pricing_kind: tableRule ? tableRule.kind : "stripe_price",
         customer_name: customerName,
         phone: phone || "",
         notes: notes || "",

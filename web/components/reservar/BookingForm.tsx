@@ -28,6 +28,172 @@ function digitsOnly(s: string, max: number): string {
   return s.replace(/\D/g, "").slice(0, max);
 }
 
+type PriceEstimate =
+  | {
+      kind: "per_person";
+      centsPerPerson: number;
+      totalCents: number;
+      label: string;
+    }
+  | {
+      kind: "per_group";
+      totalCents: number;
+      label: string;
+    }
+  | null;
+
+function formatEurFromCents(cents: number): string {
+  return new Intl.NumberFormat("pt-PT", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(cents / 100);
+}
+
+function estimateFromTable(tourId: string, quantity: number): PriceEstimate {
+  const q = Math.max(1, Math.min(MAX_TRAVELERS, quantity));
+
+  if (tourId === "sintra-cascais") {
+    if (q === 1)
+      return {
+        kind: "per_person",
+        centsPerPerson: 7500,
+        totalCents: 7500 * q,
+        label: "1 pessoa",
+      };
+    if (q === 2)
+      return {
+        kind: "per_person",
+        centsPerPerson: 6000,
+        totalCents: 6000 * q,
+        label: "2 pessoas",
+      };
+    if (q >= 3 && q <= 4)
+      return {
+        kind: "per_person",
+        centsPerPerson: 5500,
+        totalCents: 5500 * q,
+        label: "3–4 pessoas",
+      };
+    return {
+      kind: "per_person",
+      centsPerPerson: 5000,
+      totalCents: 5000 * q,
+      label: "5–7 pessoas",
+    };
+  }
+
+  if (tourId === "3-destinos") {
+    if (q === 1)
+      return {
+        kind: "per_person",
+        centsPerPerson: 10000,
+        totalCents: 10000 * q,
+        label: "1 pessoa",
+      };
+    if (q === 2)
+      return {
+        kind: "per_person",
+        centsPerPerson: 7000,
+        totalCents: 7000 * q,
+        label: "2 pessoas",
+      };
+    if (q >= 3 && q <= 5)
+      return {
+        kind: "per_person",
+        centsPerPerson: 6500,
+        totalCents: 6500 * q,
+        label: "3–5 pessoas",
+      };
+    return {
+      kind: "per_person",
+      centsPerPerson: 6000,
+      totalCents: 6000 * q,
+      label: "6–7 pessoas",
+    };
+  }
+
+  if (tourId === "lisboa") {
+    if (q === 1)
+      return {
+        kind: "per_person",
+        centsPerPerson: 9000,
+        totalCents: 9000 * q,
+        label: "1 pessoa",
+      };
+    if (q === 2)
+      return {
+        kind: "per_person",
+        centsPerPerson: 6000,
+        totalCents: 6000 * q,
+        label: "2 pessoas",
+      };
+    if (q === 3)
+      return {
+        kind: "per_person",
+        centsPerPerson: 5500,
+        totalCents: 5500 * q,
+        label: "3 pessoas",
+      };
+    if (q >= 4 && q <= 5)
+      return {
+        kind: "per_person",
+        centsPerPerson: 5000,
+        totalCents: 5000 * q,
+        label: "4–5 pessoas",
+      };
+    return {
+      kind: "per_person",
+      centsPerPerson: 4500,
+      totalCents: 4500 * q,
+      label: "6–7 pessoas",
+    };
+  }
+
+  if (tourId === "arraabida") {
+    if (q === 1)
+      return {
+        kind: "per_person",
+        centsPerPerson: 13000,
+        totalCents: 13000 * q,
+        label: "1 pessoa",
+      };
+    if (q === 2)
+      return {
+        kind: "per_person",
+        centsPerPerson: 6500,
+        totalCents: 6500 * q,
+        label: "2 pessoas",
+      };
+    if (q >= 3 && q <= 5)
+      return {
+        kind: "per_person",
+        centsPerPerson: 6000,
+        totalCents: 6000 * q,
+        label: "3–5 pessoas",
+      };
+    return {
+      kind: "per_person",
+      centsPerPerson: 5500,
+      totalCents: 5500 * q,
+      label: "6–7 pessoas",
+    };
+  }
+
+  if (tourId === "algarve") {
+    const cents = q <= 3 ? 60000 : 70000;
+    return { kind: "per_group", totalCents: cents, label: q <= 3 ? "até 3 pessoas" : "até 7 pessoas" };
+  }
+
+  if (tourId === "porto") {
+    const cents = q <= 3 ? 80000 : 90000;
+    return { kind: "per_group", totalCents: cents, label: q <= 3 ? "até 3 pessoas" : "até 7 pessoas" };
+  }
+
+  return null;
+}
+
 function defaultTourId(): string {
   return toursBooking[0]?.id ?? "";
 }
@@ -77,6 +243,7 @@ type BookingFormProps = {
 
 export function BookingForm({ initialTourId }: BookingFormProps) {
   const titleId = useId();
+  const tourPickerTitleId = useId();
   const [tourId, setTourId] = useState(() => {
     if (initialTourId && toursBooking.some((t) => t.id === initialTourId)) {
       return initialTourId;
@@ -93,6 +260,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [tourPickerOpen, setTourPickerOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const today = useMemo(() => startOfToday(), []);
@@ -117,19 +285,22 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   }, [modalOpen, preferredDate, today]);
 
   useEffect(() => {
-    if (!modalOpen) return;
-    document.body.style.overflow = "hidden";
+    const locked = modalOpen || tourPickerOpen;
+    document.body.style.overflow = locked ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setModalOpen(false);
+      if (e.key !== "Escape") return;
+      if (tourPickerOpen) setTourPickerOpen(false);
+      else if (modalOpen) setModalOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [modalOpen]);
+  }, [modalOpen, tourPickerOpen]);
 
   const tourLabel = toursBooking.find((t) => t.id === tourId)?.label ?? "";
+  const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
 
   const monthLabel = useMemo(() => {
     return new Date(viewYear, viewMonth, 1).toLocaleDateString("pt-PT", {
@@ -237,6 +408,74 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     }
   }
 
+  const tourPicker =
+    tourPickerOpen &&
+    mounted &&
+    createPortal(
+      <div
+        className="br-backdrop br-backdrop--tour"
+        role="presentation"
+        onClick={() => setTourPickerOpen(false)}
+      >
+        <div
+          className="br-modal br-modal--tour"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={tourPickerTitleId}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="br-modal-header">
+            <div>
+              <h2 id={tourPickerTitleId} className="br-modal-title">
+                Destino
+              </h2>
+              <p className="br-modal-sub">Escolhe o teu tour</p>
+            </div>
+            <button
+              type="button"
+              className="br-close"
+              aria-label="Fechar"
+              onClick={() => setTourPickerOpen(false)}
+            >
+              ×
+            </button>
+          </div>
+          <div className="br-tour-picker-body">
+            {toursBooking.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                className={
+                  t.id === tourId ? "br-tour-option is-selected" : "br-tour-option"
+                }
+                onClick={() => {
+                  setTourId(t.id);
+                  setTourPickerOpen(false);
+                }}
+              >
+                <span className="br-tour-option__label">{t.label}</span>
+                {t.id === tourId ? (
+                  <span className="br-tour-option__check" aria-hidden>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </span>
+                ) : null}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>,
+      document.body,
+    );
+
   const modal = modalOpen && mounted && (
     createPortal(
       <div
@@ -330,9 +569,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             <div className="br-travelers">
               <div>
                 <div className="br-travelers-label">Viajantes</div>
-                <div className="br-travelers-sub">Máximo {MAX_TRAVELERS} pessoas por reserva</div>
+                <div className="br-travelers-sub">
+                  Escolhe quantas pessoas vão no tour (máx. {MAX_TRAVELERS})
+                </div>
               </div>
-              <div className="br-stepper">
+              <div className="br-stepper" aria-label="Quantidade de pessoas">
                 <button
                   type="button"
                   disabled={quantity <= 1}
@@ -351,6 +592,53 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   +
                 </button>
               </div>
+            </div>
+
+            <div className="br-total" aria-label="Total estimado">
+              {estimate ? (
+                <>
+                  {estimate.kind === "per_person" ? (
+                    <>
+                      <div className="br-total__grid">
+                        <div className="br-total__cell">
+                          <div className="br-total__label">Por pessoa</div>
+                          <div className="br-total__value">
+                            {formatEurFromCents(estimate.centsPerPerson)}
+                          </div>
+                        </div>
+                        <div className="br-total__cell br-total__cell--right">
+                          <div className="br-total__label">Total</div>
+                          <div className="br-total__value">
+                            {formatEurFromCents(estimate.totalCents)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="br-total__sub">
+                        {estimate.label} · Valor final confirmado no checkout.
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="br-total__row">
+                        <span className="br-total__label">Total do grupo</span>
+                        <span className="br-total__value">
+                          {formatEurFromCents(estimate.totalCents)}
+                        </span>
+                      </div>
+                      <div className="br-total__sub">
+                        {estimate.label} · Valor final confirmado no checkout.
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="br-total__row">
+                    <span className="br-total__label">Total</span>
+                    <span className="br-total__value">Calculado no checkout</span>
+                  </div>
+                </>
+              )}
             </div>
 
             <form onSubmit={handleSubmit} className="br-fields">
@@ -451,24 +739,32 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
   return (
     <div className="br-wrap">
-      <div className="br-layout">
-        <section className="br-card" aria-label="Destino do tour">
-          <span className="br-card-label">Destino</span>
-          <select
-            className="br-select"
-            value={tourId}
-            onChange={(e) => setTourId(e.target.value)}
-            aria-label="Tour"
+      <div className="br-sheet">
+        <div className="br-layout">
+          <div className="br-row-pick">
+          <div
+            className="br-card br-card--grow br-card--destino"
+            role="region"
+            aria-label="Destino do tour"
           >
-            {toursBooking.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.icon} {t.label}
-              </option>
-            ))}
-          </select>
-        </section>
+            <span className="br-card-label">Destino</span>
+            <button
+              type="button"
+              className="br-pick-btn"
+              onClick={() => setTourPickerOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={tourPickerOpen}
+              aria-label="Escolher destino do tour"
+            >
+              <div className="br-pick-btn__text">
+                <span className="br-pick-btn__value">{tourLabel}</span>
+              </div>
+              <span className="br-pick-btn__chev" aria-hidden>
+                ›
+              </span>
+            </button>
+          </div>
 
-        <div className="br-row-pick">
           <div className="br-card br-card--grow">
             <span className="br-card-label">Data</span>
             <button
@@ -520,6 +816,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               {preferredDate ? "Rever e pagar" : "Escolher data e reservar"}
             </button>
           </div>
+          </div>
         </div>
       </div>
 
@@ -538,6 +835,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         )}
       </p>
 
+      {tourPicker}
       {modal}
     </div>
   );

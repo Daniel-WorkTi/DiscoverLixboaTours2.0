@@ -6,7 +6,14 @@
 
 import type Stripe from "stripe";
 
-let cached: Record<string, string> | null = null;
+type PriceLikeId = `price_${string}` | `prod_${string}`;
+
+/** Pode ser um id Stripe simples, ou um mapa de faixas por quantidade. */
+type TourStripeMapping =
+  | PriceLikeId
+  | Record<string, PriceLikeId>;
+
+let cached: Record<string, TourStripeMapping> | null = null;
 let lastParseError: string | null = null;
 
 /** Aspas “curvas”, BOM e valor guardado como string JSON dupla na Netlify. */
@@ -43,7 +50,7 @@ function repairStripePriceMapJson(s: string): string {
   return t;
 }
 
-function tryParseMapJson(s: string): Record<string, string> | null {
+function tryParseMapJson(s: string): Record<string, TourStripeMapping> | null {
   const attempts = [s, repairStripePriceMapJson(s)];
   const seen = new Set<string>();
   for (const attempt of attempts) {
@@ -51,7 +58,7 @@ function tryParseMapJson(s: string): Record<string, string> | null {
     if (seen.has(key)) continue;
     seen.add(key);
     try {
-      const parsed = JSON.parse(attempt) as Record<string, string>;
+      const parsed = JSON.parse(attempt) as Record<string, TourStripeMapping>;
       if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
         return parsed;
       }
@@ -62,7 +69,7 @@ function tryParseMapJson(s: string): Record<string, string> | null {
   return null;
 }
 
-function loadMap(): Record<string, string> {
+function loadMap(): Record<string, TourStripeMapping> {
   if (cached) return cached;
   const raw = process.env.STRIPE_PRICE_MAP?.trim();
   if (!raw) {
@@ -92,31 +99,88 @@ export function getStripePriceMapParseError(): string | null {
   return lastParseError;
 }
 
-/** Valor bruto no mapa (price_ ou prod_), se existir e for válido. */
-export function getTourStripeMapping(tourId: string): string | undefined {
-  const id = loadMap()[tourId]?.trim();
-  if (typeof id !== "string" || !id) return undefined;
-  if (id.startsWith("price_") || id.startsWith("prod_")) return id;
+function isPriceLikeId(v: unknown): v is PriceLikeId {
+  return (
+    typeof v === "string" &&
+    (v.startsWith("price_") || v.startsWith("prod_"))
+  );
+}
+
+/** Valor bruto no mapa, se existir e for válido. */
+export function getTourStripeMapping(
+  tourId: string,
+): TourStripeMapping | undefined {
+  const v = loadMap()[tourId];
+  if (!v) return undefined;
+  if (isPriceLikeId(v)) return v;
+  if (typeof v === "object" && v !== null && !Array.isArray(v)) {
+    const obj = v as Record<string, unknown>;
+    // valida se parece um mapa de tiers
+    const entries = Object.entries(obj);
+    if (entries.length === 0) return undefined;
+    if (entries.every(([, val]) => isPriceLikeId(val))) {
+      return obj as Record<string, PriceLikeId>;
+    }
+  }
   return undefined;
 }
 
 /** @deprecated usar getTourStripeMapping */
 export function getStripePriceId(tourId: string): string | undefined {
   const v = getTourStripeMapping(tourId);
-  return v?.startsWith("price_") ? v : undefined;
+  return typeof v === "string" && v.startsWith("price_") ? v : undefined;
 }
 
 export function isConfiguredTour(tourId: string): boolean {
   return getTourStripeMapping(tourId) !== undefined;
 }
 
-/** Resolve prod_ → price_ para Checkout (mode payment). */
-export async function resolveStripePriceId(
+type Tier = { min: number; max: number; id: PriceLikeId };
+
+function parseTierKey(key: string): { min: number; max: number } | null {
+  const k = key.trim();
+  // "3" (exato)
+  if (/^\d+$/.test(k)) {
+    const n = Number(k);
+    return n > 0 ? { min: n, max: n } : null;
+  }
+  // "3-5"
+  const m = k.match(/^(\d+)\s*-\s*(\d+)$/);
+  if (m) {
+    const a = Number(m[1]);
+    const b = Number(m[2]);
+    if (a > 0 && b > 0 && a <= b) return { min: a, max: b };
+    return null;
+  }
+  // "5+"
+  const p = k.match(/^(\d+)\s*\+$/);
+  if (p) {
+    const a = Number(p[1]);
+    if (a > 0) return { min: a, max: Number.POSITIVE_INFINITY };
+  }
+  return null;
+}
+
+function pickTierId(
+  tiers: Record<string, PriceLikeId>,
+  quantity: number,
+): PriceLikeId | undefined {
+  const parsed: Tier[] = [];
+  for (const [k, id] of Object.entries(tiers)) {
+    const r = parseTierKey(k);
+    if (!r) continue;
+    parsed.push({ ...r, id });
+  }
+  // tenta match mais específico primeiro (faixas pequenas)
+  parsed.sort((a, b) => (a.max - a.min) - (b.max - b.min));
+  return parsed.find((t) => quantity >= t.min && quantity <= t.max)?.id;
+}
+
+async function resolveToPriceId(
   stripe: Stripe,
-  tourId: string,
+  raw: PriceLikeId,
+  tourIdForLogs: string,
 ): Promise<string | undefined> {
-  const raw = getTourStripeMapping(tourId);
-  if (!raw) return undefined;
   if (raw.startsWith("price_")) return raw;
   if (!raw.startsWith("prod_")) return undefined;
 
@@ -146,13 +210,13 @@ export async function resolveStripePriceId(
       console.error(
         "[stripe-prices] Produto tem preços ativos mas nenhum é one-time (Checkout atual exige pagamento único):",
         raw,
-        tourId,
+        tourIdForLogs,
       );
     } else {
       console.error(
         "[stripe-prices] Produto sem preços ativos listados:",
         raw,
-        tourId,
+        tourIdForLogs,
       );
     }
     return undefined;
@@ -160,8 +224,31 @@ export async function resolveStripePriceId(
     const msg = e instanceof Error ? e.message : String(e);
     console.error(
       "[stripe-prices] Erro ao resolver produto/preço (test/live e conta Stripe têm de coincidir):",
-      { tourId, productId: raw, message: msg },
+      { tourId: tourIdForLogs, productId: raw, message: msg },
     );
     return undefined;
   }
+}
+
+/** Resolve prod_ → price_ para Checkout (mode payment). */
+export async function resolveStripePriceId(
+  stripe: Stripe,
+  tourId: string,
+  quantity?: number,
+): Promise<string | undefined> {
+  const raw = getTourStripeMapping(tourId);
+  if (!raw) return undefined;
+  if (typeof raw === "string") {
+    return await resolveToPriceId(stripe, raw, tourId);
+  }
+  const q = Math.max(1, Math.min(7, Number(quantity) || 1));
+  const picked = pickTierId(raw, q);
+  if (!picked) {
+    console.error(
+      "[stripe-prices] Nenhuma faixa corresponde à quantidade; confirma STRIPE_PRICE_MAP:",
+      { tourId, quantity: q, keys: Object.keys(raw).slice(0, 12) },
+    );
+    return undefined;
+  }
+  return await resolveToPriceId(stripe, picked, tourId);
 }
