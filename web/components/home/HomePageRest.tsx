@@ -26,22 +26,22 @@ export function HomePageRest({
         <div className="personalized-container">
           <div className="personalized-content">
             <span className="personalized-subtitle" data-translate="personalized_subtitle">
-              Experiência Única
+              Storytelling & medida
             </span>
             <h2 className="personalized-title" data-translate="personalized_title">
-              Tours Personalizados
+              Tours personalizados — inclusive a dois
             </h2>
             <p className="personalized-description" data-translate="personalized_description1">
-              Criamos experiências sob medida para você e seu grupo. Cada tour é
-              especialmente projetado para atender seus interesses, ritmo e
-              preferências. De aventuras off-road em Sintra a caminhadas culturais
-              por cidades históricas, adaptamos cada detalhe para tornar sua
-              viagem inesquecível.
+              Criamos experiências sob medida para o teu grupo ou para um momento a
+              dois: ritmo slow, rotas alternativas e detalhes que transformam o dia
+              (flores, mesa reservada, surpresas). Do jeep em trilhos pouco óbvios a
+              roteiros culturais profundos, cada roteiro conta uma história contigo
+              no centro.
             </p>
             <p className="personalized-description" data-translate="personalized_description2">
-              Com guias locais experientes e veículos confortáveis, garantimos uma
-              jornada autêntica e memorável por Portugal. Entre em contato e
-              planeje seu tour ideal!
+              Com guia local e veículos icónicos ou confortáveis, o foco é
+              autenticidade e privacidade. Fala connosco no WhatsApp e desenhamos o
+              teu Portugal ideal — casal, família ou grupo de amigos.
             </p>
             <a
               href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20criar%20um%20tour%20personalizado%20em%20Portugal."
@@ -85,6 +85,92 @@ export function HomePageRest({
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="experience-pillars-section" id="experiencias">
+        <div className="experience-pillars-container">
+          <div className="experience-pillars-header">
+            <span className="experience-pillars-subtitle" data-translate="pillars_subtitle">
+              Experiências signature
+            </span>
+            <h2 className="experience-pillars-title" data-translate="pillars_title">
+              Jeep, Wine & momentos a dois
+            </h2>
+            <p className="experience-pillars-lead" data-translate="pillars_lead">
+              Posicionamento claro: aventura fora dos roteiros óbvios, gastronomia premium no Alentejo e privacidade para casais — com storytelling de guia local.
+            </p>
+          </div>
+          <div className="experience-pillars-grid">
+            <article className="experience-pillar-card">
+              <div className="experience-pillar-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+                  <path d="M14 16H9m10 0h3v-3.87a2 2 0 0 0-1.507-1.94l-1.493-.43M14 16v2a2 2 0 1 1-4 0v-2m4 0H9m5-9.33V6a2 2 0 1 0-4 0v.67M3 17h1.5m13 0H21" />
+                  <circle cx="7.5" cy="17" r="2" />
+                  <circle cx="16.5" cy="17" r="2" />
+                </svg>
+              </div>
+              <h3 className="experience-pillar-card-title" data-translate="pillar_jeep_title">
+                Jeep Off-road Experience
+              </h3>
+              <p className="experience-pillar-card-text" data-translate="pillar_jeep_desc">
+                Acesso a caminhos e miradouros fora do circuito turístico habitual — UMM 4x4 conversível, ritmo seu e narrativa local que diferencia da concorrência.
+              </p>
+              <a href="/tours/sintra-cascais" className="experience-pillar-link">
+                <span data-translate="pillar_jeep_cta">Explorar Sintra & Cascais</span>
+                <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden>
+                  <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
+                </svg>
+              </a>
+            </article>
+            <article className="experience-pillar-card experience-pillar-card--wine">
+              <div className="experience-pillar-badge" data-translate="pillar_wine_badge">
+                Premium
+              </div>
+              <div className="experience-pillar-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+                  <path d="M8 22h8M12 11v11M8 2h8l1 6a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4l1-6z" />
+                  <path d="M9 2v4M15 2v4" />
+                </svg>
+              </div>
+              <h3 className="experience-pillar-card-title" data-translate="pillar_wine_title">
+                Wine & Food Experience
+              </h3>
+              <p className="experience-pillar-card-text" data-translate="pillar_wine_desc">
+                O teu Alentejo como experiência de vinha e mesa: património UNESCO, provas e sabores regionais — packaging premium e roteiro contado ao pormenor.
+              </p>
+              <a href="/tours/alentejo" className="experience-pillar-link">
+                <span data-translate="pillar_wine_cta">Ver Food & Wine Tour</span>
+                <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden>
+                  <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
+                </svg>
+              </a>
+            </article>
+            <article className="experience-pillar-card">
+              <div className="experience-pillar-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+              </div>
+              <h3 className="experience-pillar-card-title" data-translate="pillar_romantic_title">
+                Romantic / Couples Tour
+              </h3>
+              <p className="experience-pillar-card-text" data-translate="pillar_romantic_desc">
+                Experiências privadas para dois: tempo, discreção e personalização (surpresas, ritmo slow, mesas especiais). Falamos contigo e desenhamos o dia.
+              </p>
+              <a
+                href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20um%20tour%20privado%20para%20casal%20%2F%20experiência%20romântica%20personalizada%20em%20Portugal."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="experience-pillar-link experience-pillar-link--wa"
+              >
+                <span data-translate="pillar_romantic_cta">Personalizar com o guia</span>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                </svg>
+              </a>
+            </article>
           </div>
         </div>
       </section>

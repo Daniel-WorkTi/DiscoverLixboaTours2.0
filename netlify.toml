@@ -35,6 +35,14 @@
   to = "/tour-arraabida.html"
   status = 200
 [[redirects]]
+  from = "/tours/aveiro"
+  to = "/tour-aveiro.html"
+  status = 200
+[[redirects]]
+  from = "/tours/monsanto"
+  to = "/tour-monsanto.html"
+  status = 200
+[[redirects]]
   from = "/tours/alentejo"
   to = "/tour-alentejo.html"
   status = 200

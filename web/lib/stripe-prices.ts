@@ -16,7 +16,7 @@ type TourStripeMapping =
 let cached: Record<string, TourStripeMapping> | null = null;
 let lastParseError: string | null = null;
 
-/** Aspas “curvas”, BOM e valor guardado como string JSON dupla na Netlify. */
+/** Aspas “curvas”, BOM e valor guardado como string JSON dupla no painel de env. */
 function normalizeStripePriceMapRaw(raw: string): string {
   let s = raw.trim().replace(/[\u200b-\u200d\ufeff]/g, "");
   if (s.charCodeAt(0) === 0xfeff) s = s.slice(1);
@@ -33,7 +33,7 @@ function normalizeStripePriceMapRaw(raw: string): string {
 }
 
 /**
- * Erros comuns ao colar na Netlify: falta `{`/`}`, vírgula a mais, quebras de linha.
+ * Erros comuns ao colar no env: falta `{`/`}`, vírgula a mais, quebras de linha.
  */
 function repairStripePriceMapJson(s: string): string {
   let t = s.replace(/\r\n|\r|\n/g, "").trim();
@@ -93,7 +93,7 @@ function loadMap(): Record<string, TourStripeMapping> {
   return cached;
 }
 
-/** Se o valor em env existe mas o JSON falhou ao dar parse (vês isto nos logs Netlify). */
+/** Se o valor em env existe mas o JSON falhou ao dar parse (vês isto nos logs da Vercel). */
 export function getStripePriceMapParseError(): string | null {
   loadMap();
   return lastParseError;

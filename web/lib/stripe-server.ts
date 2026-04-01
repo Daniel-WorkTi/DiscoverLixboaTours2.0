@@ -22,12 +22,17 @@ export function getStripe(): Stripe {
     const raw = process.env.STRIPE_SECRET_KEY;
     const detail =
       raw === undefined
-        ? "variável não definida no ambiente (Vercel → Settings → Env Vars → Production)"
+        ? "variável não definida (Vercel → Environment Variables do projeto, ou .env.local em dev)"
         : raw.trim() === ""
           ? "valor vazio"
-          : "valor não começa por sk_ — remove aspas à volta do valor no painel da Vercel";
+          : "valor não começa por sk_ — remove aspas à volta no painel do host";
     console.error("[stripe]", detail);
     throw new Error("STRIPE_SECRET_KEY em falta ou inválida.");
   }
-  return new Stripe(key, { apiVersion: API_VERSION });
+  return new Stripe(key, {
+    apiVersion: API_VERSION,
+    /** Evita pedidos à API Stripe a ficarem pendentes sem limite (serverless). */
+    timeout: 25000,
+    maxNetworkRetries: 1,
+  });
 }

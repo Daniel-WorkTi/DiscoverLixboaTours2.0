@@ -5,8 +5,7 @@ const nextConfig: NextConfig = {
    * Serve o HTML estático completo (sem iframe). Sem isto, /tours/* ficava só no iframe e podia aparecer em branco.
    */
   /**
-   * beforeFiles: corre antes da resolução de rotas App Router. Na Netlify, rewrites só em
-   * "afterFiles" (array simples) não bastavam — /tours/* devolvia 404 do runtime Next.
+   * beforeFiles: corre antes da resolução de rotas App Router (necessário para /tours/* → HTML em public).
    */
   async rewrites() {
     return {
@@ -22,6 +21,11 @@ const nextConfig: NextConfig = {
         { source: "/tours/lisboa", destination: "/tour-lisboa.html" },
         { source: "/tours/porto", destination: "/tour-porto.html" },
         { source: "/tours/arraabida", destination: "/tour-arraabida.html" },
+        { source: "/tours/aveiro", destination: "/tour-aveiro.html" },
+        {
+          source: "/tours/monsanto",
+          destination: "/tour-monsanto.html",
+        },
         { source: "/tours/alentejo", destination: "/tour-alentejo.html" },
         { source: "/tours/algarve", destination: "/tour-algarve.html" },
       ],
@@ -52,6 +56,26 @@ const nextConfig: NextConfig = {
       {
         source: "/tour-arraabida.html",
         destination: "/tours/arraabida",
+        permanent: true,
+      },
+      {
+        source: "/tour-aveiro.html",
+        destination: "/tours/aveiro",
+        permanent: true,
+      },
+      {
+        source: "/tour-monsanto.html",
+        destination: "/tours/monsanto",
+        permanent: true,
+      },
+      {
+        source: "/tours/fatima-tomar",
+        destination: "/tours/monsanto",
+        permanent: true,
+      },
+      {
+        source: "/tour-fatima-tomar.html",
+        destination: "/tours/monsanto",
         permanent: true,
       },
       {

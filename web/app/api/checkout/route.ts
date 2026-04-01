@@ -7,79 +7,37 @@ import {
 } from "@/lib/stripe-prices";
 import { getStripe } from "@/lib/stripe-server";
 import { getSiteBaseUrl } from "@/lib/site-url";
+import { getPricingRuleFromTable } from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
+
+/** Stripe limita cada valor de metadata (evita falhas silenciosas / rejeição). */
+function metaSlice(s: string, max = 500): string {
+  if (s.length <= max) return s;
+  return `${s.slice(0, max - 1)}…`;
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => {
+      reject(new Error(`${label}: timeout ao comunicar com o Stripe (${ms / 1000}s).`));
+    }, ms);
+    promise.then(
+      (v) => {
+        clearTimeout(t);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(t);
+        reject(e);
+      },
+    );
+  });
+}
 
 export const runtime = "nodejs";
 
-type PricingRule =
-  | { kind: "per_person"; centsPerPerson: number }
-  | { kind: "per_group"; centsTotal: number };
-
-function ruleFromTable(tourId: string, qty: number): PricingRule | null {
-  const q = Math.max(1, Math.min(7, qty));
-
-  // Sintra & Cascais
-  if (tourId === "sintra-cascais") {
-    // Preço base (1 pessoa)
-    if (q === 1) return { kind: "per_person", centsPerPerson: 7500 };
-    // Desconto por quantidade
-    if (q === 2) return { kind: "per_person", centsPerPerson: 6000 };
-    if (q >= 3 && q <= 4) return { kind: "per_person", centsPerPerson: 5500 };
-    if (q >= 5 && q <= 7) return { kind: "per_person", centsPerPerson: 5000 };
-    return null;
-  }
-
-  // Nazaré / Tour 3 Destinos
-  if (tourId === "3-destinos") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 10000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 7000 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 6500 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 6000 };
-    return null;
-  }
-
-  // Lisboa (tabela tinha "100–110" e "90–"; usamos regra determinística)
-  if (tourId === "lisboa") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 9000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 6000 };
-    if (q === 3) return { kind: "per_person", centsPerPerson: 5500 };
-    if (q >= 4 && q <= 5) return { kind: "per_person", centsPerPerson: 5000 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 4500 };
-    return null;
-  }
-
-  // Arrábida • Setúbal • Sesimbra
-  if (tourId === "arraabida") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 13000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 6500 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 6000 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 5500 };
-    return null;
-  }
-
-  // Algarve (preço por grupo)
-  if (tourId === "algarve") {
-    if (q <= 3) return { kind: "per_group", centsTotal: 60000 };
-    if (q <= 7) return { kind: "per_group", centsTotal: 70000 };
-    return null;
-  }
-
-  // Porto (preço por grupo)
-  if (tourId === "porto") {
-    if (q <= 3) return { kind: "per_group", centsTotal: 80000 };
-    if (q <= 7) return { kind: "per_group", centsTotal: 90000 };
-    return null;
-  }
-
-  // Alentejo (preço fixo por grupo; desconto para 5–7 vs 1–4)
-  if (tourId === "alentejo") {
-    if (q >= 1 && q <= 4) return { kind: "per_group", centsTotal: 40000 };
-    if (q >= 5 && q <= 7) return { kind: "per_group", centsTotal: 54000 };
-    return null;
-  }
-
-  return null;
-}
+/** Tempo máximo (serverless) para criar a sessão Stripe — evita função pendente. */
+export const maxDuration = 60;
 
 type Body = {
   tourId?: string;
@@ -97,7 +55,7 @@ export async function POST(req: Request) {
     stripe = getStripe();
   } catch (e) {
     console.error(
-      "[checkout] Stripe não inicializou (confirma STRIPE_SECRET_KEY na Vercel):",
+      "[checkout] Stripe não inicializou (confirma STRIPE_SECRET_KEY na Vercel ou .env.local):",
       e,
     );
     return NextResponse.json(
@@ -167,7 +125,7 @@ export async function POST(req: Request) {
   }
 
   // 1) Primeiro tenta tabela fixa (desconto por quantidade)
-  const tableRule = ruleFromTable(tourId, quantity);
+  const tableRule = getPricingRuleFromTable(tourId, quantity);
 
   // 2) Se não houver tabela, cai para STRIPE_PRICE_MAP (modo antigo)
   let fallbackPriceId: string | undefined;
@@ -195,7 +153,23 @@ export async function POST(req: Request) {
       );
     }
 
-    fallbackPriceId = await resolveStripePriceId(stripe, tourId, quantity);
+    try {
+      fallbackPriceId = await withTimeout(
+        resolveStripePriceId(stripe, tourId, quantity),
+        18_000,
+        "Stripe (resolver preço)",
+      );
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Timeout ao resolver preço.";
+      console.error("[checkout]", e);
+      return NextResponse.json(
+        {
+          error: msg,
+          code: "STRIPE_PRICE_RESOLVE_TIMEOUT",
+        },
+        { status: 504 },
+      );
+    }
     if (!fallbackPriceId) {
       return NextResponse.json(
         {
@@ -244,30 +218,34 @@ export async function POST(req: Request) {
           },
         ];
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: lineItems,
-      success_url: `${base}/reservar/obrigado?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${base}/reservar?cancelado=1`,
-      customer_email: email,
-      metadata: {
-        tour_id: tourId,
-        tour_label: tourLabel,
-        preferred_date: preferredDate,
-        quantity: String(quantity),
-        pricing_source: tableRule ? "table" : "stripe_price_map",
-        pricing_kind: tableRule ? tableRule.kind : "stripe_price",
-        customer_name: customerName,
-        phone: phone || "",
-        notes: notes || "",
-      },
-      custom_text: {
-        submit: {
-          message:
-            "Após o pagamento, a confirmação pode incluir recibo da Stripe (conforme as tuas definições). A data do tour confirma-se connosco.",
+    const session = await withTimeout(
+      stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: lineItems,
+        success_url: `${base}/reservar/obrigado?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${base}/reservar?cancelado=1`,
+        customer_email: email,
+        metadata: {
+          tour_id: metaSlice(tourId, 120),
+          tour_label: metaSlice(tourLabel),
+          preferred_date: metaSlice(preferredDate),
+          quantity: String(quantity),
+          pricing_source: tableRule ? "table" : "stripe_price_map",
+          pricing_kind: tableRule ? tableRule.kind : "stripe_price",
+          customer_name: metaSlice(customerName),
+          phone: metaSlice(phone || ""),
+          notes: metaSlice(notes || ""),
         },
-      },
-    });
+        custom_text: {
+          submit: {
+            message:
+              "Após o pagamento, a confirmação pode incluir recibo da Stripe (conforme as tuas definições). A data do tour confirma-se connosco.",
+          },
+        },
+      }),
+      22_000,
+      "Stripe Checkout",
+    );
 
     if (!session.url) {
       return NextResponse.json(
@@ -278,8 +256,21 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: session.url });
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Erro Stripe.";
+    let message = e instanceof Error ? e.message : "Erro Stripe.";
+    let stripeCode: string | undefined;
+    if (e instanceof Stripe.errors.StripeError) {
+      message = e.message || message;
+      stripeCode = e.code;
+      if (e.code) console.error("[checkout] stripe code:", e.code);
+    }
     console.error("[checkout]", e);
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: message,
+        code: "CHECKOUT_FAILED",
+        ...(stripeCode ? { stripeCode } : {}),
+      },
+      { status: 500 },
+    );
   }
 }
