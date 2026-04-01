@@ -9,6 +9,9 @@ const MAX_NAME_LEN = 120;
 const MAX_PHONE_DIGITS = 15;
 const MAX_NOTES_LEN = 500;
 
+/** Se o servidor / Stripe não responder, o fetch não deve ficar “a carregar” para sempre. */
+const CHECKOUT_FETCH_TIMEOUT_MS = 55_000;
+
 /** Indicativo só com bandeira + código (sem nome do país por extenso). */
 const PHONE_DIAL_OPTIONS = [
   { flag: "🇵🇹", dial: "+351" },
@@ -177,6 +180,66 @@ function estimateFromTable(tourId: string, quantity: number): PriceEstimate {
       kind: "per_person",
       centsPerPerson: 5500,
       totalCents: 5500 * q,
+      label: "6–7 pessoas",
+    };
+  }
+
+  if (tourId === "aveiro") {
+    if (q === 1)
+      return {
+        kind: "per_person",
+        centsPerPerson: 14000,
+        totalCents: 14000 * q,
+        label: "1 pessoa",
+      };
+    if (q === 2)
+      return {
+        kind: "per_person",
+        centsPerPerson: 14000,
+        totalCents: 14000 * q,
+        label: "2 pessoas",
+      };
+    if (q >= 3 && q <= 5)
+      return {
+        kind: "per_person",
+        centsPerPerson: 12000,
+        totalCents: 12000 * q,
+        label: "3–5 pessoas",
+      };
+    return {
+      kind: "per_person",
+      centsPerPerson: 11000,
+      totalCents: 11000 * q,
+      label: "6–7 pessoas",
+    };
+  }
+
+  if (tourId === "monsanto") {
+    if (q === 1)
+      return {
+        kind: "per_person",
+        centsPerPerson: 13000,
+        totalCents: 13000 * q,
+        label: "1 pessoa",
+      };
+    if (q === 2)
+      return {
+        kind: "per_person",
+        centsPerPerson: 13000,
+        totalCents: 13000 * q,
+        label: "2 pessoas",
+      };
+    if (q >= 3 && q <= 5)
+      return {
+        kind: "per_person",
+        centsPerPerson: 11500,
+        totalCents: 11500 * q,
+        label: "3–5 pessoas",
+      };
+    return {
+      kind: "per_person",
+      centsPerPerson: 10000,
+      totalCents: 10000 * q,
       label: "6–7 pessoas",
     };
   }
@@ -380,10 +443,18 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     const nat = digitsOnly(phoneNational, MAX_PHONE_DIGITS);
     const phone =
       nat.length > 0 ? `${phoneDial} ${nat}` : "";
+
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => {
+      controller.abort();
+    }, CHECKOUT_FETCH_TIMEOUT_MS);
+
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        cache: "no-store",
         body: JSON.stringify({
           tourId,
           quantity,
@@ -411,14 +482,25 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         setError(data.error ?? "Não foi possível iniciar o pagamento.");
         return;
       }
-      if (data.url) {
-        window.location.assign(data.url);
+      const checkoutUrl = typeof data.url === "string" ? data.url.trim() : "";
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
         return;
       }
-      setError("Resposta inválida do servidor.");
-    } catch {
-      setError("Erro de rede. Tenta novamente.");
+      setError(
+        data.error ??
+          "Resposta inválida: não há URL de pagamento. Confirma STRIPE_SECRET_KEY e os logs do servidor.",
+      );
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setError(
+          "O servidor demorou demasiado a responder (timeout). Verifica a ligação, se a chave Stripe está configurada no Netlify/Vercel e tenta de novo.",
+        );
+      } else {
+        setError("Erro de rede. Tenta novamente.");
+      }
     } finally {
+      window.clearTimeout(timeoutId);
       setLoading(false);
     }
   }

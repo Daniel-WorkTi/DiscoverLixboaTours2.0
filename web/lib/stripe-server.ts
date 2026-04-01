@@ -29,5 +29,10 @@ export function getStripe(): Stripe {
     console.error("[stripe]", detail);
     throw new Error("STRIPE_SECRET_KEY em falta ou inválida.");
   }
-  return new Stripe(key, { apiVersion: API_VERSION });
+  return new Stripe(key, {
+    apiVersion: API_VERSION,
+    /** Evita pedidos à API Stripe a ficarem pendentes sem limite (serverless). */
+    timeout: 25000,
+    maxNetworkRetries: 1,
+  });
 }

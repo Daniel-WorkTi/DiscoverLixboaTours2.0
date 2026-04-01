@@ -11,6 +11,9 @@ import { toursBooking } from "@/lib/tours-booking";
 
 export const runtime = "nodejs";
 
+/** Tempo máximo (serverless) para criar a sessão Stripe — evita função pendente. */
+export const maxDuration = 60;
+
 type PricingRule =
   | { kind: "per_person"; centsPerPerson: number }
   | { kind: "per_group"; centsTotal: number };
@@ -54,6 +57,24 @@ function ruleFromTable(tourId: string, qty: number): PricingRule | null {
     if (q === 2) return { kind: "per_person", centsPerPerson: 6500 };
     if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 6000 };
     if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 5500 };
+    return null;
+  }
+
+  // Aveiro & Costa Nova
+  if (tourId === "aveiro") {
+    if (q === 1) return { kind: "per_person", centsPerPerson: 14000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 14000 };
+    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 12000 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 11000 };
+    return null;
+  }
+
+  // Monsanto & Centro de Portugal
+  if (tourId === "monsanto") {
+    if (q === 1) return { kind: "per_person", centsPerPerson: 13000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 13000 };
+    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 11500 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 10000 };
     return null;
   }
 

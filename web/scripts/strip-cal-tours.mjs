@@ -18,6 +18,7 @@ const TOURS = [
   "tour-lisboa.html",
   "tour-porto.html",
   "tour-arraabida.html",
+  "tour-aveiro.html",
   "tour-alentejo.html",
   "tour-algarve.html",
 ];
