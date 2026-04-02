@@ -3,7 +3,20 @@ import { LoginForm } from "./ui";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminLoginPage() {
+function redirectAfterLoginFromSearchParams(next: unknown): string {
+  const raw = typeof next === "string" ? next : Array.isArray(next) ? next[0] : "";
+  const t = String(raw ?? "").trim();
+  if (!t.startsWith("/") || t.startsWith("//")) return "/admin/reservas";
+  if (!t.startsWith("/admin")) return "/admin/reservas";
+  return t;
+}
+
+type PageProps = { searchParams: Promise<{ next?: string | string[] }> };
+
+export default async function AdminLoginPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
+  const redirectAfterLogin = redirectAfterLoginFromSearchParams(sp.next);
+
   return (
     <main className="min-h-screen bg-[hsl(var(--background))] px-5 py-10">
       <div className="mx-auto w-full max-w-md">
@@ -19,7 +32,7 @@ export default function AdminLoginPage() {
             <CardDescription>Enter your password to view bookings.</CardDescription>
           </CardHeader>
           <CardContent>
-            <LoginForm />
+            <LoginForm redirectAfterLogin={redirectAfterLogin} />
           </CardContent>
         </Card>
       </div>

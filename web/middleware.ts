@@ -19,6 +19,7 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  /** Inclui /admin sem segmentos extra (senão a rota podia não passar no matcher e dar 404). */
+  matcher: ["/admin", "/admin/:path*"],
 };
 

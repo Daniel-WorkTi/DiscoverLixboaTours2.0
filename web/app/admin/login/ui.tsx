@@ -1,14 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginForm() {
-  const sp = useSearchParams();
-  const next = useMemo(() => sp.get("next") || "/admin/reservas", [sp]);
+function isSafeAdminNextPath(v: string): boolean {
+  return v === "/admin/reservas" || v === "/admin" || v.startsWith("/admin/");
+}
+
+type LoginFormProps = {
+  /** Destino após login (validado no servidor). */
+  redirectAfterLogin: string;
+};
+
+export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
+  const next = redirectAfterLogin;
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -28,7 +35,7 @@ export function LoginForm() {
         setErr(data.error || "Login failed.");
         return;
       }
-      window.location.href = next;
+      window.location.href = isSafeAdminNextPath(next) ? next : "/admin/reservas";
     } catch (e2) {
       setErr(e2 instanceof Error ? e2.message : "Network error.");
     } finally {

@@ -3,6 +3,7 @@ import { isAdminRequestAuthenticated } from "@/lib/admin-auth";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AdminLogoutButton } from "./AdminLogoutButton";
 import { BookingsClient } from "./ui";
 
 export const dynamic = "force-dynamic";
@@ -30,21 +31,7 @@ export default async function AdminReservasPage() {
             <Button asChild variant="outline">
               <Link href="/">Back to site</Link>
             </Button>
-            <form
-              action="/api/admin/logout"
-              method="post"
-              onSubmit={(e) => {
-                // allow normal post; client navigation after
-                e.preventDefault();
-                fetch("/api/admin/logout", { method: "POST" }).finally(() => {
-                  window.location.href = "/admin/login";
-                });
-              }}
-            >
-              <Button type="submit" variant="secondary">
-                Logout
-              </Button>
-            </form>
+            <AdminLogoutButton />
           </div>
         </header>
 
