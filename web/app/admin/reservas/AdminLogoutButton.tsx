@@ -14,7 +14,7 @@ export function AdminLogoutButton() {
         });
       }}
     >
-      <Button type="submit" variant="secondary" size="lg">
+      <Button type="submit" variant="secondary" size="lg" className="min-h-12 rounded-full px-6">
         Sair
       </Button>
     </form>

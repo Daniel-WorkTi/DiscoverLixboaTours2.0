@@ -17,22 +17,21 @@ export default async function AdminReservasPage() {
     <main className="admin-main">
       <div className="admin-shell admin-shell--dashboard admin-stack">
         <div className="admin-header-row">
-          <div className="min-w-0 space-y-3">
-            <div className="flex flex-wrap items-center gap-2">
+          <div className="min-w-0 space-y-4">
+            <div className="flex flex-wrap items-center gap-2.5">
               <Badge variant="default">Ao vivo</Badge>
               <Badge variant="outline">Stripe + Calendar</Badge>
             </div>
             <div>
-              <h1 className="admin-hero-title">Reservas</h1>
-              <p className="admin-lead">
-                Lista atualizada a partir do Google Calendar (eventos criados pelo webhook após
-                pagamento).
+              <h1 className="admin-page-title">Reservas</h1>
+              <p className="admin-page-lead">
+                Lista sincronizada com o Google Calendar (pagamentos confirmados no Stripe).
               </p>
             </div>
           </div>
 
-          <div className="admin-actions shrink-0">
-            <Button asChild variant="outline" size="lg">
+          <div className="admin-actions shrink-0 pt-1">
+            <Button asChild variant="outline" size="lg" className="min-h-12 rounded-full px-6">
               <Link href="/">Voltar ao site</Link>
             </Button>
             <AdminLogoutButton />
@@ -43,12 +42,12 @@ export default async function AdminReservasPage() {
 
         <section className="admin-surface">
           <div className="admin-surface__head text-left">
-            <h2 className="font-[family-name:var(--font-outfit)] text-[1.05rem] font-extrabold text-[#333] sm:text-lg">
+            <h2 className="font-[family-name:var(--font-outfit)] text-base font-bold text-[#333] sm:text-[1.05rem]">
               Pagamentos recentes
             </h2>
-              <p className="mt-2 text-base leading-relaxed text-[#666]">
-              Aceita ou recusa cada viagem paga. Contacta clientes por WhatsApp ou email com um clique.
-              Atualização automática a cada 10 s.
+            <p className="mt-3 text-[0.9375rem] leading-relaxed text-[#666] sm:text-[0.98rem]">
+              Confirma ou recusa cada viagem; contacta clientes por WhatsApp ou email. Atualização
+              automática a cada 10 s.
             </p>
           </div>
           <div className="admin-divider" role="presentation" />

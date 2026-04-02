@@ -200,71 +200,79 @@ export function BookingsClient() {
   }
 
   return (
-    <div className="admin-dash space-y-8">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-2xl border border-amber-200/80 bg-amber-50/90 px-4 py-4 text-center shadow-sm">
-          <div className="text-[0.72rem] font-semibold uppercase tracking-wide text-amber-800/90">
+    <div className="admin-dash flex flex-col gap-10">
+      <section aria-label="Resumo" className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="rounded-2xl border border-amber-200/90 bg-amber-50/95 px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
+          <div className="text-xs font-semibold uppercase tracking-wide text-amber-900/85">
             Por tratar
           </div>
-          <div className="mt-1 text-3xl font-semibold tabular-nums text-amber-950">{stats.p}</div>
+          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-amber-950 sm:text-[1.75rem]">
+            {stats.p}
+          </div>
         </div>
-        <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/90 px-4 py-4 text-center shadow-sm">
-          <div className="text-[0.72rem] font-semibold uppercase tracking-wide text-emerald-900/80">
+        <div className="rounded-2xl border border-emerald-200/90 bg-emerald-50/95 px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
+          <div className="text-xs font-semibold uppercase tracking-wide text-emerald-900/85">
             Aceites
           </div>
-          <div className="mt-1 text-3xl font-semibold tabular-nums text-emerald-950">{stats.a}</div>
+          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-emerald-950 sm:text-[1.75rem]">
+            {stats.a}
+          </div>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-4 text-center shadow-sm">
-          <div className="text-[0.72rem] font-semibold uppercase tracking-wide text-neutral-600">
+        <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
+          <div className="text-xs font-semibold uppercase tracking-wide text-neutral-600">
             Recusadas
           </div>
-          <div className="mt-1 text-3xl font-semibold tabular-nums text-neutral-900">{stats.r}</div>
+          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-neutral-900 sm:text-[1.75rem]">
+            {stats.r}
+          </div>
         </div>
-        <div className="rounded-2xl border border-black/8 bg-white px-4 py-4 text-center shadow-sm">
-          <div className="text-[0.72rem] font-semibold uppercase tracking-wide text-neutral-500">
+        <div className="rounded-2xl border border-black/8 bg-white px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
+          <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
             Total
           </div>
-          <div className="mt-1 text-3xl font-semibold tabular-nums text-[#1d1d1f]">{stats.total}</div>
+          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-[#1d1d1f] sm:text-[1.75rem]">
+            {stats.total}
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="flex flex-wrap gap-2">
+      <section aria-label="Filtrar lista" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {(["pending", "accepted", "rejected", "all"] as const).map((f) => (
           <button
             key={f}
             type="button"
             onClick={() => setFilter(f)}
             className={cn(
-              "min-h-11 rounded-full px-5 text-[15px] font-semibold transition-all",
+              "min-h-[48px] w-full rounded-2xl px-4 py-3 text-sm font-semibold transition-all sm:min-h-[52px] sm:px-5 sm:text-[15px]",
               filter === f
                 ? "bg-[#1d1d1f] text-white shadow-md"
-                : "bg-white text-[#555] shadow-sm ring-1 ring-black/8 hover:bg-neutral-50",
+                : "bg-white text-[#444] shadow-sm ring-1 ring-black/10 hover:bg-neutral-50",
             )}
           >
             {FILTER_LABELS[f]}
           </button>
         ))}
-      </div>
+      </section>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <section aria-label="Pesquisa e ações" className="flex flex-col gap-4 lg:flex-row lg:items-center">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Pesquisar nome, tour, data, email, telefone…"
-          className="h-14 min-h-14 flex-1 rounded-2xl border border-black/10 bg-white px-5 text-[17px] shadow-sm placeholder:text-neutral-400"
+          className="min-h-14 w-full rounded-2xl border border-black/10 bg-white py-3 pl-7 pr-5 text-[15px] shadow-sm placeholder:text-neutral-400 focus-visible:ring-2 sm:text-base lg:flex-1"
         />
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3 lg:shrink-0">
           <Button
             type="button"
             variant="secondary"
-            className="h-12 min-h-12 rounded-full px-5 text-[15px]"
+            className="min-h-12 rounded-full px-6 text-[15px]"
             onClick={enableNotifications}
           >
             Notificações
           </Button>
           <Button
             type="button"
-            className="h-12 min-h-12 rounded-full px-5 text-[15px]"
+            className="min-h-12 rounded-full px-6 text-[15px]"
             onClick={() => refresh(true)}
             disabled={loading}
           >
@@ -272,20 +280,22 @@ export function BookingsClient() {
             {loading ? "A atualizar…" : "Atualizar"}
           </Button>
         </div>
-      </div>
+      </section>
 
       {err ? (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-[15px] font-medium text-red-900">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-[15px] font-medium leading-relaxed text-red-900">
           {err}
         </div>
       ) : null}
 
-      <div className="space-y-5">
+      <div className="flex flex-col gap-6">
         {filtered.length === 0 ? (
-          <div className="rounded-[22px] border border-dashed border-black/12 bg-white/80 px-8 py-16 text-center">
-            <p className="text-[17px] font-medium text-[#555]">Nenhuma reserva neste filtro.</p>
-            <p className="mt-2 text-[15px] text-neutral-500">
-              Altera o separador ou limpa a pesquisa.
+          <div className="rounded-[20px] border border-dashed border-black/15 bg-neutral-50/80 px-6 py-20 text-center sm:px-10 sm:py-24">
+            <p className="text-base font-medium text-[#444] sm:text-[1.05rem]">
+              Nenhuma reserva neste filtro.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-neutral-500 sm:text-[0.95rem]">
+              Altera o separador em cima ou limpa a pesquisa.
             </p>
           </div>
         ) : (
@@ -302,15 +312,15 @@ export function BookingsClient() {
             return (
               <article
                 key={r.eventId}
-                className="overflow-hidden rounded-[22px] border border-black/[0.08] bg-white shadow-[0_8px_40px_rgba(0,0,0,0.06)]"
+                className="overflow-hidden rounded-[20px] border border-black/8 bg-white shadow-[0_6px_28px_rgba(0,0,0,0.06)]"
               >
-                <div className="flex flex-col gap-5 p-5 sm:p-7">
+                <div className="flex flex-col gap-6 p-6 sm:p-8">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0 flex-1 space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
+                    <div className="min-w-0 flex-1 space-y-3">
+                      <div className="flex flex-wrap items-center gap-2.5">
                         <span
                           className={cn(
-                            "inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold uppercase tracking-wide",
+                            "inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide sm:text-xs",
                             r.approvalStatus === "pending" &&
                               "bg-amber-100 text-amber-900 ring-1 ring-amber-200/80",
                             r.approvalStatus === "accepted" &&
@@ -323,14 +333,14 @@ export function BookingsClient() {
                           {r.approvalStatus === "accepted" && "Aceite"}
                           {r.approvalStatus === "rejected" && "Recusada"}
                         </span>
-                        <span className="text-[15px] font-semibold text-[#ff6600]">
+                        <span className="text-sm font-semibold text-[#ff6600] sm:text-[15px]">
                           {formatMoney(r.totalCents, r.currency)}
                         </span>
                       </div>
-                      <h3 className="font-[family-name:var(--font-outfit)] text-[1.35rem] font-bold leading-tight tracking-tight text-[#1d1d1f] sm:text-[1.5rem]">
+                      <h3 className="font-[family-name:var(--font-outfit)] text-lg font-bold leading-snug tracking-tight text-[#1d1d1f] sm:text-xl">
                         {r.tourLabel}
                       </h3>
-                      <p className="text-[15px] leading-relaxed text-[#555]">
+                      <p className="text-sm leading-relaxed text-[#555] sm:text-[15px]">
                         <span className="font-semibold text-[#1d1d1f]">{r.customerName}</span>
                         {" · "}
                         {formatDateLong(r.preferredDate)}
@@ -341,15 +351,15 @@ export function BookingsClient() {
                   </div>
 
                   {r.notes ? (
-                    <div className="rounded-2xl bg-neutral-50 px-4 py-3 text-[15px] leading-relaxed text-[#444] ring-1 ring-black/5">
+                    <div className="rounded-2xl bg-neutral-50 px-4 py-4 text-sm leading-relaxed text-[#444] ring-1 ring-black/5 sm:text-[15px]">
                       <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                         Notas do cliente
                       </span>
-                      <p className="mt-1">{r.notes}</p>
+                      <p className="mt-2">{r.notes}</p>
                     </div>
                   ) : null}
 
-                  <div className="flex flex-wrap gap-2 text-[15px]">
+                  <div className="flex flex-wrap gap-3 text-sm sm:text-[15px]">
                     {r.email ? (
                       <a
                         href={mailtoHref(r)}

@@ -44,20 +44,30 @@
   }
 }
 
-/* Tipografia confortável (legível, estilo limpo) */
+/* Tipografia confortável — corpo 15–16px, sem saltos extremos */
 .admin-dash {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 17px;
-  line-height: 1.45;
+  font-size: 15px;
+  line-height: 1.5;
   color: #1d1d1f;
   -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 640px) {
+  .admin-dash {
+    font-size: 16px;
+  }
 }
 
 .admin-stack {
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.admin-shell--dashboard.admin-stack {
+  gap: clamp(2rem, 5vw, 3rem);
 }
 
 .admin-hero {
@@ -75,6 +85,31 @@
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
+}
+
+/* Título de página interior (dashboard) — mais contido que a home de login */
+.admin-page-title {
+  font-family: var(--font-outfit), "Outfit", sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.7rem);
+  font-weight: 700;
+  color: #1d1d1f;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.65rem;
+}
+
+.admin-page-lead {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #555;
+  margin: 0;
+  max-width: 48ch;
+}
+
+@media (min-width: 640px) {
+  .admin-page-lead {
+    font-size: 1rem;
+  }
 }
 
 .admin-lead {
@@ -105,46 +140,52 @@
 }
 
 .admin-surface__head {
-  padding: 1.5rem 1.35rem 1.25rem;
+  padding: 1.5rem 1.25rem 1.5rem;
   border-bottom: 1px solid #eee;
   background: linear-gradient(180deg, #fff 0%, #fffaf7 100%);
 }
 
 @media (min-width: 640px) {
   .admin-surface__head {
-    padding: 1.75rem 2rem 1.35rem;
+    padding: 1.75rem 1.75rem 1.5rem;
   }
 }
 
 .admin-surface__body {
-  padding: 1.5rem 1.35rem 1.75rem;
+  padding: 1.75rem 1.25rem 2rem;
 }
 
 @media (min-width: 640px) {
   .admin-surface__body {
-    padding: 1.75rem 2rem 2rem;
+    padding: 2rem 1.75rem 2.25rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .admin-surface__body {
+    padding: 2.25rem 2rem 2.5rem;
   }
 }
 
 .admin-header-row {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.75rem;
 }
 
 @media (min-width: 1024px) {
   .admin-header-row {
     flex-direction: row;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 2rem;
+    gap: 2.5rem;
   }
 }
 
 .admin-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 1rem;
   align-items: center;
 }
 
