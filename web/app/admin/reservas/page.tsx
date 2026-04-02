@@ -3,8 +3,6 @@ import { isAdminRequestAuthenticated } from "@/lib/admin-auth";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { AdminLogoutButton } from "./AdminLogoutButton";
 import { BookingsClient } from "./ui";
 
@@ -16,45 +14,47 @@ export default async function AdminReservasPage() {
   }
 
   return (
-    <main className="px-5 pb-20 pt-8">
-      <div className="mx-auto w-full max-w-5xl space-y-8">
-        <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-3">
+    <main className="admin-main">
+      <div className="admin-shell admin-shell--wide admin-stack">
+        <div className="admin-header-row">
+          <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="default">Ao vivo</Badge>
               <Badge variant="outline">Stripe + Calendar</Badge>
             </div>
             <div>
-              <h1 className="text-3xl font-extrabold tracking-tight text-black">Reservas</h1>
-              <p className="mt-1 max-w-xl text-sm text-[hsl(var(--muted-foreground))]">
+              <h1 className="admin-hero-title">Reservas</h1>
+              <p className="admin-lead">
                 Lista atualizada a partir do Google Calendar (eventos criados pelo webhook após
                 pagamento).
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="admin-actions shrink-0">
             <Button asChild variant="outline" size="lg">
               <Link href="/">Voltar ao site</Link>
             </Button>
             <AdminLogoutButton />
           </div>
-        </header>
+        </div>
 
-        <Separator className="bg-black/10" />
+        <div className="admin-divider" role="presentation" />
 
-        <Card className="overflow-hidden border-black/[0.08] shadow-md shadow-black/[0.05]">
-          <CardHeader className="space-y-1 bg-gradient-to-br from-white via-white to-orange-50/30 pb-2">
-            <CardTitle className="text-xl">Pagamentos recentes</CardTitle>
-            <CardDescription>
+        <section className="admin-surface">
+          <div className="admin-surface__head text-left">
+            <h2 className="font-[family-name:var(--font-outfit)] text-[1.05rem] font-extrabold text-[#333] sm:text-lg">
+              Pagamentos recentes
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-[#666]">
               Pesquisa, atualização automática a cada 10 s e alertas do browser (opcional).
-            </CardDescription>
-          </CardHeader>
-          <Separator />
-          <CardContent className="pt-6">
+            </p>
+          </div>
+          <div className="admin-divider" role="presentation" />
+          <div className="admin-surface__body">
             <BookingsClient />
-          </CardContent>
-        </Card>
+          </div>
+        </section>
       </div>
     </main>
   );

@@ -46,7 +46,7 @@ export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
   }
 
   return (
-    <form className="space-y-5" onSubmit={onSubmit}>
+    <form className="space-y-6" onSubmit={onSubmit}>
       <div className="space-y-2">
         <Label htmlFor="admin-pass">Palavra-passe</Label>
         <Input

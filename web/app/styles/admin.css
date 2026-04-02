@@ -1,0 +1,143 @@
+/**
+ * Admin (/admin/*) — mesmo ritmo que .reservar-main / .reservar-shell em booking-reservar.css
+ * Fundo #f9f9f9, shell centrado com clamp horizontal, títulos Outfit como na reserva/obrigado.
+ */
+
+.admin-main {
+  min-height: min(100vh, 100dvh);
+  width: 100%;
+  padding-top: clamp(1.5rem, 4vw, 2.75rem);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+  background: #f9f9f9;
+}
+
+.admin-shell {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 3rem);
+  padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+.admin-shell--narrow {
+  max-width: 560px;
+}
+
+.admin-shell--wide {
+  max-width: 920px;
+}
+
+@media (min-width: 1100px) {
+  .admin-shell--wide {
+    max-width: 1000px;
+  }
+}
+
+.admin-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.admin-hero {
+  text-align: center;
+}
+
+.admin-shell--wide .admin-hero {
+  text-align: left;
+}
+
+.admin-hero-title {
+  font-family: var(--font-outfit), "Outfit", sans-serif;
+  font-size: clamp(1.45rem, 4.5vw, 2.05rem);
+  color: #333;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+
+.admin-lead {
+  color: #555;
+  line-height: 1.65;
+  font-size: 0.95rem;
+  margin: 0;
+  max-width: 60ch;
+}
+
+.admin-shell--wide .admin-lead {
+  max-width: 54ch;
+}
+
+@media (min-width: 900px) {
+  .admin-lead {
+    font-size: 1.05rem;
+  }
+}
+
+/* Cartão alinhado a .obrigado-card */
+.admin-surface {
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.admin-surface__head {
+  padding: 1.5rem 1.35rem 1.25rem;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(180deg, #fff 0%, #fffaf7 100%);
+}
+
+@media (min-width: 640px) {
+  .admin-surface__head {
+    padding: 1.75rem 2rem 1.35rem;
+  }
+}
+
+.admin-surface__body {
+  padding: 1.5rem 1.35rem 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .admin-surface__body {
+    padding: 1.75rem 2rem 2rem;
+  }
+}
+
+.admin-header-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-header-row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.admin-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 102, 0, 0.2) 20%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(255, 102, 0, 0.2) 80%,
+    transparent 100%
+  );
+  margin: 0;
+  border: 0;
+}

@@ -6,55 +6,45 @@ type AdminShellProps = {
 };
 
 /**
- * Fundo e marca Discover Lixboa (laranja · branco · preto) para /admin.
- * Usa tokens shadcn em globals.css (--primary, --background, etc.).
+ * Cabeçalho alinhado ao .main-header / .header-content do site (max-width 1400px, padding clamp).
+ * O fundo da página usa #f9f9f9 via .admin-main (admin.css), como .reservar-main.
  */
 export function AdminShell({ children }: AdminShellProps) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[hsl(var(--background))]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_-15%,hsl(24_95%_53%/0.14),transparent_55%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-40 top-32 h-[28rem] w-[28rem] rounded-full bg-[hsl(24_95%_53%/0.09)] blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-20 -right-32 h-[22rem] w-[22rem] rounded-full bg-black/[0.04] blur-3xl"
-      />
-
-      <div className="h-1.5 w-full bg-[hsl(var(--primary))]" />
-
-      <header className="relative z-20 border-b border-black/[0.06] bg-white/80 backdrop-blur-md">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-5 py-4 sm:flex-row">
+    <div className="min-h-screen bg-[#f9f9f9]">
+      <header className="sticky top-0 z-30 border-b border-[#eee] bg-white shadow-[0_1px_0_rgba(0,0,0,0.04)]">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-3 px-[clamp(1.5rem,4vw,3rem)] py-4 sm:flex-row sm:py-5">
           <Link
             href="/"
-            className="flex items-center gap-3 text-black transition-opacity hover:opacity-85"
+            className="flex items-center gap-3 text-[#333] no-underline transition-opacity hover:opacity-85"
           >
             <Image
               src="/assets/images/hero/logo.png.webp"
               alt="Discover Lixboa Tours"
-              width={160}
-              height={64}
-              className="h-12 w-auto object-contain"
+              width={200}
+              height={80}
+              className="h-[72px] w-auto object-contain sm:h-20"
               priority
             />
             <span className="hidden text-left sm:block">
-              <span className="block text-xs font-bold uppercase tracking-wider text-[hsl(var(--primary))]">
+              <span className="block text-[0.7rem] font-bold uppercase tracking-[0.12em] text-[#ff6600]">
                 Admin
               </span>
-              <span className="text-sm font-extrabold text-black">Discover Lixboa Tours</span>
+              <span className="text-sm font-bold text-[#333]">Discover Lixboa Tours</span>
             </span>
           </Link>
-          <p className="text-center text-xs text-black/50 sm:text-right">
-            Laranja · branco · preto
-          </p>
+          <nav className="text-center text-sm font-semibold text-[#555] sm:text-right">
+            <span className="text-[#ff6600]">Painel de reservas</span>
+          </nav>
         </div>
+        {/* Mesma ideia do .main-header::after em site.css */}
+        <div
+          aria-hidden
+          className="h-0.5 w-full bg-[linear-gradient(90deg,rgba(255,102,0,0.25)_0%,rgba(255,102,0,0.08)_25%,transparent_50%,rgba(255,102,0,0.08)_75%,rgba(255,102,0,0.25)_100%)]"
+        />
       </header>
 
-      <div className="relative z-10">{children}</div>
+      <div>{children}</div>
     </div>
   );
 }

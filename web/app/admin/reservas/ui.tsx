@@ -95,67 +95,70 @@ export function BookingsClient() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-1 items-center gap-2">
+    <div className="space-y-5">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch lg:justify-between">
+        <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
           <Input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder="Search by name, date, tour, email…"
+            placeholder="Pesquisar por nome, data, tour, email…"
+            className="min-h-11 flex-1"
           />
-          <Button variant="outline" onClick={() => setFilter("")} disabled={!filter}>
-            Clear
+          <Button variant="outline" onClick={() => setFilter("")} disabled={!filter} className="shrink-0">
+            Limpar
           </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="secondary" onClick={enableNotifications}>
-            Enable notifications
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="secondary" onClick={enableNotifications} className="min-h-11">
+            Notificações
           </Button>
-          <Button onClick={() => refresh(true)} disabled={loading}>
-            {loading ? "Refreshing…" : "Refresh"}
+          <Button onClick={() => refresh(true)} disabled={loading} className="min-h-11">
+            {loading ? "A atualizar…" : "Atualizar"}
           </Button>
         </div>
       </div>
 
       {err ? (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+        <div className="rounded-[14px] border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-800">
           {err}
         </div>
       ) : null}
 
-      <div className="grid gap-3">
+      <div className="grid gap-4">
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-white p-6 text-sm text-black/60">
-            No bookings found.
+          <div className="rounded-[16px] border border-[#eee] bg-[#fafafa] p-8 text-center text-sm text-[#666]">
+            Ainda não há reservas listadas.
           </div>
         ) : (
           filtered.map((r) => (
             <div
               key={r.stripeSessionId}
               className={cn(
-                "rounded-2xl border border-[hsl(var(--border))] bg-white p-4 shadow-sm",
-                "hover:border-black/20 transition-colors",
+                "rounded-[16px] border border-[#eee] bg-white p-4 shadow-[0_2px_12px_rgba(0,0,0,0.04)] sm:p-5",
+                "transition-shadow hover:shadow-[0_4px_20px_rgba(0,0,0,0.07)]",
               )}
             >
               <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-                <div className="text-base font-extrabold text-black">
+                <div className="font-[family-name:var(--font-outfit)] text-base font-extrabold text-[#333]">
                   {r.preferredDate} · {r.tourLabel}
                 </div>
-                <div className="text-base font-extrabold text-[hsl(var(--primary))]">
+                <div className="text-base font-extrabold text-[#ff6600]">
                   {formatMoney(r.totalCents, r.currency)}
                 </div>
               </div>
 
-              <div className="mt-2 flex flex-wrap gap-2 text-sm text-black/70">
-                <span className="rounded-full bg-black/5 px-3 py-1">
-                  <strong className="text-black">{r.customerName}</strong>
+              <div className="mt-3 flex flex-wrap gap-2 text-sm text-[#555]">
+                <span className="rounded-full bg-[#f5f5f5] px-3 py-1.5">
+                  <strong className="text-[#333]">{r.customerName}</strong>
                 </span>
-                <span className="rounded-full bg-black/5 px-3 py-1">{r.quantity} people</span>
-                <span className="rounded-full bg-black/5 px-3 py-1">{r.email || "—"}</span>
-                <span className="rounded-full bg-black/5 px-3 py-1">{r.phone || "—"}</span>
+                <span className="rounded-full bg-[#f5f5f5] px-3 py-1.5">{r.quantity} pessoas</span>
+                <span className="rounded-full bg-[#f5f5f5] px-3 py-1.5">{r.email || "—"}</span>
+                <span className="rounded-full bg-[#f5f5f5] px-3 py-1.5">{r.phone || "—"}</span>
               </div>
 
-              <div className="mt-2 text-xs text-black/45 break-all">Stripe: {r.stripeSessionId}</div>
+              <div className="mt-3 text-xs leading-relaxed text-[#999] break-all">
+                Stripe: {r.stripeSessionId}
+              </div>
             </div>
           ))
         )}
