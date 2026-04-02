@@ -94,6 +94,7 @@ export function BookingsClient() {
   const [err, setErr] = useState<string | null>(null);
   const [actingId, setActingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [testBusy, setTestBusy] = useState(false);
   const seen = useRef<Set<string>>(new Set());
 
   const refresh = useCallback(async (showToasts: boolean) => {
@@ -193,6 +194,28 @@ export function BookingsClient() {
     await Notification.requestPermission();
   }
 
+  async function createTestBooking() {
+    setTestBusy(true);
+    setErr(null);
+    try {
+      const res = await fetch("/api/admin/bookings/test", { method: "POST" });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        preferredDate?: string;
+      };
+      if (!res.ok || !data.ok) {
+        setErr(data.error || "Não foi possível criar a reserva de teste.");
+        return;
+      }
+      await refresh(true);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Erro de rede.");
+    } finally {
+      setTestBusy(false);
+    }
+  }
+
   function copyStripe(id: string) {
     void navigator.clipboard.writeText(id);
     setCopiedId(id);
@@ -262,6 +285,16 @@ export function BookingsClient() {
           className="min-h-14 w-full rounded-2xl border border-black/10 bg-white py-3 pl-7 pr-5 text-[15px] shadow-sm placeholder:text-neutral-400 focus-visible:ring-2 sm:text-base lg:flex-1"
         />
         <div className="flex flex-wrap gap-3 lg:shrink-0">
+          <Button
+            type="button"
+            variant="outline"
+            className="min-h-12 rounded-full border-dashed px-6 text-[15px]"
+            onClick={() => void createTestBooking()}
+            disabled={loading || testBusy}
+            title="Cria uma entrada no calendário como reserva, sem Stripe — para testar o painel."
+          >
+            {testBusy ? "A criar teste…" : "Reserva de teste"}
+          </Button>
           <Button
             type="button"
             variant="secondary"

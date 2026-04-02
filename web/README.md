@@ -11,6 +11,12 @@ Rotas `/tours/...` usam **rewrite** para o HTML em `public/` (página completa, 
 - **Produção (Vercel):** define tudo em **Project → Settings → Environment Variables**. Não é preciso `.env` no repositório.
 - **Local (opcional):** copia `.env.example` para `.env.local` e preenche as chaves para `npm run dev`.
 
+## Testes sem cobrar dinheiro real
+
+- **Stripe em modo teste:** na Vercel usa `sk_test_...` e preços de teste (`price_...` do modo Test no dashboard Stripe). No checkout usa o cartão de teste **4242 4242 4242 4242**, qualquer data futura e CVC qualquer — **não há cobrança real**. O webhook tem de ser o endpoint em **modo Test** (outro `whsec_...` que o de Live).
+- **“Send test webhook” no Stripe:** o evento de exemplo **não traz** `metadata` (ex.: `preferred_date`) como no checkout real, por isso o teu `/api/webhooks/stripe` pode **ignorar** o evento e **nada aparece** no painel — é normal.
+- **Painel admin:** em **Reservas** há o botão **Reserva de teste** (com sessão de admin iniciada): cria um evento no Google Calendar **sem passar pelo Stripe**, só para veres a lista e o fluxo do painel.
+
 ## Pagamentos (Stripe)
 
 1. Na Vercel (ou em `.env.local` local), cola a **Secret key** (`sk_...`, não `pk_...`) em `STRIPE_SECRET_KEY`.
