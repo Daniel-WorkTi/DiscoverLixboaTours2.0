@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { isAdminRequestAuthenticated } from "@/lib/admin-auth";
 import { redirect } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { AdminLogoutButton } from "./AdminLogoutButton";
 import { BookingsClient } from "./ui";
 
@@ -14,35 +16,42 @@ export default async function AdminReservasPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[hsl(var(--background))] px-5 py-10">
-      <div className="mx-auto w-full max-w-5xl space-y-6">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-black px-3 py-1 text-xs font-extrabold text-white">
-              <span className="h-2 w-2 rounded-full bg-[hsl(var(--primary))]" />
-              Live
+    <main className="px-5 pb-20 pt-8">
+      <div className="mx-auto w-full max-w-5xl space-y-8">
+        <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="default">Ao vivo</Badge>
+              <Badge variant="outline">Stripe + Calendar</Badge>
             </div>
-            <h1 className="mt-3 text-3xl font-extrabold text-black">Bookings</h1>
-            <p className="mt-1 text-sm text-black/60">
-              Orange / white / black dashboard. Simple and fast.
-            </p>
+            <div>
+              <h1 className="text-3xl font-extrabold tracking-tight text-black">Reservas</h1>
+              <p className="mt-1 max-w-xl text-sm text-[hsl(var(--muted-foreground))]">
+                Lista atualizada a partir do Google Calendar (eventos criados pelo webhook após
+                pagamento).
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button asChild variant="outline">
-              <Link href="/">Back to site</Link>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button asChild variant="outline" size="lg">
+              <Link href="/">Voltar ao site</Link>
             </Button>
             <AdminLogoutButton />
           </div>
         </header>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent paid bookings</CardTitle>
+        <Separator className="bg-black/10" />
+
+        <Card className="overflow-hidden border-black/[0.08] shadow-md shadow-black/[0.05]">
+          <CardHeader className="space-y-1 bg-gradient-to-br from-white via-white to-orange-50/30 pb-2">
+            <CardTitle className="text-xl">Pagamentos recentes</CardTitle>
             <CardDescription>
-              Pulled from Google Calendar events created by the Stripe webhook.
+              Pesquisa, atualização automática a cada 10 s e alertas do browser (opcional).
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <Separator />
+          <CardContent className="pt-6">
             <BookingsClient />
           </CardContent>
         </Card>
@@ -50,4 +59,3 @@ export default async function AdminReservasPage() {
     </main>
   );
 }
-

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 function isSafeAdminNextPath(v: string): boolean {
   return v === "/admin/reservas" || v === "/admin" || v.startsWith("/admin/");
@@ -44,9 +46,9 @@ export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
   }
 
   return (
-    <form className="space-y-4" onSubmit={onSubmit}>
+    <form className="space-y-5" onSubmit={onSubmit}>
       <div className="space-y-2">
-        <Label htmlFor="admin-pass">Password</Label>
+        <Label htmlFor="admin-pass">Palavra-passe</Label>
         <Input
           id="admin-pass"
           type="password"
@@ -59,18 +61,28 @@ export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
       </div>
 
       {err ? (
-        <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">
-          {err}
-        </p>
+        <Alert variant="destructive">
+          <AlertTitle>Não foi possível entrar</AlertTitle>
+          <AlertDescription>{err}</AlertDescription>
+        </Alert>
       ) : null}
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Signing in…" : "Sign in"}
+      <Button type="submit" className="w-full" size="lg" disabled={loading}>
+        {loading ? "A entrar…" : "Entrar"}
       </Button>
 
-      <p className="text-xs text-black/50">
-        Tip: set <code className="rounded bg-black/5 px-1 py-0.5">ADMIN_PASSWORD</code> and{" "}
-        <code className="rounded bg-black/5 px-1 py-0.5">ADMIN_AUTH_SECRET</code> in your deploy.
+      <Separator />
+
+      <p className="text-center text-xs leading-relaxed text-[hsl(var(--muted-foreground))]">
+        Em produção, define{" "}
+        <code className="rounded-md bg-black/[0.06] px-1 py-0.5 font-mono text-[11px] text-black/80">
+          ADMIN_PASSWORD
+        </code>{" "}
+        e{" "}
+        <code className="rounded-md bg-black/[0.06] px-1 py-0.5 font-mono text-[11px] text-black/80">
+          ADMIN_AUTH_SECRET
+        </code>{" "}
+        nas variáveis do host (ex.: Vercel).
       </p>
     </form>
   );

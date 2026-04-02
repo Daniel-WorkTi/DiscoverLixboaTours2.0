@@ -1,4 +1,6 @@
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { LoginForm } from "./ui";
 
 export const dynamic = "force-dynamic";
@@ -18,20 +20,31 @@ export default async function AdminLoginPage({ searchParams }: PageProps) {
   const redirectAfterLogin = redirectAfterLoginFromSearchParams(sp.next);
 
   return (
-    <main className="min-h-screen bg-[hsl(var(--background))] px-5 py-10">
-      <div className="mx-auto w-full max-w-md">
-        <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 h-11 w-11 rounded-2xl bg-[hsl(var(--primary))] shadow-sm" />
-          <h1 className="text-2xl font-extrabold text-black">Dashboard</h1>
-          <p className="mt-1 text-sm text-black/60">Discover Lixboa Tours</p>
+    <main className="px-5 pb-20 pt-10">
+      <div className="mx-auto w-full max-w-md space-y-8">
+        <div className="text-center">
+          <Badge className="mb-4 shadow-sm" variant="secondary">
+            Painel · reservas
+          </Badge>
+          <h1 className="text-3xl font-extrabold tracking-tight text-black">Entrar</h1>
+          <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+            Palavra-passe de administrador (variável{" "}
+            <code className="rounded-md bg-black/[0.06] px-1.5 py-0.5 text-xs font-semibold text-black/80">
+              ADMIN_PASSWORD
+            </code>
+            ).
+          </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Login</CardTitle>
-            <CardDescription>Enter your password to view bookings.</CardDescription>
+        <Card className="overflow-hidden border-black/[0.08] shadow-lg shadow-black/[0.06]">
+          <CardHeader className="space-y-1 bg-gradient-to-br from-white to-orange-50/40 pb-4">
+            <CardTitle className="text-xl">Acesso ao dashboard</CardTitle>
+            <CardDescription>
+              Laranja, branco e preto — mesmo estilo shadcn/ui do projeto.
+            </CardDescription>
           </CardHeader>
-          <CardContent>
+          <Separator />
+          <CardContent className="pt-6">
             <LoginForm redirectAfterLogin={redirectAfterLogin} />
           </CardContent>
         </Card>
@@ -39,4 +52,3 @@ export default async function AdminLoginPage({ searchParams }: PageProps) {
     </main>
   );
 }
-
