@@ -57,7 +57,7 @@ export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
           autoComplete="current-password"
           placeholder="••••••••"
           required
-          className="h-14 rounded-2xl px-4 text-[17px]"
+          className="h-14 rounded-2xl pl-7 pr-5 text-[17px]"
         />
       </div>
 
