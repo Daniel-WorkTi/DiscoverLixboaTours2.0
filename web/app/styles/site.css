@@ -990,8 +990,9 @@ body {
         order: 1;
     }
     
+    /* Tablet: título legível sem dominar o ecrã */
     .hero-title {
-        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-size: clamp(1.75rem, 4.2vw, 2.75rem);
     }
     
     .hero-features {
@@ -1037,13 +1038,14 @@ body {
     }
     
     .hero-container {
-        padding: 2rem 1.5rem;
-        gap: 2rem;
+        padding: 1.75rem max(1.25rem, env(safe-area-inset-left, 0px)) 2rem
+          max(1.25rem, env(safe-area-inset-right, 0px));
+        gap: 1.75rem;
     }
     
     .hero-cta {
         flex-direction: column;
-        gap: 0.8rem;
+        gap: 0.75rem;
     }
     
     .btn-primary,
@@ -1066,11 +1068,12 @@ body {
 @media (max-width: 480px) {
     .hero {
         min-height: auto;
-        padding: 3rem 0;
+        padding: 2.5rem 0 2.75rem;
     }
     
     .hero-container {
-        padding: 1.5rem 1rem;
+        padding: 1.35rem max(1rem, env(safe-area-inset-left, 0px)) 1.75rem
+          max(1rem, env(safe-area-inset-right, 0px));
     }
     
     .hero-image img {
@@ -3672,9 +3675,9 @@ iframe.goog-te-menu-frame {
         text-align: left !important;
     }
     
-    /* Global Mobile Spacing */
+    /* Ritmo vertical: menos “apertado” que 3rem fixo em secções densas */
     section {
-        padding: 3rem 0 !important;
+        padding: 2.75rem 0 !important;
     }
     
     /* About Section Mobile */
@@ -3739,47 +3742,98 @@ iframe.goog-te-menu-frame {
     
     /* Hero Mobile Improvements */
     .hero {
-        min-height: 90vh;
-        padding-top: 70px !important;
+        min-height: auto;
+        padding-top: 72px !important;
+        padding-bottom: 0.5rem;
     }
     
     .hero-container {
-        padding: 2rem 1.5rem;
-        gap: 2rem;
+        padding: 1.5rem max(1.25rem, env(safe-area-inset-left, 0px)) 2rem
+          max(1.25rem, env(safe-area-inset-right, 0px));
+        gap: 1.5rem;
         text-align: center;
         align-items: center;
     }
     
     .hero-badge {
-        margin: 0 auto;
+        margin: 0 auto 0.5rem;
         display: flex;
         justify-content: center;
     }
     
     .hero-title {
-        font-size: clamp(2rem, 8vw, 3rem);
-        line-height: 1.1;
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
+        font-size: clamp(1.55rem, 5.5vw, 2.05rem);
+        line-height: 1.18;
+        margin: 0.35rem 0 0.85rem;
+        padding: 0;
     }
     
     .hero-cta {
-        margin-bottom: -1.5rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 26rem;
+        margin-left: auto;
+        margin-right: auto;
     }
     .hero-subtitle {
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+        max-width: 36rem;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .hero-features {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.85rem;
+        max-width: 26rem;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .feature {
         padding: 1rem;
+    }
+
+    /* Secções: títulos mais proporcionais ao ecrã */
+    .about-title,
+    .destinations-title,
+    .personalized-title,
+    .transporte-title,
+    .testimonials-title,
+    .faq-title {
+        font-size: clamp(1.45rem, 4.6vw, 1.9rem) !important;
+        line-height: 1.22 !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .about-subtitle,
+    .destinations-subtitle,
+    .personalized-subtitle,
+    .transporte-subtitle,
+    .testimonials-subtitle,
+    .faq-subtitle {
+        font-size: 0.78rem !important;
+        margin-bottom: 0.65rem !important;
+    }
+
+    .about-description,
+    .personalized-description,
+    .transporte-description,
+    .testimonials-description,
+    .faq-description {
+        font-size: 0.94rem !important;
+        line-height: 1.58 !important;
+    }
+
+    .experience-pillars-title {
+        font-size: clamp(1.35rem, 4vw, 1.75rem) !important;
+    }
+
+    .experience-pillars-lead {
+        font-size: 0.94rem !important;
+        line-height: 1.55 !important;
     }
     
     .hero-cta-group {
@@ -4062,30 +4116,30 @@ iframe.goog-te-menu-frame {
     }
     
     .hero-container {
-        padding: 1.5rem 1rem;
-        gap: 1.5rem;
+        padding: 1.25rem max(1rem, env(safe-area-inset-left, 0px)) 1.65rem
+          max(1rem, env(safe-area-inset-right, 0px));
+        gap: 1.35rem;
         text-align: center;
         align-items: center;
     }
     
     .hero-badge {
-        margin: 0 auto;
+        margin: 0 auto 0.35rem;
         display: flex;
         justify-content: center;
     }
     
     .hero-title {
-        font-size: 1.8rem;
-        margin-top: 1.5rem;
-        margin-bottom: 1.1rem;
-        padding-top: 0.8rem;
-        padding-bottom: 0.8rem;
+        font-size: clamp(1.45rem, 5vw, 1.85rem);
+        margin: 0.25rem 0 0.75rem;
+        padding: 0;
     }
 
     
     .hero-subtitle {
         font-size: 0.9rem;
-        margin-bottom: 1.2rem;
+        line-height: 1.58;
+        margin-bottom: 1.1rem;
     }
     
     .about-container {

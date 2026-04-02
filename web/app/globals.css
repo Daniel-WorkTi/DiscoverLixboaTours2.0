@@ -9,6 +9,12 @@
 @import "./styles/flags.css";
 @import "./styles/admin.css";
 
+/* Evita zoom de texto automático no iOS e base consistente em mobile */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 /* shadcn/ui theme tokens (orange / white / black) */
 :root {
   --background: 0 0% 98%;
