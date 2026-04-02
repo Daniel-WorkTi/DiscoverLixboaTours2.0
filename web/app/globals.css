@@ -1,4 +1,10 @@
 @import "tailwindcss";
+
+/* Garantir que classes Tailwind em app/, components/ e lib/ entram no CSS de produção */
+@source "./**/*.{ts,tsx,js,jsx,mdx}";
+@source "../components/**/*.{ts,tsx,js,jsx,mdx}";
+@source "../lib/**/*.{ts,tsx,js,jsx,mdx}";
+
 @import "./styles/site.css";
 @import "./styles/flags.css";
 
