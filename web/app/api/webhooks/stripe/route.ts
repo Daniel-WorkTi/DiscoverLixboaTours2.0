@@ -5,6 +5,10 @@ import {
   isBookingEmailConfigured,
 } from "@/lib/booking-notify-email";
 import {
+  isBookingWhatsAppConfigured,
+  sendOwnerBookingWhatsApp,
+} from "@/lib/booking-notify-whatsapp";
+import {
   createBookingCalendarEvent,
   isGoogleCalendarConfigured,
   hasCalendarEventForStripeSession,
@@ -89,6 +93,8 @@ export async function POST(req: Request) {
       quantity,
       preferredDate,
       stripeSessionId: session.id,
+      totalCents: typeof session.amount_total === "number" ? session.amount_total : undefined,
+      currency: typeof session.currency === "string" ? session.currency : undefined,
     };
 
     if (isGoogleCalendarConfigured()) {
@@ -115,6 +121,14 @@ export async function POST(req: Request) {
         await sendOwnerBookingNotification(notifyPayload);
       } catch (e) {
         console.error("[stripe-webhook] Erro ao enviar email de notificação:", e);
+      }
+    }
+
+    if (isBookingWhatsAppConfigured()) {
+      try {
+        await sendOwnerBookingWhatsApp(notifyPayload);
+      } catch (e) {
+        console.error("[stripe-webhook] Erro ao enviar WhatsApp:", e);
       }
     }
   }

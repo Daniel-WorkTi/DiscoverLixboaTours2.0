@@ -15,6 +15,8 @@ export type BookingCalendarPayload = {
   quantity: number;
   preferredDate: string;
   stripeSessionId: string;
+  totalCents?: number;
+  currency?: string;
 };
 
 export const MAX_BOOKINGS_PER_DAY = 7;
@@ -30,6 +32,10 @@ function addOneDayYmd(ymd: string): string {
 }
 
 function buildDescription(p: BookingCalendarPayload): string {
+  const total =
+    typeof p.totalCents === "number" && Number.isFinite(p.totalCents)
+      ? `${(p.totalCents / 100).toFixed(2)} ${String(p.currency || "EUR").toUpperCase()}`
+      : null;
   const lines = [
     `Reserva paga via Stripe.`,
     `Tour: ${p.tourLabel}`,
@@ -37,6 +43,7 @@ function buildDescription(p: BookingCalendarPayload): string {
     `Cliente: ${p.customerName}`,
     `Email: ${p.email || "—"}`,
     `Telefone: ${p.phone || "—"}`,
+    total ? `Total: ${total}` : null,
     p.notes ? `Notas: ${p.notes}` : null,
     `Stripe Checkout: ${p.stripeSessionId}`,
   ].filter(Boolean) as string[];
@@ -146,6 +153,16 @@ export async function createBookingCalendarEvent(
         private: {
           booking_kind: "stripe_paid",
           stripe_session_id: p.stripeSessionId,
+          booking_date: p.preferredDate,
+          booking_tour: p.tourLabel,
+          booking_customer: p.customerName,
+          booking_email: p.email,
+          booking_phone: p.phone,
+          booking_quantity: String(p.quantity),
+          ...(typeof p.totalCents === "number" && Number.isFinite(p.totalCents)
+            ? { booking_total_cents: String(Math.round(p.totalCents)) }
+            : {}),
+          ...(p.currency ? { booking_currency: String(p.currency).toLowerCase() } : {}),
         },
       },
     },
