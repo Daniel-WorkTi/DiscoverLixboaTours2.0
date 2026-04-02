@@ -15,7 +15,7 @@ export default async function AdminReservasPage() {
 
   return (
     <main className="admin-main">
-      <div className="admin-shell admin-shell--wide admin-stack">
+      <div className="admin-shell admin-shell--dashboard admin-stack">
         <div className="admin-header-row">
           <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap items-center gap-2">
@@ -46,8 +46,9 @@ export default async function AdminReservasPage() {
             <h2 className="font-[family-name:var(--font-outfit)] text-[1.05rem] font-extrabold text-[#333] sm:text-lg">
               Pagamentos recentes
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-[#666]">
-              Pesquisa, atualização automática a cada 10 s e alertas do browser (opcional).
+              <p className="mt-2 text-base leading-relaxed text-[#666]">
+              Aceita ou recusa cada viagem paga. Contacta clientes por WhatsApp ou email com um clique.
+              Atualização automática a cada 10 s.
             </p>
           </div>
           <div className="admin-divider" role="presentation" />

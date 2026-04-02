@@ -165,7 +165,50 @@ export async function createBookingCalendarEvent(
             ? { booking_total_cents: String(Math.round(p.totalCents)) }
             : {}),
           ...(p.currency ? { booking_currency: String(p.currency).toLowerCase() } : {}),
+          ...(p.notes?.trim()
+            ? { booking_notes: p.notes.trim().slice(0, 1200) }
+            : {}),
+          /** O admin deve aceitar ou recusar no painel (predefinição: pendente). */
+          booking_approval_status: "pending",
         },
+      },
+    },
+  });
+}
+
+/**
+ * Atualiza aceitação/recusa no evento do Calendar (merge das private props existentes).
+ */
+export async function setBookingApprovalStatus(
+  eventId: string,
+  status: "accepted" | "rejected",
+): Promise<void> {
+  const id = eventId.trim();
+  if (!id) throw new Error("eventId em falta.");
+
+  const { calendar, calendarId } = getCalendarClient();
+
+  const existing = await calendar.events.get({
+    calendarId,
+    eventId: id,
+  });
+
+  const prev = existing.data.extendedProperties?.private ?? {};
+  const merged: Record<string, string> = {};
+  for (const [k, v] of Object.entries(prev)) {
+    if (v != null && String(v).length > 0) merged[k] = String(v);
+  }
+  if (merged.booking_kind !== "stripe_paid") {
+    throw new Error("Evento não é uma reserva Stripe.");
+  }
+  merged.booking_approval_status = status;
+
+  await calendar.events.patch({
+    calendarId,
+    eventId: id,
+    requestBody: {
+      extendedProperties: {
+        private: merged,
       },
     },
   });

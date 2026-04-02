@@ -2,22 +2,26 @@ import { NextResponse } from "next/server";
 import { google } from "googleapis";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE_NAME, isCookieValueAuthenticated } from "@/lib/admin-auth";
+import { parseApprovalStatus, type BookingApprovalStatus } from "@/lib/booking-approval";
 import { isGoogleCalendarConfigured } from "@/lib/google-calendar";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type BookingRow = {
+export type BookingRow = {
+  eventId: string;
   stripeSessionId: string;
   preferredDate: string;
   tourLabel: string;
   customerName: string;
   email: string;
   phone: string;
+  notes: string;
   quantity: number;
   totalCents?: number;
   currency?: string;
   createdAt?: string;
+  approvalStatus: BookingApprovalStatus;
 };
 
 function getCalendarClient() {
@@ -38,24 +42,28 @@ function parseRowFromEvent(ev: any): BookingRow | null {
   const priv = ev?.extendedProperties?.private ?? {};
   if (priv.booking_kind !== "stripe_paid") return null;
 
+  const eventId = String(ev?.id || "").trim();
   const stripeSessionId = String(priv.stripe_session_id || "").trim();
   const preferredDate = String(priv.booking_date || ev?.start?.date || "").trim();
-  if (!stripeSessionId || !preferredDate) return null;
+  if (!eventId || !stripeSessionId || !preferredDate) return null;
 
   const quantity = Math.max(1, Math.min(7, parseInt(String(priv.booking_quantity || "1"), 10) || 1));
   const totalCentsRaw = priv.booking_total_cents != null ? Number(priv.booking_total_cents) : NaN;
 
   return {
+    eventId,
     stripeSessionId,
     preferredDate,
     tourLabel: String(priv.booking_tour || ev?.summary || "Tour").trim(),
-    customerName: String(priv.booking_customer || "").trim() || "Customer",
+    customerName: String(priv.booking_customer || "").trim() || "Cliente",
     email: String(priv.booking_email || "").trim(),
     phone: String(priv.booking_phone || "").trim(),
+    notes: String(priv.booking_notes || "").trim(),
     quantity,
     totalCents: Number.isFinite(totalCentsRaw) ? Math.round(totalCentsRaw) : undefined,
     currency: typeof priv.booking_currency === "string" ? priv.booking_currency : undefined,
     createdAt: typeof ev?.created === "string" ? ev.created : undefined,
+    approvalStatus: parseApprovalStatus(priv.booking_approval_status),
   };
 }
 
@@ -81,7 +89,7 @@ export async function GET() {
       timeMax: future.toISOString(),
       singleEvents: true,
       showDeleted: false,
-      maxResults: 100,
+      maxResults: 250,
       orderBy: "startTime",
       privateExtendedProperty: ["booking_kind=stripe_paid"],
     });
