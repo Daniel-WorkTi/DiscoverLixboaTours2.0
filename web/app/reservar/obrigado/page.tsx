@@ -4,18 +4,27 @@ import { ObrigadoThankYouClient } from "@/components/obrigado/ObrigadoThankYouCl
 import { HomeInteractions } from "@/components/HomeInteractions";
 import { SiteClientEffects } from "@/components/SiteClientEffects";
 import { SiteHeader } from "@/components/SiteHeader";
+import {
+  firstNameForGreeting,
+  getCustomerNameFromCheckoutSession,
+} from "@/lib/obrigado-customer-name";
+import { getBookingDetailsFromCheckoutSession } from "@/lib/obrigado-booking-details";
 import { whatsappUrlAfterBooking } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
-  title: "Reserva confirmada | Discover Lixboa Tours",
-  description: "Obrigado pela tua reserva. Fala connosco no WhatsApp para alinhar o tour.",
+  title: "Booking confirmed | Discover Lixboa Tours",
+  description:
+    "Thank you for your booking. Message us on WhatsApp to confirm the tour details.",
 };
 
 type Props = { searchParams: Promise<{ session_id?: string }> };
 
 export default async function ObrigadoPage({ searchParams }: Props) {
   const { session_id: sessionId } = await searchParams;
+  const rawName = await getCustomerNameFromCheckoutSession(sessionId);
+  const customerFirstName = rawName ? firstNameForGreeting(rawName) : null;
   const waHref = whatsappUrlAfterBooking(sessionId);
+  const bookingDetails = await getBookingDetailsFromCheckoutSession(sessionId);
 
   return (
     <>
@@ -26,10 +35,15 @@ export default async function ObrigadoPage({ searchParams }: Props) {
       <main className="reservar-main obrigado-main">
         <div className="reservar-shell">
           <Link href="/" className="reservar-back">
-            ← Voltar ao site
+            ← Back to site
           </Link>
 
-          <ObrigadoThankYouClient sessionId={sessionId} waHref={waHref} />
+          <ObrigadoThankYouClient
+            sessionId={sessionId}
+            waHref={waHref}
+            customerFirstName={customerFirstName}
+            bookingDetails={bookingDetails}
+          />
         </div>
       </main>
     </>

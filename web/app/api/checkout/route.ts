@@ -8,7 +8,12 @@ import {
 import { getStripe } from "@/lib/stripe-server";
 import { getSiteBaseUrl } from "@/lib/site-url";
 import { getPricingRuleFromTable } from "@/lib/tour-pricing-table";
-import { toursBooking } from "@/lib/tours-booking";
+import { validateCheckoutPayload } from "@/lib/checkout-payload-validation";
+import {
+  isGoogleCalendarConfigured,
+  isBookingDateAvailable,
+  MAX_BOOKINGS_PER_DAY,
+} from "@/lib/google-calendar";
 
 /** Stripe limita cada valor de metadata (evita falhas silenciosas / rejeição). */
 function metaSlice(s: string, max = 500): string {
@@ -39,16 +44,6 @@ export const runtime = "nodejs";
 /** Tempo máximo (serverless) para criar a sessão Stripe — evita função pendente. */
 export const maxDuration = 60;
 
-type Body = {
-  tourId?: string;
-  quantity?: number;
-  preferredDate?: string;
-  customerName?: string;
-  email?: string;
-  phone?: string;
-  notes?: string;
-};
-
 export async function POST(req: Request) {
   let stripe: Stripe;
   try {
@@ -67,9 +62,9 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: Body;
+  let body: unknown;
   try {
-    body = (await req.json()) as Body;
+    body = await req.json();
   } catch {
     return NextResponse.json(
       { error: "JSON inválido.", code: "INVALID_JSON" },
@@ -77,51 +72,42 @@ export async function POST(req: Request) {
     );
   }
 
-  const tourId = String(body.tourId ?? "").trim();
-  const quantity = Math.min(
-    7,
-    Math.max(1, Number(body.quantity) || 1),
-  );
-  const preferredDate = String(body.preferredDate ?? "").trim();
-  const customerName = String(body.customerName ?? "")
-    .trim()
-    .slice(0, 120);
-  const email = String(body.email ?? "").trim().toLowerCase().slice(0, 254);
-  const phone = String(body.phone ?? "").trim().slice(0, 48);
-  const notes = String(body.notes ?? "").trim().slice(0, 500);
-
-  const tourLabel =
-    toursBooking.find((t) => t.id === tourId)?.label ?? tourId;
-
-  if (!tourId || !toursBooking.some((t) => t.id === tourId)) {
-    return NextResponse.json(
-      { error: "Tour inválido.", code: "INVALID_TOUR" },
-      { status: 400 },
-    );
+  const validated = validateCheckoutPayload(body);
+  if (!validated.ok) {
+    return NextResponse.json(validated.failure.body, {
+      status: validated.failure.status,
+    });
   }
 
-  if (!preferredDate) {
-    return NextResponse.json(
-      {
-        error: "Indica a data preferida para o tour.",
-        code: "MISSING_DATE",
-      },
-      { status: 400 },
-    );
-  }
+  const {
+    tourId,
+    quantity,
+    preferredDate,
+    customerName,
+    email,
+    phone,
+    notes,
+    tourLabel,
+  } = validated.data;
 
-  if (customerName.length < 2) {
-    return NextResponse.json(
-      { error: "Indica o teu nome completo.", code: "INVALID_NAME" },
-      { status: 400 },
-    );
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return NextResponse.json(
-      { error: "Email inválido.", code: "INVALID_EMAIL" },
-      { status: 400 },
-    );
+  // Capacity guard: do not allow more than N paid bookings per date.
+  // We use the Google Calendar as the source of truth in production.
+  if (isGoogleCalendarConfigured() && /^\d{4}-\d{2}-\d{2}$/.test(preferredDate)) {
+    try {
+      const ok = await isBookingDateAvailable(preferredDate);
+      if (!ok) {
+        return NextResponse.json(
+          {
+            error: `This date is fully booked. Please choose another day (max ${MAX_BOOKINGS_PER_DAY} bookings per date).`,
+            code: "DATE_FULLY_BOOKED",
+          },
+          { status: 409 },
+        );
+      }
+    } catch (e) {
+      // If Calendar check fails, do not block checkout (avoid false negatives).
+      console.error("[checkout] calendar capacity check failed:", e);
+    }
   }
 
   // 1) Primeiro tenta tabela fixa (desconto por quantidade)

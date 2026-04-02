@@ -7,6 +7,7 @@ import {
 import {
   createBookingCalendarEvent,
   isGoogleCalendarConfigured,
+  hasCalendarEventForStripeSession,
 } from "@/lib/google-calendar";
 import { getStripe } from "@/lib/stripe-server";
 
@@ -92,7 +93,10 @@ export async function POST(req: Request) {
 
     if (isGoogleCalendarConfigured()) {
       try {
+        const exists = await hasCalendarEventForStripeSession(session.id);
+        if (!exists) {
         await createBookingCalendarEvent(notifyPayload);
+        }
       } catch (e) {
         console.error("[stripe-webhook] Erro ao criar evento no Google Calendar:", e);
         return NextResponse.json(

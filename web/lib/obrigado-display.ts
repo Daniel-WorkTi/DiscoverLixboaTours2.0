@@ -1,5 +1,5 @@
 /**
- * Dados de apresentação da página /reservar/obrigado (testável sem React).
+ * Presentation data for /reservar/obrigado (testable without React).
  */
 
 export type SecurityBadge = {
@@ -8,27 +8,27 @@ export type SecurityBadge = {
   sub: string;
 };
 
-/** Badges de confiança (Stripe + HTTPS) — textos estáveis para testes e i18n futuro. */
+/** Trust badges (Stripe + HTTPS) — stable copy for tests and future i18n. */
 export const OBRIGADO_SECURITY_BADGES: readonly SecurityBadge[] = [
   {
     id: "stripe",
     label: "Stripe",
-    sub: "Pagamento seguro (PCI DSS)",
+    sub: "Secure payment (PCI DSS)",
   },
   {
     id: "https",
     label: "HTTPS",
-    sub: "Ligação encriptada",
+    sub: "Encrypted connection",
   },
   {
     id: "checkout",
     label: "Checkout",
-    sub: "Dados do cartão na Stripe",
+    sub: "Card details handled by Stripe",
   },
 ] as const;
 
 /**
- * Referências de sessão Stripe são longas; mostrar truncada no “bilhete”.
+ * Stripe session references are long; show a truncated form on the “ticket”.
  */
 export function formatCheckoutSessionRefForDisplay(
   id: string | undefined | null,
