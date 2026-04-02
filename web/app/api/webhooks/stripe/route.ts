@@ -5,10 +5,6 @@ import {
   isBookingEmailConfigured,
 } from "@/lib/booking-notify-email";
 import {
-  isBookingWhatsAppConfigured,
-  sendOwnerBookingWhatsApp,
-} from "@/lib/booking-notify-whatsapp";
-import {
   createBookingCalendarEvent,
   isGoogleCalendarConfigured,
   hasCalendarEventForStripeSession,
@@ -121,14 +117,6 @@ export async function POST(req: Request) {
         await sendOwnerBookingNotification(notifyPayload);
       } catch (e) {
         console.error("[stripe-webhook] Erro ao enviar email de notificação:", e);
-      }
-    }
-
-    if (isBookingWhatsAppConfigured()) {
-      try {
-        await sendOwnerBookingWhatsApp(notifyPayload);
-      } catch (e) {
-        console.error("[stripe-webhook] Erro ao enviar WhatsApp:", e);
       }
     }
   }
