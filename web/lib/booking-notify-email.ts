@@ -28,7 +28,8 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function buildPlainText(p: BookingNotifyPayload): string {
+/** Exported for unit tests. */
+export function buildBookingEmailPlainText(p: BookingNotifyPayload): string {
   return [
     "Nova reserva paga (Stripe)",
     "",
@@ -94,7 +95,7 @@ export async function sendOwnerBookingNotification(
       from,
       to: [to],
       subject,
-      text: buildPlainText(p),
+      text: buildBookingEmailPlainText(p),
       html: buildHtml(p),
     }),
   });

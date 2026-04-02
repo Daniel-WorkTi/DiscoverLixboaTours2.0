@@ -21,7 +21,8 @@ export type BookingCalendarPayload = {
 
 export const MAX_BOOKINGS_PER_DAY = 7;
 
-function addOneDayYmd(ymd: string): string {
+/** Next calendar day (all-day events use exclusive end date). Exported for unit tests. */
+export function addOneDayYmd(ymd: string): string {
   const [y, m, d] = ymd.split("-").map(Number);
   const dt = new Date(y, m - 1, d);
   dt.setDate(dt.getDate() + 1);
@@ -31,7 +32,8 @@ function addOneDayYmd(ymd: string): string {
   return `${yy}-${mm}-${dd}`;
 }
 
-function buildDescription(p: BookingCalendarPayload): string {
+/** Human-readable event body. Exported for unit tests. */
+export function buildBookingCalendarDescription(p: BookingCalendarPayload): string {
   const total =
     typeof p.totalCents === "number" && Number.isFinite(p.totalCents)
       ? `${(p.totalCents / 100).toFixed(2)} ${String(p.currency || "EUR").toUpperCase()}`
@@ -146,7 +148,7 @@ export async function createBookingCalendarEvent(
     calendarId,
     requestBody: {
       summary: `${p.tourLabel} — ${p.customerName}`,
-      description: buildDescription(p),
+      description: buildBookingCalendarDescription(p),
       start: { date: p.preferredDate },
       end: { date: endDate },
       extendedProperties: {
