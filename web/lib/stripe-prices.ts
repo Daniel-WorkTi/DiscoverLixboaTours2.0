@@ -1,5 +1,5 @@
 /**
- * STRIPE_PRICE_MAP em .env.local: JSON tourId → `price_...` OU `prod_...`.
+ * STRIPE_PRICE_MAP (Vercel ou .env.local): JSON tourId → `price_...` OU `prod_...`.
  * - price_: usado diretamente no Checkout.
  * - prod_: o servidor obtém o preço predefinido do produto (default_price) ou o 1.º preço ativo.
  */

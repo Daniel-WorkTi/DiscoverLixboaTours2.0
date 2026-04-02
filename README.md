@@ -12,4 +12,4 @@ Abre [http://localhost:3000](http://localhost:3000).
 
 Para regenerar os HTML dos tours a partir de `web/tour-sources/`: `npm run patch-tours` (dentro de `web/`).
 
-**Stripe:** copia `web/.env.example` para `web/.env.local` e preenche as chaves (ver `web/README.md`).
+**Ambiente:** em produção usa as variáveis na **Vercel**; localmente podes copiar `web/.env.example` para `web/.env.local` (ver `web/README.md`).

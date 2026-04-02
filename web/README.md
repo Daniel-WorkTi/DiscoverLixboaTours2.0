@@ -6,13 +6,17 @@
 
 Rotas `/tours/...` usam **rewrite** para o HTML em `public/` (página completa, não iframe).
 
+## Variáveis de ambiente
+
+- **Produção (Vercel):** define tudo em **Project → Settings → Environment Variables**. Não é preciso `.env` no repositório.
+- **Local (opcional):** copia `.env.example` para `.env.local` e preenche as chaves para `npm run dev`.
+
 ## Pagamentos (Stripe)
 
-1. Copia `.env.example` para `.env.local`.
-2. Cola a **Secret key** (`sk_...`, não `pk_...`) em `STRIPE_SECRET_KEY`.
-3. Em `STRIPE_PRICE_MAP`, usa **Price IDs** (`price_...`). No dashboard isso está em cada produto → **Pricing** → ID do preço. **Não** uses Product ID (`prod_...`).
-4. Cada preço deve ser **pagamento único** (one-time). Preços só em **subscrição** (ex.: por mês) não servem para o checkout atual — cria um preço “One-time” no mesmo produto.
-5. `NEXT_PUBLIC_SITE_URL` em produção (URL sem `/` no fim).
+1. Na Vercel (ou em `.env.local` local), cola a **Secret key** (`sk_...`, não `pk_...`) em `STRIPE_SECRET_KEY`.
+2. Em `STRIPE_PRICE_MAP`, usa **Price IDs** (`price_...`). No dashboard isso está em cada produto → **Pricing** → ID do preço. **Não** uses Product ID (`prod_...`).
+3. Cada preço deve ser **pagamento único** (one-time). Preços só em **subscrição** (ex.: por mês) não servem para o checkout atual — cria um preço “One-time” no mesmo produto.
+4. `NEXT_PUBLIC_SITE_URL` em produção (URL sem `/` no fim).
 
 Referência dos teus produtos (substitui `prod_` pelo `price_` certo em cada um):
 
