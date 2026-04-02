@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
+import type { calendar_v3 } from "googleapis";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE_NAME, isCookieValueAuthenticated } from "@/lib/admin-auth";
 import { parseApprovalStatus, type BookingApprovalStatus } from "@/lib/booking-approval";
@@ -38,8 +39,8 @@ function getCalendarClient() {
   return { calendar, calendarId };
 }
 
-function parseRowFromEvent(ev: any): BookingRow | null {
-  const priv = ev?.extendedProperties?.private ?? {};
+function parseRowFromEvent(ev: calendar_v3.Schema$Event): BookingRow | null {
+  const priv = ev.extendedProperties?.private ?? {};
   if (priv.booking_kind !== "stripe_paid") return null;
 
   const eventId = String(ev?.id || "").trim();
