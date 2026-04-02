@@ -93,7 +93,7 @@ export async function hasCalendarEventForStripeSession(
   const res = await calendar.events.list({
     calendarId,
     maxResults: 5,
-    privateExtendedProperty: `stripe_session_id=${id}`,
+    privateExtendedProperty: [`stripe_session_id=${id}`],
   });
   const items = res.data.items ?? [];
   return items.some((ev) => (ev.status ?? "") !== "cancelled");
