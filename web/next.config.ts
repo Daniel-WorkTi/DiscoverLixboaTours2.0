@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    localPatterns: [
+      {
+        pathname: "/assets/images/**",
+      },
+      {
+        pathname: "/assets/images/**",
+        search: "*",
+      },
+    ],
+  },
   /** Cabeçalhos HTTP de segurança (anti-MIME sniff, clickjacking, referrer). */
   async headers() {
     return [

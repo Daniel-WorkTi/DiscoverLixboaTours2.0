@@ -34,6 +34,9 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
           <a href={`${base}#servicos`} data-translate="menu_services">
             Serviços
           </a>
+          <Link href="/executive" data-translate="menu_executive">
+            Executive
+          </Link>
           <a href={`${base}#instagram`} data-translate="menu_contact">
             Contato
           </a>
@@ -91,6 +94,9 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
         <a href={`${base}#servicos`} data-translate="menu_services">
           Serviços
         </a>
+        <Link href="/executive" data-translate="menu_executive">
+          Executive
+        </Link>
         <a href={`${base}#instagram`} data-translate="menu_contact">
           Contato
         </a>

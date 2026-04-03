@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ObrigadoThankYouClient } from "@/components/obrigado/ObrigadoThankYouClient";
 import { HomeInteractions } from "@/components/HomeInteractions";
 import { SiteClientEffects } from "@/components/SiteClientEffects";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
   firstNameForGreeting,
@@ -46,6 +47,8 @@ export default async function ObrigadoPage({ searchParams }: Props) {
           />
         </div>
       </main>
+
+      <SiteFooter variant="site" />
     </>
   );
 }

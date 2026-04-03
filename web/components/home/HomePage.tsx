@@ -110,6 +110,8 @@ const faqItems = [
 ] as const;
 
 export function HomePage() {
+  const assetVersion = process.env.NEXT_PUBLIC_ASSET_VERSION?.trim() || "1";
+
   return (
     <>
       <SiteHeader variant="home" />
@@ -197,7 +199,7 @@ export function HomePage() {
 
           <div className="hero-image">
             <Image
-              src="/assets/images/hero/car%20(2).webp"
+              src={`/assets/images/hero/car%20(2).webp?v=${assetVersion}`}
               alt="Jeep Discover Portugal"
               width={800}
               height={600}

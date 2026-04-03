@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BookingForm } from "@/components/reservar/BookingForm";
 import { HomeInteractions } from "@/components/HomeInteractions";
 import { SiteClientEffects } from "@/components/SiteClientEffects";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
@@ -43,6 +44,8 @@ export default async function ReservarPage({ searchParams }: PageProps) {
           />
         </div>
       </main>
+
+      <SiteFooter variant="site" />
     </>
   );
 }
