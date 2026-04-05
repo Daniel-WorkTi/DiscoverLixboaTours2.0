@@ -19,6 +19,7 @@ const TOUR_FILES = [
   "tour-arraabida.html",
   "tour-aveiro.html",
   "tour-monsanto.html",
+  "tour-fatima-tomar.html",
   "tour-alentejo.html",
   "tour-algarve.html",
 ];
@@ -31,6 +32,7 @@ const TOUR_TO_PATH = [
   ["tour-arraabida.html", "/tours/arraabida"],
   ["tour-aveiro.html", "/tours/aveiro"],
   ["tour-monsanto.html", "/tours/monsanto"],
+  ["tour-fatima-tomar.html", "/tours/fatima-tomar"],
   ["tour-alentejo.html", "/tours/alentejo"],
   ["tour-algarve.html", "/tours/algarve"],
 ];

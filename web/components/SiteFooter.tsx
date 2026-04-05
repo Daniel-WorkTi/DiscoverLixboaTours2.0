@@ -50,10 +50,14 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
                 </a>
               </li>
               <li>
-                <Link href="/executive">Executive &amp; Concierge</Link>
+                <Link href="/executive">
+                  <span data-translate="footer_executive_link">Executive &amp; Concierge</span>
+                </Link>
               </li>
               <li>
-                <Link href="/reservar">Reservar com quantidade</Link>
+                <Link href="/reservar">
+                  <span data-translate="footer_book_link">Reservar com quantidade</span>
+                </Link>
               </li>
             </ul>
           </div>
@@ -79,7 +83,7 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
           </div>
 
           <div className="footer-social">
-            <h3>Follow Us</h3>
+            <h3 data-translate="footer_follow_us">Siga-nos</h3>
             <div className="social-icons">
               <a
                 href="https://www.instagram.com/discoverlixboatours/"
@@ -116,9 +120,12 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} DiscoverTour. All rights reserved.</p>
           <p>
-            Developed by{" "}
+            &copy; {new Date().getFullYear()} DiscoverTour.{" "}
+            <span data-translate="footer_rights_part">Todos os direitos reservados.</span>
+          </p>
+          <p>
+            <span data-translate="footer_dev_prefix">Desenvolvido por</span>{" "}
             <a href="https://dm-lab.netlify.app/" target="_blank" rel="noopener noreferrer" className="dev-credit">
               DMLab
             </a>

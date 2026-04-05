@@ -22,8 +22,17 @@ const destinations = [
     label: "Ver detalhes do tour 3 Destinos",
   },
   {
-    href: "/tours/monsanto",
+    href: "/tours/fatima-tomar",
     img: "/assets/images/TOMAR/BANNER.png",
+    alt: "Fátima & Tomar Private Tour",
+    nameKey: "destination_fatima_tomar_name",
+    placesKey: "destination_fatima_tomar_places",
+    places: "Peregrinação & património UNESCO",
+    label: "Ver detalhes do tour Fátima e Tomar",
+  },
+  {
+    href: "/tours/monsanto",
+    img: "/assets/images/Monsanto/monsanto1.webp",
     alt: "Monsanto & Centro de Portugal",
     nameKey: "destination_monsanto_name",
     placesKey: "destination_monsanto_places",

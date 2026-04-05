@@ -8,6 +8,7 @@ export const toursBooking: TourBookingOption[] = [
   { id: "sintra-cascais", label: "Sintra & Cascais" },
   { id: "3-destinos", label: "Tour 3 Destinos (Fátima, Nazaré, Óbidos)" },
   { id: "monsanto", label: "Monsanto & Centro de Portugal" },
+  { id: "fatima-tomar", label: "Fátima & Tomar Private Tour" },
   { id: "lisboa", label: "Lisboa" },
   { id: "porto", label: "Porto" },
   { id: "arraabida", label: "Arrábida, Setúbal & Sesimbra" },

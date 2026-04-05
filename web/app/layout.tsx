@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk, Outfit } from "next/font/google";
 import Script from "next/script";
+import { TranslateBridge } from "@/components/TranslateBridge";
 import "./globals.css";
 import "./styles/booking-reservar.css";
 
@@ -42,6 +43,7 @@ export default function RootLayout({
   return (
     <html lang="pt-PT" className={`${hanken.variable} ${outfit.variable}`}>
       <body suppressHydrationWarning>
+        <TranslateBridge />
         {children}
         <Script src="/assets/js/translate.js" strategy="afterInteractive" />
       </body>

@@ -31,10 +31,10 @@ export default async function ReservarPage({ searchParams }: PageProps) {
       <main className="reservar-main">
         <div className="reservar-shell">
           <Link href="/" className="reservar-back">
-            ← Voltar ao site
+            <span data-translate="reservar_back">← Voltar ao site</span>
           </Link>
-          <h1>Reserva o teu tour</h1>
-          <p className="reservar-lead">
+          <h1 data-translate="reservar_h1">Reserva o teu tour</h1>
+          <p className="reservar-lead" data-translate="reservar_lead">
             Escolhe destino, data e viajantes (até 7 pessoas). No passo seguinte confirmas os
             dados e segues para o pagamento seguro.
           </p>

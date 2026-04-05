@@ -60,3 +60,20 @@ html {
   --input: 0 0% 18%;
   --ring: 24 95% 53%;
 }
+
+/* Mobile: imagens Next.js (data-nimg) um pouco maiores — exceto CTA Mike, logos e admin. */
+@media (max-width: 899px) {
+  img[data-nimg] {
+    transform: scale(1.08);
+    transform-origin: center center;
+  }
+
+  .exec-cta__visual img[data-nimg],
+  .main-header img[data-nimg],
+  .header-logo img[data-nimg],
+  footer img[data-nimg],
+  .footer-brand img[data-nimg],
+  .admin-shell img[data-nimg] {
+    transform: none;
+  }
+}

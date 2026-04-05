@@ -1,15 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   OBRIGADO_SECURITY_BADGES,
   formatCheckoutSessionRefForDisplay,
 } from "@/lib/obrigado-display";
-import {
-  formatPreferredDateEnLong,
-  type ObrigadoBookingDetails,
-} from "@/lib/obrigado-booking-details";
+import type { ObrigadoBookingDetails } from "@/lib/obrigado-booking-details";
 import { ObrigadoConfetti } from "./ObrigadoConfetti";
 
 type Props = {
@@ -19,6 +16,29 @@ type Props = {
   customerFirstName?: string | null;
   bookingDetails?: ObrigadoBookingDetails | null;
 };
+
+type ReceiptErr =
+  | { kind: "i18n"; key: "obrigado_receipt_err_link" | "obrigado_receipt_err_unavailable" | "obrigado_receipt_err_network" }
+  | { kind: "server"; message: string };
+
+/** PT defaults — mirror obrigado_receipt_err_* in translate.js */
+const RECEIPT_ERR_PT: Record<string, string> = {
+  obrigado_receipt_err_link: "Não foi possível obter o link do recibo.",
+  obrigado_receipt_err_unavailable: "Recibo indisponível de momento.",
+  obrigado_receipt_err_network: "Erro de rede. Tenta novamente.",
+};
+
+function formatPreferredDateLong(ymd: string, locale: string): string {
+  const p = ymd.split("-").map(Number);
+  if (p.length !== 3 || !p[0] || !p[1] || !p[2]) return ymd;
+  const d = new Date(p[0], p[1] - 1, p[2]);
+  return d.toLocaleDateString(locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
 function BadgeIcon({ id }: { id: string }) {
   if (id === "stripe") {
@@ -69,8 +89,37 @@ export function ObrigadoThankYouClient({
   customerFirstName,
   bookingDetails,
 }: Props) {
-  const [receiptErr, setReceiptErr] = useState<string | null>(null);
+  const [receiptErr, setReceiptErr] = useState<ReceiptErr | null>(null);
   const [receiptLoading, setReceiptLoading] = useState(false);
+  const [uiLang, setUiLang] = useState<"pt" | "en">("pt");
+
+  useEffect(() => {
+    const read = () => {
+      const l = localStorage.getItem("language") || "pt";
+      setUiLang(l === "en" ? "en" : "pt");
+    };
+    read();
+    const onLang = () => read();
+    window.addEventListener("discoverlangchange", onLang);
+    return () => window.removeEventListener("discoverlangchange", onLang);
+  }, []);
+
+  const dateLocale = uiLang === "en" ? "en-GB" : "pt-PT";
+
+  const obrigadoAria = useMemo(() => {
+    if (uiLang === "en") {
+      return {
+        details: "Booking details",
+        badges: "Payment security",
+        lottie: "Booking confirmation animation",
+      };
+    }
+    return {
+      details: "Detalhes da reserva",
+      badges: "Segurança do pagamento",
+      lottie: "Animação de confirmação da reserva",
+    };
+  }, [uiLang]);
 
   const refDisplay = sessionId
     ? formatCheckoutSessionRefForDisplay(sessionId)
@@ -104,18 +153,18 @@ export function ObrigadoThankYouClient({
         if (loc) {
           window.open(loc, "_blank", "noopener,noreferrer");
         } else {
-          setReceiptErr("Could not get the receipt link.");
+          setReceiptErr({ kind: "i18n", key: "obrigado_receipt_err_link" });
         }
       } else {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setReceiptErr(
-          typeof data.error === "string"
-            ? data.error
-            : "Receipt unavailable at the moment.",
-        );
+        if (typeof data.error === "string" && data.error.trim()) {
+          setReceiptErr({ kind: "server", message: data.error.trim() });
+        } else {
+          setReceiptErr({ kind: "i18n", key: "obrigado_receipt_err_unavailable" });
+        }
       }
     } catch {
-      setReceiptErr("Network error. Please try again.");
+      setReceiptErr({ kind: "i18n", key: "obrigado_receipt_err_network" });
     } finally {
       setReceiptLoading(false);
     }
@@ -131,29 +180,31 @@ export function ObrigadoThankYouClient({
             <div className="obrigado-ticket__stub obrigado-ticket__stub--lottie">
               <iframe
                 src="https://lottie.host/embed/283c56c5-cb53-4b3c-964e-ff0835b07791/eaPqweqVf0.lottie"
-                title="Booking confirmation animation"
+                title={obrigadoAria.lottie}
                 className="obrigado-ticket__lottie-iframe"
                 loading="lazy"
               />
             </div>
             <div className="obrigado-ticket__head-main">
-              <p className="obrigado-ticket__eyebrow">Digital ticket</p>
+              <p className="obrigado-ticket__eyebrow" data-translate="obrigado_eyebrow">
+                Bilhete digital
+              </p>
               <h1 id="obrigado-ticket-title" className="obrigado-ticket__title">
                 {customerFirstName ? (
                   <>
-                    Thank you,{" "}
+                    <span data-translate="obrigado_greeting_prefix">Obrigado,</span>{" "}
                     <span className="obrigado-ticket__name-accent">
                       {customerFirstName}
                     </span>
-                    !
+                    <span data-translate="obrigado_greeting_suffix">!</span>
                   </>
                 ) : (
-                  "Booking paid successfully"
+                  <span data-translate="obrigado_title_paid">Reserva paga com sucesso</span>
                 )}
               </h1>
               {customerFirstName ? (
-                <p className="obrigado-ticket__subtitle">
-                  Payment confirmed · Discover Lixboa Tours
+                <p className="obrigado-ticket__subtitle" data-translate="obrigado_subtitle">
+                  Pagamento confirmado · Discover Lixboa Tours
                 </p>
               ) : null}
             </div>
@@ -163,60 +214,72 @@ export function ObrigadoThankYouClient({
 
           <div className="obrigado-ticket__body">
             <p className="obrigado-ticket__lead">
-              {customerFirstName
-                ? `${customerFirstName}, your spot is secured. `
-                : null}
-              Thank you for choosing Discover Lixboa Tours. Your payment was processed securely.
-              The date you entered on the form is your preference — we&apos;ll confirm the final
-              details with you.
+              {customerFirstName ? (
+                <>
+                  <strong>{customerFirstName}</strong>
+                  <span data-translate="obrigado_lead_after_name">
+                    , o teu lugar está garantido.{" "}
+                  </span>
+                </>
+              ) : null}
+              <span data-translate="obrigado_lead_body">
+                Obrigado por escolheres a Discover Lixboa Tours. O pagamento foi processado em
+                segurança. A data que indicaste no formulário é uma preferência — confirmamos
+                contigo os detalhes finais.
+              </span>
             </p>
 
             {showDetails ? (
-              <section className="obrigado-ticket__details" aria-label="Booking details">
-                <h2 className="obrigado-ticket__details-title">Booking details</h2>
+              <section
+                className="obrigado-ticket__details"
+                aria-label={obrigadoAria.details}
+              >
+                <h2 className="obrigado-ticket__details-title" data-translate="obrigado_details_title">
+                  Detalhes da reserva
+                </h2>
                 <dl className="obrigado-ticket__details-grid">
                   {bookingDetails?.customerName ? (
                     <>
-                      <dt>Name</dt>
+                      <dt data-translate="obrigado_dt_name">Nome</dt>
                       <dd>{bookingDetails.customerName}</dd>
                     </>
                   ) : null}
                   {bookingDetails?.email ? (
                     <>
-                      <dt>Email</dt>
+                      <dt data-translate="obrigado_dt_email">Email</dt>
                       <dd>{bookingDetails.email}</dd>
                     </>
                   ) : null}
                   {bookingDetails?.phone ? (
                     <>
-                      <dt>Phone</dt>
+                      <dt data-translate="obrigado_dt_phone">Telefone</dt>
                       <dd>{bookingDetails.phone}</dd>
                     </>
                   ) : null}
                   {bookingDetails?.tourLabel ? (
                     <>
-                      <dt>Tour</dt>
+                      <dt data-translate="obrigado_dt_tour">Tour</dt>
                       <dd>{bookingDetails.tourLabel}</dd>
                     </>
                   ) : null}
                   {bookingDetails?.preferredDate ? (
                     <>
-                      <dt>Preferred date</dt>
+                      <dt data-translate="obrigado_dt_date">Data preferida</dt>
                       <dd>
-                        {formatPreferredDateEnLong(bookingDetails.preferredDate) ||
+                        {formatPreferredDateLong(bookingDetails.preferredDate, dateLocale) ||
                           bookingDetails.preferredDate}
                       </dd>
                     </>
                   ) : null}
                   {bookingDetails?.quantity ? (
                     <>
-                      <dt>People</dt>
+                      <dt data-translate="obrigado_dt_people">Pessoas</dt>
                       <dd>{bookingDetails.quantity}</dd>
                     </>
                   ) : null}
                   {bookingDetails?.notes ? (
                     <>
-                      <dt>Notes</dt>
+                      <dt data-translate="obrigado_dt_notes">Notas</dt>
                       <dd className="obrigado-ticket__details-notes">{bookingDetails.notes}</dd>
                     </>
                   ) : null}
@@ -226,7 +289,9 @@ export function ObrigadoThankYouClient({
 
             {refDisplay ? (
               <div className="obrigado-ticket__ref-block">
-                <span className="obrigado-ticket__ref-label">Payment reference</span>
+                <span className="obrigado-ticket__ref-label" data-translate="obrigado_ref_label">
+                  Referência de pagamento
+                </span>
                 <code className="obrigado-ticket__ref-code" title={sessionId}>
                   {refDisplay}
                 </code>
@@ -234,9 +299,12 @@ export function ObrigadoThankYouClient({
             ) : null}
 
             {showReceiptCta ? (
-              <p className="obrigado-ticket__export-intro">
-                <strong>Receipt:</strong> export Stripe&apos;s official receipt (PDF in your
-                browser).
+              <p
+                className="obrigado-ticket__export-intro"
+                data-translate="obrigado_receipt_intro"
+                data-html
+              >
+                <strong>Recibo:</strong> exporta o recibo oficial da Stripe (PDF no browser).
               </p>
             ) : null}
 
@@ -261,11 +329,21 @@ export function ObrigadoThankYouClient({
                         />
                       </svg>
                     </span>
-                    {receiptLoading ? "Preparing…" : "Export receipt"}
+                    {receiptLoading ? (
+                      <span data-translate="obrigado_export_loading">A preparar…</span>
+                    ) : (
+                      <span data-translate="obrigado_export">Exportar recibo</span>
+                    )}
                   </button>
                   {receiptErr ? (
                     <p className="br-error obrigado-ticket__receipt-err" role="alert">
-                      {receiptErr}
+                      {receiptErr.kind === "server" ? (
+                        receiptErr.message
+                      ) : (
+                        <span data-translate={receiptErr.key}>
+                          {RECEIPT_ERR_PT[receiptErr.key]}
+                        </span>
+                      )}
                     </p>
                   ) : null}
                 </>
@@ -287,17 +365,19 @@ export function ObrigadoThankYouClient({
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.123 1.035 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                   </svg>
                 </span>
-                Chat on WhatsApp
+                <span data-translate="obrigado_whatsapp">Falar no WhatsApp</span>
               </a>
               <Link className="obrigado-btn obrigado-btn--home" href="/">
-                Back to home
+                <span data-translate="obrigado_home">Voltar ao início</span>
               </Link>
             </div>
           </div>
         </article>
 
-        <section className="obrigado-badges" aria-label="Payment security">
-          <h2 className="obrigado-badges__title">Secure payment</h2>
+        <section className="obrigado-badges" aria-label={obrigadoAria.badges}>
+          <h2 className="obrigado-badges__title" data-translate="obrigado_secure_title">
+            Pagamento seguro
+          </h2>
           <ul className="obrigado-badges__list">
             {OBRIGADO_SECURITY_BADGES.map((b) => (
               <li key={b.id} className="obrigado-badge">
@@ -305,8 +385,18 @@ export function ObrigadoThankYouClient({
                   <BadgeIcon id={b.id} />
                 </span>
                 <span className="obrigado-badge__text">
-                  <span className="obrigado-badge__label">{b.label}</span>
-                  <span className="obrigado-badge__sub">{b.sub}</span>
+                  <span
+                    className="obrigado-badge__label"
+                    data-translate={`obrigado_badge_${b.id}_label`}
+                  >
+                    {b.label}
+                  </span>
+                  <span
+                    className="obrigado-badge__sub"
+                    data-translate={`obrigado_badge_${b.id}_sub`}
+                  >
+                    {b.sub}
+                  </span>
                 </span>
               </li>
             ))}

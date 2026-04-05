@@ -57,6 +57,10 @@ const nextConfig: NextConfig = {
           source: "/tours/monsanto",
           destination: "/tour-monsanto.html",
         },
+        {
+          source: "/tours/fatima-tomar",
+          destination: "/tour-fatima-tomar.html",
+        },
         { source: "/tours/alentejo", destination: "/tour-alentejo.html" },
         { source: "/tours/algarve", destination: "/tour-algarve.html" },
       ],
@@ -100,13 +104,8 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/tours/fatima-tomar",
-        destination: "/tours/monsanto",
-        permanent: true,
-      },
-      {
         source: "/tour-fatima-tomar.html",
-        destination: "/tours/monsanto",
+        destination: "/tours/fatima-tomar",
         permanent: true,
       },
       {

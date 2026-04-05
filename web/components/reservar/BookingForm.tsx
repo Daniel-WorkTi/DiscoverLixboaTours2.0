@@ -64,10 +64,10 @@ function parseYMD(s: string): Date | null {
   return new Date(p[0], p[1] - 1, p[2]);
 }
 
-function formatPtLong(ymd: string): string {
+function formatDateLong(ymd: string, locale: string): string {
   const d = parseYMD(ymd);
   if (!d) return "";
-  return d.toLocaleDateString("pt-PT", {
+  return d.toLocaleDateString(locale, {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -75,10 +75,10 @@ function formatPtLong(ymd: string): string {
   });
 }
 
-function formatPtShort(ymd: string): string {
+function formatDateShort(ymd: string, locale: string): string {
   const d = parseYMD(ymd);
   if (!d) return "";
-  return d.toLocaleDateString("pt-PT", {
+  return d.toLocaleDateString(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -87,6 +87,23 @@ function formatPtShort(ymd: string): string {
 
 type BookingFormProps = {
   initialTourId?: string;
+};
+
+type BookingFormError =
+  | { kind: "i18n"; key: string }
+  | { kind: "server"; message: string };
+
+/** PT default copy — mirror `booking_err_*` in translate.js */
+const BOOKING_ERR_PT: Record<string, string> = {
+  booking_err_pick_date:
+    "Escolhe um dia no calendário em cima («Data do tour») antes de continuar para o pagamento.",
+  booking_err_invalid_response: "Resposta inválida do servidor. Tenta novamente.",
+  booking_err_checkout_default: "Não foi possível iniciar o pagamento.",
+  booking_err_no_url:
+    "Resposta inválida: não há URL de pagamento. Confirma STRIPE_SECRET_KEY e os logs do servidor.",
+  booking_err_timeout:
+    "O servidor demorou demasiado a responder (timeout). Verifica a ligação, se a chave Stripe está na Vercel (Environment Variables) e tenta de novo.",
+  booking_err_network: "Erro de rede. Tenta novamente.",
 };
 
 export function BookingForm({ initialTourId }: BookingFormProps) {
@@ -108,10 +125,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const [loading, setLoading] = useState(false);
   /** Evita dois pedidos em paralelo (duplo clique antes do re-render com loading=true). */
   const checkoutInFlight = useRef(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<BookingFormError | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [tourPickerOpen, setTourPickerOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [uiLang, setUiLang] = useState<"pt" | "en">("pt");
 
   const today = useMemo(() => startOfToday(), []);
 
@@ -120,6 +138,17 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const read = () => {
+      const l = localStorage.getItem("language") || "pt";
+      setUiLang(l === "en" ? "en" : "pt");
+    };
+    read();
+    const onLang = () => read();
+    window.addEventListener("discoverlangchange", onLang);
+    return () => window.removeEventListener("discoverlangchange", onLang);
   }, []);
 
   useEffect(() => {
@@ -150,14 +179,17 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   }, [modalOpen, tourPickerOpen]);
 
   const tourLabel = toursBooking.find((t) => t.id === tourId)?.label ?? "";
+  const tourLabelKey = `tour_booking_${tourId.replace(/-/g, "_")}`;
   const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
 
+  const dateLocale = uiLang === "en" ? "en-GB" : "pt-PT";
+
   const monthLabel = useMemo(() => {
-    return new Date(viewYear, viewMonth, 1).toLocaleDateString("pt-PT", {
+    return new Date(viewYear, viewMonth, 1).toLocaleDateString(dateLocale, {
       month: "long",
       year: "numeric",
     });
-  }, [viewYear, viewMonth]);
+  }, [viewYear, viewMonth, dateLocale]);
 
   const calendarCells = useMemo(() => {
     const first = new Date(viewYear, viewMonth, 1);
@@ -212,9 +244,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!preferredDate) {
-      setError(
-        "Escolhe um dia no calendário em cima («Data do tour») antes de continuar para o pagamento.",
-      );
+      setError({ kind: "i18n", key: "booking_err_pick_date" });
       document.getElementById("br-booking-cal")?.scrollIntoView({
         behavior: "smooth",
         block: "center",
@@ -272,7 +302,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             })
           : {};
       } catch {
-        setError("Resposta inválida do servidor. Tenta novamente.");
+        setError({ kind: "i18n", key: "booking_err_invalid_response" });
         return;
       }
       if (!res.ok) {
@@ -285,7 +315,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             data.error ?? "",
           );
         }
-        setError(data.error ?? "Não foi possível iniciar o pagamento.");
+        if (typeof data.error === "string" && data.error.trim()) {
+          setError({ kind: "server", message: data.error.trim() });
+        } else {
+          setError({ kind: "i18n", key: "booking_err_checkout_default" });
+        }
         return;
       }
       const checkoutUrl = typeof data.url === "string" ? data.url.trim() : "";
@@ -293,17 +327,16 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         window.location.href = checkoutUrl;
         return;
       }
-      setError(
-        data.error ??
-          "Resposta inválida: não há URL de pagamento. Confirma STRIPE_SECRET_KEY e os logs do servidor.",
-      );
+      if (typeof data.error === "string" && data.error.trim()) {
+        setError({ kind: "server", message: data.error.trim() });
+      } else {
+        setError({ kind: "i18n", key: "booking_err_no_url" });
+      }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
-        setError(
-          "O servidor demorou demasiado a responder (timeout). Verifica a ligação, se a chave Stripe está na Vercel (Environment Variables) e tenta de novo.",
-        );
+        setError({ kind: "i18n", key: "booking_err_timeout" });
       } else {
-        setError("Erro de rede. Tenta novamente.");
+        setError({ kind: "i18n", key: "booking_err_network" });
       }
     } finally {
       window.clearTimeout(timeoutId);
@@ -330,10 +363,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         >
           <div className="br-modal-header">
             <div>
-              <h2 id={tourPickerTitleId} className="br-modal-title">
+              <h2 id={tourPickerTitleId} className="br-modal-title" data-translate="booking_modal_destino">
                 Destino
               </h2>
-              <p className="br-modal-sub">Escolhe o teu tour</p>
+              <p className="br-modal-sub" data-translate="booking_modal_choose">
+                Escolhe o teu tour
+              </p>
             </div>
             <button
               type="button"
@@ -357,7 +392,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   setTourPickerOpen(false);
                 }}
               >
-                <span className="br-tour-option__label">{t.label}</span>
+                <span className="br-tour-option__label" data-translate={`tour_booking_${t.id.replace(/-/g, "_")}`}>
+                  {t.label}
+                </span>
                 {t.id === tourId ? (
                   <span className="br-tour-option__check" aria-hidden>
                     <svg
@@ -396,10 +433,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         >
           <div className="br-modal-header">
             <div>
-              <h2 id={titleId} className="br-modal-title">
+              <h2 id={titleId} className="br-modal-title" data-translate="booking_modal_title">
                 Reserva o teu tour
               </h2>
-              <p className="br-modal-sub">{tourLabel}</p>
+              <p className="br-modal-sub" data-translate={tourLabelKey}>
+                {tourLabel}
+              </p>
             </div>
             <button
               type="button"
@@ -472,8 +511,10 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
             <div className="br-travelers">
               <div>
-                <div className="br-travelers-label">Viajantes</div>
-                <div className="br-travelers-sub">
+                <div className="br-travelers-label" data-translate="booking_travelers">
+                  Viajantes
+                </div>
+                <div className="br-travelers-sub" data-translate="booking_travelers_hint">
                   Escolhe quantas pessoas vão no tour (máx. {MAX_TRAVELERS})
                 </div>
               </div>
@@ -505,32 +546,38 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     <>
                       <div className="br-total__grid">
                         <div className="br-total__cell">
-                          <div className="br-total__label">Por pessoa</div>
+                          <div className="br-total__label" data-translate="booking_per_person">
+                            Por pessoa
+                          </div>
                           <div className="br-total__value">
                             {formatEurFromCents(estimate.centsPerPerson)}
                           </div>
                         </div>
                         <div className="br-total__cell br-total__cell--right">
-                          <div className="br-total__label">Total</div>
+                          <div className="br-total__label" data-translate="booking_total">
+                            Total
+                          </div>
                           <div className="br-total__value">
                             {formatEurFromCents(estimate.totalCents)}
                           </div>
                         </div>
                       </div>
-                      <div className="br-total__sub">
-                        {estimate.label} · Valor final confirmado no checkout.
+                      <div className="br-total__sub" data-translate="booking_checkout_note">
+                        Valor final confirmado no checkout.
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="br-total__row">
-                        <span className="br-total__label">Total do grupo</span>
+                        <span className="br-total__label" data-translate="booking_total_group">
+                          Total do grupo
+                        </span>
                         <span className="br-total__value">
                           {formatEurFromCents(estimate.totalCents)}
                         </span>
                       </div>
-                      <div className="br-total__sub">
-                        {estimate.label} · Valor final confirmado no checkout.
+                      <div className="br-total__sub" data-translate="booking_checkout_note">
+                        Valor final confirmado no checkout.
                       </div>
                     </>
                   )}
@@ -538,8 +585,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               ) : (
                 <>
                   <div className="br-total__row">
-                    <span className="br-total__label">Total</span>
-                    <span className="br-total__value">Calculado no checkout</span>
+                    <span className="br-total__label" data-translate="booking_total">
+                      Total
+                    </span>
+                    <span className="br-total__value" data-translate="booking_total_tbd">
+                      Calculado no checkout
+                    </span>
                   </div>
                 </>
               )}
@@ -547,10 +598,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
             <form onSubmit={handleSubmit} className="br-fields">
               <div>
-                <p className="br-section-title">Os teus dados</p>
+                <p className="br-section-title" data-translate="booking_your_details">
+                  Os teus dados
+                </p>
                 <div className="br-row2">
                   <label className="br-label">
-                    Nome completo
+                    <span data-translate="booking_full_name">Nome completo</span>
                     <input
                       className="br-input"
                       value={customerName}
@@ -596,7 +649,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   </label>
                 </div>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
-                  Email
+                  <span data-translate="booking_email">Email</span>
                   <input
                     className="br-input"
                     type="email"
@@ -608,12 +661,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   />
                 </label>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
-                  Notas (opcional)
+                  <span data-translate="booking_notes">Notas (opcional)</span>
                   <textarea
                     className="br-input br-textarea"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value.slice(0, MAX_NOTES_LEN))}
                     placeholder="Pickup, alergias…"
+                    data-translate-placeholder="booking_notes_ph"
                     maxLength={MAX_NOTES_LEN}
                   />
                   <span className="br-char-hint">
@@ -622,12 +676,15 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 </label>
               </div>
 
-              {error ? <p className="br-error">{error}</p> : null}
-
-              {!preferredDate && !loading ? (
-                <p className="br-submit-hint" role="status">
-                  Toca num dia no calendário (secção «Data do tour») para ativar o
-                  pagamento.
+              {error ? (
+                <p className="br-error">
+                  {error.kind === "server" ? (
+                    error.message
+                  ) : (
+                    <span data-translate={error.key}>
+                      {BOOKING_ERR_PT[error.key] ?? error.key}
+                    </span>
+                  )}
                 </p>
               ) : null}
 
@@ -637,9 +694,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 disabled={loading}
                 aria-busy={loading}
               >
-                {loading
-                  ? "A redirecionar para o pagamento…"
-                  : "Continuar para pagamento seguro"}
+                {loading ? (
+                  <span data-translate="booking_submit_loading">
+                    A redirecionar para o pagamento…
+                  </span>
+                ) : (
+                  <span data-translate="booking_submit">Continuar para pagamento seguro</span>
+                )}
               </button>
             </form>
           </div>
@@ -659,7 +720,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             role="region"
             aria-label="Destino do tour"
           >
-            <span className="br-card-label">Destino</span>
+            <span className="br-card-label" data-translate="booking_card_destino">
+              Destino
+            </span>
             <button
               type="button"
               className="br-pick-btn"
@@ -669,30 +732,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               aria-label="Escolher destino do tour"
             >
               <div className="br-pick-btn__text">
-                <span className="br-pick-btn__value">{tourLabel}</span>
-              </div>
-              <span className="br-pick-btn__chev" aria-hidden>
-                ›
-              </span>
-            </button>
-          </div>
-
-          <div className="br-card br-card--grow">
-            <span className="br-card-label">Data</span>
-            <button
-              type="button"
-              className="br-pick-btn"
-              onClick={() => setModalOpen(true)}
-            >
-              <div className="br-pick-btn__text">
-                <span
-                  className={
-                    preferredDate
-                      ? "br-pick-btn__value"
-                      : "br-pick-btn__value br-pick-btn__value--muted"
-                  }
-                >
-                  {preferredDate ? formatPtShort(preferredDate) : "Toca para escolher"}
+                <span className="br-pick-btn__value" data-translate={tourLabelKey}>
+                  {tourLabel}
                 </span>
               </div>
               <span className="br-pick-btn__chev" aria-hidden>
@@ -702,7 +743,38 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           </div>
 
           <div className="br-card br-card--grow">
-            <span className="br-card-label">Viajantes</span>
+            <span className="br-card-label" data-translate="booking_card_data">
+              Data
+            </span>
+            <button
+              type="button"
+              className="br-pick-btn"
+              onClick={() => setModalOpen(true)}
+            >
+              <div className="br-pick-btn__text">
+                {preferredDate ? (
+                  <span className="br-pick-btn__value">
+                    {formatDateShort(preferredDate, dateLocale)}
+                  </span>
+                ) : (
+                  <span
+                    className="br-pick-btn__value br-pick-btn__value--muted"
+                    data-translate="booking_pick_date"
+                  >
+                    Toca para escolher
+                  </span>
+                )}
+              </div>
+              <span className="br-pick-btn__chev" aria-hidden>
+                ›
+              </span>
+            </button>
+          </div>
+
+          <div className="br-card br-card--grow">
+            <span className="br-card-label" data-translate="booking_card_viajantes">
+              Viajantes
+            </span>
             <button
               type="button"
               className="br-pick-btn"
@@ -710,7 +782,14 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             >
               <div className="br-pick-btn__text">
                 <span className="br-pick-btn__value">
-                  {quantity} {quantity === 1 ? "pessoa" : "pessoas"}
+                  {quantity}{" "}
+                  <span
+                    data-translate={
+                      quantity === 1 ? "booking_person_singular" : "booking_person_plural"
+                    }
+                  >
+                    {quantity === 1 ? "pessoa" : "pessoas"}
+                  </span>
                 </span>
               </div>
               <span className="br-pick-btn__chev" aria-hidden>
@@ -725,7 +804,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               className="br-cta"
               onClick={() => setModalOpen(true)}
             >
-              {preferredDate ? "Rever e pagar" : "Escolher data e reservar"}
+              {preferredDate ? (
+                <span data-translate="booking_cta_review">Rever e pagar</span>
+              ) : (
+                <span data-translate="booking_cta_choose">Escolher data e reservar</span>
+              )}
             </button>
           </div>
           </div>
@@ -735,15 +818,24 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
       <p className="br-hint">
         {preferredDate ? (
           <>
-            <strong>{formatPtLong(preferredDate)}</strong>
+            <strong>{formatDateLong(preferredDate, dateLocale)}</strong>
             {" · "}
-            {quantity} {quantity === 1 ? "pessoa" : "pessoas"} · {tourLabel}
+            {quantity}{" "}
+            <span
+              data-translate={
+                quantity === 1 ? "booking_person_singular" : "booking_person_plural"
+              }
+            >
+              {quantity === 1 ? "pessoa" : "pessoas"}
+            </span>
+            {" · "}
+            <span data-translate={tourLabelKey}>{tourLabel}</span>
           </>
         ) : (
-          <>
+          <span data-translate="booking_hint_long">
             Abre o calendário no botão laranja, escolhe até 7 pessoas e conclui os teus dados para
             ires ao pagamento seguro.
-          </>
+          </span>
         )}
       </p>
 

@@ -13,9 +13,9 @@ import { getBookingDetailsFromCheckoutSession } from "@/lib/obrigado-booking-det
 import { whatsappUrlAfterBooking } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
-  title: "Booking confirmed | Discover Lixboa Tours",
+  title: "Reserva confirmada | Discover Lixboa Tours",
   description:
-    "Thank you for your booking. Message us on WhatsApp to confirm the tour details.",
+    "Obrigado pela tua reserva. Confirma connosco os detalhes do tour por WhatsApp.",
 };
 
 type Props = { searchParams: Promise<{ session_id?: string }> };
@@ -36,7 +36,7 @@ export default async function ObrigadoPage({ searchParams }: Props) {
       <main className="reservar-main obrigado-main">
         <div className="reservar-shell">
           <Link href="/" className="reservar-back">
-            ← Back to site
+            <span data-translate="reservar_back">← Voltar ao site</span>
           </Link>
 
           <ObrigadoThankYouClient

@@ -15,31 +15,48 @@ function totalFromRule(
   return r.centsTotal;
 }
 
-describe("Sintra & Cascais (0,50 €/pessoa — testes)", () => {
-  it("regra de checkout: 50 ¢ por pessoa para quantidades 1–7", () => {
-    for (let q = 1; q <= 7; q++) {
-      const r = getPricingRuleFromTable("sintra-cascais", q);
-      expect(r).toEqual({ kind: "per_person", centsPerPerson: 50 });
-    }
+describe("Sintra & Cascais — faixas por pessoa", () => {
+  it("checkout: 1–2 p. 120 €; 3–4 p. 110 €; 5–7 p. 100 €", () => {
+    expect(getPricingRuleFromTable("sintra-cascais", 1)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 12000,
+    });
+    expect(getPricingRuleFromTable("sintra-cascais", 2)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 12000,
+    });
+    expect(getPricingRuleFromTable("sintra-cascais", 4)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 11000,
+    });
+    expect(getPricingRuleFromTable("sintra-cascais", 7)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 10000,
+    });
   });
 
-  it("estimativa no formulário: 50 ¢ × quantidade", () => {
+  it("estimativa coerente com a regra", () => {
     for (let q = 1; q <= 7; q++) {
       const e = estimateFromTable("sintra-cascais", q);
+      const tot = totalFromRule("sintra-cascais", q);
       expect(e).not.toBeNull();
-      if (e?.kind === "per_person") {
-        expect(e.centsPerPerson).toBe(50);
-        expect(e.totalCents).toBe(50 * q);
-      }
+      expect(e?.kind === "per_person" ? e.totalCents : 0).toBe(tot);
     }
   });
 });
 
 describe("Outros destinos (amostras)", () => {
-  it("Lisboa 1 pessoa = 90 €", () => {
+  it("Lisboa 1 pessoa = 240 € (total grupo)", () => {
     expect(getPricingRuleFromTable("lisboa", 1)).toEqual({
+      kind: "per_group",
+      centsTotal: 24000,
+    });
+  });
+
+  it("3 destinos 2 pessoas = 140 € / pessoa", () => {
+    expect(getPricingRuleFromTable("3-destinos", 2)).toEqual({
       kind: "per_person",
-      centsPerPerson: 9000,
+      centsPerPerson: 14000,
     });
   });
 
@@ -47,6 +64,17 @@ describe("Outros destinos (amostras)", () => {
     expect(getPricingRuleFromTable("monsanto", 2)).toEqual({
       kind: "per_person",
       centsPerPerson: 13000,
+    });
+  });
+
+  it("Fátima & Tomar segue a mesma tabela que Monsanto", () => {
+    expect(getPricingRuleFromTable("fatima-tomar", 2)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 13000,
+    });
+    expect(getPricingRuleFromTable("fatima-tomar", 5)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 11500,
     });
   });
 

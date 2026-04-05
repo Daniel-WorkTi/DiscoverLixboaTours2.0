@@ -1,10 +1,7 @@
 /**
  * Tabela única de preços (UI + API checkout).
- * Sintra a 0,50 €/pessoa: valor de teste (mínimo típico Stripe em EUR) — repõe preços reais antes do deploy final.
+ * Valores em cêntimos EUR; faixas alinhadas com preçário 2026 (revisão comercial).
  */
-
-/** Sintra: 0,50 € por pessoa (50 cêntimos) enquanto em modo teste. */
-const SINTRA_TEST_CENTS_PER_PERSON = 50;
 
 export type PricingRule =
   | { kind: "per_person"; centsPerPerson: number }
@@ -33,39 +30,38 @@ export function getPricingRuleFromTable(
 ): PricingRule | null {
   const q = Math.max(1, Math.min(MAX_Q, qty));
 
-  // Sintra & Cascais — 0,50 €/pessoa (testes / mínimo Stripe)
+  // Sintra & Cascais — por pessoa por faixa
   if (tourId === "sintra-cascais") {
-    if (q >= 1 && q <= MAX_Q) {
-      return {
-        kind: "per_person",
-        centsPerPerson: SINTRA_TEST_CENTS_PER_PERSON,
-      };
-    }
+    if (q <= 2) return { kind: "per_person", centsPerPerson: 12000 };
+    if (q <= 4) return { kind: "per_person", centsPerPerson: 11000 };
+    if (q <= MAX_Q) return { kind: "per_person", centsPerPerson: 10000 };
     return null;
   }
 
+  // Fátima, Nazaré, Óbidos — 2 p.: 280 € total (140 €/p.); 3–5 / 6–7 por pessoa
   if (tourId === "3-destinos") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 10000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 7000 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 6500 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 6000 };
+    if (q === 1) return { kind: "per_group", centsTotal: 28000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 14000 };
+    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 13000 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 12000 };
     return null;
   }
 
+  // Lisboa — 2 p.: 240 € total; 3–5: 100 €/p.; 6–7: 90 €/p.; 1 p.: 240 € (grupo)
   if (tourId === "lisboa") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 9000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 6000 };
-    if (q === 3) return { kind: "per_person", centsPerPerson: 5500 };
-    if (q >= 4 && q <= 5) return { kind: "per_person", centsPerPerson: 5000 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 4500 };
+    if (q === 1) return { kind: "per_group", centsTotal: 24000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 12000 };
+    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 10000 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 9000 };
     return null;
   }
 
+  // Arrábida, Setúbal, Sesimbra — 2 p.: 260 € total; depois por pessoa
   if (tourId === "arraabida") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 13000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 6500 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 6000 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 5500 };
+    if (q === 1) return { kind: "per_group", centsTotal: 26000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 13000 };
+    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 12000 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 11000 };
     return null;
   }
 
@@ -77,7 +73,7 @@ export function getPricingRuleFromTable(
     return null;
   }
 
-  if (tourId === "monsanto") {
+  if (tourId === "monsanto" || tourId === "fatima-tomar") {
     if (q === 1) return { kind: "per_person", centsPerPerson: 13000 };
     if (q === 2) return { kind: "per_person", centsPerPerson: 13000 };
     if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 11500 };
@@ -111,15 +107,18 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   const q = Math.max(1, Math.min(MAX_Q, quantity));
 
   if (tourId === "sintra-cascais") {
-    const cpp = SINTRA_TEST_CENTS_PER_PERSON;
-    const label =
-      q === 1
-        ? "1 pessoa"
-        : q === 2
-          ? "2 pessoas"
-          : q <= 4
-            ? "3–4 pessoas"
-            : "5–7 pessoas";
+    let cpp: number;
+    let label: string;
+    if (q <= 2) {
+      cpp = 12000;
+      label = q === 1 ? "1 pessoa" : "2 pessoas";
+    } else if (q <= 4) {
+      cpp = 11000;
+      label = "3–4 pessoas";
+    } else {
+      cpp = 10000;
+      label = "5–7 pessoas";
+    }
     return {
       kind: "per_person",
       centsPerPerson: cpp,
@@ -129,124 +128,93 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "3-destinos") {
-    if (q === 1)
+    if (q === 1) {
       return {
-        kind: "per_person",
-        centsPerPerson: 10000,
-        totalCents: 10000 * q,
-        label: "1 pessoa",
+        kind: "per_group",
+        totalCents: 28000,
+        label: "1 pessoa (280 €)",
       };
-    if (q === 2)
+    }
+    if (q === 2) {
       return {
         kind: "per_person",
-        centsPerPerson: 7000,
-        totalCents: 7000 * q,
-        label: "2 pessoas",
+        centsPerPerson: 14000,
+        totalCents: 28000,
+        label: "2 pessoas (280 € total)",
       };
-    if (q >= 3 && q <= 5)
+    }
+    if (q >= 3 && q <= 5) {
       return {
         kind: "per_person",
-        centsPerPerson: 6500,
-        totalCents: 6500 * q,
+        centsPerPerson: 13000,
+        totalCents: 13000 * q,
         label: "3–5 pessoas",
       };
+    }
     return {
       kind: "per_person",
-      centsPerPerson: 6000,
-      totalCents: 6000 * q,
+      centsPerPerson: 12000,
+      totalCents: 12000 * q,
       label: "6–7 pessoas",
     };
   }
 
   if (tourId === "lisboa") {
-    if (q === 1)
+    if (q === 1) {
+      return {
+        kind: "per_group",
+        totalCents: 24000,
+        label: "1 pessoa (240 €)",
+      };
+    }
+    if (q === 2) {
       return {
         kind: "per_person",
-        centsPerPerson: 9000,
-        totalCents: 9000 * q,
-        label: "1 pessoa",
+        centsPerPerson: 12000,
+        totalCents: 24000,
+        label: "2 pessoas (240 € total)",
       };
-    if (q === 2)
+    }
+    if (q >= 3 && q <= 5) {
       return {
         kind: "per_person",
-        centsPerPerson: 6000,
-        totalCents: 6000 * q,
-        label: "2 pessoas",
+        centsPerPerson: 10000,
+        totalCents: 10000 * q,
+        label: "3–5 pessoas",
       };
-    if (q === 3)
-      return {
-        kind: "per_person",
-        centsPerPerson: 5500,
-        totalCents: 5500 * q,
-        label: "3 pessoas",
-      };
-    if (q >= 4 && q <= 5)
-      return {
-        kind: "per_person",
-        centsPerPerson: 5000,
-        totalCents: 5000 * q,
-        label: "4–5 pessoas",
-      };
+    }
     return {
       kind: "per_person",
-      centsPerPerson: 4500,
-      totalCents: 4500 * q,
+      centsPerPerson: 9000,
+      totalCents: 9000 * q,
       label: "6–7 pessoas",
     };
   }
 
   if (tourId === "arraabida") {
-    if (q === 1)
+    if (q === 1) {
+      return {
+        kind: "per_group",
+        totalCents: 26000,
+        label: "1 pessoa (260 €)",
+      };
+    }
+    if (q === 2) {
       return {
         kind: "per_person",
         centsPerPerson: 13000,
-        totalCents: 13000 * q,
-        label: "1 pessoa",
+        totalCents: 26000,
+        label: "2 pessoas (260 € total)",
       };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 6500,
-        totalCents: 6500 * q,
-        label: "2 pessoas",
-      };
-    if (q >= 3 && q <= 5)
-      return {
-        kind: "per_person",
-        centsPerPerson: 6000,
-        totalCents: 6000 * q,
-        label: "3–5 pessoas",
-      };
-    return {
-      kind: "per_person",
-      centsPerPerson: 5500,
-      totalCents: 5500 * q,
-      label: "6–7 pessoas",
-    };
-  }
-
-  if (tourId === "aveiro") {
-    if (q === 1)
-      return {
-        kind: "per_person",
-        centsPerPerson: 14000,
-        totalCents: 14000 * q,
-        label: "1 pessoa",
-      };
-    if (q === 2)
-      return {
-        kind: "per_person",
-        centsPerPerson: 14000,
-        totalCents: 14000 * q,
-        label: "2 pessoas",
-      };
-    if (q >= 3 && q <= 5)
+    }
+    if (q >= 3 && q <= 5) {
       return {
         kind: "per_person",
         centsPerPerson: 12000,
         totalCents: 12000 * q,
         label: "3–5 pessoas",
       };
+    }
     return {
       kind: "per_person",
       centsPerPerson: 11000,
@@ -255,28 +223,64 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
     };
   }
 
-  if (tourId === "monsanto") {
-    if (q === 1)
+  if (tourId === "aveiro") {
+    if (q === 1) {
       return {
         kind: "per_person",
-        centsPerPerson: 13000,
-        totalCents: 13000 * q,
+        centsPerPerson: 14000,
+        totalCents: 14000,
         label: "1 pessoa",
       };
-    if (q === 2)
+    }
+    if (q === 2) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 14000,
+        totalCents: 28000,
+        label: "2 pessoas",
+      };
+    }
+    if (q >= 3 && q <= 5) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 12000,
+        totalCents: 12000 * q,
+        label: "3–5 pessoas",
+      };
+    }
+    return {
+      kind: "per_person",
+      centsPerPerson: 11000,
+      totalCents: 11000 * q,
+      label: "6–7 pessoas",
+    };
+  }
+
+  if (tourId === "monsanto" || tourId === "fatima-tomar") {
+    if (q === 1) {
       return {
         kind: "per_person",
         centsPerPerson: 13000,
-        totalCents: 13000 * q,
+        totalCents: 13000,
+        label: "1 pessoa",
+      };
+    }
+    if (q === 2) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 13000,
+        totalCents: 26000,
         label: "2 pessoas",
       };
-    if (q >= 3 && q <= 5)
+    }
+    if (q >= 3 && q <= 5) {
       return {
         kind: "per_person",
         centsPerPerson: 11500,
         totalCents: 11500 * q,
         label: "3–5 pessoas",
       };
+    }
     return {
       kind: "per_person",
       centsPerPerson: 10000,
@@ -290,7 +294,7 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
     return {
       kind: "per_group",
       totalCents: cents,
-      label: q <= 3 ? "até 3 pessoas" : "até 7 pessoas",
+      label: q <= 3 ? "até 3 pessoas (600 €)" : "4–7 pessoas (700 €)",
     };
   }
 
@@ -299,7 +303,7 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
     return {
       kind: "per_group",
       totalCents: cents,
-      label: q <= 3 ? "até 3 pessoas" : "até 7 pessoas",
+      label: q <= 3 ? "até 3 pessoas (800 €)" : "4–7 pessoas (900 €)",
     };
   }
 

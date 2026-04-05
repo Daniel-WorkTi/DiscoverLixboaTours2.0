@@ -8,6 +8,8 @@ export type ExecutiveTourBanner = {
   key: string;
   titlePt: string;
   linePt: string;
+  titleKey: string;
+  lineKey: string;
   src: string;
   alt: string;
 };
@@ -81,8 +83,12 @@ export function ExecutiveToursCarousel({ slides }: Props) {
                 priority={i === 0}
               />
               <div className="exec-tour-carousel__caption">
-                <h3 className="exec-tour-carousel__title">{slide.titlePt}</h3>
-                <p className="exec-tour-carousel__line">{slide.linePt}</p>
+                <h3 className="exec-tour-carousel__title" data-translate={slide.titleKey}>
+                  {slide.titlePt}
+                </h3>
+                <p className="exec-tour-carousel__line" data-translate={slide.lineKey}>
+                  {slide.linePt}
+                </p>
               </div>
             </div>
           ))}
@@ -113,7 +119,7 @@ export function ExecutiveToursCarousel({ slides }: Props) {
             type="button"
             role="tab"
             aria-selected={i === index}
-            aria-label={`${slide.titlePt} — slide ${i + 1} de ${len}`}
+            aria-label={`${slide.titlePt} — slide ${i + 1} / ${len}`}
             className={`exec-tour-carousel__dot ${i === index ? "exec-tour-carousel__dot--active" : ""}`}
             onClick={() => setIndex(i)}
           />

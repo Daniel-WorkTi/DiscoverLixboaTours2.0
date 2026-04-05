@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wine & Food Experience — Alentejo (Évora, Estremoz & Arraiolos) | DiscoverTour</title>
+    <title>Fátima & Tomar Private Tour — DiscoverTour</title>
     
-    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/hero/logo.png.webp">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/hero/logo.png.webp">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/hero/logo.png.webp">
@@ -16,16 +15,11 @@
     <link rel="stylesheet" href="assets/css/destino.css">
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    
-    <!-- Stripe -->
     <script src="https://js.stripe.com/v3/"></script>
-    <!-- Stripe e Cal.com são configurados via integração - não expõe chaves -->
 </head>
 <body>
-    <!-- Header -->
     <header class="main-header" aria-label="Cabeçalho do site">
         <div class="header-content">
             <div class="header-logo">
@@ -59,14 +53,12 @@
             </button>
         </div>
         
-        <!-- Mobile Menu -->
         <nav class="mobile-menu" aria-label="Navegação móvel">
             <a href="index.html#home" data-translate="menu_home">Home</a>
             <a href="index.html#About" data-translate="menu_about">About</a>
             <a href="index.html#servicos" data-translate="menu_services">Services</a>
             <a href="index.html#instagram" data-translate="menu_contact">Contact</a>
             <a href="index.html#faq" data-translate="menu_faq">FAQ</a>
-            <!-- Language Selector Mobile -->
             <div class="language-selector-mobile">
                 <div class="language-flag flag-pt" data-lang="pt" title="Português"></div>
                 <div class="language-flag flag-en" data-lang="en" title="English"></div>
@@ -75,10 +67,9 @@
         </nav>
     </header>
 
-    <!-- Hero do Destino -->
     <section class="destino-hero">
         <div class="destino-hero-image">
-            <img src="assets/images/alentejo-galeria/estremoz.webp" alt="Alentejo - Évora, Estremoz & Arraiolos" decoding="async" fetchpriority="high" srcset="assets/images/alentejo-galeria/estremoz-800.webp 800w, assets/images/alentejo-galeria/estremoz-1400.webp 1400w" sizes="100vw">
+            <img src="assets/images/TOMAR/BANNER.png" alt="Fátima & Tomar Private Tour" decoding="async" fetchpriority="high" sizes="100vw">
             <div class="destino-hero-overlay"></div>
         </div>
         <div class="destino-hero-content">
@@ -88,17 +79,22 @@
                     <span>/</span>
                     <a href="index.html#servicos" data-translate="menu_services">Destinations</a>
                     <span>/</span>
-                    <span>Alentejo</span>
+                    <span data-translate="tour_fatima_tomar_breadcrumb">Fátima & Tomar Private Tour</span>
                 </nav>
-                <h1 class="destino-hero-title">Wine & Food Experience — Alentejo Premium</h1>
-                <p class="destino-hero-subtitle" data-translate="tour_alentejo_hero_subtitle">Descobre o coração histórico de Portugal numa viagem pelo Alentejo, onde a história se mistura com a tradição, a gastronomia e a autenticidade rural portuguesa, num passeio privado que combina património, cultura e tradição</p>
+                <h1 class="destino-hero-title" data-translate="tour_fatima_tomar_title">Fátima & Tomar Private Tour</h1>
+                <p class="destino-hero-subtitle" style="margin-bottom: 0.5rem;" data-translate="tour_fatima_tomar_hero_subtitle">
+                    Explore dois dos locais mais emblemáticos de Portugal numa experiência privada única.
+                </p>
+                <p class="destino-hero-subtitle" style="font-size: 1rem; opacity: 0.95; font-weight: 600; color: #ffb366;" data-translate="tour_fatima_tomar_tagline">
+                    Peregrinação &amp; património templário — dia completo sob medida
+                </p>
                 <div class="destino-hero-info">
                     <div class="info-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
                             <polyline points="12 6 12 12 16 14"/>
                         </svg>
-                        <span data-translate="tour_alentejo_duration">480 min</span>
+                        <span data-translate="tour_fatima_tomar_duration">Aproximadamente 8 horas</span>
                     </div>
                     <div class="info-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -107,41 +103,37 @@
                             <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                         </svg>
-                        <span data-translate="tour_alentejo_passengers">Máx. 7 pessoas</span>
+                        <span data-translate="tour_fatima_tomar_passengers">Máx. 7 pessoas</span>
                     </div>
                     <div class="info-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                             <circle cx="12" cy="10" r="3"/>
                         </svg>
-                        <span data-translate="tour_stops">3 cidades históricas</span>
+                        <span data-translate="tour_fatima_tomar_stops">Fátima &amp; Tomar</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Informações do Tour -->
     <section class="tour-info-section">
         <div class="container">
             <div class="tour-info-grid">
-                <!-- Coluna Principal -->
                 <div class="tour-main-content">
-                    <!-- Descrição -->
                     <div class="info-card">
                         <h2 class="info-card-title" data-translate="tour_about">About this Tour</h2>
-                        <p class="info-card-text" data-translate="tour_alentejo_about_text1" data-html>
-                            Uma jornada pelo Alentejo, a região mais autêntica de Portugal, onde o tempo parece ter parado. Começamos em <strong>Évora</strong> com o <strong>Templo de Diana</strong>, a <strong>Sé</strong> e a famosa <strong>Capela dos Ossos</strong>.
+                        <p class="info-card-text" data-translate="tour_fatima_tomar_about_text1" data-html>
+                            Visite <strong>Fátima</strong>, um dos maiores centros de peregrinação do mundo, e descubra <strong>Tomar</strong>, cidade histórica ligada aos Cavaleiros Templários e ao impressionante <strong>Convento de Cristo</strong> (Património Mundial UNESCO).
                         </p>
-                        <p class="info-card-text" data-translate="tour_alentejo_about_text2" data-html>
-                            Em <strong>Estremoz</strong>, descobrimos uma vila medieval encantadora e degustamos os famosos <strong>vinhos alentejanos</strong>. Terminamos em <strong>Arraiolos</strong>, famosa pelas suas <strong>tapeçarias tradicionais</strong> artesanais.
+                        <p class="info-card-text" data-translate="tour_fatima_tomar_about_text2" data-html>
+                            É uma <strong>experiência privada</strong> pensada para o teu ritmo: tempo para reflexão em Fátima e para explorar o centro histórico de Tomar ao detalhe.
                         </p>
-                        <p class="info-card-text" data-translate="tour_alentejo_about_text3" data-html>
-                            Viaja com conforto na nossa van privada climatizada, com um guia experiente que te levará pelos segredos mais bem guardados desta região única, onde a história, a cultura e a tradição se encontram.
+                        <p class="info-card-text" data-translate="tour_fatima_tomar_about_text3" data-html>
+                            <strong>Transporte confortável</strong>, <strong>motorista/guia profissional</strong> e <strong>pick-up e drop-off no hotel</strong> — o itinerário pode ser ajustado ao teu interesse.
                         </p>
                     </div>
 
-                    <!-- Itinerário -->
                     <div class="info-card">
                         <h2 class="info-card-title" data-translate="section_suggested_itinerary">Suggested Itinerary</h2>
                         <p style="color: #666; font-style: italic; margin-bottom: 1.5rem;" data-translate="section_itinerary_customizable">
@@ -150,64 +142,60 @@
                         <div class="itinerary-list">
                             <div class="itinerary-item">
                                 <div class="itinerary-time">
-                                    <span class="time-badge">Évora</span>
+                                    <span class="time-badge">Fátima</span>
                                 </div>
                                 <div class="itinerary-content">
-                                    <h3 data-translate="tour_alentejo_evora_title">Évora: Templo de Diana, Sé, Capela dos Ossos</h3>
-                                    <p data-translate="tour_alentejo_evora_desc" data-html><strong>Templo de Diana</strong> - ruínas romanas únicas<br>
-                                    <strong>Sé Catedral de Évora</strong> - arquitetura gótica<br>
-                                    <strong>Capela dos Ossos</strong> - experiência única e impactante</p>
+                                    <h3 data-translate="tour_fatima_tomar_itin1_title">Santuário de Fátima</h3>
+                                    <p data-translate="tour_fatima_tomar_itin1_desc" data-html>Um dos maiores santuários marianos do mundo — espaço de visita e contemplação.</p>
                                 </div>
                             </div>
-                            
                             <div class="itinerary-item">
                                 <div class="itinerary-time">
-                                    <span class="time-badge">Estremoz</span>
+                                    <span class="time-badge">Fátima</span>
                                 </div>
                                 <div class="itinerary-content">
-                                    <h3 data-translate="tour_alentejo_estremoz_title">Estremoz: Vila Medieval e Vinhos</h3>
-                                    <p data-translate="tour_alentejo_estremoz_desc" data-html>Vila medieval com castelo imponente<br>
-                                    <strong>Degustação de vinhos alentejanos</strong><br>
-                                    <strong>Artesanato local</strong> - cerâmica tradicional</p>
+                                    <h3 data-translate="tour_fatima_tomar_itin2_title">Capelinha das Aparições</h3>
+                                    <p data-translate="tour_fatima_tomar_itin2_desc" data-html>Local histórico ligado às aparições de 1917.</p>
                                 </div>
                             </div>
-                            
                             <div class="itinerary-item">
                                 <div class="itinerary-time">
-                                    <span class="time-badge">Arraiolos</span>
+                                    <span class="time-badge">Fátima</span>
                                 </div>
                                 <div class="itinerary-content">
-                                    <h3 data-translate="tour_alentejo_arraiolos_title">Arraiolos: Tapeçarias Tradicionais</h3>
-                                    <p data-translate="tour_alentejo_arraiolos_desc" data-html>Vila famosa pelas tapeçarias artesanais<br>
-                                    <strong>Oficina de tapeçarias</strong> - demonstração ao vivo<br>
-                                    <strong>Castelo de Arraiolos</strong> - vistas panorâmicas</p>
+                                    <h3 data-translate="tour_fatima_tomar_itin3_title">Tempo livre</h3>
+                                    <p data-translate="tour_fatima_tomar_itin3_desc" data-html>Tempo para visita e reflexão ao teu ritmo.</p>
                                 </div>
                             </div>
-                            
                             <div class="itinerary-item">
                                 <div class="itinerary-time">
-                                    <span class="time-badge">Regresso</span>
+                                    <span class="time-badge">Tomar</span>
                                 </div>
                                 <div class="itinerary-content">
-                                    <h3 data-translate="tour_alentejo_fotos_title">Paragens para Fotos nos Melhores Pontos</h3>
-                                    <p data-translate="tour_alentejo_fotos_desc" data-html>Paisagens alentejanas únicas<br>
-                                    <strong>Oliveiras centenárias</strong><br>
-                                    <strong>Montados de sobro</strong> - ecossistema único</p>
+                                    <h3 data-translate="tour_fatima_tomar_itin4_title">Centro histórico de Tomar</h3>
+                                    <p data-translate="tour_fatima_tomar_itin4_desc" data-html>Ruas medievais e ambiente templário numa das cidades mais charmosas do centro de Portugal.</p>
+                                </div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="itinerary-time">
+                                    <span class="time-badge">Tomar</span>
+                                </div>
+                                <div class="itinerary-content">
+                                    <h3 data-translate="tour_fatima_tomar_itin5_title">Convento de Cristo (UNESCO)</h3>
+                                    <p data-translate="tour_fatima_tomar_itin5_desc" data-html>Obra-prima manuelina e fortaleza templária — visita ao exterior e contexto histórico (entradas não incluídas).</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Mapa do Percurso -->
                     <div class="info-card">
                         <h2 class="info-card-title" data-translate="section_map">Mapa do Percurso</h2>
                         <div id="tourMap" style="height: 500px; border-radius: 15px; overflow: hidden;"></div>
-                        <p style="color: #666; font-size: 0.9rem; margin-top: 1rem; text-align: center;" data-translate="section_visualize_route">
-                            Visualize todo o percurso do tour pelo Alentejo
+                        <p style="color: #666; font-size: 0.9rem; margin-top: 1rem; text-align: center;" data-translate="tour_fatima_tomar_map_caption">
+                            Fátima e Tomar — percurso indicativo (ordem e tempo em cada local ajustáveis).
                         </p>
                     </div>
 
-                    <!-- Inclui -->
                     <div class="info-card">
                         <h2 class="info-card-title" data-translate="section_whats_included">Inclui</h2>
                         <div class="included-grid">
@@ -215,36 +203,23 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="20 6 9 17 4 12"/>
                                 </svg>
-                                <span data-translate="included_van_guide">Van privada com ar-condicionado + guia experiente</span>
+                                <span data-translate="tour_fatima_tomar_included_1">Transporte privado confortável</span>
                             </div>
                             <div class="included-item included">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="20 6 9 17 4 12"/>
                                 </svg>
-                                <span data-translate="included_hotel_pickup">Pick-up/drop-off</span>
+                                <span data-translate="tour_fatima_tomar_included_2">Motorista/guia profissional</span>
                             </div>
                             <div class="included-item included">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="20 6 9 17 4 12"/>
                                 </svg>
-                                <span data-translate="included_wifi_water">Água a bordo</span>
-                            </div>
-                            <div class="included-item included">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="20 6 9 17 4 12"/>
-                                </svg>
-                                <span data-translate="included_personalized_music">Música personalizada</span>
-                            </div>
-                            <div class="included-item included">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="20 6 9 17 4 12"/>
-                                </svg>
-                                <span data-translate="included_photo_stops">Paragens para fotos nos melhores pontos</span>
+                                <span data-translate="tour_fatima_tomar_included_3">Pick-up e drop-off no hotel</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Não Inclui -->
                     <div class="info-card">
                         <h2 class="info-card-title" data-translate="section_not_includes">Não Inclui</h2>
                         <div class="included-grid">
@@ -253,76 +228,55 @@
                                     <line x1="18" y1="6" x2="6" y2="18"/>
                                     <line x1="6" y1="6" x2="18" y2="18"/>
                                 </svg>
-                                <span data-translate="not_included_meals_drinks">Refeições e bebidas (exceto água)</span>
+                                <span data-translate="tour_fatima_tomar_not_included_1">Entradas em monumentos</span>
                             </div>
                             <div class="included-item not-included">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <line x1="18" y1="6" x2="6" y2="18"/>
                                     <line x1="6" y1="6" x2="18" y2="18"/>
                                 </svg>
-                                <span data-translate="not_included_monument_entries">Entradas em monumentos</span>
-                            </div>
-                            <div class="included-item not-included">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="18" y1="6" x2="6" y2="18"/>
-                                    <line x1="6" y1="6" x2="18" y2="18"/>
-                                </svg>
-                                <span data-translate="not_included_personal_expenses">Despesas pessoais e lembranças</span>
-                            </div>
-                            <div class="included-item not-included">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="18" y1="6" x2="6" y2="18"/>
-                                    <line x1="6" y1="6" x2="18" y2="18"/>
-                                </svg>
-                                <span data-translate="not_included_gratuities">Gratificações</span>
+                                <span data-translate="tour_fatima_tomar_not_included_2">Refeições</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Porquê escolher este tour -->
                     <div class="info-card" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-left: 4px solid #00B4D8;">
-                        <h2 class="info-card-title" style="color: #00B4D8;" data-translate="section_why_choose">Porquê escolher este tour</h2>
-                        <p class="info-card-text" style="font-size: 1.1rem; line-height: 1.6; color: #333;" data-translate="tour_alentejo_why_choose_text">
-                            Porque o Alentejo é a alma de Portugal.<br>
-                            E com a Discoverlix Boatours, vais descobrir Évora, Estremoz e Arraiolos da forma mais autêntica e exclusiva possível.
+                        <h2 class="info-card-title" style="color: #00B4D8;" data-translate="tour_fatima_tomar_notes_title">Notas</h2>
+                        <p class="info-card-text" style="font-size: 1.1rem; line-height: 1.6; color: #333;" data-translate="tour_fatima_tomar_notes_text">
+                            Experiência privada, com possibilidade de ajustar o itinerário conforme o interesse do cliente (mais tempo em Fátima ou Tomar).
                         </p>
+                        <ul style="margin: 1rem 0 0; padding-left: 1.25rem; color: #333; line-height: 1.7;">
+                            <li data-translate="tour_fatima_tomar_sell_1">Dois ícones de Portugal num único dia</li>
+                            <li data-translate="tour_fatima_tomar_sell_2">Ritmo flexível entre espiritualidade e história templária</li>
+                            <li data-translate="tour_fatima_tomar_sell_3">Convento de Cristo — referência UNESCO</li>
+                            <li data-translate="tour_fatima_tomar_sell_4">Ideal para famílias e grupos privados</li>
+                        </ul>
                     </div>
 
-                    <!-- Pontos de Partida & Chegada -->
                     <div class="info-card">
                         <h2 class="info-card-title">Pontos de Partida & Chegada</h2>
-                        
-                        <div style="margin-bottom: 2rem;">
-                            <h3 style="color: #FF6600; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Home - Opções de Pick-up:</h3>
-                            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem;">
-                                <li style="display: flex; align-items: start; gap: 0.8rem;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#52B788" stroke-width="2" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;">
+                        <div class="pickup-section">
+                            <h3 class="pickup-heading">Pick-up &amp; drop-off</h3>
+                            <ul class="pickup-list">
+                                <li class="pickup-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" class="pickup-icon">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
                                     <div>
-                                        <strong style="color: #333;">Sintra:</strong> Largo Vasco da Gama 7, 2710-423
-                                        <div style="color: #52B788; font-size: 0.85rem; margin-top: 0.2rem;">Sem custo adicional</div>
+                                        <strong class="pickup-title">Hotel ou alojamento</strong>
+                                        <div class="pickup-label">Recolha e regresso na Grande Lisboa (conforme combinado na reserva)</div>
                                     </div>
                                 </li>
-                                <li style="display: flex; align-items: start; gap: 0.8rem;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#52B788" stroke-width="2" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    <div>
-                                        <strong style="color: #333;">Portela Sintra Station:</strong> Local tranquilo
-                                        <div style="color: #52B788; font-size: 0.85rem; margin-top: 0.2rem;">Sem custo adicional</div>
-                                    </div>
-                                </li>
-                                <li style="display: flex; align-items: start; gap: 0.8rem; padding: 1rem; background: #fff3cd; border-radius: 10px; border-left: 4px solid #FFB800;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="#FFB800" stroke-width="2" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;">
+                                <li class="pickup-item pickup-item--highlight">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" class="pickup-icon">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <line x1="12" y1="16" x2="12" y2="12"></line>
                                         <line x1="12" y1="8" x2="12.01" y2="8"></line>
                                     </svg>
                                     <div>
-                                        <strong style="color: #856404;">Lisboa / Aeroporto / Seu Hotel:</strong>
-                                        <div style="color: #856404; font-size: 0.9rem; margin-top: 0.3rem; line-height: 1.5;">
-                                            Disponível com <strong>custo adicional</strong> (valor a negociar diretamente com nossa equipe após reserva)
+                                        <strong class="pickup-title">Outras zonas ou aeroporto</strong>
+                                        <div class="pickup-label">
+                                            Pode ser possível com <strong>custo adicional</strong> — confirma connosco após a reserva.
                                         </div>
                                     </div>
                                 </li>
@@ -330,14 +284,13 @@
                         </div>
                     </div>
 
-                    <!-- Galeria de Fotos -->
                     <div class="info-card">
                         <h2 class="info-card-title" data-translate="tour_aveiro_video_title">Vídeo do tour</h2>
-                        <div class="tour-video-embed tour-video-embed--alentejo" aria-label="Vídeo Alentejo">
+                        <div class="tour-video-embed tour-video-embed--fatima-tomar" aria-label="Vídeo Fátima e Tomar">
                             <div class="tour-video-embed-inner">
                                 <iframe
-                                    src="https://www.youtube.com/embed/Q9rnV-2j2LM?controls=0&amp;modestbranding=1&amp;rel=0&amp;iv_load_policy=3&amp;playsinline=1&amp;color=white"
-                                    title="Alentejo — vídeo"
+                                    src="https://www.youtube.com/embed/-QMOm4_Qv3k?controls=0&amp;modestbranding=1&amp;rel=0&amp;iv_load_policy=3&amp;playsinline=1&amp;color=white"
+                                    title="Fátima &amp; Tomar — vídeo"
                                     loading="lazy"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     allowfullscreen
@@ -347,30 +300,29 @@
                         <h3 class="tour-aveiro-gallery-heading" data-translate="section_gallery">Galeria</h3>
                         <div class="tour-gallery tour-gallery--below-video">
                             <div class="gallery-item">
-                                <img src="assets/images/alentejo-galeria/estremoz.webp" alt="Alentejo - Estremoz" loading="lazy" decoding="async" srcset="assets/images/alentejo-galeria/estremoz-800.webp 800w, assets/images/alentejo-galeria/estremoz-1400.webp 1400w" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 1200px">
+                                <img src="assets/images/TOMAR/ChatGPT%20Image%20Apr%201%2C%202026%2C%2010_26_11%20PM.png" alt="Fátima &amp; Tomar — imagem 1" loading="lazy" decoding="async">
                             </div>
                             <div class="gallery-item">
-                                <img src="assets/images/alentejo-galeria/arraiolos_tapetes.webp" alt="Alentejo - Arraiolos" loading="lazy" decoding="async" srcset="assets/images/alentejo-galeria/arraiolos_tapetes-800.webp 800w, assets/images/alentejo-galeria/arraiolos_tapetes-1400.webp 1400w" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 1200px">
+                                <img src="assets/images/TOMAR/ChatGPT%20Image%20Apr%201%2C%202026%2C%2010_26_25%20PM.png" alt="Fátima &amp; Tomar — imagem 2" loading="lazy" decoding="async">
                             </div>
                             <div class="gallery-item">
-                                <img src="assets/images/alentejo-galeria/imgi_4_site_0361_0016-1200-630-20151104161636.webp" alt="Alentejo - Évora" loading="lazy" decoding="async" srcset="assets/images/alentejo-galeria/imgi_4_site_0361_0016-1200-630-20151104161636-800.webp 800w, assets/images/alentejo-galeria/imgi_4_site_0361_0016-1200-630-20151104161636-1400.webp 1400w" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 1200px">
+                                <img src="assets/images/TOMAR/ChatGPT%20Image%20Apr%201%2C%202026%2C%2010_26_29%20PM.png" alt="Fátima &amp; Tomar — imagem 3" loading="lazy" decoding="async">
                             </div>
                             <div class="gallery-item">
-                                <img src="assets/images/alentejo-galeria/imgi_6_estremoz-flickrccby-phillipc.webp" alt="Alentejo - Estremoz" loading="lazy" decoding="async" srcset="assets/images/alentejo-galeria/imgi_6_estremoz-flickrccby-phillipc-800.webp 800w, assets/images/alentejo-galeria/imgi_6_estremoz-flickrccby-phillipc-1400.webp 1400w" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 1200px">
+                                <img src="assets/images/TOMAR/ChatGPT%20Image%20Apr%201%2C%202026%2C%2010_26_33%20PM.png" alt="Fátima &amp; Tomar — imagem 4" loading="lazy" decoding="async">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sidebar de Reserva -->
                 <div class="tour-sidebar">
                     <div class="booking-card">
                         <div class="price-section">
-                                <span class="price-label" data-translate="price_label">A partir de</span>
+                            <span class="price-label" data-translate="price_label">A partir de</span>
                             <div class="price-amount">
                                 <span class="currency">€</span>
-                                <span class="price">400</span>
-                                <span class="price-unit"> total (1–4 pessoas)</span>
+                                <span class="price">130</span>
+                                <span class="price-unit" data-translate="price_unit">/ pessoa</span>
                             </div>
                         </div>
 
@@ -401,7 +353,6 @@
                             </div>
                         </div>
 
-                        <!-- Pacotes: preço de grupo com desconto (só neste tour, 2 faixas) -->
                         <div class="package-pricing">
                             <div class="package-head">
                                 <span class="package-icon" aria-hidden>
@@ -414,19 +365,20 @@
                                 </span>
                                 <div class="package-title">
                                     <p class="package-label">Pacote</p>
-                                    <p class="package-subtitle">Preço de grupo com desconto para 5–7 pessoas</p>
+                                    <p class="package-subtitle">Escolhe o melhor valor para o teu grupo</p>
                                 </div>
                             </div>
-                            <select class="package-select" id="packageSelectAlentejo" name="package">
-                                <option value="1-4" selected>1–4 pessoas — €400 total (grupo)</option>
-                                <option value="5-7">5–7 pessoas — €540 total (grupo)</option>
+                            <select class="package-select" id="packageSelectFatimaTomar" name="package">
+                                <option value="2">2 pessoas — €130 por pessoa (€260 total)</option>
+                                <option value="3-5" selected>3–5 pessoas — €115 por pessoa</option>
+                                <option value="6-7">6–7 pessoas — €100 por pessoa</option>
                             </select>
                             <p class="package-hint">
                                 O total é calculado automaticamente no checkout conforme o número de pessoas.
                             </p>
                         </div>
 
-                        <a href="/reservar?tour=alentejo" class="btn-reservar">
+                        <a href="/reservar?tour=fatima-tomar" class="btn-reservar">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                                 <line x1="16" y1="2" x2="16" y2="6"/>
@@ -447,19 +399,16 @@
                         </div>
                     </div>
 
-                    <!-- Transferes -->
                     <div class="info-box">
-                        <h3>Transferes</h3>
+                        <h3 data-translate="need_help_title">Need Help?</h3>
+                        <p data-translate="need_help_text">Our team is available to answer your questions.</p>
                         <div class="transfers-container">
-                            <p class="transfer-description">Serviço de transfer privado confortável e seguro para diversos Destinations em Portugal e Espanha. Preços sob consulta.</p>
-                            
                             <div class="transfer-search-container">
                                 <input type="text" class="transfer-search-input" placeholder="Escolha seu destino..." readonly data-placeholder-pt="Escolha seu destino..." data-placeholder-en="Choose your destination...">
                                 <svg class="transfer-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="11" cy="11" r="8"/>
                                     <path d="m21 21-4.35-4.35"/>
                                 </svg>
-                                
                                 <div class="transfer-dropdown" id="transferDropdown">
                                     <div class="transfer-option" onclick="selectTransfer('Lisboa → Porto', '3 horas')">
                                         <div class="transfer-option-info">
@@ -479,33 +428,6 @@
                                             <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.7 9c-.3-.8-1-1.3-1.7-1.3H7c-.7 0-1.4.5-1.7 1.3L4.5 11.1C3.7 11.3 3 12.1 3 13v3c0 .6.4 1 1 1h2m0 0a3 3 0 1 0 6 0m-6 0a3 3 0 1 1 6 0m-6 0h6"/>
                                         </svg>
                                     </div>
-                                    <div class="transfer-option" onclick="selectTransfer('Lisboa → Sevilha', '4 horas')">
-                                        <div class="transfer-option-info">
-                                            <h4>Lisboa → Sevilha</h4>
-                                            <p>4 horas</p>
-                                        </div>
-                                        <svg class="transfer-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.7 9c-.3-.8-1-1.3-1.7-1.3H7c-.7 0-1.4.5-1.7 1.3L4.5 11.1C3.7 11.3 3 12.1 3 13v3c0 .6.4 1 1 1h2m0 0a3 3 0 1 0 6 0m-6 0a3 3 0 1 1 6 0m-6 0h6"/>
-                                        </svg>
-                                    </div>
-                                    <div class="transfer-option" onclick="selectTransfer('Lisboa → Madrid', '6 horas')">
-                                        <div class="transfer-option-info">
-                                            <h4>Lisboa → Madrid</h4>
-                                            <p>6 horas</p>
-                                        </div>
-                                        <svg class="transfer-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.7 9c-.3-.8-1-1.3-1.7-1.3H7c-.7 0-1.4.5-1.7 1.3L4.5 11.1C3.7 11.3 3 12.1 3 13v3c0 .6.4 1 1 1h2m0 0a3 3 0 1 0 6 0m-6 0a3 3 0 1 1 6 0m-6 0h6"/>
-                                        </svg>
-                                    </div>
-                                    <div class="transfer-option" onclick="selectTransfer('Hotel → Aeroporto', '30 minutos')">
-                                        <div class="transfer-option-info">
-                                            <h4>Hotel → Aeroporto</h4>
-                                            <p>30 minutos</p>
-                                        </div>
-                                        <svg class="transfer-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 16v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2m4-4l4-4 4 4m-4-4v12"/>
-                                        </svg>
-                                    </div>
                                     <div class="transfer-option" onclick="selectTransfer('Outros Destinations', 'Sob consulta')">
                                         <div class="transfer-option-info">
                                             <h4>Outros Destinations</h4>
@@ -517,7 +439,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <a href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20saber%20mais%20About%20os%20transferes%20da%20DiscoverTour." target="_blank" class="transfer-whatsapp-btn" id="whatsappBtn" style="display: none;">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
@@ -527,10 +448,9 @@
                         </div>
                     </div>
 
-                    <!-- Info Adicional -->
                     <div class="info-box">
-                        <h3 data-translate="need_help_title">Need Help?</h3>
-                        <p data-translate="need_help_text">Our team is available to answer your questions.</p>
+                        <h3>Precisa de ajuda?</h3>
+                        <p>Nossa equipe está disponível para responder suas dúvidas.</p>
                         <a href="tel:+351934483853" class="contact-link">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -543,7 +463,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-content">
@@ -551,7 +470,6 @@
                     <img src="assets/images/hero/logo.png.webp" alt="DiscoverTour Logo" class="footer-logo" decoding="async">
                     <p class="footer-tagline">Authentic Tours por Portugal com veículos históricos portugueses</p>
                 </div>
-                
                 <div class="footer-links">
                     <h3>Quick Links</h3>
                     <ul>
@@ -561,7 +479,6 @@
                         <li><a href="index.html#instagram">Contact</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-contact">
                     <h3>Contact</h3>
                     <ul>
@@ -581,7 +498,6 @@
                         </li>
                     </ul>
                 </div>
-                
                 <div class="footer-social">
                     <h3>Follow Us</h3>
                     <div class="social-icons">
@@ -597,13 +513,12 @@
                         </a>
                         <a href="https://wa.me/351934483853?text=Olá!%20Vim%20do%20site%20da%20DiscoverLixboaTours%20e%20gostaria%20de%20mais%20informações." target="_blank" aria-label="WhatsApp">
                             <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488Z"/>
                             </svg>
                         </a>
                     </div>
                 </div>
             </div>
-            
             <div class="footer-bottom">
                 <p>&copy; 2025 DiscoverTour. Todos os direitos reservados.</p>
                 <p>Desenvolvido por <a href="https://dm-lab.netlify.app/" target="_blank" rel="noopener noreferrer" class="dev-credit">DMLab</a></p>
@@ -611,7 +526,6 @@
         </div>
     </footer>
 
-    <!-- Google Translate Element (Hidden) -->
     <div id="google_translate_element" style="display: none;"></div>
     <script type="text/javascript">
         function googleTranslateElementInit() {
@@ -627,67 +541,39 @@
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-    <!-- WhatsApp Fixed Button -->
     <a href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20saber%20mais%20About%20os%20tours%20da%20DiscoverLixboaTours." target="_blank" class="whatsapp-float" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488Z"/>
         </svg>
     </a>
 
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
     <script>
-        
-        // Mapa do Itinerário - Tour Alentejo
         document.addEventListener('DOMContentLoaded', () => {
-            // Criar mapa centrado no Alentejo
-            const map = L.map('tourMap').setView([38.5, -7.8], 9);
-            
-            // Adicionar tiles do OpenStreetMap
+            const map = L.map('tourMap').setView([39.62, -8.54], 9);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
                 maxZoom: 19
             }).addTo(map);
-            
-            // Pontos do itinerário
+
             const tourStops = [
-                {
-                    coords: [38.5667, -7.9000],
-                    name: '1. Évora (UNESCO)',
-                    description: 'Templo de Diana, Sé Catedral, Capela dos Ossos, Praça do Giraldo'
-                },
-                {
-                    coords: [38.8333, -7.5833],
-                    name: '2. Estremoz',
-                    description: 'Vila medieval, castelo, degustação de vinhos alentejanos'
-                },
-                {
-                    coords: [38.7167, -7.9667],
-                    name: '3. Arraiolos',
-                    description: 'Tapeçarias tradicionais, castelo, almoço típico alentejano'
-                }
+                { coords: [39.6311, -8.6736], name: '1. Fátima', description: 'Santuário de Fátima e Capelinha das Aparições' },
+                { coords: [39.6044, -8.4083], name: '2. Tomar', description: 'Centro histórico e Convento de Cristo (UNESCO)' }
             ];
-            
-            // Criar ícone personalizado numerado
+
             const numberIcon = (number) => L.divIcon({
                 className: 'custom-marker number-marker',
                 html: `<div class="marker-pin"><span>${number}</span></div>`,
                 iconSize: [35, 45],
                 iconAnchor: [17.5, 45]
             });
-            
-            // Adicionar marcadores e conectar com linhas
+
             const latLngs = [];
-            
             tourStops.forEach((stop, index) => {
                 const coords = stop.coords;
                 latLngs.push(coords);
-                
                 const icon = numberIcon(index + 1);
                 const marker = L.marker(coords, { icon: icon }).addTo(map);
-                
-                // Popup com informações
                 marker.bindPopup(`
                     <div style="font-family: 'Outfit', sans-serif; min-width: 200px;">
                         <h3 style="color: #FF6600; font-size: 1.1rem; font-weight: 700; margin: 0 0 0.5rem 0;">${stop.name}</h3>
@@ -695,30 +581,24 @@
                     </div>
                 `);
             });
-            
-            // Desenhar linha conectando os pontos
+
             const polyline = L.polyline(latLngs, {
                 color: '#FF6600',
                 weight: 4,
                 opacity: 0.7,
                 smoothFactor: 1
             }).addTo(map);
-            
-            // Ajustar zoom para mostrar todo o percurso
+
             map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
         });
     </script>
-    
 
     <script src="assets/js/script.js"></script>
-    
-    <!-- Transfer Dropdown Script -->
     <script>
         function selectTransfer(destino, duracao) {
             const input = document.querySelector('.transfer-search-input');
             const dropdown = document.getElementById('transferDropdown');
             const whatsappBtn = document.getElementById('whatsappBtn');
-            
             if (input) input.value = `${destino} (${duracao})`;
             if (dropdown) dropdown.classList.remove('show');
             if (whatsappBtn) {
@@ -727,42 +607,27 @@
                 whatsappBtn.style.display = 'inline-flex';
             }
         }
-        
         document.addEventListener('DOMContentLoaded', function() {
             const input = document.querySelector('.transfer-search-input');
             const dropdown = document.getElementById('transferDropdown');
             const options = document.querySelectorAll('.transfer-option');
-            
             if (input && dropdown) {
                 input.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     dropdown.classList.add('show');
                 });
-                
                 input.addEventListener('touchstart', function(e) {
                     e.preventDefault();
                     dropdown.classList.add('show');
                 });
-                
                 options.forEach(option => {
                     option.addEventListener('click', function() {
                         const destino = this.getAttribute('data-destino');
                         const duracao = this.getAttribute('data-duracao');
-                        if (destino && duracao) {
-                            selectTransfer(destino, duracao);
-                        }
-                    });
-                    
-                    option.addEventListener('touchend', function() {
-                        const destino = this.getAttribute('data-destino');
-                        const duracao = this.getAttribute('data-duracao');
-                        if (destino && duracao) {
-                            selectTransfer(destino, duracao);
-                        }
+                        if (destino && duracao) selectTransfer(destino, duracao);
                     });
                 });
-                
                 document.addEventListener('click', function(e) {
                     if (!e.target.closest('.transfer-search-container') && !e.target.closest('.transfer-option') && !e.target.closest('.transfer-dropdown')) {
                         dropdown.classList.remove('show');
@@ -771,9 +636,6 @@
             }
         });
     </script>
-    
-    
-
     <script src="assets/js/translate.js"></script>
 </body>
 </html>
