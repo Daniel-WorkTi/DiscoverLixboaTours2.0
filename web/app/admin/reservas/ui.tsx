@@ -109,7 +109,33 @@ export function BookingsClient() {
   const [testBusy, setTestBusy] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerRow, setDrawerRow] = useState<Row | null>(null);
+  const [showExample, setShowExample] = useState(true);
   const seen = useRef<Set<string>>(new Set());
+
+  const EXAMPLE_ROW: Row = useMemo(
+    () => ({
+      eventId: "__example__",
+      stripeSessionId: "cs_example_1234567890",
+      preferredDate: "2026-06-12",
+      tourLabel: "Sintra & Cascais (Exemplo)",
+      customerName: "Cliente Exemplo",
+      email: "cliente.exemplo@discoverlixboatours.com",
+      phone: "+351 910 000 000",
+      notes:
+        "Pickup: Hotel no Chiado.\nPreferência: paragens para fotos.\nObservação: isto é um exemplo (não real).",
+      quantity: 2,
+      totalCents: 24000,
+      currency: "eur",
+      createdAt: new Date().toISOString(),
+      approvalStatus: "pending",
+    }),
+    [],
+  );
+
+  const isExample = useCallback(
+    (r: Row | null | undefined) => Boolean(r && r.eventId === EXAMPLE_ROW.eventId),
+    [EXAMPLE_ROW.eventId],
+  );
 
   const refresh = useCallback(async (showToasts: boolean) => {
     setErr(null);
@@ -154,20 +180,31 @@ export function BookingsClient() {
     return () => window.clearInterval(t);
   }, [refresh]);
 
+  useEffect(() => {
+    // Se não existem reservas reais, mostramos o exemplo por defeito.
+    if (rows.length === 0) setShowExample(true);
+  }, [rows.length]);
+
+  const displayRows = useMemo(() => {
+    if (!showExample) return rows;
+    if (rows.some((r) => r.eventId === EXAMPLE_ROW.eventId)) return rows;
+    return [EXAMPLE_ROW, ...rows];
+  }, [rows, showExample, EXAMPLE_ROW]);
+
   const stats = useMemo(() => {
     let p = 0;
     let a = 0;
     let r = 0;
-    for (const row of rows) {
+    for (const row of displayRows) {
       if (row.approvalStatus === "pending") p += 1;
       else if (row.approvalStatus === "accepted") a += 1;
       else r += 1;
     }
-    return { p, a, r, total: rows.length };
-  }, [rows]);
+    return { p, a, r, total: displayRows.length };
+  }, [displayRows]);
 
   const filtered = useMemo(() => {
-    let list = rows;
+    let list = displayRows;
     if (filter !== "all") list = list.filter((x) => x.approvalStatus === filter);
     const q = search.trim().toLowerCase();
     if (!q) return list;
@@ -176,7 +213,7 @@ export function BookingsClient() {
         `${r.preferredDate} ${r.tourLabel} ${r.customerName} ${r.email} ${r.phone} ${r.stripeSessionId} ${r.notes}`.toLowerCase();
       return hay.includes(q);
     });
-  }, [rows, filter, search]);
+  }, [displayRows, filter, search]);
 
   async function setApproval(eventId: string, status: "accepted" | "rejected") {
     setActingId(eventId);
@@ -308,12 +345,22 @@ export function BookingsClient() {
             type="button"
             variant="outline"
             size="lg"
+            className="rounded-full px-6 text-[15px] whitespace-nowrap"
+            onClick={() => setShowExample((v) => !v)}
+            title="Mostra/oculta um cliente de exemplo (não real) para demonstração."
+          >
+            {showExample ? "Ocultar exemplo" : "Mostrar exemplo"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
             className="rounded-full border-dashed px-6 text-[15px] whitespace-nowrap"
             onClick={() => void createTestBooking()}
             disabled={loading || testBusy}
             title="Cria uma entrada no calendário como reserva, sem Stripe — para testar o painel."
           >
-            {testBusy ? "A criar demo…" : "Cliente demo"}
+            {testBusy ? "A criar teste…" : "Criar teste"}
           </Button>
           <Button
             type="button"
@@ -363,6 +410,7 @@ export function BookingsClient() {
             const phoneDial = telHref(r.phone);
             const pending = r.approvalStatus === "pending";
             const busy = actingId === r.eventId;
+            const example = isExample(r);
 
             return (
               <article
@@ -384,6 +432,9 @@ export function BookingsClient() {
                         {r.approvalStatus === "accepted" && "Aceite"}
                         {r.approvalStatus === "rejected" && "Recusada"}
                       </span>
+                      {example ? (
+                        <span className="booking-pill booking-pill--rejected">Exemplo</span>
+                      ) : null}
                       <span className="booking-price">{formatMoney(r.totalCents, r.currency)}</span>
                     </div>
 
@@ -419,47 +470,55 @@ export function BookingsClient() {
                   ) : null}
 
                   <div className="booking-actions text-sm sm:text-[15px]">
-                    {r.email ? (
-                      <a
-                        href={mailtoHref(r)}
-                        className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-2.5 font-semibold text-white no-underline transition-opacity hover:opacity-90"
-                      >
-                        <Mail className="h-4 w-4 shrink-0" />
-                        Email
-                      </a>
-                    ) : null}
-                    {wa ? (
-                      <a
-                        href={wa}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-semibold text-white no-underline shadow-sm hover:brightness-95"
-                      >
-                        <MessageCircle className="h-4 w-4 shrink-0" />
-                        WhatsApp
-                      </a>
-                    ) : (
-                      <span className="inline-flex min-h-11 items-center rounded-full bg-neutral-100 px-4 py-2 text-[14px] text-neutral-500">
-                        Sem telemóvel no formulário
+                    {example ? (
+                      <span className="inline-flex min-h-11 items-center rounded-full bg-neutral-100 px-4 py-2 text-[14px] font-semibold text-neutral-500">
+                        Ações desativadas no exemplo
                       </span>
+                    ) : (
+                      <>
+                        {r.email ? (
+                          <a
+                            href={mailtoHref(r)}
+                            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-2.5 font-semibold text-white no-underline transition-opacity hover:opacity-90"
+                          >
+                            <Mail className="h-4 w-4 shrink-0" />
+                            Email
+                          </a>
+                        ) : null}
+                        {wa ? (
+                          <a
+                            href={wa}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-semibold text-white no-underline shadow-sm hover:brightness-95"
+                          >
+                            <MessageCircle className="h-4 w-4 shrink-0" />
+                            WhatsApp
+                          </a>
+                        ) : (
+                          <span className="inline-flex min-h-11 items-center rounded-full bg-neutral-100 px-4 py-2 text-[14px] text-neutral-500">
+                            Sem telemóvel no formulário
+                          </span>
+                        )}
+                        {phoneDial ? (
+                          <a
+                            href={phoneDial}
+                            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 font-semibold text-[#1d1d1f] no-underline hover:bg-neutral-50"
+                          >
+                            <Phone className="h-4 w-4" />
+                            Ligar
+                          </a>
+                        ) : null}
+                        <button
+                          type="button"
+                          onClick={() => copyStripe(r.stripeSessionId)}
+                          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-[15px] font-semibold text-[#1d1d1f] hover:bg-neutral-50"
+                        >
+                          <Copy className="h-4 w-4" />
+                          {copiedId === r.stripeSessionId ? "Copiado" : "Stripe"}
+                        </button>
+                      </>
                     )}
-                    {phoneDial ? (
-                      <a
-                        href={phoneDial}
-                        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 font-semibold text-[#1d1d1f] no-underline hover:bg-neutral-50"
-                      >
-                        <Phone className="h-4 w-4" />
-                        Ligar
-                      </a>
-                    ) : null}
-                    <button
-                      type="button"
-                      onClick={() => copyStripe(r.stripeSessionId)}
-                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-[15px] font-semibold text-[#1d1d1f] hover:bg-neutral-50"
-                    >
-                      <Copy className="h-4 w-4" />
-                      {copiedId === r.stripeSessionId ? "Copiado" : "Stripe"}
-                    </button>
                   </div>
 
                   {pending ? (
@@ -467,7 +526,7 @@ export function BookingsClient() {
                       <Button
                         type="button"
                         className="h-12 min-h-12 rounded-2xl text-[16px] font-semibold"
-                        disabled={busy}
+                        disabled={busy || example}
                         onClick={() => setApproval(r.eventId, "accepted")}
                       >
                         <Check className="mr-2 h-5 w-5" />
@@ -477,7 +536,7 @@ export function BookingsClient() {
                         type="button"
                         variant="outline"
                         className="h-12 min-h-12 rounded-2xl border-red-200 text-[16px] font-semibold text-red-700 hover:bg-red-50"
-                        disabled={busy}
+                        disabled={busy || example}
                         onClick={() => setApproval(r.eventId, "rejected")}
                       >
                         <X className="mr-2 h-5 w-5" />
@@ -647,35 +706,43 @@ export function BookingsClient() {
               ) : null}
 
               <div className="booking-drawer-footer">
-                {drawerRow.email ? (
-                  <a
-                    href={mailtoHref(drawerRow)}
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#1d1d1f] px-5 py-2.5 font-semibold text-white no-underline hover:opacity-90 sm:w-auto"
-                  >
-                    <Mail className="h-4 w-4" />
-                    Email
-                  </a>
-                ) : null}
-                {drawerWa ? (
-                  <a
-                    href={drawerWa}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-2.5 font-semibold text-white no-underline hover:brightness-95 sm:w-auto"
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    WhatsApp
-                  </a>
-                ) : null}
-                {telHref(drawerRow.phone) ? (
-                  <a
-                    href={telHref(drawerRow.phone) as string}
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-2.5 font-semibold text-[#1d1d1f] no-underline hover:bg-neutral-50 sm:w-auto"
-                  >
-                    <Phone className="h-4 w-4" />
-                    Ligar
-                  </a>
-                ) : null}
+                {isExample(drawerRow) ? (
+                  <span className="inline-flex min-h-11 items-center rounded-2xl bg-neutral-100 px-5 py-2.5 font-semibold text-neutral-500">
+                    Ações desativadas no exemplo
+                  </span>
+                ) : (
+                  <>
+                    {drawerRow.email ? (
+                      <a
+                        href={mailtoHref(drawerRow)}
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#1d1d1f] px-5 py-2.5 font-semibold text-white no-underline hover:opacity-90 sm:w-auto"
+                      >
+                        <Mail className="h-4 w-4" />
+                        Email
+                      </a>
+                    ) : null}
+                    {drawerWa ? (
+                      <a
+                        href={drawerWa}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-2.5 font-semibold text-white no-underline hover:brightness-95 sm:w-auto"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        WhatsApp
+                      </a>
+                    ) : null}
+                    {telHref(drawerRow.phone) ? (
+                      <a
+                        href={telHref(drawerRow.phone) as string}
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-2.5 font-semibold text-[#1d1d1f] no-underline hover:bg-neutral-50 sm:w-auto"
+                      >
+                        <Phone className="h-4 w-4" />
+                        Ligar
+                      </a>
+                    ) : null}
+                  </>
+                )}
               </div>
 
               {drawerRow.approvalStatus === "pending" ? (
@@ -683,7 +750,7 @@ export function BookingsClient() {
                   <Button
                     type="button"
                     className="h-12 min-h-12 rounded-2xl text-[16px] font-semibold"
-                    disabled={actingId === drawerRow.eventId}
+                    disabled={actingId === drawerRow.eventId || isExample(drawerRow)}
                     onClick={() => void setApproval(drawerRow.eventId, "accepted")}
                   >
                     <Check className="mr-2 h-5 w-5" />
@@ -693,7 +760,7 @@ export function BookingsClient() {
                     type="button"
                     variant="outline"
                     className="h-12 min-h-12 rounded-2xl border-red-200 text-[16px] font-semibold text-red-700 hover:bg-red-50"
-                    disabled={actingId === drawerRow.eventId}
+                    disabled={actingId === drawerRow.eventId || isExample(drawerRow)}
                     onClick={() => void setApproval(drawerRow.eventId, "rejected")}
                   >
                     <X className="mr-2 h-5 w-5" />

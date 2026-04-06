@@ -19,10 +19,10 @@ export default async function AdminReservasPage() {
         <div className="admin-header-row">
           <div className="min-w-0 space-y-4">
             <div className="flex flex-wrap items-center gap-2.5">
-              <Badge variant="default" className="whitespace-nowrap px-3 py-1 text-[12px]">
+              <Badge variant="default" className="whitespace-nowrap px-4 py-1.5 text-[13px]">
                 Ao vivo
               </Badge>
-              <Badge variant="outline" className="whitespace-nowrap px-3 py-1 text-[12px]">
+              <Badge variant="outline" className="whitespace-nowrap px-4 py-1.5 text-[13px]">
                 Stripe + Calendar
               </Badge>
             </div>
