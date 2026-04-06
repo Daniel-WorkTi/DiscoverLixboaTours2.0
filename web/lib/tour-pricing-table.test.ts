@@ -111,12 +111,42 @@ describe("Outros destinos (amostras)", () => {
       centsTotal: 60000,
     });
   });
+
+  it("Évora & Alentejo Premium — por pessoa por faixa", () => {
+    expect(getPricingRuleFromTable("alentejo", 1)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 16000,
+    });
+    expect(getPricingRuleFromTable("alentejo", 2)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 16000,
+    });
+    expect(getPricingRuleFromTable("alentejo", 3)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 14000,
+    });
+    expect(getPricingRuleFromTable("alentejo", 4)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 12500,
+    });
+    expect(getPricingRuleFromTable("alentejo", 5)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 11500,
+    });
+    expect(getPricingRuleFromTable("alentejo", 6)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 10500,
+    });
+    expect(getPricingRuleFromTable("alentejo", 7)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 10500,
+    });
+  });
 });
 
 describe("Cobertura: todos os tours em reserva têm preço na tabela", () => {
   it("cada tour tem regra para 1 viajante", () => {
     for (const t of toursBooking) {
-      if (t.id === "alentejo") continue; // sob consulta
       expect(
         getPricingRuleFromTable(t.id, 1),
         `sem preço para ${t.id}`,

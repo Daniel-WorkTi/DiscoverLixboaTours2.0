@@ -369,8 +369,8 @@
                                 <span class="price-label" data-translate="price_label">A partir de</span>
                             <div class="price-amount">
                                 <span class="currency">€</span>
-                                <span class="price">400</span>
-                                <span class="price-unit"> total (1–4 pessoas)</span>
+                                <span class="price">105</span>
+                                <span class="price-unit" data-translate="price_unit">/ pessoa</span>
                             </div>
                         </div>
 
@@ -401,7 +401,7 @@
                             </div>
                         </div>
 
-                        <!-- Pacotes: preço de grupo com desconto (só neste tour, 2 faixas) -->
+                        <!-- Preço por pessoa conforme nº de viajantes -->
                         <div class="package-pricing">
                             <div class="package-head">
                                 <span class="package-icon" aria-hidden>
@@ -414,12 +414,16 @@
                                 </span>
                                 <div class="package-title">
                                     <p class="package-label">Pacote</p>
-                                    <p class="package-subtitle">Preço de grupo com desconto para 5–7 pessoas</p>
+                                    <p class="package-subtitle">Preço por pessoa (privado)</p>
                                 </div>
                             </div>
                             <select class="package-select" id="packageSelectAlentejo" name="package">
-                                <option value="1-4" selected>1–4 pessoas — €400 total (grupo)</option>
-                                <option value="5-7">5–7 pessoas — €540 total (grupo)</option>
+                                <option value="1">1 pessoa — €160</option>
+                                <option value="2" selected>2 pessoas — €160 por pessoa (€320 total)</option>
+                                <option value="3">3 pessoas — €140 por pessoa (€420 total)</option>
+                                <option value="4">4 pessoas — €125 por pessoa (€500 total)</option>
+                                <option value="5">5 pessoas — €115 por pessoa (€575 total)</option>
+                                <option value="6-7">6–7 pessoas — €105 por pessoa</option>
                             </select>
                             <p class="package-hint">
                                 O total é calculado automaticamente no checkout conforme o número de pessoas.

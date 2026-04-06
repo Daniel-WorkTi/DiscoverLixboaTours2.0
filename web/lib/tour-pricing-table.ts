@@ -97,8 +97,14 @@ export function getPricingRuleFromTable(
     return { kind: "per_group", centsTotal: 80000 };
   }
 
+  // Évora & Alentejo Premium — por pessoa por faixa (2–7 p.)
   if (tourId === "alentejo") {
-    // Évora & Alentejo Premium — preço sob consulta
+    if (q === 1) return { kind: "per_person", centsPerPerson: 16000 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 16000 };
+    if (q === 3) return { kind: "per_person", centsPerPerson: 14000 };
+    if (q === 4) return { kind: "per_person", centsPerPerson: 12500 };
+    if (q === 5) return { kind: "per_person", centsPerPerson: 11500 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 10500 };
     return null;
   }
 
@@ -341,7 +347,52 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "alentejo") {
-    return null;
+    if (q === 1) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 16000,
+        totalCents: 16000,
+        label: "1 pessoa",
+      };
+    }
+    if (q === 2) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 16000,
+        totalCents: 32000,
+        label: "2 pessoas (320 € total)",
+      };
+    }
+    if (q === 3) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 14000,
+        totalCents: 14000 * q,
+        label: "3 pessoas",
+      };
+    }
+    if (q === 4) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 12500,
+        totalCents: 12500 * q,
+        label: "4 pessoas",
+      };
+    }
+    if (q === 5) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 11500,
+        totalCents: 11500 * q,
+        label: "5 pessoas",
+      };
+    }
+    return {
+      kind: "per_person",
+      centsPerPerson: 10500,
+      totalCents: 10500 * q,
+      label: "6–7 pessoas",
+    };
   }
 
   return null;

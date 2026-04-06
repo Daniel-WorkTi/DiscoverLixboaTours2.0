@@ -4,7 +4,6 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { estimateFromTable } from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
-import { WHATSAPP_E164 } from "@/lib/whatsapp";
 
 const MAX_TRAVELERS = 7;
 const MAX_NAME_LEN = 120;
@@ -185,40 +184,6 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const tourLabel = toursBooking.find((t) => t.id === tourId)?.label ?? "";
   const tourLabelKey = `tour_booking_${tourId.replace(/-/g, "_")}`;
   const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
-  const isConsultOnlyTour = tourId === "alentejo";
-
-  const consultWhatsAppHref = useMemo(() => {
-    if (!isConsultOnlyTour) return "";
-    const nat = digitsOnly(phoneNational, MAX_PHONE_DIGITS);
-    const phone = nat.length > 0 ? `${phoneDial} ${nat}` : "";
-    const pickupLine = pickup.trim()
-      ? `Pickup / Ponto de encontro: ${pickup.trim().slice(0, 140)}`
-      : null;
-    const notesLine = notes.trim()
-      ? `Preferências: ${notes.trim().slice(0, MAX_NOTES_LEN)}`
-      : null;
-    const msgParts = [
-      "Olá! Gostaria de agendar o tour Évora & Alentejo Premium (preço sob consulta).",
-      quantity >= 2 ? `Pessoas: ${quantity}` : null,
-      preferredDate ? `Data preferida: ${preferredDate}` : null,
-      customerName.trim() ? `Nome: ${customerName.trim().slice(0, MAX_NAME_LEN)}` : null,
-      email.trim() ? `Email: ${email.trim().slice(0, 254)}` : null,
-      phone ? `Telefone: ${phone}` : null,
-      pickupLine,
-      notesLine,
-    ].filter(Boolean) as string[];
-    return `https://wa.me/${WHATSAPP_E164}?text=${encodeURIComponent(msgParts.join("\n"))}`;
-  }, [
-    isConsultOnlyTour,
-    phoneNational,
-    phoneDial,
-    quantity,
-    preferredDate,
-    customerName,
-    email,
-    pickup,
-    notes,
-  ]);
 
   const dateLocale = uiLang === "en" ? "en-GB" : "pt-PT";
 
@@ -762,31 +727,20 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 </p>
               ) : null}
 
-              {isConsultOnlyTour ? (
-                <a
-                  className="br-submit"
-                  href={consultWhatsAppHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Agendar no WhatsApp
-                </a>
-              ) : (
-                <button
-                  type="submit"
-                  className="br-submit"
-                  disabled={loading}
-                  aria-busy={loading}
-                >
-                  {loading ? (
-                    <span data-translate="booking_submit_loading">
-                      A redirecionar para o pagamento…
-                    </span>
-                  ) : (
-                    <span data-translate="booking_submit">Continuar para pagamento seguro</span>
-                  )}
-                </button>
-              )}
+              <button
+                type="submit"
+                className="br-submit"
+                disabled={loading}
+                aria-busy={loading}
+              >
+                {loading ? (
+                  <span data-translate="booking_submit_loading">
+                    A redirecionar para o pagamento…
+                  </span>
+                ) : (
+                  <span data-translate="booking_submit">Continuar para pagamento seguro</span>
+                )}
+              </button>
             </form>
           </div>
         </div>

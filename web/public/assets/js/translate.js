@@ -241,7 +241,7 @@ const translations = {
         tour_booking_porto: "Porto",
         tour_booking_arraabida: "Arrábida, Setúbal & Sesimbra",
         tour_booking_aveiro: "Aveiro & Costa Nova",
-        tour_booking_alentejo: "Alentejo",
+        tour_booking_alentejo: "Évora & Alentejo Premium",
         tour_booking_algarve: "Algarve",
 
         exec_badge: "Concierge · Corporate · Family",
@@ -900,7 +900,7 @@ const translations = {
         tour_booking_porto: "Porto",
         tour_booking_arraabida: "Arrábida, Setúbal & Sesimbra",
         tour_booking_aveiro: "Aveiro & Costa Nova",
-        tour_booking_alentejo: "Alentejo",
+        tour_booking_alentejo: "Évora & Alentejo Premium",
         tour_booking_algarve: "Algarve",
 
         exec_badge: "Concierge · Corporate · Family",
