@@ -41,15 +41,16 @@ export async function POST() {
 
   try {
     await createBookingCalendarEvent({
-      tourLabel: "Teste (sem pagamento)",
-      customerName: "Cliente teste",
-      email: "",
-      phone: "",
-      notes: "[Criado pelo painel admin — sem pagamento Stripe.]",
-      quantity: 1,
+      tourLabel: "Tour 3 Destinos (DEMO)",
+      customerName: "Cliente Demonstração",
+      email: "cliente.demo@discoverlixboatours.com",
+      phone: "+351 912 345 678",
+      notes:
+        "DEMO: reserva criada pelo painel admin (sem pagamento Stripe) para demonstração do fluxo.",
+      quantity: 2,
       preferredDate,
       stripeSessionId,
-      totalCents: 0,
+      totalCents: 28000,
       currency: "eur",
     });
     return NextResponse.json({ ok: true, preferredDate, stripeSessionId });

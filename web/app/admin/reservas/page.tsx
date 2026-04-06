@@ -19,8 +19,12 @@ export default async function AdminReservasPage() {
         <div className="admin-header-row">
           <div className="min-w-0 space-y-4">
             <div className="flex flex-wrap items-center gap-2.5">
-              <Badge variant="default">Ao vivo</Badge>
-              <Badge variant="outline">Stripe + Calendar</Badge>
+              <Badge variant="default" className="whitespace-nowrap px-3 py-1 text-[12px]">
+                Ao vivo
+              </Badge>
+              <Badge variant="outline" className="whitespace-nowrap px-3 py-1 text-[12px]">
+                Stripe + Calendar
+              </Badge>
             </div>
             <div>
               <h1 className="admin-page-title">Reservas</h1>
@@ -31,7 +35,7 @@ export default async function AdminReservasPage() {
           </div>
 
           <div className="admin-actions shrink-0 pt-1">
-            <Button asChild variant="outline" size="lg" className="min-h-12 rounded-full px-6">
+            <Button asChild variant="outline" size="lg" className="rounded-full px-6 whitespace-nowrap">
               <Link href="/">Voltar ao site</Link>
             </Button>
             <AdminLogoutButton />

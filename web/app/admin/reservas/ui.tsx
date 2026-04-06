@@ -307,24 +307,27 @@ export function BookingsClient() {
           <Button
             type="button"
             variant="outline"
-            className="min-h-12 rounded-full border-dashed px-6 text-[15px]"
+            size="lg"
+            className="rounded-full border-dashed px-6 text-[15px] whitespace-nowrap"
             onClick={() => void createTestBooking()}
             disabled={loading || testBusy}
             title="Cria uma entrada no calendário como reserva, sem Stripe — para testar o painel."
           >
-            {testBusy ? "A criar teste…" : "Reserva de teste"}
+            {testBusy ? "A criar demo…" : "Cliente demo"}
           </Button>
           <Button
             type="button"
             variant="secondary"
-            className="min-h-12 rounded-full px-6 text-[15px]"
+            size="lg"
+            className="rounded-full px-6 text-[15px] whitespace-nowrap"
             onClick={enableNotifications}
           >
             Notificações
           </Button>
           <Button
             type="button"
-            className="min-h-12 rounded-full px-6 text-[15px]"
+            size="lg"
+            className="rounded-full px-6 text-[15px] whitespace-nowrap"
             onClick={() => refresh(true)}
             disabled={loading}
           >
