@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Check,
+  ChevronRight,
   Copy,
   Mail,
   MessageCircle,
@@ -33,6 +34,12 @@ type Row = {
 };
 
 type FilterTab = "all" | BookingApprovalStatus;
+
+function clip(s: string, max = 44): string {
+  const t = (s || "").trim();
+  if (!t) return "—";
+  return t.length > max ? `${t.slice(0, max - 1)}…` : t;
+}
 
 function formatMoney(totalCents?: number, currency?: string): string {
   if (typeof totalCents !== "number" || !Number.isFinite(totalCents)) return "—";
@@ -79,6 +86,11 @@ function telHref(phone: string): string | null {
   return `tel:+${d}`;
 }
 
+function safeCopy(text: string) {
+  if (!text) return;
+  void navigator.clipboard?.writeText(text);
+}
+
 const FILTER_LABELS: Record<FilterTab, string> = {
   pending: "Pendentes",
   accepted: "Aceites",
@@ -95,6 +107,8 @@ export function BookingsClient() {
   const [actingId, setActingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [testBusy, setTestBusy] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerRow, setDrawerRow] = useState<Row | null>(null);
   const seen = useRef<Set<string>>(new Set());
 
   const refresh = useCallback(async (showToasts: boolean) => {
@@ -217,10 +231,33 @@ export function BookingsClient() {
   }
 
   function copyStripe(id: string) {
-    void navigator.clipboard.writeText(id);
+    safeCopy(id);
     setCopiedId(id);
     window.setTimeout(() => setCopiedId(null), 2000);
   }
+
+  const closeDrawer = useCallback(() => {
+    setDrawerOpen(false);
+    window.setTimeout(() => setDrawerRow(null), 160);
+  }, []);
+
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeDrawer();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [drawerOpen, closeDrawer]);
+
+  const drawerWa = useMemo(() => {
+    if (!drawerRow) return null;
+    return whatsappUrlForCustomerPhone(drawerRow.phone, {
+      customerName: drawerRow.customerName,
+      tourLabel: drawerRow.tourLabel,
+      preferredDate: drawerRow.preferredDate,
+    });
+  }, [drawerRow]);
 
   return (
     <div className="admin-dash flex flex-col gap-10">
@@ -370,7 +407,7 @@ export function BookingsClient() {
                           {formatMoney(r.totalCents, r.currency)}
                         </span>
                       </div>
-                      <h3 className="font-[family-name:var(--font-outfit)] text-lg font-bold leading-snug tracking-tight text-[#1d1d1f] sm:text-xl">
+                      <h3 className="font-(family-name:--font-outfit) text-lg font-bold leading-snug tracking-tight text-[#1d1d1f] sm:text-xl">
                         {r.tourLabel}
                       </h3>
                       <p className="text-sm leading-relaxed text-[#555] sm:text-[15px]">
@@ -381,6 +418,18 @@ export function BookingsClient() {
                         {r.quantity} {r.quantity === 1 ? "pessoa" : "pessoas"}
                       </p>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDrawerRow(r);
+                        setDrawerOpen(true);
+                      }}
+                      className="group inline-flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-[15px] font-semibold text-[#1d1d1f] shadow-sm hover:bg-neutral-50 sm:min-h-12 sm:px-5"
+                      aria-label={`Abrir detalhes de ${r.customerName}`}
+                    >
+                      <span className="truncate">Detalhes</span>
+                      <ChevronRight className="h-5 w-5 opacity-70 transition-transform group-hover:translate-x-0.5" />
+                    </button>
                   </div>
 
                   {r.notes ? (
@@ -437,7 +486,7 @@ export function BookingsClient() {
                   </div>
 
                   {pending ? (
-                    <div className="flex flex-col gap-3 border-t border-black/[0.06] pt-5 sm:flex-row">
+                    <div className="flex flex-col gap-3 border-t border-black/6 pt-5 sm:flex-row">
                       <Button
                         type="button"
                         className="h-12 min-h-12 flex-1 rounded-2xl text-[16px] font-semibold sm:max-w-xs"
@@ -459,7 +508,7 @@ export function BookingsClient() {
                       </Button>
                     </div>
                   ) : (
-                    <p className="border-t border-black/[0.06] pt-4 text-[14px] text-neutral-500">
+                    <p className="border-t border-black/6 pt-4 text-[14px] text-neutral-500">
                       Estado:{" "}
                       <strong className="text-[#1d1d1f]">
                         {r.approvalStatus === "accepted" ? "Aceite" : "Recusada"}
@@ -473,6 +522,225 @@ export function BookingsClient() {
           })
         )}
       </div>
+
+      {/* Drawer (detalhes) */}
+      {drawerRow ? (
+        <div
+          className={cn(
+            "fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-2 backdrop-blur-[2px] transition-opacity sm:items-center sm:p-6",
+            drawerOpen ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Detalhes da reserva"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) closeDrawer();
+          }}
+        >
+          <div
+            className={cn(
+              "max-h-[92vh] w-full max-w-[820px] overflow-hidden rounded-[22px] border border-black/10 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.25)] transition-transform",
+              drawerOpen ? "translate-y-0" : "translate-y-3",
+            )}
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-black/6 px-5 py-5 sm:px-7">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide sm:text-xs",
+                      drawerRow.approvalStatus === "pending" &&
+                        "bg-amber-100 text-amber-900 ring-1 ring-amber-200/80",
+                      drawerRow.approvalStatus === "accepted" &&
+                        "bg-emerald-100 text-emerald-900 ring-1 ring-emerald-200/80",
+                      drawerRow.approvalStatus === "rejected" &&
+                        "bg-neutral-200/80 text-neutral-800 ring-1 ring-neutral-300/80",
+                    )}
+                  >
+                    {drawerRow.approvalStatus === "pending" && "Por confirmar"}
+                    {drawerRow.approvalStatus === "accepted" && "Aceite"}
+                    {drawerRow.approvalStatus === "rejected" && "Recusada"}
+                  </span>
+                  <span className="text-sm font-semibold text-[#ff6600]">
+                    {formatMoney(drawerRow.totalCents, drawerRow.currency)}
+                  </span>
+                </div>
+                <h3 className="mt-3 font-(family-name:--font-outfit) text-lg font-bold leading-snug tracking-tight text-[#1d1d1f] sm:text-xl">
+                  {drawerRow.tourLabel}
+                </h3>
+                <p className="mt-1 text-sm text-neutral-600">
+                  {formatDateLong(drawerRow.preferredDate)} · {drawerRow.quantity}{" "}
+                  {drawerRow.quantity === 1 ? "pessoa" : "pessoas"}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeDrawer}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-lg font-semibold text-neutral-700 hover:bg-neutral-50"
+                aria-label="Fechar"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="max-h-[calc(92vh-84px)] overflow-auto px-5 py-5 sm:px-7 sm:py-6">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-black/10 bg-neutral-50/60 p-4">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                    Cliente
+                  </div>
+                  <div className="mt-2 text-[15px] font-semibold text-[#1d1d1f]">
+                    {drawerRow.customerName || "—"}
+                  </div>
+                  <div className="mt-2 space-y-1 text-[14px] text-neutral-700">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="truncate">{drawerRow.email || "—"}</span>
+                      {drawerRow.email ? (
+                        <button
+                          type="button"
+                          onClick={() => safeCopy(drawerRow.email)}
+                          className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[13px] font-semibold hover:bg-neutral-50"
+                        >
+                          <Copy className="h-4 w-4" />
+                          Copiar
+                        </button>
+                      ) : null}
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="truncate">{drawerRow.phone || "—"}</span>
+                      {drawerRow.phone ? (
+                        <button
+                          type="button"
+                          onClick={() => safeCopy(drawerRow.phone)}
+                          className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[13px] font-semibold hover:bg-neutral-50"
+                        >
+                          <Copy className="h-4 w-4" />
+                          Copiar
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-black/10 bg-neutral-50/60 p-4">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                    Referências
+                  </div>
+                  <div className="mt-2 space-y-2 text-[14px] text-neutral-700">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold text-neutral-500">Stripe</div>
+                        <div className="break-all font-mono text-[13px] text-neutral-800">
+                          {drawerRow.stripeSessionId}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => copyStripe(drawerRow.stripeSessionId)}
+                        className="inline-flex h-9 items-center gap-2 rounded-full border border-black/10 bg-white px-3 text-[13px] font-semibold hover:bg-neutral-50"
+                      >
+                        <Copy className="h-4 w-4" />
+                        {copiedId === drawerRow.stripeSessionId ? "Copiado" : "Copiar"}
+                      </button>
+                    </div>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold text-neutral-500">Calendar event</div>
+                        <div className="break-all font-mono text-[13px] text-neutral-800">
+                          {drawerRow.eventId}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => safeCopy(drawerRow.eventId)}
+                        className="inline-flex h-9 items-center gap-2 rounded-full border border-black/10 bg-white px-3 text-[13px] font-semibold hover:bg-neutral-50"
+                      >
+                        <Copy className="h-4 w-4" />
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {drawerRow.notes ? (
+                <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                    Notas do cliente
+                  </div>
+                  <p className="mt-2 whitespace-pre-wrap text-[14px] leading-relaxed text-neutral-800">
+                    {drawerRow.notes}
+                  </p>
+                </div>
+              ) : null}
+
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                {drawerRow.email ? (
+                  <a
+                    href={mailtoHref(drawerRow)}
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#1d1d1f] px-5 py-2.5 font-semibold text-white no-underline hover:opacity-90 sm:w-auto"
+                  >
+                    <Mail className="h-4 w-4" />
+                    Email
+                  </a>
+                ) : null}
+                {drawerWa ? (
+                  <a
+                    href={drawerWa}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-2.5 font-semibold text-white no-underline hover:brightness-95 sm:w-auto"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    WhatsApp
+                  </a>
+                ) : null}
+                {telHref(drawerRow.phone) ? (
+                  <a
+                    href={telHref(drawerRow.phone) as string}
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-2.5 font-semibold text-[#1d1d1f] no-underline hover:bg-neutral-50 sm:w-auto"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Ligar
+                  </a>
+                ) : null}
+              </div>
+
+              {drawerRow.approvalStatus === "pending" ? (
+                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <Button
+                    type="button"
+                    className="h-12 min-h-12 rounded-2xl text-[16px] font-semibold"
+                    disabled={actingId === drawerRow.eventId}
+                    onClick={() => void setApproval(drawerRow.eventId, "accepted")}
+                  >
+                    <Check className="mr-2 h-5 w-5" />
+                    Aceitar viagem
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-12 min-h-12 rounded-2xl border-red-200 text-[16px] font-semibold text-red-700 hover:bg-red-50"
+                    disabled={actingId === drawerRow.eventId}
+                    onClick={() => void setApproval(drawerRow.eventId, "rejected")}
+                  >
+                    <X className="mr-2 h-5 w-5" />
+                    Recusar
+                  </Button>
+                </div>
+              ) : (
+                <p className="mt-5 text-[14px] text-neutral-500">
+                  Estado atual:{" "}
+                  <strong className="text-[#1d1d1f]">
+                    {drawerRow.approvalStatus === "accepted" ? "Aceite" : "Recusada"}
+                  </strong>
+                  .
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
