@@ -124,6 +124,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const [email, setEmail] = useState("");
   const [phoneDial, setPhoneDial] = useState("+351");
   const [phoneNational, setPhoneNational] = useState("");
+  const [pickup, setPickup] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   /** Evita dois pedidos em paralelo (duplo clique antes do re-render com loading=true). */
@@ -190,6 +191,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     if (!isConsultOnlyTour) return "";
     const nat = digitsOnly(phoneNational, MAX_PHONE_DIGITS);
     const phone = nat.length > 0 ? `${phoneDial} ${nat}` : "";
+    const pickupLine = pickup.trim()
+      ? `Pickup / Ponto de encontro: ${pickup.trim().slice(0, 140)}`
+      : null;
+    const notesLine = notes.trim()
+      ? `Preferências: ${notes.trim().slice(0, MAX_NOTES_LEN)}`
+      : null;
     const msgParts = [
       "Olá! Gostaria de agendar o tour Évora & Alentejo Premium (preço sob consulta).",
       quantity >= 2 ? `Pessoas: ${quantity}` : null,
@@ -197,7 +204,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
       customerName.trim() ? `Nome: ${customerName.trim().slice(0, MAX_NAME_LEN)}` : null,
       email.trim() ? `Email: ${email.trim().slice(0, 254)}` : null,
       phone ? `Telefone: ${phone}` : null,
-      notes.trim() ? `Notas: ${notes.trim().slice(0, MAX_NOTES_LEN)}` : null,
+      pickupLine,
+      notesLine,
     ].filter(Boolean) as string[];
     return `https://wa.me/${WHATSAPP_E164}?text=${encodeURIComponent(msgParts.join("\n"))}`;
   }, [
@@ -208,6 +216,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     preferredDate,
     customerName,
     email,
+    pickup,
     notes,
   ]);
 
@@ -287,6 +296,15 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     const nat = digitsOnly(phoneNational, MAX_PHONE_DIGITS);
     const phone =
       nat.length > 0 ? `${phoneDial} ${nat}` : "";
+    const pickupClean = pickup.trim().slice(0, 140);
+    const notesClean = notes.trim().slice(0, MAX_NOTES_LEN);
+    const combinedNotes = [
+      pickupClean ? `Pickup / Ponto de encontro: ${pickupClean}` : null,
+      notesClean ? `Preferências: ${notesClean}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n")
+      .slice(0, MAX_NOTES_LEN);
 
     const controller = new AbortController();
     const timeoutId = window.setTimeout(() => {
@@ -311,7 +329,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           customerName: customerName.trim().slice(0, MAX_NAME_LEN),
           email: email.trim().slice(0, 254),
           phone,
-          notes: notes.slice(0, MAX_NOTES_LEN),
+          notes: combinedNotes,
         }),
       });
       const rawText = await res.text();
@@ -659,7 +677,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     />
                   </label>
                   <label className="br-label">
-                    Telefone (opcional)
+                    <span data-translate="booking_phone_opt">Telefone (opcional)</span>
                     <div className="br-phone-row">
                       <select
                         className="br-input br-dial-select"
@@ -703,12 +721,26 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   />
                 </label>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
+                  <span data-translate="booking_pickup">Pickup / ponto de encontro</span>
+                  <input
+                    className="br-input"
+                    value={pickup}
+                    onChange={(e) => setPickup(e.target.value.slice(0, 140))}
+                    placeholder="Hotel, morada ou ponto de encontro"
+                    data-translate-placeholder="booking_pickup_ph"
+                    required
+                    minLength={2}
+                    maxLength={140}
+                    autoComplete="street-address"
+                  />
+                </label>
+                <label className="br-label" style={{ marginTop: "0.65rem" }}>
                   <span data-translate="booking_notes">Notas (opcional)</span>
                   <textarea
                     className="br-input br-textarea"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value.slice(0, MAX_NOTES_LEN))}
-                    placeholder="Pickup, alergias…"
+                    placeholder="Horário preferido, idioma (PT/EN), crianças, etc."
                     data-translate-placeholder="booking_notes_ph"
                     maxLength={MAX_NOTES_LEN}
                   />
