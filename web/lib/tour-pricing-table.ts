@@ -51,7 +51,9 @@ export function getPricingRuleFromTable(
   if (tourId === "lisboa") {
     if (q === 1) return { kind: "per_group", centsTotal: 24000 };
     if (q === 2) return { kind: "per_person", centsPerPerson: 12000 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 10000 };
+    // 3–5 pessoas: 100–110 €/p. (oferta) — aproximamos com 3p=110 €, 4–5p=100 €
+    if (q === 3) return { kind: "per_person", centsPerPerson: 11000 };
+    if (q >= 4 && q <= 5) return { kind: "per_person", centsPerPerson: 10000 };
     if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 9000 };
     return null;
   }
@@ -94,8 +96,7 @@ export function getPricingRuleFromTable(
   }
 
   if (tourId === "alentejo") {
-    if (q >= 1 && q <= 4) return { kind: "per_group", centsTotal: 40000 };
-    if (q >= 5 && q <= 7) return { kind: "per_group", centsTotal: 54000 };
+    // Évora & Alentejo Premium — preço sob consulta
     return null;
   }
 
@@ -175,12 +176,20 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
         label: "2 pessoas (240 € total)",
       };
     }
-    if (q >= 3 && q <= 5) {
+    if (q === 3) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 11000,
+        totalCents: 11000 * q,
+        label: "3 pessoas",
+      };
+    }
+    if (q >= 4 && q <= 5) {
       return {
         kind: "per_person",
         centsPerPerson: 10000,
         totalCents: 10000 * q,
-        label: "3–5 pessoas",
+        label: "4–5 pessoas",
       };
     }
     return {
@@ -308,18 +317,7 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "alentejo") {
-    if (q >= 1 && q <= 4) {
-      return {
-        kind: "per_group",
-        totalCents: 40000,
-        label: "1–4 pessoas (grupo)",
-      };
-    }
-    return {
-      kind: "per_group",
-      totalCents: 54000,
-      label: "5–7 pessoas (grupo)",
-    };
+    return null;
   }
 
   return null;
