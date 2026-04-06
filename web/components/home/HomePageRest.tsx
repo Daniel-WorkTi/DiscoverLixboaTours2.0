@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Fragment } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -440,10 +439,13 @@ export function HomePageRest({
               rel="noopener noreferrer"
               className="btn-tripadvisor"
             >
-              <img
+              <Image
                 src="https://images.seeklogo.com/logo-png/22/1/tripadvisor-logo-png_seeklogo-222085.png"
                 alt="TripAdvisor Logo"
                 className="tripadvisor-icon"
+                width={32}
+                height={32}
+                unoptimized
               />
               <span data-translate="tripadvisor_btn_text">
                 Ver mais avaliações no TripAdvisor

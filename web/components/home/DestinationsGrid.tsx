@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 
 export type DestinationCard = {
   href: string;
@@ -51,10 +51,6 @@ export function DestinationsGrid({ destinations, groupPriceByHref }: Props) {
     return scored;
   }, [destinations, q]);
 
-  useEffect(() => {
-    if (!open) setActiveIndex(-1);
-  }, [open]);
-
   function clear() {
     setQ("");
     setOpen(false);
@@ -101,6 +97,7 @@ export function DestinationsGrid({ destinations, groupPriceByHref }: Props) {
                 return;
               }
               setOpen(false);
+              setActiveIndex(-1);
             }}
             onKeyDown={(e) => {
               if (e.key === "Escape") {

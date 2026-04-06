@@ -1363,7 +1363,7 @@ function setLanguage(lang) {
 
     try {
         window.dispatchEvent(new CustomEvent("discoverlangchange", { detail: normalized }));
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
 }
 
 // Função para inicializar tradução

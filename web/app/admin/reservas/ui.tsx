@@ -35,12 +35,6 @@ type Row = {
 
 type FilterTab = "all" | BookingApprovalStatus;
 
-function clip(s: string, max = 44): string {
-  const t = (s || "").trim();
-  if (!t) return "—";
-  return t.length > max ? `${t.slice(0, max - 1)}…` : t;
-}
-
 function formatMoney(totalCents?: number, currency?: string): string {
   if (typeof totalCents !== "number" || !Number.isFinite(totalCents)) return "—";
   const cur = (currency || "eur").toUpperCase();
