@@ -14,6 +14,8 @@ const MAX_NOTES_LEN = 500;
 /** Se o servidor / Stripe não responder, o fetch não deve ficar “a carregar” para sempre. */
 const CHECKOUT_FETCH_TIMEOUT_MS = 55_000;
 
+const GROUP_PRICE_TOUR_IDS = new Set(["algarve", "porto", "monsanto"]);
+
 /** Indicativo só com bandeira + código (sem nome do país por extenso). */
 const PHONE_DIAL_OPTIONS = [
   { flag: "🇵🇹", dial: "+351" },
@@ -419,8 +421,18 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   setTourPickerOpen(false);
                 }}
               >
-                <span className="br-tour-option__label" data-translate={`tour_booking_${t.id.replace(/-/g, "_")}`}>
-                  {t.label}
+                <span className="br-tour-option__meta">
+                  <span
+                    className="br-tour-option__label"
+                    data-translate={`tour_booking_${t.id.replace(/-/g, "_")}`}
+                  >
+                    {t.label}
+                  </span>
+                  {GROUP_PRICE_TOUR_IDS.has(t.id) ? (
+                    <span className="br-tour-option__badge" data-translate="price_group_badge">
+                      Preço de grupo
+                    </span>
+                  ) : null}
                 </span>
                 {t.id === tourId ? (
                   <span className="br-tour-option__check" aria-hidden>
@@ -595,6 +607,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     </>
                   ) : (
                     <>
+                      <div className="br-total__badge" data-translate="price_group_badge">
+                        Preço de grupo
+                      </div>
                       <div className="br-total__row">
                         <span className="br-total__label" data-translate="booking_total_group">
                           Total do grupo

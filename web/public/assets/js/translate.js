@@ -253,6 +253,8 @@ const translations = {
             "Na <strong>DiscoverLixboaTours</strong> unimos hospitalidade de alto nível com transporte de luxo. Na nossa <strong>Mercedes-Benz Vito 116 CDI Select 2023</strong>, cada quilómetro é vivido com conforto, discrição e atenção ao detalhe.",
         exec_story_p2:
             "Lounge móvel para até sete passageiros, estofos premium, luz natural e mimos à medida — para atravessar Portugal de norte a sul com a tranquilidade de quem viaja em privado.",
+        exec_wa_schedule: "Agendar Executive no WhatsApp",
+        exec_wa_schedule_short: "Agendar no WhatsApp",
         exec_stat_1: "Jornadas premium",
         exec_stat_2: "Lugares no lounge móvel",
         exec_stat_3: "Destinos em Portugal",
@@ -363,6 +365,12 @@ const translations = {
         tour_algarve_hero_subtitle: "Descubra as praias mais bonitas de Portugal, grutas espetaculares e falésias impressionantes numa viagem inesquecível pela Costa do Sol",
         price_label: "A partir de",
         price_unit: "/ pessoa",
+        price_group_badge: "Preço de grupo",
+        price_group_total_suffix: "total (grupo)",
+        tours_search_placeholder: "Pesquisar tours…",
+        tours_search_clear: "Limpar pesquisa",
+        tours_search_results: "resultados",
+        tours_search_no_results: "Sem resultados",
         
         // Dynamic Pricing Section
         dynamic_pricing_title: "Preços por Grupo",
@@ -902,6 +910,8 @@ const translations = {
             "At <strong>DiscoverLixboaTours</strong> we combine high-end hospitality with luxury transport. In our <strong>Mercedes-Benz Vito 116 CDI Select 2023</strong>, every kilometre is lived with comfort, discretion and attention to detail.",
         exec_story_p2:
             "A mobile lounge for up to seven passengers, premium upholstery, natural light and bespoke touches — to cross Portugal north to south with the ease of private travel.",
+        exec_wa_schedule: "Schedule Executive on WhatsApp",
+        exec_wa_schedule_short: "Schedule on WhatsApp",
         exec_stat_1: "Premium journeys",
         exec_stat_2: "Seats in the mobile lounge",
         exec_stat_3: "Destinations in Portugal",
@@ -1015,6 +1025,12 @@ const translations = {
         tour_algarve_hero_subtitle: "Discover Portugal's most beautiful beaches, spectacular caves and impressive cliffs on an unforgettable journey along the Costa do Sol",
         price_label: "Starting from",
         price_unit: "/ person",
+        price_group_badge: "Group price",
+        price_group_total_suffix: "total (group)",
+        tours_search_placeholder: "Search tours…",
+        tours_search_clear: "Clear search",
+        tours_search_results: "results",
+        tours_search_no_results: "No results",
         
         // Dynamic Pricing Section
         dynamic_pricing_title: "Group Pricing",

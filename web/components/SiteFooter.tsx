@@ -59,6 +59,18 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
                   <span data-translate="footer_book_link">Reservar com quantidade</span>
                 </Link>
               </li>
+              <li>
+                <Link href="/privacidade">Privacidade</Link>
+              </li>
+              <li>
+                <Link href="/cookies">Cookies</Link>
+              </li>
+              <li>
+                <Link href="/termos">Termos</Link>
+              </li>
+              <li>
+                <Link href="/sgpd">Direitos SGPD</Link>
+              </li>
             </ul>
           </div>
 

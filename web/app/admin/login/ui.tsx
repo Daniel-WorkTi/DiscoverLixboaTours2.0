@@ -5,7 +5,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 
 function isSafeAdminNextPath(v: string): boolean {
   return v === "/admin/reservas" || v === "/admin" || v.startsWith("/admin/");
@@ -46,8 +45,8 @@ export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
   }
 
   return (
-    <form className="space-y-6" onSubmit={onSubmit}>
-      <div className="space-y-2">
+    <form className="space-y-14" onSubmit={onSubmit}>
+      <div className="space-y-3">
         <Label htmlFor="admin-pass">Palavra-passe</Label>
         <Input
           id="admin-pass"
@@ -57,7 +56,8 @@ export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
           autoComplete="current-password"
           placeholder="••••••••"
           required
-          className="h-14 rounded-2xl pl-7 pr-5 text-[17px]"
+          className="h-14 rounded-2xl pr-5 text-[17px]"
+          style={{ textIndent: 10 }}
         />
       </div>
 
@@ -68,23 +68,11 @@ export function LoginForm({ redirectAfterLogin }: LoginFormProps) {
         </Alert>
       ) : null}
 
+      <div className="h-6" aria-hidden="true" />
+
       <Button type="submit" className="w-full" size="lg" disabled={loading}>
         {loading ? "A entrar…" : "Entrar"}
       </Button>
-
-      <Separator />
-
-      <p className="text-center text-xs leading-relaxed text-[hsl(var(--muted-foreground))]">
-        Em produção, define{" "}
-        <code className="rounded-md bg-black/[0.06] px-1 py-0.5 font-mono text-[11px] text-black/80">
-          ADMIN_PASSWORD
-        </code>{" "}
-        e{" "}
-        <code className="rounded-md bg-black/[0.06] px-1 py-0.5 font-mono text-[11px] text-black/80">
-          ADMIN_AUTH_SECRET
-        </code>{" "}
-        nas variáveis do host (ex.: Vercel).
-      </p>
     </form>
   );
 }

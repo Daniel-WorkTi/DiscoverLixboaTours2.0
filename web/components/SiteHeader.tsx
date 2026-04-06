@@ -40,9 +40,6 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
           <a href={`${base}#instagram`} data-translate="menu_contact">
             Contato
           </a>
-          <a href={`${base}#faq`} data-translate="menu_faq">
-            FAQ
-          </a>
         </nav>
         <Link href="/reservar" className="header-cta">
           <span data-translate="book_now">Reservar Agora</span>
@@ -99,9 +96,6 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
         </Link>
         <a href={`${base}#instagram`} data-translate="menu_contact">
           Contato
-        </a>
-        <a href={`${base}#faq`} data-translate="menu_faq">
-          FAQ
         </a>
         <div className="language-selector-mobile">
           <div

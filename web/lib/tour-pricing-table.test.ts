@@ -60,14 +60,37 @@ describe("Outros destinos (amostras)", () => {
     });
   });
 
-  it("Monsanto 2 pessoas = 130 € / pessoa", () => {
-    expect(getPricingRuleFromTable("monsanto", 2)).toEqual({
+  it("3 destinos segue o preçário por pessoa (3–6+)", () => {
+    expect(getPricingRuleFromTable("3-destinos", 3)).toEqual({
       kind: "per_person",
-      centsPerPerson: 13000,
+      centsPerPerson: 11500,
+    });
+    expect(getPricingRuleFromTable("3-destinos", 4)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 10500,
+    });
+    expect(getPricingRuleFromTable("3-destinos", 5)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 10000,
+    });
+    expect(getPricingRuleFromTable("3-destinos", 6)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 9500,
     });
   });
 
-  it("Fátima & Tomar segue a mesma tabela que Monsanto", () => {
+  it("Monsanto grupo = 800 €", () => {
+    expect(getPricingRuleFromTable("monsanto", 2)).toEqual({
+      kind: "per_group",
+      centsTotal: 80000,
+    });
+    expect(getPricingRuleFromTable("monsanto", 7)).toEqual({
+      kind: "per_group",
+      centsTotal: 80000,
+    });
+  });
+
+  it("Fátima & Tomar tem tabela própria", () => {
     expect(getPricingRuleFromTable("fatima-tomar", 2)).toEqual({
       kind: "per_person",
       centsPerPerson: 13000,
@@ -78,8 +101,12 @@ describe("Outros destinos (amostras)", () => {
     });
   });
 
-  it("Algarve grupo até 3 = 600 €", () => {
+  it("Algarve grupo = 600 €", () => {
     expect(getPricingRuleFromTable("algarve", 2)).toEqual({
+      kind: "per_group",
+      centsTotal: 60000,
+    });
+    expect(getPricingRuleFromTable("algarve", 7)).toEqual({
       kind: "per_group",
       centsTotal: 60000,
     });

@@ -414,11 +414,19 @@ export function HomePageRest({
                     <StarIcon key={s} />
                   ))}
                 </div>
+                <svg className="testimonial-quote" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M10.5 7.5H7.8C6.26 7.5 5 8.76 5 10.3v4.4c0 1.54 1.26 2.8 2.8 2.8h2.2c.55 0 1-.45 1-1v-2.2c0-.55-.45-1-1-1H9.5v-1.2c0-1.1.9-2 2-2h.1c.55 0 1-.45 1-1V8.5c0-.55-.45-1-1-1zm8 0H15.8c-1.54 0-2.8 1.26-2.8 2.8v4.4c0 1.54 1.26 2.8 2.8 2.8h2.2c.55 0 1-.45 1-1v-2.2c0-.55-.45-1-1-1H17.5v-1.2c0-1.1.9-2 2-2h.1c.55 0 1-.45 1-1V8.5c0-.55-.45-1-1-1z"
+                    fill="currentColor"
+                  />
+                </svg>
                 <p className="testimonial-text" data-translate={t.key} />
                 <div className="testimonial-author">
                   <div className="author-info">
                     <h4 className="author-name">{t.author}</h4>
-                    <p className="author-location">TripAdvisor</p>
+                    <p className="author-location">
+                      <span className="testimonial-source">TripAdvisor</span>
+                    </p>
                   </div>
                 </div>
               </div>

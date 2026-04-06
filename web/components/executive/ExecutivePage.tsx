@@ -298,6 +298,18 @@ export function ExecutivePage() {
                   </div>
                 ))}
               </dl>
+
+              <div className="exec-story__cta">
+                <a
+                  href={WA_HREF}
+                  className="exec-btn-light"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="mr-2 inline h-5 w-5" aria-hidden />
+                  <span data-translate="exec_wa_schedule_short">Agendar no WhatsApp</span>
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -422,6 +434,18 @@ export function ExecutivePage() {
           <div className="exec-tour-carousel-outer">
             <ExecutiveToursCarousel slides={EXEC_TOUR_BANNERS} />
           </div>
+
+          <div className="exec-section__actions">
+            <a
+              href={WA_HREF}
+              className="exec-btn-light"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle className="mr-2 inline h-5 w-5" aria-hidden />
+              <span data-translate="exec_wa_schedule">Agendar Executive no WhatsApp</span>
+            </a>
+          </div>
         </section>
 
         <section id="transfers" className="exec-section">
@@ -497,6 +521,17 @@ export function ExecutivePage() {
               Transfers personalizados e serviços VIP em todo o país. Guia privado e serviço premium
               — atento e discreto.
             </p>
+            <div className="exec-section__actions">
+              <a
+                href={WA_HREF}
+                className="exec-btn-light"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircle className="mr-2 inline h-5 w-5" aria-hidden />
+                <span data-translate="exec_wa_schedule_short">Agendar no WhatsApp</span>
+              </a>
+            </div>
           </div>
         </section>
 

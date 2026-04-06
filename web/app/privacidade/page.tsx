@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { COMPANY, DATA_PROCESSORS } from "@/lib/legal";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteClientEffects } from "@/components/SiteClientEffects";
+import { HomeInteractions } from "@/components/HomeInteractions";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade | DiscoverLixboaTours",
@@ -10,125 +14,120 @@ export const metadata: Metadata = {
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex flex-col gap-1 rounded-2xl border border-black/10 bg-white px-5 py-4 shadow-sm">
-      <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">{k}</div>
-      <div className="text-[15px] font-semibold text-[#1d1d1f]">{v}</div>
+    <div className="legal-row">
+      <div className="legal-row__k">{k}</div>
+      <div className="legal-row__v">{v}</div>
     </div>
   );
 }
 
 export default function PrivacidadePage() {
   return (
-    <main className="mx-auto w-full max-w-[980px] px-[clamp(1.25rem,4vw,3rem)] py-[clamp(2rem,5vw,3.5rem)]">
-      <header className="space-y-3">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#ff6600]">
-          SGPD · GDPR
-        </p>
-        <h1 className="font-(family-name:--font-outfit) text-[clamp(1.6rem,4vw,2.35rem)] font-bold leading-tight tracking-tight text-[#1d1d1f]">
-          Política de Privacidade
-        </h1>
-        <p className="max-w-[70ch] text-[15px] leading-relaxed text-neutral-600 sm:text-base">
-          Esta página explica como tratamos dados pessoais no âmbito das reservas e do apoio ao
-          cliente, e como exercer os seus direitos.
-        </p>
-      </header>
+    <>
+      <SiteClientEffects />
+      <HomeInteractions />
+      <SiteHeader variant="site" />
 
-      <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Row k="Responsável pelo tratamento" v={COMPANY.legalName} />
-        <Row k="NIF" v={COMPANY.vatNumber} />
-        <Row k="Morada" v={COMPANY.address} />
-        <Row k="Email (privacidade)" v={COMPANY.privacyEmail} />
-        <Row k="Âmbito" v={COMPANY.operatingCountries} />
-      </section>
+      <main className="reservar-main">
+        <div className="reservar-shell">
+          <Link href="/" className="reservar-back">
+            ← Voltar ao site
+          </Link>
 
-      <section className="mt-10 space-y-8">
-        <div className="rounded-[22px] border border-black/10 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="font-(family-name:--font-outfit) text-lg font-bold text-[#1d1d1f]">
-            1) Que dados recolhemos
-          </h2>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-relaxed text-neutral-700 sm:text-base">
-            <li>Nome, email e telefone.</li>
-            <li>Tour escolhido, nº de pessoas e data preferida.</li>
-            <li>Notas do cliente (ex.: pickup, preferências, restrições).</li>
-            <li>
-              Dados técnicos essenciais de navegação (cookies essenciais e logs de segurança).
-            </li>
-          </ul>
-        </div>
-
-        <div className="rounded-[22px] border border-black/10 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="font-(family-name:--font-outfit) text-lg font-bold text-[#1d1d1f]">
-            2) Finalidades e bases legais
-          </h2>
-          <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-neutral-700 sm:text-base">
-            <p>
-              Tratamos os dados para <strong>gestão de reservas</strong>,{" "}
-              <strong>comunicação com o cliente</strong> e{" "}
-              <strong>cumprimento de obrigações legais</strong> (ex.: fiscais/contabilísticas, quando
-              aplicável).
-            </p>
-            <p>
-              A base legal pode incluir: execução de contrato (reserva), diligências pré-contratuais,
-              cumprimento de obrigação legal e interesse legítimo (segurança e prevenção de fraude).
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-[22px] border border-black/10 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="font-(family-name:--font-outfit) text-lg font-bold text-[#1d1d1f]">
-            3) Subcontratantes (terceiros)
-          </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-neutral-700 sm:text-base">
-            Usamos prestadores de serviços para operar o website e processar pagamentos:
+          <h1>Política de Privacidade</h1>
+          <p className="reservar-lead">
+            Como tratamos dados pessoais no âmbito das reservas e do apoio ao cliente (SGPD/GDPR).
           </p>
-          <ul className="mt-4 space-y-2 text-[15px] leading-relaxed text-neutral-700 sm:text-base">
-            {DATA_PROCESSORS.map((p) => (
-              <li key={p.name} className="flex flex-col gap-0.5 rounded-2xl bg-neutral-50 px-5 py-4">
-                <span className="font-semibold text-[#1d1d1f]">{p.name}</span>
-                <span className="text-neutral-600">{p.purpose}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
 
-        <div className="rounded-[22px] border border-black/10 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="font-(family-name:--font-outfit) text-lg font-bold text-[#1d1d1f]">
-            4) Retenção
-          </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-neutral-700 sm:text-base">
-            {COMPANY.retentionBookings}
-          </p>
-        </div>
+          <section className="legal-grid-info">
+            <Row k="Responsável pelo tratamento" v={COMPANY.legalName} />
+            <Row k="NIF" v={COMPANY.vatNumber} />
+            <Row k="Morada" v={COMPANY.address} />
+            <Row k="Email (privacidade)" v={COMPANY.privacyEmail} />
+            <Row k="Âmbito" v={COMPANY.operatingCountries} />
+          </section>
 
-        <div className="rounded-[22px] border border-black/10 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="font-(family-name:--font-outfit) text-lg font-bold text-[#1d1d1f]">
-            5) Direitos do titular
-          </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-neutral-700 sm:text-base">
-            Pode exercer direitos de acesso, retificação, apagamento, limitação, oposição e portabilidade,
-            quando aplicável. Para pedidos SGPD, contacte-nos por email.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <a
-              className="inline-flex min-h-11 items-center rounded-full bg-[#1d1d1f] px-5 py-2.5 text-[15px] font-semibold text-white"
-              href={`mailto:${COMPANY.privacyEmail}?subject=${encodeURIComponent("Pedido SGPD (Privacidade)")}`}
-            >
-              Enviar pedido por email
-            </a>
-            <Link
-              className="inline-flex min-h-11 items-center rounded-full border border-black/10 bg-white px-5 py-2.5 text-[15px] font-semibold text-[#1d1d1f] hover:bg-neutral-50"
-              href="/cookies"
-            >
-              Ver Política de Cookies
-            </Link>
-          </div>
-        </div>
-      </section>
+          <section className="legal-stack">
+            <article className="legal-card">
+              <h2 className="legal-card__title">Que dados recolhemos</h2>
+              <div className="legal-card__content">
+                <ul className="legal-list">
+                  <li>Nome, email e telefone.</li>
+                  <li>Tour escolhido, nº de pessoas e data preferida.</li>
+                  <li>Notas do cliente (ex.: pickup, preferências, restrições).</li>
+                  <li>Dados técnicos essenciais (cookies essenciais e logs de segurança).</li>
+                </ul>
+              </div>
+            </article>
 
-      <footer className="mt-10 text-sm text-neutral-500">
-        Última atualização: {new Date().toISOString().slice(0, 10)}
-      </footer>
-    </main>
+            <article className="legal-card">
+              <h2 className="legal-card__title">Finalidades e bases legais</h2>
+              <div className="legal-card__content">
+                <p>
+                  Gestão de reservas, comunicação com o cliente e, quando aplicável, cumprimento de
+                  obrigações legais.
+                </p>
+                <p>
+                  A base legal pode incluir execução de contrato (reserva), diligências
+                  pré-contratuais, obrigação legal e interesse legítimo (segurança/prevenção de
+                  fraude).
+                </p>
+              </div>
+            </article>
+
+            <article className="legal-card">
+              <h2 className="legal-card__title">Subcontratantes</h2>
+              <div className="legal-card__content">
+                <p>Prestadores usados para operar o website e processar pagamentos:</p>
+                <ul className="legal-processor-list">
+                  {DATA_PROCESSORS.map((p) => (
+                    <li key={p.name}>
+                      <strong>{p.name}</strong>
+                      <span className="muted"> — {p.purpose}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+
+            <article className="legal-card">
+              <h2 className="legal-card__title">Retenção</h2>
+              <div className="legal-card__content">
+                <p>{COMPANY.retentionBookings}</p>
+              </div>
+            </article>
+
+            <article className="legal-card">
+              <h2 className="legal-card__title">Direitos do titular</h2>
+              <div className="legal-card__content">
+                <p>
+                  Pode exercer direitos de acesso, retificação, apagamento, limitação, oposição e
+                  portabilidade (quando aplicável). Para pedidos SGPD, contacte-nos por email.
+                </p>
+                <div className="legal-actions">
+                  <a
+                    className="legal-btn legal-btn--primary"
+                    href={`mailto:${COMPANY.privacyEmail}?subject=${encodeURIComponent("Pedido SGPD (Privacidade)")}`}
+                  >
+                    Enviar pedido por email
+                  </a>
+                  <Link className="legal-btn legal-btn--ghost" href="/cookies">
+                    Política de Cookies
+                  </Link>
+                  <Link className="legal-btn legal-btn--ghost" href="/sgpd">
+                    Direitos SGPD
+                  </Link>
+                </div>
+                <p className="legal-meta">
+                  Última atualização: {new Date().toISOString().slice(0, 10)}
+                </p>
+              </div>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <SiteFooter variant="site" />
+    </>
   );
 }
-

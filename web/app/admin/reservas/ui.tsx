@@ -260,53 +260,35 @@ export function BookingsClient() {
   }, [drawerRow]);
 
   return (
-    <div className="admin-dash flex flex-col gap-10">
-      <section aria-label="Resumo" className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="rounded-2xl border border-amber-200/90 bg-amber-50/95 px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
-          <div className="text-xs font-semibold uppercase tracking-wide text-amber-900/85">
-            Por tratar
-          </div>
-          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-amber-950 sm:text-[1.75rem]">
-            {stats.p}
-          </div>
+    <div className="admin-dash bookings-wrap">
+      <section aria-label="Resumo" className="bookings-stats">
+        <div className="bookings-stat bookings-stat--pending">
+          <div className="bookings-stat__k">Por tratar</div>
+          <div className="bookings-stat__v">{stats.p}</div>
         </div>
-        <div className="rounded-2xl border border-emerald-200/90 bg-emerald-50/95 px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
-          <div className="text-xs font-semibold uppercase tracking-wide text-emerald-900/85">
-            Aceites
-          </div>
-          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-emerald-950 sm:text-[1.75rem]">
-            {stats.a}
-          </div>
+        <div className="bookings-stat bookings-stat--accepted">
+          <div className="bookings-stat__k">Aceites</div>
+          <div className="bookings-stat__v">{stats.a}</div>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
-          <div className="text-xs font-semibold uppercase tracking-wide text-neutral-600">
-            Recusadas
-          </div>
-          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-neutral-900 sm:text-[1.75rem]">
-            {stats.r}
-          </div>
+        <div className="bookings-stat bookings-stat--rejected">
+          <div className="bookings-stat__k">Recusadas</div>
+          <div className="bookings-stat__v">{stats.r}</div>
         </div>
-        <div className="rounded-2xl border border-black/8 bg-white px-4 py-5 text-center shadow-sm sm:px-5 sm:py-6">
-          <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-            Total
-          </div>
-          <div className="mt-2 text-2xl font-semibold tabular-nums leading-none text-[#1d1d1f] sm:text-[1.75rem]">
-            {stats.total}
-          </div>
+        <div className="bookings-stat">
+          <div className="bookings-stat__k">Total</div>
+          <div className="bookings-stat__v">{stats.total}</div>
         </div>
       </section>
 
-      <section aria-label="Filtrar lista" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <section aria-label="Filtrar lista" className="bookings-filters">
         {(["pending", "accepted", "rejected", "all"] as const).map((f) => (
           <button
             key={f}
             type="button"
             onClick={() => setFilter(f)}
             className={cn(
-              "min-h-[48px] w-full rounded-2xl px-4 py-3 text-sm font-semibold transition-all sm:min-h-[52px] sm:px-5 sm:text-[15px]",
-              filter === f
-                ? "bg-[#1d1d1f] text-white shadow-md"
-                : "bg-white text-[#444] shadow-sm ring-1 ring-black/10 hover:bg-neutral-50",
+              "bookings-filter",
+              filter === f && "is-active",
             )}
           >
             {FILTER_LABELS[f]}
@@ -314,14 +296,14 @@ export function BookingsClient() {
         ))}
       </section>
 
-      <section aria-label="Pesquisa e ações" className="flex flex-col gap-4 lg:flex-row lg:items-center">
+      <section aria-label="Pesquisa e ações" className="bookings-toolbar">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Pesquisar nome, tour, data, email, telefone…"
-          className="min-h-14 w-full rounded-2xl border border-black/10 bg-white py-3 pl-7 pr-5 text-[15px] shadow-sm placeholder:text-neutral-400 focus-visible:ring-2 sm:text-base lg:flex-1"
+          className="bookings-search placeholder:text-neutral-400 focus-visible:ring-2"
         />
-        <div className="flex flex-wrap gap-3 lg:shrink-0">
+        <div className="bookings-actions">
           <Button
             type="button"
             variant="outline"
@@ -358,7 +340,7 @@ export function BookingsClient() {
         </div>
       ) : null}
 
-      <div className="flex flex-col gap-6">
+      <div className="bookings-list">
         {filtered.length === 0 ? (
           <div className="rounded-[20px] border border-dashed border-black/15 bg-neutral-50/80 px-6 py-20 text-center sm:px-10 sm:py-24">
             <p className="text-base font-medium text-[#444] sm:text-[1.05rem]">
@@ -382,49 +364,43 @@ export function BookingsClient() {
             return (
               <article
                 key={r.eventId}
-                className="overflow-hidden rounded-[20px] border border-black/8 bg-white shadow-[0_6px_28px_rgba(0,0,0,0.06)]"
+                className="booking-card"
               >
-                <div className="flex flex-col gap-6 p-6 sm:p-8">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0 flex-1 space-y-3">
-                      <div className="flex flex-wrap items-center gap-2.5">
-                        <span
-                          className={cn(
-                            "inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide sm:text-xs",
-                            r.approvalStatus === "pending" &&
-                              "bg-amber-100 text-amber-900 ring-1 ring-amber-200/80",
-                            r.approvalStatus === "accepted" &&
-                              "bg-emerald-100 text-emerald-900 ring-1 ring-emerald-200/80",
-                            r.approvalStatus === "rejected" &&
-                              "bg-neutral-200/80 text-neutral-800 ring-1 ring-neutral-300/80",
-                          )}
-                        >
-                          {r.approvalStatus === "pending" && "Por confirmar"}
-                          {r.approvalStatus === "accepted" && "Aceite"}
-                          {r.approvalStatus === "rejected" && "Recusada"}
-                        </span>
-                        <span className="text-sm font-semibold text-[#ff6600] sm:text-[15px]">
-                          {formatMoney(r.totalCents, r.currency)}
-                        </span>
-                      </div>
-                      <h3 className="font-(family-name:--font-outfit) text-lg font-bold leading-snug tracking-tight text-[#1d1d1f] sm:text-xl">
-                        {r.tourLabel}
-                      </h3>
-                      <p className="text-sm leading-relaxed text-[#555] sm:text-[15px]">
-                        <span className="font-semibold text-[#1d1d1f]">{r.customerName}</span>
-                        {" · "}
-                        {formatDateLong(r.preferredDate)}
-                        {" · "}
-                        {r.quantity} {r.quantity === 1 ? "pessoa" : "pessoas"}
-                      </p>
+                <div className="booking-card__inner">
+                  <div className="booking-top">
+                    <div className="booking-badges">
+                      <span
+                        className={cn(
+                          "booking-pill",
+                          r.approvalStatus === "pending" && "booking-pill--pending",
+                          r.approvalStatus === "accepted" && "booking-pill--accepted",
+                          r.approvalStatus === "rejected" && "booking-pill--rejected",
+                        )}
+                      >
+                        {r.approvalStatus === "pending" && "Por confirmar"}
+                        {r.approvalStatus === "accepted" && "Aceite"}
+                        {r.approvalStatus === "rejected" && "Recusada"}
+                      </span>
+                      <span className="booking-price">{formatMoney(r.totalCents, r.currency)}</span>
                     </div>
+
+                    <h3 className="booking-title">{r.tourLabel}</h3>
+
+                    <p className="booking-sub">
+                      <span className="font-semibold text-[#1d1d1f]">{r.customerName}</span>
+                      {" · "}
+                      {formatDateLong(r.preferredDate)}
+                      {" · "}
+                      {r.quantity} {r.quantity === 1 ? "pessoa" : "pessoas"}
+                    </p>
+
                     <button
                       type="button"
                       onClick={() => {
                         setDrawerRow(r);
                         setDrawerOpen(true);
                       }}
-                      className="group inline-flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-[15px] font-semibold text-[#1d1d1f] shadow-sm hover:bg-neutral-50 sm:min-h-12 sm:px-5"
+                      className="group inline-flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-[15px] font-semibold text-[#1d1d1f] shadow-sm hover:bg-neutral-50"
                       aria-label={`Abrir detalhes de ${r.customerName}`}
                     >
                       <span className="truncate">Detalhes</span>
@@ -433,15 +409,13 @@ export function BookingsClient() {
                   </div>
 
                   {r.notes ? (
-                    <div className="rounded-2xl bg-neutral-50 px-4 py-4 text-sm leading-relaxed text-[#444] ring-1 ring-black/5 sm:text-[15px]">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                        Notas do cliente
-                      </span>
+                    <div className="booking-notes">
+                      <div className="booking-notes__k">Notas do cliente</div>
                       <p className="mt-2">{r.notes}</p>
                     </div>
                   ) : null}
 
-                  <div className="flex flex-wrap gap-3 text-sm sm:text-[15px]">
+                  <div className="booking-actions text-sm sm:text-[15px]">
                     {r.email ? (
                       <a
                         href={mailtoHref(r)}
@@ -486,10 +460,10 @@ export function BookingsClient() {
                   </div>
 
                   {pending ? (
-                    <div className="flex flex-col gap-3 border-t border-black/6 pt-5 sm:flex-row">
+                    <div className="booking-approve">
                       <Button
                         type="button"
-                        className="h-12 min-h-12 flex-1 rounded-2xl text-[16px] font-semibold sm:max-w-xs"
+                        className="h-12 min-h-12 rounded-2xl text-[16px] font-semibold"
                         disabled={busy}
                         onClick={() => setApproval(r.eventId, "accepted")}
                       >
@@ -499,7 +473,7 @@ export function BookingsClient() {
                       <Button
                         type="button"
                         variant="outline"
-                        className="h-12 min-h-12 flex-1 rounded-2xl border-red-200 text-[16px] font-semibold text-red-700 hover:bg-red-50 sm:max-w-xs"
+                        className="h-12 min-h-12 rounded-2xl border-red-200 text-[16px] font-semibold text-red-700 hover:bg-red-50"
                         disabled={busy}
                         onClick={() => setApproval(r.eventId, "rejected")}
                       >
@@ -527,7 +501,7 @@ export function BookingsClient() {
       {drawerRow ? (
         <div
           className={cn(
-            "fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-2 backdrop-blur-[2px] transition-opacity sm:items-center sm:p-6",
+            "booking-drawer-backdrop transition-opacity",
             drawerOpen ? "opacity-100" : "pointer-events-none opacity-0",
           )}
           role="dialog"
@@ -539,35 +513,30 @@ export function BookingsClient() {
         >
           <div
             className={cn(
-              "max-h-[92vh] w-full max-w-[820px] overflow-hidden rounded-[22px] border border-black/10 bg-white shadow-[0_20px_80px_rgba(0,0,0,0.25)] transition-transform",
-              drawerOpen ? "translate-y-0" : "translate-y-3",
+              "booking-drawer",
+              drawerOpen && "is-open",
             )}
           >
-            <div className="flex items-start justify-between gap-4 border-b border-black/6 px-5 py-5 sm:px-7">
+            <div className="booking-drawer__head">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className={cn(
-                      "inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide sm:text-xs",
-                      drawerRow.approvalStatus === "pending" &&
-                        "bg-amber-100 text-amber-900 ring-1 ring-amber-200/80",
-                      drawerRow.approvalStatus === "accepted" &&
-                        "bg-emerald-100 text-emerald-900 ring-1 ring-emerald-200/80",
-                      drawerRow.approvalStatus === "rejected" &&
-                        "bg-neutral-200/80 text-neutral-800 ring-1 ring-neutral-300/80",
+                      "booking-pill",
+                      drawerRow.approvalStatus === "pending" && "booking-pill--pending",
+                      drawerRow.approvalStatus === "accepted" && "booking-pill--accepted",
+                      drawerRow.approvalStatus === "rejected" && "booking-pill--rejected",
                     )}
                   >
                     {drawerRow.approvalStatus === "pending" && "Por confirmar"}
                     {drawerRow.approvalStatus === "accepted" && "Aceite"}
                     {drawerRow.approvalStatus === "rejected" && "Recusada"}
                   </span>
-                  <span className="text-sm font-semibold text-[#ff6600]">
+                  <span className="booking-price">
                     {formatMoney(drawerRow.totalCents, drawerRow.currency)}
                   </span>
                 </div>
-                <h3 className="mt-3 font-(family-name:--font-outfit) text-lg font-bold leading-snug tracking-tight text-[#1d1d1f] sm:text-xl">
-                  {drawerRow.tourLabel}
-                </h3>
+                <h3 className="mt-3 booking-title">{drawerRow.tourLabel}</h3>
                 <p className="mt-1 text-sm text-neutral-600">
                   {formatDateLong(drawerRow.preferredDate)} · {drawerRow.quantity}{" "}
                   {drawerRow.quantity === 1 ? "pessoa" : "pessoas"}
@@ -583,9 +552,9 @@ export function BookingsClient() {
               </button>
             </div>
 
-            <div className="max-h-[calc(92vh-84px)] overflow-auto px-5 py-5 sm:px-7 sm:py-6">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-black/10 bg-neutral-50/60 p-4">
+            <div className="booking-drawer__body">
+              <div className="booking-drawer-grid">
+                <div className="booking-drawer-box">
                   <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                     Cliente
                   </div>
@@ -622,7 +591,7 @@ export function BookingsClient() {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-black/10 bg-neutral-50/60 p-4">
+                <div className="booking-drawer-box">
                   <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                     Referências
                   </div>
@@ -664,7 +633,7 @@ export function BookingsClient() {
               </div>
 
               {drawerRow.notes ? (
-                <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
+                <div className="booking-drawer-notes">
                   <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                     Notas do cliente
                   </div>
@@ -674,7 +643,7 @@ export function BookingsClient() {
                 </div>
               ) : null}
 
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <div className="booking-drawer-footer">
                 {drawerRow.email ? (
                   <a
                     href={mailtoHref(drawerRow)}
@@ -707,7 +676,7 @@ export function BookingsClient() {
               </div>
 
               {drawerRow.approvalStatus === "pending" ? (
-                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="mt-5 booking-approve">
                   <Button
                     type="button"
                     className="h-12 min-h-12 rounded-2xl text-[16px] font-semibold"

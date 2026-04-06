@@ -42,8 +42,10 @@ export function getPricingRuleFromTable(
   if (tourId === "3-destinos") {
     if (q === 1) return { kind: "per_group", centsTotal: 28000 };
     if (q === 2) return { kind: "per_person", centsPerPerson: 14000 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 13000 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 12000 };
+    if (q === 3) return { kind: "per_person", centsPerPerson: 11500 };
+    if (q === 4) return { kind: "per_person", centsPerPerson: 10500 };
+    if (q === 5) return { kind: "per_person", centsPerPerson: 10000 };
+    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 9500 };
     return null;
   }
 
@@ -75,7 +77,11 @@ export function getPricingRuleFromTable(
     return null;
   }
 
-  if (tourId === "monsanto" || tourId === "fatima-tomar") {
+  if (tourId === "monsanto") {
+    return { kind: "per_group", centsTotal: 80000 };
+  }
+
+  if (tourId === "fatima-tomar") {
     if (q === 1) return { kind: "per_person", centsPerPerson: 13000 };
     if (q === 2) return { kind: "per_person", centsPerPerson: 13000 };
     if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 11500 };
@@ -84,15 +90,11 @@ export function getPricingRuleFromTable(
   }
 
   if (tourId === "algarve") {
-    if (q <= 3) return { kind: "per_group", centsTotal: 60000 };
-    if (q <= 7) return { kind: "per_group", centsTotal: 70000 };
-    return null;
+    return { kind: "per_group", centsTotal: 60000 };
   }
 
   if (tourId === "porto") {
-    if (q <= 3) return { kind: "per_group", centsTotal: 80000 };
-    if (q <= 7) return { kind: "per_group", centsTotal: 90000 };
-    return null;
+    return { kind: "per_group", centsTotal: 80000 };
   }
 
   if (tourId === "alentejo") {
@@ -144,18 +146,34 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
         label: "2 pessoas (280 € total)",
       };
     }
-    if (q >= 3 && q <= 5) {
+    if (q === 3) {
       return {
         kind: "per_person",
-        centsPerPerson: 13000,
-        totalCents: 13000 * q,
-        label: "3–5 pessoas",
+        centsPerPerson: 11500,
+        totalCents: 11500 * q,
+        label: "3 pessoas",
+      };
+    }
+    if (q === 4) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 10500,
+        totalCents: 10500 * q,
+        label: "4 pessoas",
+      };
+    }
+    if (q === 5) {
+      return {
+        kind: "per_person",
+        centsPerPerson: 10000,
+        totalCents: 10000 * q,
+        label: "5 pessoas",
       };
     }
     return {
       kind: "per_person",
-      centsPerPerson: 12000,
-      totalCents: 12000 * q,
+      centsPerPerson: 9500,
+      totalCents: 9500 * q,
       label: "6–7 pessoas",
     };
   }
@@ -265,7 +283,15 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
     };
   }
 
-  if (tourId === "monsanto" || tourId === "fatima-tomar") {
+  if (tourId === "monsanto") {
+    return {
+      kind: "per_group",
+      totalCents: 80000,
+      label: "grupo (800 €)",
+    };
+  }
+
+  if (tourId === "fatima-tomar") {
     if (q === 1) {
       return {
         kind: "per_person",
@@ -299,20 +325,18 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "algarve") {
-    const cents = q <= 3 ? 60000 : 70000;
     return {
       kind: "per_group",
-      totalCents: cents,
-      label: q <= 3 ? "até 3 pessoas (600 €)" : "4–7 pessoas (700 €)",
+      totalCents: 60000,
+      label: "grupo (600 €)",
     };
   }
 
   if (tourId === "porto") {
-    const cents = q <= 3 ? 80000 : 90000;
     return {
       kind: "per_group",
-      totalCents: cents,
-      label: q <= 3 ? "até 3 pessoas (800 €)" : "4–7 pessoas (900 €)",
+      totalCents: 80000,
+      label: "grupo (800 €)",
     };
   }
 

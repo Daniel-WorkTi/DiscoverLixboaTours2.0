@@ -1231,6 +1231,31 @@
   line-height: 1.35;
 }
 
+.br-tour-option__meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.br-tour-option__badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: #ff6600;
+  background: rgba(255, 102, 0, 0.06);
+  border: 1px solid rgba(255, 102, 0, 0.18);
+  white-space: nowrap;
+}
+
 .br-tour-option__check {
   flex-shrink: 0;
   color: #ff6600;
@@ -1484,6 +1509,23 @@
   line-height: 1.45;
 }
 
+.br-total__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.1rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+  color: #ff6600;
+  background: rgba(255, 102, 0, 0.06);
+  border: 1px solid rgba(255, 102, 0, 0.18);
+  width: fit-content;
+}
+
 .br-travelers-label {
   font-size: 0.9rem;
   font-weight: 600;
@@ -1710,4 +1752,222 @@
   padding: 0.6rem 0.75rem;
   background: #fdecea;
   border-radius: 10px;
+}
+
+/* —— Páginas legais (/privacidade, /cookies, /termos, /sgpd) ——
+   Evita marcadores nativos (list-disc) a “sair” para fora do cartão no mobile. */
+
+.legal-stack {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .legal-stack {
+    gap: 1.5rem;
+  }
+}
+
+.legal-card {
+  margin: 0;
+  border-radius: 20px;
+  border: 1px solid #eee;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  padding: 1.35rem 1.35rem 1.6rem;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .legal-card {
+    padding: 1.75rem 1.85rem 2rem;
+  }
+}
+
+.legal-card__title {
+  font-family: var(--font-outfit), "Outfit", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.legal-card__content {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: #444;
+}
+
+.legal-card__content > p {
+  margin: 0 0 0.75rem;
+}
+
+.legal-card__content > p:last-child {
+  margin-bottom: 0;
+}
+
+/* Lista com marcador dentro do padding (nunca desenha para fora do cartão) */
+.legal-list {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legal-card__content > .legal-list:first-child {
+  margin-top: 0;
+}
+
+.legal-list li {
+  position: relative;
+  padding-left: 1.05rem;
+  margin-bottom: 0.5rem;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.legal-list li:last-child {
+  margin-bottom: 0;
+}
+
+.legal-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: #ff6600;
+  transform: rotate(45deg);
+}
+
+.legal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+}
+
+.legal-card__content > .legal-actions:last-child {
+  margin-bottom: 0;
+}
+
+.legal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: 9999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  line-height: 1.25;
+  transition: filter 0.15s ease, background 0.15s ease;
+}
+
+.legal-btn--primary {
+  background: #ff6600;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.legal-btn--primary:hover {
+  filter: brightness(0.96);
+}
+
+.legal-btn--ghost {
+  background: #fff;
+  color: #333;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.legal-btn--ghost:hover {
+  background: #fafafa;
+}
+
+.legal-meta {
+  margin-top: 1.1rem;
+  font-size: 0.8125rem;
+  color: #888;
+  line-height: 1.45;
+}
+
+.legal-grid-info {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .legal-grid-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.legal-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  min-width: 0;
+}
+
+.legal-row__k {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #737373;
+}
+
+.legal-row__v {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  word-break: break-word;
+}
+
+.legal-processor-list {
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.legal-processor-list li {
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fafafa;
+  padding: 0.85rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #444;
+}
+
+.legal-processor-list strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.legal-processor-list span.muted {
+  color: #666;
 }
