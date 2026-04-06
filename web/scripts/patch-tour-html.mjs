@@ -37,6 +37,8 @@ const TOUR_TO_PATH = [
   ["tour-algarve.html", "/tours/algarve"],
 ];
 
+const TOUR_ASSET_V = "2";
+
 function patchContent(raw) {
   let s = raw;
 
@@ -71,6 +73,16 @@ function patchContent(raw) {
 
   s = s.replace(/href="test-flags\.css"/g, 'href="/test-flags.css"');
   s = s.replace(/href='test-flags\.css'/g, "href='/test-flags.css'");
+
+  // Cache-bust CSS dos tours (evita ver HTML/CSS antigo em CDN/mobile)
+  s = s.replace(
+    /href="\/assets\/css\/destino\.css(\?[^"]*)?"/g,
+    `href="/assets/css/destino.css?v=${TOUR_ASSET_V}"`,
+  );
+  s = s.replace(
+    /href='\/assets\/css\/destino\.css(\?[^']*)?'/g,
+    `href='/assets/css/destino.css?v=${TOUR_ASSET_V}'`,
+  );
 
   if (!s.includes("<base ")) {
     s = s.replace(/<head>/i, '<head>\n    <base target="_top" />');
