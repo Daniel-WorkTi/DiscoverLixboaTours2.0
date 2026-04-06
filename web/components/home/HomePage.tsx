@@ -21,7 +21,7 @@ const destinations = [
   },
   {
     href: "/tours/3-destinos",
-    img: "/assets/images/galeria-tour3Destinations/img2.webp",
+    img: "/assets/images/galeria-tour3destinations/img2.webp",
     alt: "Tour 3 Destinos",
     nameKey: "destination_3destinos_name",
     placesKey: "destination_3destinos_places",
