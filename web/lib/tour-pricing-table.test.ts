@@ -89,6 +89,7 @@ describe("Outros destinos (amostras)", () => {
 describe("Cobertura: todos os tours em reserva têm preço na tabela", () => {
   it("cada tour tem regra para 1 viajante", () => {
     for (const t of toursBooking) {
+      if (t.id === "alentejo") continue; // sob consulta
       expect(
         getPricingRuleFromTable(t.id, 1),
         `sem preço para ${t.id}`,
