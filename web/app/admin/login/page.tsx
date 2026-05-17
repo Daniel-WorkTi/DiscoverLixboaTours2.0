@@ -28,10 +28,6 @@ export default async function AdminLoginPage({ searchParams }: PageProps) {
             <h2 className="font-[family-name:var(--font-outfit)] text-[1.05rem] font-extrabold text-[#333] sm:text-lg">
               Dashboard admin
             </h2>
-            <p className="mt-2 text-base leading-relaxed text-[#666]">
-              Acesso à gestão de reservas: vê pagamentos, contacta clientes (email, WhatsApp, telefone) e
-              confirma ou recusa cada viagem a partir deste painel.
-            </p>
           </div>
           <div className="admin-divider" role="presentation" />
           <div className="admin-surface__body">

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Fragment } from "react";
-import { SiteFooter } from "@/components/SiteFooter";
 
 type Props = {
   instagramPhotos: string[];
@@ -489,8 +488,6 @@ export function HomePageRest({
           </div>
         </div>
       </section>
-
-      <SiteFooter variant="home" />
 
       <a
         href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20tours%20da%20DiscoverLixboaTours."

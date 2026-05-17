@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { SiteHeader } from "@/components/SiteHeader";
 import { HomePageRest } from "./HomePageRest";
 import { DestinationsGrid } from "./DestinationsGrid";
 
@@ -130,8 +129,6 @@ export function HomePage() {
 
   return (
     <>
-      <SiteHeader variant="home" />
-
       <section className="hero" id="home">
         <div className="hero-shapes">
           <div className="shape shape-wave" />

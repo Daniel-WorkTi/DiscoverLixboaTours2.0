@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ObrigadoThankYouClient } from "@/components/obrigado/ObrigadoThankYouClient";
-import { HomeInteractions } from "@/components/HomeInteractions";
-import { SiteClientEffects } from "@/components/SiteClientEffects";
-import { SiteFooter } from "@/components/SiteFooter";
-import { SiteHeader } from "@/components/SiteHeader";
 import {
   firstNameForGreeting,
   getCustomerNameFromCheckoutSession,
@@ -28,27 +24,19 @@ export default async function ObrigadoPage({ searchParams }: Props) {
   const bookingDetails = await getBookingDetailsFromCheckoutSession(sessionId);
 
   return (
-    <>
-      <SiteClientEffects />
-      <HomeInteractions />
-      <SiteHeader variant="site" />
+    <main className="reservar-main obrigado-main">
+      <div className="reservar-shell">
+        <Link href="/" className="reservar-back">
+          <span data-translate="reservar_back">← Voltar ao site</span>
+        </Link>
 
-      <main className="reservar-main obrigado-main">
-        <div className="reservar-shell">
-          <Link href="/" className="reservar-back">
-            <span data-translate="reservar_back">← Voltar ao site</span>
-          </Link>
-
-          <ObrigadoThankYouClient
-            sessionId={sessionId}
-            waHref={waHref}
-            customerFirstName={customerFirstName}
-            bookingDetails={bookingDetails}
-          />
-        </div>
-      </main>
-
-      <SiteFooter variant="site" />
-    </>
+        <ObrigadoThankYouClient
+          sessionId={sessionId}
+          waHref={waHref}
+          customerFirstName={customerFirstName}
+          bookingDetails={bookingDetails}
+        />
+      </div>
+    </main>
   );
 }

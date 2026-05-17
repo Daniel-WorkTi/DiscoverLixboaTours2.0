@@ -12,8 +12,6 @@ import {
   Users,
 } from "lucide-react";
 import { ExecutiveToursCarousel } from "@/components/executive/ExecutiveToursCarousel";
-import { SiteFooter } from "@/components/SiteFooter";
-import { SiteHeader } from "@/components/SiteHeader";
 
 const WA_PHONE = "351934483351";
 const WA_HREF = `https://api.whatsapp.com/send/?phone=${WA_PHONE}&text=${encodeURIComponent(
@@ -64,7 +62,7 @@ const EXECUTIVE_CTA_ATTENDANT =
 
 const STORY_STATS = [
   { num: "500+", label: "Jornadas premium" },
-  { num: "7", label: "Lugares no lounge móvel" },
+  { num: "8", label: "Lugares · 7 passageiros + condutor" },
   { num: "20+", label: "Destinos em Portugal" },
 ] as const;
 
@@ -151,13 +149,13 @@ const SPECS: ReadonlyArray<{
   {
     Icon: Users,
     k: "Capacidade",
-    v: "Até 7 passageiros",
+    v: "8 lugares — 7 passageiros + condutor",
     hint: "Famílias, grupos e equipas em viagem de negócios",
   },
   {
     Icon: Car,
     k: "Veículo",
-    v: "Vito 116 CDI Select 2023",
+    v: "Vito 116 CDI Select · modelo recente",
     hint: "Mercedes-Benz · espaço e elegância em estrada",
   },
   {
@@ -177,8 +175,6 @@ const SPECS: ReadonlyArray<{
 export function ExecutivePage() {
   return (
     <div className="executive-page">
-      <SiteHeader variant="site" />
-
       <section className="exec-hero" aria-label="Apresentação">
         <div className="exec-hero__media" aria-hidden>
           <Image
@@ -276,13 +272,13 @@ export function ExecutivePage() {
                 <p data-translate="exec_story_p1" data-html>
                   Na <strong>DiscoverLixboaTours</strong> unimos hospitalidade de alto nível com
                   transporte de luxo. Na nossa{" "}
-                  <strong>Mercedes-Benz Vito 116 CDI Select 2023</strong>, cada quilómetro é vivido
-                  com conforto, discrição e atenção ao detalhe.
+                  <strong>Mercedes-Benz Vito 116 CDI Select</strong> (modelo recente), cada
+                  quilómetro é vivido com conforto, discrição e atenção ao detalhe.
                 </p>
                 <p data-translate="exec_story_p2" data-html>
-                  Lounge móvel para até sete passageiros, estofos premium, luz natural e mimos à
-                  medida — para atravessar Portugal de norte a sul com a tranquilidade de quem viaja
-                  em privado.
+                  Lounge móvel com oito lugares — sete passageiros e condutor —, estofos premium,
+                  luz natural e mimos à medida — para atravessar Portugal de norte a sul com a
+                  tranquilidade de quem viaja em privado.
                 </p>
               </div>
               <dl className="exec-story__stats">
@@ -595,8 +591,6 @@ export function ExecutivePage() {
           </div>
         </section>
       </main>
-
-      <SiteFooter variant="site" />
     </div>
   );
 }

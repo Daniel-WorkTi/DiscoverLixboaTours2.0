@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { COMPANY } from "@/lib/legal";
-import { SiteFooter } from "@/components/SiteFooter";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteClientEffects } from "@/components/SiteClientEffects";
-import { HomeInteractions } from "@/components/HomeInteractions";
-
 export const metadata: Metadata = {
   title: "Política de Cookies | DiscoverLixboaTours",
   description:
@@ -14,12 +9,7 @@ export const metadata: Metadata = {
 
 export default function CookiesPage() {
   return (
-    <>
-      <SiteClientEffects />
-      <HomeInteractions />
-      <SiteHeader variant="site" />
-
-      <main className="reservar-main">
+    <main className="reservar-main">
         <div className="reservar-shell">
           <Link href="/" className="reservar-back">
             ← Voltar ao site
@@ -84,9 +74,6 @@ export default function CookiesPage() {
             </article>
           </section>
         </div>
-      </main>
-
-      <SiteFooter variant="site" />
-    </>
+    </main>
   );
 }

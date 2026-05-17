@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { COMPANY, DATA_PROCESSORS } from "@/lib/legal";
-import { SiteFooter } from "@/components/SiteFooter";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteClientEffects } from "@/components/SiteClientEffects";
-import { HomeInteractions } from "@/components/HomeInteractions";
-
 export const metadata: Metadata = {
   title: "Política de Privacidade | DiscoverLixboaTours",
   description:
@@ -23,12 +18,7 @@ function Row({ k, v }: { k: string; v: string }) {
 
 export default function PrivacidadePage() {
   return (
-    <>
-      <SiteClientEffects />
-      <HomeInteractions />
-      <SiteHeader variant="site" />
-
-      <main className="reservar-main">
+    <main className="reservar-main">
         <div className="reservar-shell">
           <Link href="/" className="reservar-back">
             ← Voltar ao site
@@ -125,9 +115,6 @@ export default function PrivacidadePage() {
             </article>
           </section>
         </div>
-      </main>
-
-      <SiteFooter variant="site" />
-    </>
+    </main>
   );
 }

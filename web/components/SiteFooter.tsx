@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getSiteNavBase, type SiteNavVariant } from "@/lib/site-nav";
 
 type SiteFooterProps = {
-  /** Na home usa `#secção`; noutras páginas usa `/#secção`. */
-  variant?: "home" | "site";
+  /** Derivado automaticamente em SiteChrome. */
+  variant?: SiteNavVariant;
 };
 
 export function SiteFooter({ variant = "home" }: SiteFooterProps) {
-  const base = variant === "home" ? "" : "/";
+  const base = getSiteNavBase(variant);
 
   return (
     <footer className="footer">
