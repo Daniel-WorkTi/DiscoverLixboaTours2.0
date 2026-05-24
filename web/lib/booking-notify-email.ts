@@ -1,7 +1,10 @@
 /**
  * Notificação por email ao dono da reserva (Resend API).
- * Variáveis: RESEND_API_KEY, BOOKING_NOTIFY_EMAIL (e opcionalmente RESEND_FROM_EMAIL).
+ * Variáveis: RESEND_API_KEY (obrigatório), BOOKING_NOTIFY_EMAIL (opcional — sobrescreve o padrão),
+ * RESEND_FROM_EMAIL (opcional).
  */
+
+import { COMPANY } from "@/lib/legal";
 
 export type BookingNotifyPayload = {
   tourLabel: string;
@@ -14,10 +17,14 @@ export type BookingNotifyPayload = {
   stripeSessionId: string;
 };
 
+/** Destino dos avisos de reserva (env ou email oficial do site). */
+export function getBookingNotifyEmail(): string {
+  return process.env.BOOKING_NOTIFY_EMAIL?.trim() || COMPANY.bookingNotifyEmail;
+}
+
+/** Envio ativo quando a API Resend está configurada. */
 export function isBookingEmailConfigured(): boolean {
-  return Boolean(
-    process.env.RESEND_API_KEY?.trim() && process.env.BOOKING_NOTIFY_EMAIL?.trim(),
-  );
+  return Boolean(process.env.RESEND_API_KEY?.trim());
 }
 
 function escapeHtml(s: string): string {
@@ -76,7 +83,7 @@ export async function sendOwnerBookingNotification(
   p: BookingNotifyPayload,
 ): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const to = process.env.BOOKING_NOTIFY_EMAIL?.trim();
+  const to = getBookingNotifyEmail();
   if (!apiKey || !to) return;
 
   const from =

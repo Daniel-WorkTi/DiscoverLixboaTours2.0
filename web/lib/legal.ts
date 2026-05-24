@@ -5,6 +5,8 @@ export type LegalCompanyInfo = {
   country: string;
   operatingCountries: string;
   publicSiteUrl: string;
+  /** Email que recebe avisos de novas reservas pagas (Resend). */
+  bookingNotifyEmail: string;
   privacyEmail: string;
   phone?: string;
   retentionBookings: string;
@@ -21,7 +23,8 @@ export const COMPANY: LegalCompanyInfo = {
   country: "Portugal",
   operatingCountries: "Portugal e Espanha",
   publicSiteUrl: "https://www.discoverlixboatours.com/",
-  privacyEmail: "Discoverlixboatours@gmail.com",
+  bookingNotifyEmail: "websitediscoverlixboatours@gmail.com",
+  privacyEmail: "websitediscoverlixboatours@gmail.com",
   phone: "+351 934 483 853",
   retentionBookings:
     "Retenção: seguimos os prazos padrão definidos pela Stripe para dados de pagamento e registos associados. Mantemos apenas o necessário para gestão operacional de reservas e cumprimento de obrigações aplicáveis.",

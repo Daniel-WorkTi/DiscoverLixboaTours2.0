@@ -1,5 +1,26 @@
-import { describe, expect, it } from "vitest";
-import { buildBookingEmailPlainText } from "./booking-notify-email";
+import { afterEach, describe, expect, it } from "vitest";
+import {
+  buildBookingEmailPlainText,
+  getBookingNotifyEmail,
+} from "./booking-notify-email";
+
+describe("getBookingNotifyEmail", () => {
+  const prev = process.env.BOOKING_NOTIFY_EMAIL;
+
+  afterEach(() => {
+    process.env.BOOKING_NOTIFY_EMAIL = prev;
+  });
+
+  it("usa o email oficial do site por defeito", () => {
+    delete process.env.BOOKING_NOTIFY_EMAIL;
+    expect(getBookingNotifyEmail()).toBe("websitediscoverlixboatours@gmail.com");
+  });
+
+  it("respeita BOOKING_NOTIFY_EMAIL quando definido", () => {
+    process.env.BOOKING_NOTIFY_EMAIL = "outro@example.com";
+    expect(getBookingNotifyEmail()).toBe("outro@example.com");
+  });
+});
 
 describe("buildBookingEmailPlainText", () => {
   it("includes all booking fields", () => {

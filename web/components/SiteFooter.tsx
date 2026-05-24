@@ -91,7 +91,7 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
                   <rect width="20" height="16" x="2" y="4" rx="2" />
                   <path d="m2 7 10 7 10-7" />
                 </svg>
-                <span data-translate="footer_email">Discoverlixboatours@gmail.com</span>
+                <span data-translate="footer_email">websitediscoverlixboatours@gmail.com</span>
               </li>
             </ul>
           </div>

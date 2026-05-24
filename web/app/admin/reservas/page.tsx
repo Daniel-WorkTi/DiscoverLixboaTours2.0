@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { isAdminRequestAuthenticated } from "@/lib/admin-auth";
-import { isBookingEmailConfigured } from "@/lib/booking-notify-email";
+import { getBookingNotifyEmail, isBookingEmailConfigured } from "@/lib/booking-notify-email";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AdminLogoutButton } from "./AdminLogoutButton";
@@ -14,7 +14,7 @@ export default async function AdminReservasPage() {
   }
 
   const emailConfigured = isBookingEmailConfigured();
-  const notifyEmail = process.env.BOOKING_NOTIFY_EMAIL?.trim() || "";
+  const notifyEmail = getBookingNotifyEmail();
 
   return (
     <main className="admin-main">
@@ -47,11 +47,8 @@ export default async function AdminReservasPage() {
                   <code className="rounded bg-black/5 px-1.5 py-0.5 text-[0.85em]">
                     RESEND_API_KEY
                   </code>{" "}
-                  e{" "}
-                  <code className="rounded bg-black/5 px-1.5 py-0.5 text-[0.85em]">
-                    BOOKING_NOTIFY_EMAIL
-                  </code>{" "}
-                  na Vercel (Resend) para receber notificações de novas reservas.
+                  na Vercel (Resend). Os avisos serão enviados para{" "}
+                  <span className="font-semibold text-[#1d1d1f]">{notifyEmail}</span>.
                 </>
               )}
             </p>
