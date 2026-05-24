@@ -1,5 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { digitsForWhatsApp, whatsappUrlForCustomerPhone } from "./whatsapp";
+import {
+  WHATSAPP_E164,
+  digitsForWhatsApp,
+  whatsappSiteUrl,
+  whatsappUrlForCustomerPhone,
+} from "./whatsapp";
+
+describe("whatsappSiteUrl", () => {
+  it("usa o número oficial do site", () => {
+    const u = whatsappSiteUrl("Olá!");
+    expect(u).toContain(`https://wa.me/${WHATSAPP_E164}`);
+    expect(u).not.toContain("351934483351");
+  });
+});
 
 describe("digitsForWhatsApp", () => {
   it("normalizes PT 9 digits to 351…", () => {

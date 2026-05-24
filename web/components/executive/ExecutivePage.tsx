@@ -12,11 +12,11 @@ import {
   Users,
 } from "lucide-react";
 import { ExecutiveToursCarousel } from "@/components/executive/ExecutiveToursCarousel";
+import { WHATSAPP_DISPLAY, whatsappSiteUrl } from "@/lib/whatsapp";
 
-const WA_PHONE = "351934483351";
-const WA_HREF = `https://api.whatsapp.com/send/?phone=${WA_PHONE}&text=${encodeURIComponent(
+const WA_HREF = whatsappSiteUrl(
   "Olá! Gostaria de informações sobre Private Tours & Concierge — DiscoverLixboaTours.",
-)}`;
+);
 const SITE_HREF = "https://www.discoverlixboatours.com/";
 const ASSET_VERSION = process.env.NEXT_PUBLIC_ASSET_VERSION?.trim() || "1";
 /** Aumentar quando substituir PNGs da galeria executive (cache do browser / otimizador). */
@@ -62,7 +62,7 @@ const EXECUTIVE_CTA_ATTENDANT =
 
 const STORY_STATS = [
   { num: "500+", label: "Jornadas premium" },
-  { num: "8", label: "Lugares · 7 passageiros + condutor" },
+  { num: "9", label: "Lugares no total" },
   { num: "20+", label: "Destinos em Portugal" },
 ] as const;
 
@@ -149,8 +149,8 @@ const SPECS: ReadonlyArray<{
   {
     Icon: Users,
     k: "Capacidade",
-    v: "8 lugares — 7 passageiros + condutor",
-    hint: "Famílias, grupos e equipas em viagem de negócios",
+    v: "8 passageiros + condutor",
+    hint: "9 lugares na Mercedes-Benz Vito",
   },
   {
     Icon: Car,
@@ -276,9 +276,9 @@ export function ExecutivePage() {
                   quilómetro é vivido com conforto, discrição e atenção ao detalhe.
                 </p>
                 <p data-translate="exec_story_p2" data-html>
-                  Lounge móvel com oito lugares — sete passageiros e condutor —, estofos premium,
-                  luz natural e mimos à medida — para atravessar Portugal de norte a sul com a
-                  tranquilidade de quem viaja em privado.
+                  Lounge móvel com lugar para 8 passageiros e condutor (9 no total), estofos
+                  premium e serviço personalizado — para viajar por Portugal com conforto e
+                  discrição.
                 </p>
               </div>
               <dl className="exec-story__stats">
@@ -548,7 +548,7 @@ export function ExecutivePage() {
                   <dt data-translate="exec_cta_dt_whatsapp">WhatsApp</dt>
                   <dd>
                     <a href={WA_HREF} target="_blank" rel="noopener noreferrer">
-                      +351 934 483 351
+                      {WHATSAPP_DISPLAY}
                     </a>
                   </dd>
                 </div>

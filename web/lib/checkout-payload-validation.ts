@@ -1,4 +1,5 @@
 import { toursBooking, type TourBookingOption } from "@/lib/tours-booking";
+import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
 export type ValidatedCheckoutPayload = {
   tourId: string;
@@ -39,7 +40,10 @@ export function validateCheckoutPayload(
   const b = body as Record<string, unknown>;
 
   const tourId = String(b.tourId ?? "").trim();
-  const quantity = Math.min(7, Math.max(1, Number(b.quantity) || 1));
+  const quantity = Math.min(
+    MAX_TOUR_PASSENGERS,
+    Math.max(1, Number(b.quantity) || 1),
+  );
   const preferredDate = String(b.preferredDate ?? "").trim();
   const customerName = String(b.customerName ?? "")
     .trim()

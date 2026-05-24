@@ -12,7 +12,12 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   if (!isAdminAuthConfigured()) {
     return NextResponse.json(
-      { ok: false, error: "Admin auth not configured." },
+      {
+        ok: false,
+        code: "AUTH_NOT_CONFIGURED",
+        error:
+          "O login do admin ainda não está configurado no servidor. Defina ADMIN_PASSWORD e ADMIN_AUTH_SECRET nas variáveis de ambiente (ex.: Vercel) e faça um novo deploy.",
+      },
       { status: 500 },
     );
   }
@@ -20,7 +25,10 @@ export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as null | { password?: string };
   const pass = String(body?.password || "");
   if (!verifyAdminPassword(pass)) {
-    return NextResponse.json({ ok: false, error: "Invalid password." }, { status: 401 });
+    return NextResponse.json(
+      { ok: false, code: "INVALID_PASSWORD", error: "Palavra-passe incorreta. Tente novamente." },
+      { status: 401 },
+    );
   }
 
   const res = NextResponse.json({ ok: true });

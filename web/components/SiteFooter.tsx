@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getSiteNavBase, type SiteNavVariant } from "@/lib/site-nav";
+import { whatsappSiteUrl } from "@/lib/whatsapp";
 
 type SiteFooterProps = {
   /** Derivado automaticamente em SiteChrome. */
@@ -119,7 +120,9 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
                 </svg>
               </a>
               <a
-                href="https://wa.me/351934483853?text=Olá!%20Vim%20do%20site%20da%20DiscoverLixboaTours%20e%20gostaria%20de%20mais%20informações."
+                href={whatsappSiteUrl(
+                  "Olá! Vim do site da DiscoverLixboaTours e gostaria de mais informações.",
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"

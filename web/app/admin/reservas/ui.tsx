@@ -86,11 +86,28 @@ function safeCopy(text: string) {
 }
 
 const FILTER_LABELS: Record<FilterTab, string> = {
-  pending: "Pendentes",
+  pending: "Por confirmar",
   accepted: "Aceites",
   rejected: "Recusadas",
   all: "Todas",
 };
+
+function StatusPill({ status }: { status: BookingApprovalStatus }) {
+  return (
+    <span
+      className={cn(
+        "booking-pill",
+        status === "pending" && "booking-pill--pending",
+        status === "accepted" && "booking-pill--accepted",
+        status === "rejected" && "booking-pill--rejected",
+      )}
+    >
+      {status === "pending" && "Por confirmar"}
+      {status === "accepted" && "Aceite"}
+      {status === "rejected" && "Recusada"}
+    </span>
+  );
+}
 
 export function BookingsClient() {
   const [rows, setRows] = useState<Row[]>([]);
@@ -103,35 +120,9 @@ export function BookingsClient() {
   const [testBusy, setTestBusy] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerRow, setDrawerRow] = useState<Row | null>(null);
-  const [showExample, setShowExample] = useState(true);
   const seen = useRef<Set<string>>(new Set());
 
-  const EXAMPLE_ROW: Row = useMemo(
-    () => ({
-      eventId: "__example__",
-      stripeSessionId: "cs_example_1234567890",
-      preferredDate: "2026-06-12",
-      tourLabel: "Sintra & Cascais (Exemplo)",
-      customerName: "Cliente Exemplo",
-      email: "cliente.exemplo@discoverlixboatours.com",
-      phone: "+351 910 000 000",
-      notes:
-        "Pickup: Hotel no Chiado.\nPreferência: paragens para fotos.\nObservação: isto é um exemplo (não real).",
-      quantity: 2,
-      totalCents: 24000,
-      currency: "eur",
-      createdAt: new Date().toISOString(),
-      approvalStatus: "pending",
-    }),
-    [],
-  );
-
-  const isExample = useCallback(
-    (r: Row | null | undefined) => Boolean(r && r.eventId === EXAMPLE_ROW.eventId),
-    [EXAMPLE_ROW.eventId],
-  );
-
-  const refresh = useCallback(async (showToasts: boolean) => {
+  const refresh = useCallback(async () => {
     setErr(null);
     setLoading(true);
     try {
@@ -147,20 +138,12 @@ export function BookingsClient() {
       }
       const next = data.rows || [];
       setRows(next);
-
-      if (showToasts && "Notification" in window && Notification.permission === "granted") {
-        for (const r of next) {
-          if (seen.current.has(r.stripeSessionId)) continue;
-          if (seen.current.size > 0) {
-            new Notification("Nova reserva", {
-              body: `${r.tourLabel} · ${r.customerName} · ${formatDateLong(r.preferredDate)}`,
-            });
-          }
-          seen.current.add(r.stripeSessionId);
-        }
-      } else {
-        for (const r of next) seen.current.add(r.stripeSessionId);
-      }
+      setDrawerRow((prev) => {
+        if (!prev) return prev;
+        const updated = next.find((r) => r.eventId === prev.eventId);
+        return updated ?? prev;
+      });
+      for (const r of next) seen.current.add(r.stripeSessionId);
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Erro de rede.");
     } finally {
@@ -169,36 +152,25 @@ export function BookingsClient() {
   }, []);
 
   useEffect(() => {
-    refresh(false);
-    const t = window.setInterval(() => refresh(true), 10_000);
+    void refresh();
+    const t = window.setInterval(() => void refresh(), 10_000);
     return () => window.clearInterval(t);
   }, [refresh]);
-
-  useEffect(() => {
-    // Se não existem reservas reais, mostramos o exemplo por defeito.
-    if (rows.length === 0) setShowExample(true);
-  }, [rows.length]);
-
-  const displayRows = useMemo(() => {
-    if (!showExample) return rows;
-    if (rows.some((r) => r.eventId === EXAMPLE_ROW.eventId)) return rows;
-    return [EXAMPLE_ROW, ...rows];
-  }, [rows, showExample, EXAMPLE_ROW]);
 
   const stats = useMemo(() => {
     let p = 0;
     let a = 0;
     let r = 0;
-    for (const row of displayRows) {
+    for (const row of rows) {
       if (row.approvalStatus === "pending") p += 1;
       else if (row.approvalStatus === "accepted") a += 1;
       else r += 1;
     }
-    return { p, a, r, total: displayRows.length };
-  }, [displayRows]);
+    return { p, a, r, total: rows.length };
+  }, [rows]);
 
   const filtered = useMemo(() => {
-    let list = displayRows;
+    let list = rows;
     if (filter !== "all") list = list.filter((x) => x.approvalStatus === filter);
     const q = search.trim().toLowerCase();
     if (!q) return list;
@@ -207,7 +179,7 @@ export function BookingsClient() {
         `${r.preferredDate} ${r.tourLabel} ${r.customerName} ${r.email} ${r.phone} ${r.stripeSessionId} ${r.notes}`.toLowerCase();
       return hay.includes(q);
     });
-  }, [displayRows, filter, search]);
+  }, [rows, filter, search]);
 
   async function setApproval(eventId: string, status: "accepted" | "rejected") {
     setActingId(eventId);
@@ -223,9 +195,10 @@ export function BookingsClient() {
         setErr(data.error || "Não foi possível atualizar o estado.");
         return;
       }
-      setRows((prev) =>
-        prev.map((row) => (row.eventId === eventId ? { ...row, approvalStatus: status } : row)),
-      );
+      const patch = (row: Row) =>
+        row.eventId === eventId ? { ...row, approvalStatus: status } : row;
+      setRows((prev) => prev.map(patch));
+      setDrawerRow((prev) => (prev ? patch(prev) : prev));
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Erro de rede.");
     } finally {
@@ -233,27 +206,17 @@ export function BookingsClient() {
     }
   }
 
-  async function enableNotifications() {
-    if (!("Notification" in window)) return;
-    if (Notification.permission === "granted") return;
-    await Notification.requestPermission();
-  }
-
   async function createTestBooking() {
     setTestBusy(true);
     setErr(null);
     try {
       const res = await fetch("/api/admin/bookings/test", { method: "POST" });
-      const data = (await res.json().catch(() => ({}))) as {
-        ok?: boolean;
-        error?: string;
-        preferredDate?: string;
-      };
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
       if (!res.ok || !data.ok) {
         setErr(data.error || "Não foi possível criar a reserva de teste.");
         return;
       }
-      await refresh(true);
+      await refresh();
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Erro de rede.");
     } finally {
@@ -294,7 +257,7 @@ export function BookingsClient() {
     <div className="admin-dash bookings-wrap">
       <section aria-label="Resumo" className="bookings-stats">
         <div className="bookings-stat bookings-stat--pending">
-          <div className="bookings-stat__k">Por tratar</div>
+          <div className="bookings-stat__k">Por confirmar</div>
           <div className="bookings-stat__v">{stats.p}</div>
         </div>
         <div className="bookings-stat bookings-stat--accepted">
@@ -311,254 +274,157 @@ export function BookingsClient() {
         </div>
       </section>
 
-      <section aria-label="Filtrar lista" className="bookings-filters">
-        {(["pending", "accepted", "rejected", "all"] as const).map((f) => (
-          <button
-            key={f}
-            type="button"
-            onClick={() => setFilter(f)}
-            className={cn(
-              "bookings-filter",
-              filter === f && "is-active",
-            )}
-          >
-            {FILTER_LABELS[f]}
-          </button>
-        ))}
-      </section>
+      <section aria-label="Filtrar e pesquisar" className="bookings-controls">
+        <div className="bookings-filters" role="tablist" aria-label="Estado da reserva">
+          {(["pending", "accepted", "rejected", "all"] as const).map((f) => (
+            <button
+              key={f}
+              type="button"
+              role="tab"
+              aria-selected={filter === f}
+              onClick={() => setFilter(f)}
+              className={cn("bookings-filter", filter === f && "is-active")}
+            >
+              {FILTER_LABELS[f]}
+            </button>
+          ))}
+        </div>
 
-      <section aria-label="Pesquisa e ações" className="bookings-toolbar">
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Pesquisar nome, tour, data, email, telefone…"
-          className="bookings-search placeholder:text-neutral-400 focus-visible:ring-2"
-        />
-        <div className="bookings-actions">
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            className="rounded-full px-6 text-[15px] whitespace-nowrap"
-            onClick={() => setShowExample((v) => !v)}
-            title="Mostra/oculta um cliente de exemplo (não real) para demonstração."
-          >
-            {showExample ? "Ocultar exemplo" : "Mostrar exemplo"}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            className="rounded-full border-dashed px-6 text-[15px] whitespace-nowrap"
-            onClick={() => void createTestBooking()}
-            disabled={loading || testBusy}
-            title="Cria uma entrada no calendário como reserva, sem Stripe — para testar o painel."
-          >
-            {testBusy ? "A criar teste…" : "Criar teste"}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            size="lg"
-            className="rounded-full px-6 text-[15px] whitespace-nowrap"
-            onClick={enableNotifications}
-          >
-            Notificações
-          </Button>
+        <div className="bookings-toolbar">
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Pesquisar por nome, tour, data ou email…"
+            className="bookings-search placeholder:text-neutral-400"
+            aria-label="Pesquisar reservas"
+          />
           <Button
             type="button"
             size="lg"
-            className="rounded-full px-6 text-[15px] whitespace-nowrap"
-            onClick={() => refresh(true)}
+            className="bookings-refresh-btn"
+            onClick={() => void refresh()}
             disabled={loading}
           >
-            <RefreshCw className={cn("mr-2 h-4 w-4", loading && "animate-spin")} />
+            <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
             {loading ? "A atualizar…" : "Atualizar"}
           </Button>
         </div>
       </section>
 
       {err ? (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-[15px] font-medium leading-relaxed text-red-900">
+        <div className="bookings-alert" role="alert">
           {err}
         </div>
       ) : null}
 
       <div className="bookings-list">
         {filtered.length === 0 ? (
-          <div className="rounded-[20px] border border-dashed border-black/15 bg-neutral-50/80 px-6 py-20 text-center sm:px-10 sm:py-24">
-            <p className="text-base font-medium text-[#444] sm:text-[1.05rem]">
-              Nenhuma reserva neste filtro.
+          <div className="bookings-empty">
+            <p className="bookings-empty__title">
+              {rows.length === 0
+                ? "Ainda não há reservas"
+                : "Nenhuma reserva neste filtro"}
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-neutral-500 sm:text-[0.95rem]">
-              Altera o separador em cima ou limpa a pesquisa.
+            <p className="bookings-empty__text">
+              {rows.length === 0
+                ? "Quando um cliente pagar no Stripe, a reserva aparece aqui para confirmar ou recusar."
+                : "Experimente outro separador ou limpe a pesquisa."}
             </p>
+            <div className="bookings-empty__actions">
+              <Button type="button" variant="outline" onClick={() => void refresh()} disabled={loading}>
+                Atualizar lista
+              </Button>
+              {rows.length === 0 ? (
+                <button
+                  type="button"
+                  className="bookings-empty__link"
+                  onClick={() => void createTestBooking()}
+                  disabled={testBusy || loading}
+                >
+                  {testBusy ? "A criar teste…" : "Criar reserva de teste no calendário"}
+                </button>
+              ) : null}
+            </div>
           </div>
         ) : (
           filtered.map((r) => {
-            const wa = whatsappUrlForCustomerPhone(r.phone, {
-              customerName: r.customerName,
-              tourLabel: r.tourLabel,
-              preferredDate: r.preferredDate,
-            });
-            const phoneDial = telHref(r.phone);
             const pending = r.approvalStatus === "pending";
             const busy = actingId === r.eventId;
-            const example = isExample(r);
 
             return (
-              <article
-                key={r.eventId}
-                className="booking-card"
-              >
-                <div className="booking-card__inner">
-                  <div className="booking-top">
-                    <div className="booking-badges">
-                      <span
-                        className={cn(
-                          "booking-pill",
-                          r.approvalStatus === "pending" && "booking-pill--pending",
-                          r.approvalStatus === "accepted" && "booking-pill--accepted",
-                          r.approvalStatus === "rejected" && "booking-pill--rejected",
-                        )}
-                      >
-                        {r.approvalStatus === "pending" && "Por confirmar"}
-                        {r.approvalStatus === "accepted" && "Aceite"}
-                        {r.approvalStatus === "rejected" && "Recusada"}
-                      </span>
-                      {example ? (
-                        <span className="booking-pill booking-pill--rejected">Exemplo</span>
-                      ) : null}
-                      <span className="booking-price">{formatMoney(r.totalCents, r.currency)}</span>
-                    </div>
-
-                    <h3 className="booking-title">{r.tourLabel}</h3>
-
-                    <p className="booking-sub">
-                      <span className="font-semibold text-[#1d1d1f]">{r.customerName}</span>
-                      {" · "}
-                      {formatDateLong(r.preferredDate)}
-                      {" · "}
+              <article key={r.eventId} className="booking-card">
+                <div className="booking-card__head">
+                  <div className="booking-card__meta">
+                    <StatusPill status={r.approvalStatus} />
+                    <span className="booking-price">{formatMoney(r.totalCents, r.currency)}</span>
+                  </div>
+                  <h2 className="booking-title">{r.tourLabel}</h2>
+                  <p className="booking-sub">
+                    <span className="booking-sub__name">{r.customerName}</span>
+                    <span className="booking-sub__dot" aria-hidden="true">
+                      ·
+                    </span>
+                    <span>{formatDateLong(r.preferredDate)}</span>
+                    <span className="booking-sub__dot" aria-hidden="true">
+                      ·
+                    </span>
+                    <span>
                       {r.quantity} {r.quantity === 1 ? "pessoa" : "pessoas"}
-                    </p>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDrawerRow(r);
-                        setDrawerOpen(true);
-                      }}
-                      className="group inline-flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-[15px] font-semibold text-[#1d1d1f] shadow-sm hover:bg-neutral-50"
-                      aria-label={`Abrir detalhes de ${r.customerName}`}
-                    >
-                      <span className="truncate">Detalhes</span>
-                      <ChevronRight className="h-5 w-5 opacity-70 transition-transform group-hover:translate-x-0.5" />
-                    </button>
-                  </div>
-
-                  {r.notes ? (
-                    <div className="booking-notes">
-                      <div className="booking-notes__k">Notas do cliente</div>
-                      <p className="mt-2">{r.notes}</p>
-                    </div>
-                  ) : null}
-
-                  <div className="booking-actions text-sm sm:text-[15px]">
-                    {example ? (
-                      <span className="inline-flex min-h-11 items-center rounded-full bg-neutral-100 px-4 py-2 text-[14px] font-semibold text-neutral-500">
-                        Ações desativadas no exemplo
-                      </span>
-                    ) : (
-                      <>
-                        {r.email ? (
-                          <a
-                            href={mailtoHref(r)}
-                            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-2.5 font-semibold text-white no-underline transition-opacity hover:opacity-90"
-                          >
-                            <Mail className="h-4 w-4 shrink-0" />
-                            Email
-                          </a>
-                        ) : null}
-                        {wa ? (
-                          <a
-                            href={wa}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-semibold text-white no-underline shadow-sm hover:brightness-95"
-                          >
-                            <MessageCircle className="h-4 w-4 shrink-0" />
-                            WhatsApp
-                          </a>
-                        ) : (
-                          <span className="inline-flex min-h-11 items-center rounded-full bg-neutral-100 px-4 py-2 text-[14px] text-neutral-500">
-                            Sem telemóvel no formulário
-                          </span>
-                        )}
-                        {phoneDial ? (
-                          <a
-                            href={phoneDial}
-                            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 font-semibold text-[#1d1d1f] no-underline hover:bg-neutral-50"
-                          >
-                            <Phone className="h-4 w-4" />
-                            Ligar
-                          </a>
-                        ) : null}
-                        <button
-                          type="button"
-                          onClick={() => copyStripe(r.stripeSessionId)}
-                          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-[15px] font-semibold text-[#1d1d1f] hover:bg-neutral-50"
-                        >
-                          <Copy className="h-4 w-4" />
-                          {copiedId === r.stripeSessionId ? "Copiado" : "Stripe"}
-                        </button>
-                      </>
-                    )}
-                  </div>
-
-                  {pending ? (
-                    <div className="booking-approve">
-                      <Button
-                        type="button"
-                        className="h-12 min-h-12 rounded-2xl text-[16px] font-semibold"
-                        disabled={busy || example}
-                        onClick={() => setApproval(r.eventId, "accepted")}
-                      >
-                        <Check className="mr-2 h-5 w-5" />
-                        Aceitar viagem
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="h-12 min-h-12 rounded-2xl border-red-200 text-[16px] font-semibold text-red-700 hover:bg-red-50"
-                        disabled={busy || example}
-                        onClick={() => setApproval(r.eventId, "rejected")}
-                      >
-                        <X className="mr-2 h-5 w-5" />
-                        Recusar
-                      </Button>
-                    </div>
-                  ) : (
-                    <p className="border-t border-black/6 pt-4 text-[14px] text-neutral-500">
-                      Estado:{" "}
-                      <strong className="text-[#1d1d1f]">
-                        {r.approvalStatus === "accepted" ? "Aceite" : "Recusada"}
-                      </strong>
-                      . Podes alterar contactando o cliente pelos botões acima.
-                    </p>
-                  )}
+                    </span>
+                  </p>
                 </div>
+
+                {pending ? (
+                  <div className="booking-approve">
+                    <Button
+                      type="button"
+                      className="booking-btn-accept"
+                      disabled={busy}
+                      onClick={() => void setApproval(r.eventId, "accepted")}
+                    >
+                      <Check className="h-5 w-5 shrink-0" />
+                      Aceitar viagem
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="booking-btn-reject"
+                      disabled={busy}
+                      onClick={() => void setApproval(r.eventId, "rejected")}
+                    >
+                      <X className="h-5 w-5 shrink-0" />
+                      Recusar
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="booking-resolved">
+                    Estado:{" "}
+                    <strong>{r.approvalStatus === "accepted" ? "viagem aceite" : "viagem recusada"}</strong>
+                  </p>
+                )}
+
+                <button
+                  type="button"
+                  className="booking-details-btn"
+                  onClick={() => {
+                    setDrawerRow(r);
+                    setDrawerOpen(true);
+                  }}
+                >
+                  Ver contacto e detalhes
+                  <ChevronRight className="h-5 w-5 opacity-60" aria-hidden="true" />
+                </button>
               </article>
             );
           })
         )}
       </div>
 
-      {/* Drawer (detalhes) */}
       {drawerRow ? (
         <div
           className={cn(
-            "booking-drawer-backdrop transition-opacity",
-            drawerOpen ? "opacity-100" : "pointer-events-none opacity-0",
+            "booking-drawer-backdrop",
+            drawerOpen ? "is-visible" : "is-hidden",
           )}
           role="dialog"
           aria-modal="true"
@@ -567,33 +433,15 @@ export function BookingsClient() {
             if (e.target === e.currentTarget) closeDrawer();
           }}
         >
-          <div
-            className={cn(
-              "booking-drawer",
-              drawerOpen && "is-open",
-            )}
-          >
+          <div className={cn("booking-drawer", drawerOpen && "is-open")}>
             <div className="booking-drawer__head">
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={cn(
-                      "booking-pill",
-                      drawerRow.approvalStatus === "pending" && "booking-pill--pending",
-                      drawerRow.approvalStatus === "accepted" && "booking-pill--accepted",
-                      drawerRow.approvalStatus === "rejected" && "booking-pill--rejected",
-                    )}
-                  >
-                    {drawerRow.approvalStatus === "pending" && "Por confirmar"}
-                    {drawerRow.approvalStatus === "accepted" && "Aceite"}
-                    {drawerRow.approvalStatus === "rejected" && "Recusada"}
-                  </span>
-                  <span className="booking-price">
-                    {formatMoney(drawerRow.totalCents, drawerRow.currency)}
-                  </span>
+                  <StatusPill status={drawerRow.approvalStatus} />
+                  <span className="booking-price">{formatMoney(drawerRow.totalCents, drawerRow.currency)}</span>
                 </div>
-                <h3 className="mt-3 booking-title">{drawerRow.tourLabel}</h3>
-                <p className="mt-1 text-sm text-neutral-600">
+                <h3 className="booking-drawer__title">{drawerRow.tourLabel}</h3>
+                <p className="booking-drawer__sub">
                   {formatDateLong(drawerRow.preferredDate)} · {drawerRow.quantity}{" "}
                   {drawerRow.quantity === 1 ? "pessoa" : "pessoas"}
                 </p>
@@ -601,176 +449,120 @@ export function BookingsClient() {
               <button
                 type="button"
                 onClick={closeDrawer}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-lg font-semibold text-neutral-700 hover:bg-neutral-50"
+                className="booking-drawer__close"
                 aria-label="Fechar"
               >
-                ×
+                <X className="h-5 w-5" />
               </button>
             </div>
 
             <div className="booking-drawer__body">
               <div className="booking-drawer-grid">
                 <div className="booking-drawer-box">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                    Cliente
-                  </div>
-                  <div className="mt-2 text-[15px] font-semibold text-[#1d1d1f]">
-                    {drawerRow.customerName || "—"}
-                  </div>
-                  <div className="mt-2 space-y-1 text-[14px] text-neutral-700">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="truncate">{drawerRow.email || "—"}</span>
-                      {drawerRow.email ? (
-                        <button
-                          type="button"
-                          onClick={() => safeCopy(drawerRow.email)}
-                          className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[13px] font-semibold hover:bg-neutral-50"
-                        >
-                          <Copy className="h-4 w-4" />
-                          Copiar
-                        </button>
-                      ) : null}
+                  <h4 className="booking-drawer-box__label">Cliente</h4>
+                  <p className="booking-drawer-box__value">{drawerRow.customerName || "—"}</p>
+                  <dl className="booking-drawer-dl">
+                    <div>
+                      <dt>Email</dt>
+                      <dd>
+                        <span>{drawerRow.email || "—"}</span>
+                        {drawerRow.email ? (
+                          <button type="button" onClick={() => safeCopy(drawerRow.email)}>
+                            Copiar
+                          </button>
+                        ) : null}
+                      </dd>
                     </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="truncate">{drawerRow.phone || "—"}</span>
-                      {drawerRow.phone ? (
-                        <button
-                          type="button"
-                          onClick={() => safeCopy(drawerRow.phone)}
-                          className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[13px] font-semibold hover:bg-neutral-50"
-                        >
-                          <Copy className="h-4 w-4" />
-                          Copiar
-                        </button>
-                      ) : null}
+                    <div>
+                      <dt>Telefone</dt>
+                      <dd>
+                        <span>{drawerRow.phone || "—"}</span>
+                        {drawerRow.phone ? (
+                          <button type="button" onClick={() => safeCopy(drawerRow.phone)}>
+                            Copiar
+                          </button>
+                        ) : null}
+                      </dd>
                     </div>
-                  </div>
+                  </dl>
                 </div>
 
                 <div className="booking-drawer-box">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                    Referências
-                  </div>
-                  <div className="mt-2 space-y-2 text-[14px] text-neutral-700">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="text-xs font-semibold text-neutral-500">Stripe</div>
-                        <div className="break-all font-mono text-[13px] text-neutral-800">
-                          {drawerRow.stripeSessionId}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => copyStripe(drawerRow.stripeSessionId)}
-                        className="inline-flex h-9 items-center gap-2 rounded-full border border-black/10 bg-white px-3 text-[13px] font-semibold hover:bg-neutral-50"
-                      >
-                        <Copy className="h-4 w-4" />
-                        {copiedId === drawerRow.stripeSessionId ? "Copiado" : "Copiar"}
-                      </button>
+                  <h4 className="booking-drawer-box__label">Referência</h4>
+                  <dl className="booking-drawer-dl">
+                    <div>
+                      <dt>Stripe</dt>
+                      <dd>
+                        <code>{drawerRow.stripeSessionId}</code>
+                        <button type="button" onClick={() => copyStripe(drawerRow.stripeSessionId)}>
+                          {copiedId === drawerRow.stripeSessionId ? "Copiado" : "Copiar"}
+                        </button>
+                      </dd>
                     </div>
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="text-xs font-semibold text-neutral-500">Calendar event</div>
-                        <div className="break-all font-mono text-[13px] text-neutral-800">
-                          {drawerRow.eventId}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => safeCopy(drawerRow.eventId)}
-                        className="inline-flex h-9 items-center gap-2 rounded-full border border-black/10 bg-white px-3 text-[13px] font-semibold hover:bg-neutral-50"
-                      >
-                        <Copy className="h-4 w-4" />
-                        Copiar
-                      </button>
-                    </div>
-                  </div>
+                  </dl>
                 </div>
               </div>
 
               {drawerRow.notes ? (
                 <div className="booking-drawer-notes">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                    Notas do cliente
-                  </div>
-                  <p className="mt-2 whitespace-pre-wrap text-[14px] leading-relaxed text-neutral-800">
-                    {drawerRow.notes}
-                  </p>
+                  <h4 className="booking-drawer-box__label">Notas do cliente</h4>
+                  <p>{drawerRow.notes}</p>
                 </div>
               ) : null}
 
-              <div className="booking-drawer-footer">
-                {isExample(drawerRow) ? (
-                  <span className="inline-flex min-h-11 items-center rounded-2xl bg-neutral-100 px-5 py-2.5 font-semibold text-neutral-500">
-                    Ações desativadas no exemplo
-                  </span>
-                ) : (
-                  <>
-                    {drawerRow.email ? (
-                      <a
-                        href={mailtoHref(drawerRow)}
-                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#1d1d1f] px-5 py-2.5 font-semibold text-white no-underline hover:opacity-90 sm:w-auto"
-                      >
-                        <Mail className="h-4 w-4" />
-                        Email
-                      </a>
-                    ) : null}
-                    {drawerWa ? (
-                      <a
-                        href={drawerWa}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-2.5 font-semibold text-white no-underline hover:brightness-95 sm:w-auto"
-                      >
-                        <MessageCircle className="h-4 w-4" />
-                        WhatsApp
-                      </a>
-                    ) : null}
-                    {telHref(drawerRow.phone) ? (
-                      <a
-                        href={telHref(drawerRow.phone) as string}
-                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-2.5 font-semibold text-[#1d1d1f] no-underline hover:bg-neutral-50 sm:w-auto"
-                      >
-                        <Phone className="h-4 w-4" />
-                        Ligar
-                      </a>
-                    ) : null}
-                  </>
-                )}
+              <div className="booking-drawer-contact">
+                {drawerRow.email ? (
+                  <a href={mailtoHref(drawerRow)} className="booking-contact-btn booking-contact-btn--email">
+                    <Mail className="h-4 w-4" />
+                    Email
+                  </a>
+                ) : null}
+                {drawerWa ? (
+                  <a
+                    href={drawerWa}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="booking-contact-btn booking-contact-btn--wa"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    WhatsApp
+                  </a>
+                ) : null}
+                {telHref(drawerRow.phone) ? (
+                  <a
+                    href={telHref(drawerRow.phone) as string}
+                    className="booking-contact-btn booking-contact-btn--phone"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Ligar
+                  </a>
+                ) : null}
               </div>
-
-              {drawerRow.approvalStatus === "pending" ? (
-                <div className="mt-5 booking-approve">
-                  <Button
-                    type="button"
-                    className="h-12 min-h-12 rounded-2xl text-[16px] font-semibold"
-                    disabled={actingId === drawerRow.eventId || isExample(drawerRow)}
-                    onClick={() => void setApproval(drawerRow.eventId, "accepted")}
-                  >
-                    <Check className="mr-2 h-5 w-5" />
-                    Aceitar viagem
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-12 min-h-12 rounded-2xl border-red-200 text-[16px] font-semibold text-red-700 hover:bg-red-50"
-                    disabled={actingId === drawerRow.eventId || isExample(drawerRow)}
-                    onClick={() => void setApproval(drawerRow.eventId, "rejected")}
-                  >
-                    <X className="mr-2 h-5 w-5" />
-                    Recusar
-                  </Button>
-                </div>
-              ) : (
-                <p className="mt-5 text-[14px] text-neutral-500">
-                  Estado atual:{" "}
-                  <strong className="text-[#1d1d1f]">
-                    {drawerRow.approvalStatus === "accepted" ? "Aceite" : "Recusada"}
-                  </strong>
-                  .
-                </p>
-              )}
             </div>
+
+            {drawerRow.approvalStatus === "pending" ? (
+              <div className="booking-drawer__foot">
+                <Button
+                  type="button"
+                  className="booking-btn-accept"
+                  disabled={actingId === drawerRow.eventId}
+                  onClick={() => void setApproval(drawerRow.eventId, "accepted")}
+                >
+                  <Check className="h-5 w-5 shrink-0" />
+                  Aceitar viagem
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="booking-btn-reject"
+                  disabled={actingId === drawerRow.eventId}
+                  onClick={() => void setApproval(drawerRow.eventId, "rejected")}
+                >
+                  <X className="h-5 w-5 shrink-0" />
+                  Recusar
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

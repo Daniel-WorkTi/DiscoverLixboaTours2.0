@@ -26,7 +26,7 @@ export default async function ReservarPage({ searchParams }: PageProps) {
         </Link>
         <h1 data-translate="reservar_h1">Reserva o teu tour</h1>
         <p className="reservar-lead" data-translate="reservar_lead">
-          Escolhe destino, data e viajantes (até 7 pessoas). No passo seguinte confirmas os
+          Escolhe destino, data e viajantes (até 8 passageiros). No passo seguinte confirmas os
           dados e segues para o pagamento seguro.
         </p>
         <BookingForm key={tourFromUrl ?? "_"} initialTourId={tourFromUrl} />

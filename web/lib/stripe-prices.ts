@@ -5,6 +5,7 @@
  */
 
 import type Stripe from "stripe";
+import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
 type PriceLikeId = `price_${string}` | `prod_${string}`;
 
@@ -241,7 +242,7 @@ export async function resolveStripePriceId(
   if (typeof raw === "string") {
     return await resolveToPriceId(stripe, raw, tourId);
   }
-  const q = Math.max(1, Math.min(7, Number(quantity) || 1));
+  const q = Math.max(1, Math.min(MAX_TOUR_PASSENGERS, Number(quantity) || 1));
   const picked = pickTierId(raw, q);
   if (!picked) {
     console.error(

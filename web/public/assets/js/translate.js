@@ -154,7 +154,7 @@ const translations = {
         reservar_back: "← Voltar ao site",
         reservar_h1: "Reserva o teu tour",
         reservar_lead:
-            "Escolhe destino, data e viajantes (até 7 pessoas). No passo seguinte confirmas os dados e segues para o pagamento seguro.",
+            "Escolhe destino, data e viajantes (até 8 passageiros). No passo seguinte confirmas os dados e segues para o pagamento seguro.",
 
         obrigado_eyebrow: "Bilhete digital",
         obrigado_title_paid: "Reserva paga com sucesso",
@@ -205,7 +205,7 @@ const translations = {
         booking_modal_title: "Reserva o teu tour",
         booking_section_date: "Data do tour",
         booking_travelers: "Viajantes",
-        booking_travelers_hint: "Escolhe quantas pessoas vão no tour (máx. 7)",
+        booking_travelers_hint: "Escolhe quantas pessoas vão no tour (máx. 8 passageiros)",
         booking_per_person: "Por pessoa",
         booking_total: "Total",
         booking_total_group: "Total do grupo",
@@ -231,7 +231,7 @@ const translations = {
         booking_person_singular: "pessoa",
         booking_person_plural: "pessoas",
         booking_hint_long:
-            "Abre o calendário no botão laranja, escolhe até 7 pessoas e conclui os teus dados para ires ao pagamento seguro.",
+            "Abre o calendário no botão laranja, escolhe até 8 passageiros e conclui os teus dados para ires ao pagamento seguro.",
 
         tour_booking_sintra_cascais: "Sintra & Cascais",
         tour_booking_3_destinos: "Tour 3 Destinos (Fátima, Nazaré, Óbidos)",
@@ -254,11 +254,11 @@ const translations = {
         exec_story_p1:
             "Na <strong>DiscoverLixboaTours</strong> unimos hospitalidade de alto nível com transporte de luxo. Na nossa <strong>Mercedes-Benz Vito 116 CDI Select</strong> (modelo recente), cada quilómetro é vivido com conforto, discrição e atenção ao detalhe.",
         exec_story_p2:
-            "Lounge móvel com oito lugares — sete passageiros e condutor —, estofos premium, luz natural e mimos à medida — para atravessar Portugal de norte a sul com a tranquilidade de quem viaja em privado.",
+            "Lounge móvel com lugar para 8 passageiros e condutor (9 no total), estofos premium e serviço personalizado — para viajar por Portugal com conforto e discrição.",
         exec_wa_schedule: "Agendar Executive no WhatsApp",
         exec_wa_schedule_short: "Agendar no WhatsApp",
         exec_stat_1: "Jornadas premium",
-        exec_stat_2: "Lugares · 7 passageiros + condutor",
+        exec_stat_2: "Lugares no total",
         exec_stat_3: "Destinos em Portugal",
         exec_abordo_kicker: "A bordo",
         exec_abordo_h2: "Hospitalidade premium, quilómetro a quilómetro",
@@ -268,8 +268,8 @@ const translations = {
         exec_chip_corporate: "Corporate & eventos",
         exec_chip_territory: "Portugal inteiro",
         exec_spec_1_k: "Capacidade",
-        exec_spec_1_v: "8 lugares — 7 passageiros + condutor",
-        exec_spec_1_hint: "Famílias, grupos e equipas em viagem de negócios",
+        exec_spec_1_v: "8 passageiros + condutor",
+        exec_spec_1_hint: "9 lugares na Mercedes-Benz Vito",
         exec_spec_2_k: "Veículo",
         exec_spec_2_v: "Vito 116 CDI Select · modelo recente",
         exec_spec_2_hint: "Mercedes-Benz · espaço e elegância em estrada",
@@ -813,7 +813,7 @@ const translations = {
         reservar_back: "← Back to site",
         reservar_h1: "Book your tour",
         reservar_lead:
-            "Choose destination, date and travellers (up to 7). On the next step you confirm your details and continue to secure payment.",
+            "Choose destination, date and travellers (up to 8 passengers). On the next step you confirm your details and continue to secure payment.",
 
         obrigado_eyebrow: "Digital ticket",
         obrigado_title_paid: "Booking paid successfully",
@@ -864,7 +864,7 @@ const translations = {
         booking_modal_title: "Book your tour",
         booking_section_date: "Tour date",
         booking_travelers: "Travellers",
-        booking_travelers_hint: "Choose how many people on the tour (max. 7)",
+        booking_travelers_hint: "Choose how many people on the tour (max. 8 passengers)",
         booking_per_person: "Per person",
         booking_total: "Total",
         booking_total_group: "Group total",
@@ -890,7 +890,7 @@ const translations = {
         booking_person_singular: "person",
         booking_person_plural: "people",
         booking_hint_long:
-            "Open the calendar on the orange button, choose up to 7 people and complete your details to go to secure payment.",
+            "Open the calendar on the orange button, choose up to 8 passengers and complete your details to go to secure payment.",
 
         tour_booking_sintra_cascais: "Sintra & Cascais",
         tour_booking_3_destinos: "3-Destination Tour (Fátima, Nazaré, Óbidos)",
@@ -913,11 +913,11 @@ const translations = {
         exec_story_p1:
             "At <strong>DiscoverLixboaTours</strong> we combine high-end hospitality with luxury transport. In our <strong>Mercedes-Benz Vito 116 CDI Select</strong> (recent model), every kilometre is lived with comfort, discretion and attention to detail.",
         exec_story_p2:
-            "A mobile lounge with eight seats — seven passengers and driver — premium upholstery, natural light and bespoke touches — to cross Portugal north to south with the ease of private travel.",
+            "A mobile lounge for 8 passengers plus driver (9 in total), premium upholstery and personalised service — travel across Portugal in comfort and discretion.",
         exec_wa_schedule: "Schedule Executive on WhatsApp",
         exec_wa_schedule_short: "Schedule on WhatsApp",
         exec_stat_1: "Premium journeys",
-        exec_stat_2: "Seats · 7 passengers + driver",
+        exec_stat_2: "Total seats",
         exec_stat_3: "Destinations in Portugal",
         exec_abordo_kicker: "On board",
         exec_abordo_h2: "Premium hospitality, kilometre after kilometre",
@@ -927,8 +927,8 @@ const translations = {
         exec_chip_corporate: "Corporate & events",
         exec_chip_territory: "All of Portugal",
         exec_spec_1_k: "Capacity",
-        exec_spec_1_v: "8 seats — 7 passengers + driver",
-        exec_spec_1_hint: "Families, groups and business travel teams",
+        exec_spec_1_v: "8 passengers + driver",
+        exec_spec_1_hint: "9 seats in the Mercedes-Benz Vito",
         exec_spec_2_k: "Vehicle",
         exec_spec_2_v: "Vito 116 CDI Select · recent model",
         exec_spec_2_hint: "Mercedes-Benz · space and elegance on the road",

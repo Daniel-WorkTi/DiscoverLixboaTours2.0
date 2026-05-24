@@ -4,8 +4,9 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { estimateFromTable } from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
+import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
-const MAX_TRAVELERS = 7;
+const MAX_TRAVELERS = MAX_TOUR_PASSENGERS;
 const MAX_NAME_LEN = 120;
 const MAX_PHONE_DIGITS = 15;
 const MAX_NOTES_LEN = 500;
@@ -872,7 +873,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           </>
         ) : (
           <span data-translate="booking_hint_long">
-            Abre o calendário no botão laranja, escolhe até 7 pessoas e conclui os teus dados para
+            Abre o calendário no botão laranja, escolhe até 8 passageiros e conclui os teus dados para
             ires ao pagamento seguro.
           </span>
         )}

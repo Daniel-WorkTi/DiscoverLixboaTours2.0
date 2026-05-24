@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { HomePageRest } from "./HomePageRest";
 import { DestinationsGrid } from "./DestinationsGrid";
+import { whatsappSiteUrl } from "@/lib/whatsapp";
 
 const GROUP_PRICE_BY_TOUR_HREF: Record<string, string> = {
   "/tours/algarve": "€600",
@@ -322,7 +323,9 @@ export function HomePage() {
               tour é uma experiência única e inesquecível!
             </p>
             <a
-              href="https://api.whatsapp.com/send/?phone=351934483853&text=Ol%C3%A1%21+Gostaria+de+conhecer+mais+sobre+a+DiscoverLixboatours+dispon%C3%ADveis.&type=phone_number&app_absent=0"
+              href={whatsappSiteUrl(
+                "Olá! Gostaria de conhecer mais sobre a DiscoverLixboaTours disponíveis.",
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-about"

@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { ADMIN_COOKIE_NAME, isCookieValueAuthenticated } from "@/lib/admin-auth";
 import { parseApprovalStatus, type BookingApprovalStatus } from "@/lib/booking-approval";
 import { isGoogleCalendarConfigured } from "@/lib/google-calendar";
+import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,7 +49,13 @@ function parseRowFromEvent(ev: calendar_v3.Schema$Event): BookingRow | null {
   const preferredDate = String(priv.booking_date || ev?.start?.date || "").trim();
   if (!eventId || !stripeSessionId || !preferredDate) return null;
 
-  const quantity = Math.max(1, Math.min(7, parseInt(String(priv.booking_quantity || "1"), 10) || 1));
+  const quantity = Math.max(
+    1,
+    Math.min(
+      MAX_TOUR_PASSENGERS,
+      parseInt(String(priv.booking_quantity || "1"), 10) || 1,
+    ),
+  );
   const totalCentsRaw = priv.booking_total_cents != null ? Number(priv.booking_total_cents) : NaN;
 
   return {

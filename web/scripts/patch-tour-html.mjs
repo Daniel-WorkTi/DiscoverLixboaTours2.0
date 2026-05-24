@@ -38,6 +38,8 @@ const TOUR_TO_PATH = [
 ];
 
 const TOUR_ASSET_V = "2";
+/** Número oficial WhatsApp (E.164 sem +) — alinhado com web/lib/whatsapp.ts */
+const WHATSAPP_E164 = "351934483853";
 
 function patchContent(raw) {
   let s = raw;
@@ -87,6 +89,11 @@ function patchContent(raw) {
   if (!s.includes("<base ")) {
     s = s.replace(/<head>/i, '<head>\n    <base target="_top" />');
   }
+
+  // Garantir número WhatsApp correto em wa.me, tel: e api.whatsapp.com
+  s = s.replace(/351934483351/g, WHATSAPP_E164);
+  s = s.replace(/\+351934483351/g, `+${WHATSAPP_E164}`);
+  s = s.replace(/\+351 934 483 351/g, "+351 934 483 853");
 
   return s;
 }

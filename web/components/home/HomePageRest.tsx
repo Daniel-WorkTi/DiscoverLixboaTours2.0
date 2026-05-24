@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Fragment } from "react";
+import { whatsappSiteUrl } from "@/lib/whatsapp";
 
 type Props = {
   instagramPhotos: string[];
@@ -43,7 +44,9 @@ export function HomePageRest({
               teu Portugal ideal — casal, família ou grupo de amigos.
             </p>
             <a
-              href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20criar%20um%20tour%20personalizado%20em%20Portugal."
+              href={whatsappSiteUrl(
+                "Olá! Gostaria de criar um tour personalizado em Portugal.",
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-personalized"
@@ -159,7 +162,9 @@ export function HomePageRest({
                 Experiências privadas para dois: tempo, discreção e personalização (surpresas, ritmo slow, mesas especiais). Falamos contigo e desenhamos o dia.
               </p>
               <a
-                href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20um%20tour%20privado%20para%20casal%20%2F%20experiência%20romântica%20personalizada%20em%20Portugal."
+                href={whatsappSiteUrl(
+                  "Olá! Gostaria de um tour privado para casal / experiência romântica personalizada em Portugal.",
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="experience-pillar-link experience-pillar-link--wa"
@@ -490,7 +495,9 @@ export function HomePageRest({
       </section>
 
       <a
-        href="https://wa.me/351934483853?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20tours%20da%20DiscoverLixboaTours."
+        href={whatsappSiteUrl(
+          "Olá! Gostaria de saber mais sobre os tours da DiscoverLixboaTours.",
+        )}
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-float"

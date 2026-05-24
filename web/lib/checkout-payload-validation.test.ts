@@ -63,10 +63,10 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     ).toBe(false);
   });
 
-  it("limita quantidade entre 1 e 7 (abuso / overflow)", () => {
+  it("limita quantidade entre 1 e 8 (abuso / overflow)", () => {
     const high = validateCheckoutPayload({ ...baseGood, quantity: 999 });
     expect(high.ok).toBe(true);
-    if (high.ok) expect(high.data.quantity).toBe(7);
+    if (high.ok) expect(high.data.quantity).toBe(8);
 
     const low = validateCheckoutPayload({ ...baseGood, quantity: 0 });
     expect(low.ok).toBe(true);
