@@ -84,7 +84,7 @@ describe("POST /api/webhooks/stripe", () => {
       metadata: {
         preferred_date: "2026-12-20",
         tour_label: "Lisboa tour",
-        quantity: "3",
+        quantity: "8",
         customer_name: "Lucas",
         phone: "+351911111111",
         notes: "Hotel pickup",
@@ -126,7 +126,7 @@ describe("POST /api/webhooks/stripe", () => {
       email: "lucas@example.com",
       phone: "+351911111111",
       notes: "Hotel pickup",
-      quantity: 3,
+      quantity: 8,
       preferredDate: "2026-12-20",
       stripeSessionId: "cs_test_booking1",
       totalCents: 9900,

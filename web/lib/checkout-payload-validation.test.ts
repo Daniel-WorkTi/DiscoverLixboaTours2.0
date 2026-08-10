@@ -63,10 +63,28 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     ).toBe(false);
   });
 
-  it("limita quantidade entre 1 e 8 (abuso / overflow)", () => {
-    const high = validateCheckoutPayload({ ...baseGood, quantity: 999 });
-    expect(high.ok).toBe(true);
-    if (high.ok) expect(high.data.quantity).toBe(8);
+  it("rejeita quantidade acima do máximo bookable do tour (Lisboa = 7)", () => {
+    const highLisboa = validateCheckoutPayload({ ...baseGood, quantity: 8 });
+    expect(highLisboa.ok).toBe(false);
+    if (!highLisboa.ok) {
+      expect(highLisboa.failure.body.code).toBe("UNSUPPORTED_QUANTITY");
+    }
+
+    const highSintra = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "sintra-cascais",
+      quantity: 8,
+    });
+    expect(highSintra.ok).toBe(true);
+    if (highSintra.ok) expect(highSintra.data.quantity).toBe(8);
+
+    const overflow = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "sintra-cascais",
+      quantity: 9,
+    });
+    expect(overflow.ok).toBe(true);
+    if (overflow.ok) expect(overflow.data.quantity).toBe(8);
 
     const low = validateCheckoutPayload({ ...baseGood, quantity: 0 });
     expect(low.ok).toBe(true);

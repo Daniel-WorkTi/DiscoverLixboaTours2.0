@@ -10,6 +10,7 @@ import {
   hasCalendarEventForStripeSession,
 } from "@/lib/google-calendar";
 import { getStripe } from "@/lib/stripe-server";
+import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
     const tourLabel = md.tour_label?.trim() || "Tour";
     const customerName = md.customer_name?.trim() || "";
     const quantity = Math.min(
-      7,
+      MAX_TOUR_PASSENGERS,
       Math.max(1, parseInt(md.quantity || "1", 10) || 1),
     );
     const phone = (md.phone || "").trim();

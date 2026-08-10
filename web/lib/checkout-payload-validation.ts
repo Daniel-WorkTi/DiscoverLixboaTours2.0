@@ -1,4 +1,5 @@
 import { toursBooking, type TourBookingOption } from "@/lib/tours-booking";
+import { getMaxBookablePassengers } from "@/lib/tour-pricing-table";
 import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
 export type ValidatedCheckoutPayload = {
@@ -40,10 +41,6 @@ export function validateCheckoutPayload(
   const b = body as Record<string, unknown>;
 
   const tourId = String(b.tourId ?? "").trim();
-  const quantity = Math.min(
-    MAX_TOUR_PASSENGERS,
-    Math.max(1, Number(b.quantity) || 1),
-  );
   const preferredDate = String(b.preferredDate ?? "").trim();
   const customerName = String(b.customerName ?? "")
     .trim()
@@ -64,6 +61,33 @@ export function validateCheckoutPayload(
       },
     };
   }
+
+  const maxBookable = Math.min(
+    MAX_TOUR_PASSENGERS,
+    getMaxBookablePassengers(tourId),
+  );
+  const rawQty = Number(b.quantity);
+  // Dentro da capacidade do veículo mas sem preço definido (ex.: Lisboa 8)
+  if (
+    Number.isFinite(rawQty) &&
+    rawQty > maxBookable &&
+    rawQty <= MAX_TOUR_PASSENGERS
+  ) {
+    return {
+      ok: false,
+      failure: {
+        status: 400,
+        body: {
+          error:
+            tourId === "lisboa"
+              ? `Lisboa aceita no máximo ${maxBookable} pessoas por reserva. O preço para 8 pessoas ainda não está disponível.`
+              : `Máximo de ${maxBookable} pessoas para este tour.`,
+          code: "UNSUPPORTED_QUANTITY",
+        },
+      },
+    };
+  }
+  const quantity = Math.min(maxBookable, Math.max(1, rawQty || 1));
 
   if (!preferredDate) {
     return {

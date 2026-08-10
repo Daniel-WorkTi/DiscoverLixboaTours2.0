@@ -7,7 +7,11 @@ import {
 } from "@/lib/stripe-prices";
 import { getStripe } from "@/lib/stripe-server";
 import { getSiteBaseUrl } from "@/lib/site-url";
-import { getPricingRuleFromTable } from "@/lib/tour-pricing-table";
+import {
+  getMaxBookablePassengers,
+  getPricingRuleFromTable,
+  tourHasDynamicPricingTable,
+} from "@/lib/tour-pricing-table";
 import { validateCheckoutPayload } from "@/lib/checkout-payload-validation";
 import {
   isGoogleCalendarConfigured,
@@ -112,6 +116,21 @@ export async function POST(req: Request) {
 
   // 1) Primeiro tenta tabela fixa (desconto por quantidade)
   const tableRule = getPricingRuleFromTable(tourId, quantity);
+
+  // Tours com tabela dinâmica: quantidade sem regra NÃO cai para Stripe legado
+  if (!tableRule && tourHasDynamicPricingTable(tourId)) {
+    const maxBookable = getMaxBookablePassengers(tourId);
+    return NextResponse.json(
+      {
+        error:
+          tourId === "lisboa"
+            ? `Lisboa aceita no máximo ${maxBookable} pessoas por reserva. O preço para 8 pessoas ainda não está disponível.`
+            : `Esta quantidade não está disponível para este tour (máx. ${maxBookable} pessoas).`,
+        code: "UNSUPPORTED_QUANTITY",
+      },
+      { status: 400 },
+    );
+  }
 
   // 2) Se não houver tabela, cai para STRIPE_PRICE_MAP (modo antigo)
   let fallbackPriceId: string | undefined;

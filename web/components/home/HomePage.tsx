@@ -4,8 +4,9 @@ import { DestinationsGrid } from "./DestinationsGrid";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 
 const GROUP_PRICE_BY_TOUR_HREF: Record<string, string> = {
+  "/tours/sintra-cascais": "€250",
   "/tours/algarve": "€600",
-  "/tours/porto": "€800",
+  "/tours/porto": "€700",
   "/tours/monsanto": "€800",
 };
 

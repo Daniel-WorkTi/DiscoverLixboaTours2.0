@@ -2,11 +2,9 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { estimateFromTable } from "@/lib/tour-pricing-table";
+import { estimateFromTable, getMaxBookablePassengers } from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
-import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
-const MAX_TRAVELERS = MAX_TOUR_PASSENGERS;
 const MAX_NAME_LEN = 120;
 const MAX_PHONE_DIGITS = 15;
 const MAX_NOTES_LEN = 500;
@@ -14,7 +12,12 @@ const MAX_NOTES_LEN = 500;
 /** Se o servidor / Stripe não responder, o fetch não deve ficar “a carregar” para sempre. */
 const CHECKOUT_FETCH_TIMEOUT_MS = 55_000;
 
-const GROUP_PRICE_TOUR_IDS = new Set(["algarve", "porto", "monsanto"]);
+const GROUP_PRICE_TOUR_IDS = new Set([
+  "sintra-cascais",
+  "algarve",
+  "porto",
+  "monsanto",
+]);
 
 /** Indicativo só com bandeira + código (sem nome do país por extenso). */
 const PHONE_DIAL_OPTIONS = [
@@ -184,7 +187,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
   const tourLabel = toursBooking.find((t) => t.id === tourId)?.label ?? "";
   const tourLabelKey = `tour_booking_${tourId.replace(/-/g, "_")}`;
+  const maxTravelers = useMemo(() => getMaxBookablePassengers(tourId), [tourId]);
   const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
+
+  useEffect(() => {
+    setQuantity((q) => Math.min(q, maxTravelers));
+  }, [maxTravelers]);
 
   const dateLocale = uiLang === "en" ? "en-GB" : "pt-PT";
 
@@ -538,7 +546,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   Viajantes
                 </div>
                 <div className="br-travelers-sub" data-translate="booking_travelers_hint">
-                  Escolhe quantas pessoas vão no tour (máx. {MAX_TRAVELERS})
+                  Escolhe quantas pessoas vão no tour (máx. {maxTravelers})
                 </div>
               </div>
               <div className="br-stepper" aria-label="Quantidade de pessoas">
@@ -553,8 +561,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 <span>{quantity}</span>
                 <button
                   type="button"
-                  disabled={quantity >= MAX_TRAVELERS}
-                  onClick={() => setQuantity((q) => Math.min(MAX_TRAVELERS, q + 1))}
+                  disabled={quantity >= maxTravelers}
+                  onClick={() => setQuantity((q) => Math.min(maxTravelers, q + 1))}
                   aria-label="Mais uma pessoa"
                 >
                   +
