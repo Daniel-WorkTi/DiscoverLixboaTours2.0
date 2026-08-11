@@ -1,5 +1,5 @@
 import { toursBooking, type TourBookingOption } from "@/lib/tours-booking";
-import { getMaxBookablePassengers } from "@/lib/tour-pricing-table";
+import { getMaxBookablePassengers, getMinBookablePassengers } from "@/lib/tour-pricing-table";
 import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
 
 export type ValidatedCheckoutPayload = {
@@ -66,6 +66,7 @@ export function validateCheckoutPayload(
     MAX_TOUR_PASSENGERS,
     getMaxBookablePassengers(tourId),
   );
+  const minBookable = getMinBookablePassengers(tourId);
   const rawQty = Number(b.quantity);
   // Dentro da capacidade do veículo mas sem preço definido (ex.: Lisboa 8)
   if (
@@ -87,7 +88,22 @@ export function validateCheckoutPayload(
       },
     };
   }
-  const quantity = Math.min(maxBookable, Math.max(1, rawQty || 1));
+  if (Number.isFinite(rawQty) && rawQty >= 1 && rawQty < minBookable) {
+    return {
+      ok: false,
+      failure: {
+        status: 400,
+        body: {
+          error: `Este tour requer no mínimo ${minBookable} pessoas.`,
+          code: "UNSUPPORTED_QUANTITY",
+        },
+      },
+    };
+  }
+  const quantity = Math.min(
+    maxBookable,
+    Math.max(minBookable, rawQty || minBookable),
+  );
 
   if (!preferredDate) {
     return {

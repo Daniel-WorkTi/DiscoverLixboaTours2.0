@@ -2,7 +2,11 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { estimateFromTable, getMaxBookablePassengers } from "@/lib/tour-pricing-table";
+import {
+  estimateFromTable,
+  getMaxBookablePassengers,
+  getMinBookablePassengers,
+} from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
 
 const MAX_NAME_LEN = 120;
@@ -12,12 +16,8 @@ const MAX_NOTES_LEN = 500;
 /** Se o servidor / Stripe não responder, o fetch não deve ficar “a carregar” para sempre. */
 const CHECKOUT_FETCH_TIMEOUT_MS = 55_000;
 
-const GROUP_PRICE_TOUR_IDS = new Set([
-  "sintra-cascais",
-  "algarve",
-  "porto",
-  "monsanto",
-]);
+/** Badge “Preço de grupo” só para tours comercialmente flat/grupo (não Aveiro/Monsanto exact-total). */
+const GROUP_PRICE_TOUR_IDS = new Set(["sintra-cascais", "algarve", "porto"]);
 
 /** Indicativo só com bandeira + código (sem nome do país por extenso). */
 const PHONE_DIAL_OPTIONS = [
@@ -122,7 +122,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     return defaultTourId();
   });
   const [preferredDate, setPreferredDate] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(() => {
+    const id =
+      initialTourId && toursBooking.some((t) => t.id === initialTourId)
+        ? initialTourId
+        : defaultTourId();
+    return getMinBookablePassengers(id);
+  });
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneDial, setPhoneDial] = useState("+351");
@@ -188,11 +194,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const tourLabel = toursBooking.find((t) => t.id === tourId)?.label ?? "";
   const tourLabelKey = `tour_booking_${tourId.replace(/-/g, "_")}`;
   const maxTravelers = useMemo(() => getMaxBookablePassengers(tourId), [tourId]);
+  const minTravelers = useMemo(() => getMinBookablePassengers(tourId), [tourId]);
   const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
 
   useEffect(() => {
-    setQuantity((q) => Math.min(q, maxTravelers));
-  }, [maxTravelers]);
+    setQuantity((q) => Math.min(maxTravelers, Math.max(minTravelers, q)));
+  }, [maxTravelers, minTravelers]);
 
   const dateLocale = uiLang === "en" ? "en-GB" : "pt-PT";
 
@@ -552,8 +559,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               <div className="br-stepper" aria-label="Quantidade de pessoas">
                 <button
                   type="button"
-                  disabled={quantity <= 1}
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  disabled={quantity <= minTravelers}
+                  onClick={() => setQuantity((q) => Math.max(minTravelers, q - 1))}
                   aria-label="Menos uma pessoa"
                 >
                   −

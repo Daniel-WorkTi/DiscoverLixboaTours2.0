@@ -91,6 +91,36 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     if (low.ok) expect(low.data.quantity).toBe(1);
   });
 
+  it("rejeita quantidade abaixo do mínimo bookable (Aveiro/Monsanto/Alentejo = 2)", () => {
+    for (const tourId of ["aveiro", "monsanto", "alentejo"] as const) {
+      const solo = validateCheckoutPayload({
+        ...baseGood,
+        tourId,
+        quantity: 1,
+      });
+      expect(solo.ok).toBe(false);
+      if (!solo.ok) {
+        expect(solo.failure.body.code).toBe("UNSUPPORTED_QUANTITY");
+      }
+
+      const pair = validateCheckoutPayload({
+        ...baseGood,
+        tourId,
+        quantity: 2,
+      });
+      expect(pair.ok).toBe(true);
+      if (pair.ok) expect(pair.data.quantity).toBe(2);
+    }
+
+    const aveiro8 = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "aveiro",
+      quantity: 8,
+    });
+    expect(aveiro8.ok).toBe(true);
+    if (aveiro8.ok) expect(aveiro8.data.quantity).toBe(8);
+  });
+
   it("trunca campos longos para metadados Stripe seguros", () => {
     const longName = "x".repeat(200);
     const longNotes = "n".repeat(2000);

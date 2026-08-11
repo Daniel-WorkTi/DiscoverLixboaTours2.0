@@ -34,7 +34,6 @@ function parseGuestQty(qty: number): number | null {
  * Capacidade física do van = MAX_TOUR_PASSENGERS (8); preço 8 pode faltar em alguns tours.
  */
 export function getMaxBookablePassengers(tourId: string): number {
-  // Tours com taxa explícita (ou flat group) para 8 convidados
   switch (tourId) {
     case "sintra-cascais":
     case "algarve":
@@ -42,22 +41,74 @@ export function getMaxBookablePassengers(tourId: string): number {
     case "arraabida":
     case "3-destinos":
     case "monsanto":
-      return MAX_TOUR_PASSENGERS;
-    // Sem taxa comercial confirmada para o 8.º — não inventar nem tratar como 7
-    case "lisboa":
     case "aveiro":
-    case "fatima-tomar":
     case "alentejo":
+      return MAX_TOUR_PASSENGERS;
+    // Sem taxa comercial confirmada para o 8.º
+    case "lisboa":
+    case "fatima-tomar":
       return 7;
     default:
       return MAX_TOUR_PASSENGERS;
   }
 }
 
-/** Tour com regra na tabela dinâmica para pelo menos 1 pessoa (sem fallback Stripe legado). */
-export function tourHasDynamicPricingTable(tourId: string): boolean {
-  return getPricingRuleFromTable(tourId, 1) !== null;
+/** Mínimo comercialmente reservável (tabelas que começam em 2 convidados). */
+export function getMinBookablePassengers(tourId: string): number {
+  switch (tourId) {
+    case "aveiro":
+    case "alentejo":
+    case "monsanto":
+      return 2;
+    default:
+      return 1;
+  }
 }
+
+/** Tour com regra na tabela dinâmica (sem fallback Stripe legado). */
+export function tourHasDynamicPricingTable(tourId: string): boolean {
+  return getPricingRuleFromTable(tourId, getMinBookablePassengers(tourId)) !== null;
+}
+
+/** Totais exactos Aveiro (billing). Display €/pessoa pode ser arredondado. */
+const AVEIRO_EXACT_TOTALS: Record<number, number> = {
+  2: 50000,
+  3: 55000,
+  4: 60000,
+  5: 65000,
+  6: 70000,
+  7: 75000,
+  8: 80000,
+};
+const AVEIRO_DISPLAY_CPP: Record<number, number> = {
+  2: 25000,
+  3: 18300,
+  4: 15000,
+  5: 13000,
+  6: 11700,
+  7: 10800,
+  8: 10000,
+};
+
+/** Totais exactos Monsanto (billing). Display €/pessoa pode ser arredondado. */
+const MONSANTO_EXACT_TOTALS: Record<number, number> = {
+  2: 60000,
+  3: 65000,
+  4: 70000,
+  5: 75000,
+  6: 80000,
+  7: 85000,
+  8: 90000,
+};
+const MONSANTO_DISPLAY_CPP: Record<number, number> = {
+  2: 30000,
+  3: 21700,
+  4: 17500,
+  5: 15000,
+  6: 13300,
+  7: 12100,
+  8: 11300,
+};
 
 /** Regra para o Stripe Checkout (sem labels). */
 export function getPricingRuleFromTable(
@@ -117,15 +168,18 @@ export function getPricingRuleFromTable(
   }
 
   if (tourId === "aveiro") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 14000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 14000 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 12000 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 11000 };
-    return null;
+    // Billing = total exacto (pp display arredondado); mín. 2 convidados
+    if (q < 2) return null;
+    const total = AVEIRO_EXACT_TOTALS[q];
+    if (!total) return null;
+    return { kind: "per_group", centsTotal: total };
   }
 
   if (tourId === "monsanto") {
-    return { kind: "per_group", centsTotal: 80000 };
+    if (q < 2) return null;
+    const total = MONSANTO_EXACT_TOTALS[q];
+    if (!total) return null;
+    return { kind: "per_group", centsTotal: total };
   }
 
   if (tourId === "fatima-tomar") {
@@ -155,14 +209,15 @@ export function getPricingRuleFromTable(
     return null;
   }
 
-  // Évora & Alentejo Premium — por pessoa (preço 8 ainda não confirmado)
+  // Premium Alentejo — por pessoa exacto (2–8)
   if (tourId === "alentejo") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 16000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 16000 };
-    if (q === 3) return { kind: "per_person", centsPerPerson: 14000 };
-    if (q === 4) return { kind: "per_person", centsPerPerson: 12500 };
-    if (q === 5) return { kind: "per_person", centsPerPerson: 11500 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 10500 };
+    if (q === 2) return { kind: "per_person", centsPerPerson: 27500 };
+    if (q === 3) return { kind: "per_person", centsPerPerson: 22000 };
+    if (q === 4) return { kind: "per_person", centsPerPerson: 19500 };
+    if (q === 5) return { kind: "per_person", centsPerPerson: 17500 };
+    if (q === 6) return { kind: "per_person", centsPerPerson: 16500 };
+    if (q === 7) return { kind: "per_person", centsPerPerson: 15500 };
+    if (q === 8) return { kind: "per_person", centsPerPerson: 14500 };
     return null;
   }
 
@@ -223,7 +278,32 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
     };
   }
 
-  if (tourId === "aveiro" || tourId === "fatima-tomar" || tourId === "alentejo") {
+  if (tourId === "aveiro") {
+    // UI: por pessoa (display) + total exacto; Stripe: per_group com total
+    if (rule.kind !== "per_group") return null;
+    const display = AVEIRO_DISPLAY_CPP[q];
+    if (!display) return null;
+    return {
+      kind: "per_person",
+      centsPerPerson: display,
+      totalCents: rule.centsTotal,
+      label: `${q} pessoas`,
+    };
+  }
+
+  if (tourId === "monsanto") {
+    if (rule.kind !== "per_group") return null;
+    const display = MONSANTO_DISPLAY_CPP[q];
+    if (!display) return null;
+    return {
+      kind: "per_person",
+      centsPerPerson: display,
+      totalCents: rule.centsTotal,
+      label: `${q} pessoas`,
+    };
+  }
+
+  if (tourId === "fatima-tomar" || tourId === "alentejo") {
     if (rule.kind !== "per_person") return null;
     return {
       kind: "per_person",
@@ -231,10 +311,6 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
       totalCents: rule.centsPerPerson * q,
       label: `${q} pessoas`,
     };
-  }
-
-  if (tourId === "monsanto") {
-    return { kind: "per_group", totalCents: 80000, label: "grupo (800 €)" };
   }
 
   if (tourId === "algarve") {

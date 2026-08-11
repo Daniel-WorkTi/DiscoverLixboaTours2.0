@@ -13,6 +13,6 @@ export const toursBooking: TourBookingOption[] = [
   { id: "porto", label: "Porto" },
   { id: "arraabida", label: "Arrábida, Setúbal & Sesimbra" },
   { id: "aveiro", label: "Aveiro & Costa Nova" },
-  { id: "alentejo", label: "Évora & Alentejo Premium" },
+  { id: "alentejo", label: "Premium Alentejo Wine, Food & Culture Experience" },
   { id: "algarve", label: "Algarve" },
 ];

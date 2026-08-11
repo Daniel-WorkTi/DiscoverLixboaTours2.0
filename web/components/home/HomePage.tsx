@@ -7,7 +7,6 @@ const GROUP_PRICE_BY_TOUR_HREF: Record<string, string> = {
   "/tours/sintra-cascais": "€250",
   "/tours/algarve": "€600",
   "/tours/porto": "€700",
-  "/tours/monsanto": "€800",
 };
 
 const destinations = [
@@ -86,11 +85,11 @@ const destinations = [
   {
     href: "/tours/alentejo",
     img: "/assets/images/alentejo-galeria/estremoz.webp",
-    alt: "Wine & Food Experience — Alentejo",
+    alt: "Premium Alentejo Wine, Food & Culture Experience",
     nameKey: "destination_alentejo_name",
     placesKey: "destination_alentejo_places",
     places: "Premium · Património, vinha & mesa alentejana",
-    label: "Ver Wine & Food Experience no Alentejo",
+    label: "Ver Premium Alentejo Wine, Food & Culture Experience",
   },
   {
     href: "/tours/algarve",

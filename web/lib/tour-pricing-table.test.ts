@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   estimateFromTable,
   getMaxBookablePassengers,
+  getMinBookablePassengers,
   getPricingRuleFromTable,
 } from "./tour-pricing-table";
 import { toursBooking } from "./tours-booking";
@@ -11,7 +12,8 @@ function totalFromRule(tourId: string, qty: number): number | null {
   const r = getPricingRuleFromTable(tourId, qty);
   if (!r) return null;
   if (r.kind === "per_person") {
-    const q = Math.max(1, Math.min(getMaxBookablePassengers(tourId), qty));
+    const q = Math.floor(Number(qty));
+    if (!Number.isFinite(q) || q < 1) return null;
     return r.centsPerPerson * q;
   }
   return r.centsTotal;
@@ -197,11 +199,24 @@ describe("Capacidade partilhada", () => {
   });
 
   it("tours sem taxa 8 não inventam preço nem usam a regra de 7", () => {
-    for (const id of ["lisboa", "aveiro", "fatima-tomar", "alentejo"] as const) {
+    for (const id of ["lisboa", "fatima-tomar"] as const) {
       expect(getMaxBookablePassengers(id)).toBe(7);
       expect(getPricingRuleFromTable(id, 8)).toBeNull();
       expect(estimateFromTable(id, 8)).toBeNull();
     }
+  });
+
+  it("Aveiro e Alentejo têm taxa comercial para 8", () => {
+    expect(getMaxBookablePassengers("aveiro")).toBe(8);
+    expect(getMaxBookablePassengers("alentejo")).toBe(8);
+    expect(getPricingRuleFromTable("aveiro", 8)).toEqual({
+      kind: "per_group",
+      centsTotal: 80000,
+    });
+    expect(getPricingRuleFromTable("alentejo", 8)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 14500,
+    });
   });
 });
 
@@ -338,15 +353,49 @@ describe("Outros destinos (amostras)", () => {
     });
   });
 
-  it("Monsanto grupo = 800 €", () => {
-    expect(getPricingRuleFromTable("monsanto", 2)).toEqual({
-      kind: "per_group",
-      centsTotal: 80000,
-    });
-    expect(getPricingRuleFromTable("monsanto", 8)).toEqual({
-      kind: "per_group",
-      centsTotal: 80000,
-    });
+  it("Monsanto — totais exactos 2–8 (não flat €800)", () => {
+    const totals: Record<number, number> = {
+      2: 60000,
+      3: 65000,
+      4: 70000,
+      5: 75000,
+      6: 80000,
+      7: 85000,
+      8: 90000,
+    };
+    const display: Record<number, number> = {
+      2: 30000,
+      3: 21700,
+      4: 17500,
+      5: 15000,
+      6: 13300,
+      7: 12100,
+      8: 11300,
+    };
+    expect(getMinBookablePassengers("monsanto")).toBe(2);
+    expect(getMaxBookablePassengers("monsanto")).toBe(8);
+    expect(getPricingRuleFromTable("monsanto", 1)).toBeNull();
+    for (let q = 2; q <= 8; q++) {
+      expect(getPricingRuleFromTable("monsanto", q)).toEqual({
+        kind: "per_group",
+        centsTotal: totals[q],
+      });
+      expect(totalFromRule("monsanto", q)).toBe(totals[q]);
+      const est = estimateFromTable("monsanto", q);
+      expect(est?.kind).toBe("per_person");
+      if (est?.kind === "per_person") {
+        expect(est.centsPerPerson).toBe(display[q]);
+        expect(est.totalCents).toBe(totals[q]);
+      }
+    }
+    // Criticos: arredondamentos de display ≠ total × pp
+    expect(totalFromRule("monsanto", 2)).not.toBe(80000);
+    expect(totalFromRule("monsanto", 8)).not.toBe(80000);
+    expect(totalFromRule("monsanto", 6)).toBe(80000);
+    expect(totalFromRule("monsanto", 3)).toBe(65000); // não 65100
+    expect(totalFromRule("monsanto", 6)).toBe(80000); // não 79800
+    expect(totalFromRule("monsanto", 7)).toBe(85000); // não 84700
+    expect(totalFromRule("monsanto", 8)).toBe(90000); // não 90400
   });
 
   it("Fátima & Tomar tem tabela própria", () => {
@@ -360,53 +409,100 @@ describe("Outros destinos (amostras)", () => {
     });
   });
 
-  it("Évora & Alentejo Premium — por pessoa por faixa (sem inventar 8)", () => {
-    expect(getPricingRuleFromTable("alentejo", 1)).toEqual({
+  it("Premium Alentejo — por pessoa exacto 2–8", () => {
+    const cpp: Record<number, number> = {
+      2: 27500,
+      3: 22000,
+      4: 19500,
+      5: 17500,
+      6: 16500,
+      7: 15500,
+      8: 14500,
+    };
+    const totals: Record<number, number> = {
+      2: 55000,
+      3: 66000,
+      4: 78000,
+      5: 87500,
+      6: 99000,
+      7: 108500,
+      8: 116000,
+    };
+    expect(getMinBookablePassengers("alentejo")).toBe(2);
+    expect(getMaxBookablePassengers("alentejo")).toBe(8);
+    expect(getPricingRuleFromTable("alentejo", 1)).toBeNull();
+    for (let q = 2; q <= 8; q++) {
+      expect(getPricingRuleFromTable("alentejo", q)).toEqual({
+        kind: "per_person",
+        centsPerPerson: cpp[q],
+      });
+      expect(totalFromRule("alentejo", q)).toBe(totals[q]);
+      expect(estimateFromTable("alentejo", q)?.totalCents).toBe(totals[q]);
+    }
+    expect(getPricingRuleFromTable("alentejo", 8)).toEqual({
       kind: "per_person",
-      centsPerPerson: 16000,
+      centsPerPerson: 14500,
     });
-    expect(getPricingRuleFromTable("alentejo", 2)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 16000,
-    });
-    expect(getPricingRuleFromTable("alentejo", 3)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 14000,
-    });
-    expect(getPricingRuleFromTable("alentejo", 4)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 12500,
-    });
-    expect(getPricingRuleFromTable("alentejo", 5)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 11500,
-    });
-    expect(getPricingRuleFromTable("alentejo", 6)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 10500,
-    });
-    expect(getPricingRuleFromTable("alentejo", 7)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 10500,
-    });
-    expect(getPricingRuleFromTable("alentejo", 8)).toBeNull();
+  });
+
+  it("Aveiro — totais exactos 2–8 (display pp arredondado)", () => {
+    const totals: Record<number, number> = {
+      2: 50000,
+      3: 55000,
+      4: 60000,
+      5: 65000,
+      6: 70000,
+      7: 75000,
+      8: 80000,
+    };
+    const display: Record<number, number> = {
+      2: 25000,
+      3: 18300,
+      4: 15000,
+      5: 13000,
+      6: 11700,
+      7: 10800,
+      8: 10000,
+    };
+    expect(getMinBookablePassengers("aveiro")).toBe(2);
+    expect(getMaxBookablePassengers("aveiro")).toBe(8);
+    expect(getPricingRuleFromTable("aveiro", 1)).toBeNull();
+    for (let q = 2; q <= 8; q++) {
+      expect(getPricingRuleFromTable("aveiro", q)).toEqual({
+        kind: "per_group",
+        centsTotal: totals[q],
+      });
+      expect(totalFromRule("aveiro", q)).toBe(totals[q]);
+      const est = estimateFromTable("aveiro", q);
+      expect(est?.kind).toBe("per_person");
+      if (est?.kind === "per_person") {
+        expect(est.centsPerPerson).toBe(display[q]);
+        expect(est.totalCents).toBe(totals[q]);
+      }
+    }
+    expect(totalFromRule("aveiro", 3)).toBe(55000); // não 54900
+    expect(totalFromRule("aveiro", 6)).toBe(70000); // não 70200
+    expect(totalFromRule("aveiro", 7)).toBe(75000); // não 75600
+    expect(totalFromRule("aveiro", 8)).toBe(80000);
   });
 });
 
 describe("Cobertura: todos os tours em reserva têm preço na tabela", () => {
-  it("cada tour tem regra para 1 viajante", () => {
+  it("cada tour tem regra para o mínimo bookable", () => {
     for (const t of toursBooking) {
+      const minQ = getMinBookablePassengers(t.id);
       expect(
-        getPricingRuleFromTable(t.id, 1),
-        `sem preço para ${t.id}`,
+        getPricingRuleFromTable(t.id, minQ),
+        `sem preço para ${t.id} q=${minQ}`,
       ).not.toBeNull();
     }
   });
 
   it("total da regra coincide com a estimativa (quando aplicável)", () => {
     for (const t of toursBooking) {
+      const minQ = getMinBookablePassengers(t.id);
       const maxQ = getMaxBookablePassengers(t.id);
-      for (let q = 1; q <= maxQ; q++) {
+      for (let q = minQ; q <= maxQ; q++) {
         const est = estimateFromTable(t.id, q);
         const tot = totalFromRule(t.id, q);
         if (est === null || tot === null) continue;
