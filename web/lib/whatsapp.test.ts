@@ -12,6 +12,14 @@ describe("whatsappSiteUrl", () => {
     expect(u).toContain(`https://wa.me/${WHATSAPP_E164}`);
     expect(u).not.toContain("351934483351");
   });
+
+  it("usa a mensagem padrão de contacto sem argumento", () => {
+    const u = whatsappSiteUrl();
+    expect(u).toContain(`https://wa.me/${WHATSAPP_E164}`);
+    expect(decodeURIComponent(u.split("text=")[1])).toBe(
+      "Thank you for contacting us! We are at your service. Descubralixboatours",
+    );
+  });
 });
 
 describe("digitsForWhatsApp", () => {

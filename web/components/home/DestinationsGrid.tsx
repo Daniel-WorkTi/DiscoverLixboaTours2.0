@@ -11,14 +11,14 @@ export type DestinationCard = {
   placesKey: string;
   places: string;
   label: string;
+  priceFrom: string;
 };
 
 type Props = {
   destinations: readonly DestinationCard[];
-  groupPriceByHref: Record<string, string>;
 };
 
-export function DestinationsGrid({ destinations, groupPriceByHref }: Props) {
+export function DestinationsGrid({ destinations }: Props) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -181,21 +181,22 @@ export function DestinationsGrid({ destinations, groupPriceByHref }: Props) {
       <div className="destinations-grid" role="list">
         {filtered.map((d) => (
           <div className="destination-card" key={d.href} role="listitem">
-            {groupPriceByHref[d.href] ? (
-              <div className="destination-badge destination-badge--group" aria-label="Preço de grupo">
-                <span className="destination-badge__label" data-translate="price_group_badge">
-                  Preço de grupo
-                </span>
-                <span className="destination-badge__value">{groupPriceByHref[d.href]}</span>
-                <span className="destination-badge__suffix" data-translate="price_group_total_suffix">
-                  total (grupo)
-                </span>
-              </div>
-            ) : null}
+            <div className="destination-badge" aria-label={`A partir de ${d.priceFrom}`}>
+              <span className="destination-badge__label" data-translate="price_label">
+                A partir de
+              </span>
+              <span className="destination-badge__value">{d.priceFrom}</span>
+            </div>
 
             <a href={d.href} className="destination-image-link">
               <div className="destination-image">
-                <Image src={d.img} alt={d.alt} width={400} height={260} />
+                <Image
+                  src={d.img}
+                  alt={d.alt}
+                  width={640}
+                  height={800}
+                  sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                />
               </div>
             </a>
 

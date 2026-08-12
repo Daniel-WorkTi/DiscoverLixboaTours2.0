@@ -3,12 +3,6 @@ import { HomePageRest } from "./HomePageRest";
 import { DestinationsGrid } from "./DestinationsGrid";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 
-const GROUP_PRICE_BY_TOUR_HREF: Record<string, string> = {
-  "/tours/sintra-cascais": "€250",
-  "/tours/algarve": "€600",
-  "/tours/porto": "€700",
-};
-
 const destinations = [
   {
     href: "/tours/sintra-cascais",
@@ -18,6 +12,7 @@ const destinations = [
     placesKey: "destination_sintra_places",
     places: "Palácios & Praias Secretas",
     label: "Ver detalhes do tour Sintra e Cascais",
+    priceFrom: "€250",
   },
   {
     href: "/tours/3-destinos",
@@ -27,6 +22,7 @@ const destinations = [
     placesKey: "destination_3destinos_places",
     places: "Fátima • Nazaré • Óbidos",
     label: "Ver detalhes do tour 3 Destinos",
+    priceFrom: "€85",
   },
   {
     href: "/tours/fatima-tomar",
@@ -36,6 +32,7 @@ const destinations = [
     placesKey: "destination_fatima_tomar_places",
     places: "Peregrinação & património UNESCO",
     label: "Ver detalhes do tour Fátima e Tomar",
+    priceFrom: "€310",
   },
   {
     href: "/tours/monsanto",
@@ -45,6 +42,7 @@ const destinations = [
     placesKey: "destination_monsanto_places",
     places: "Portugal Autêntico · Hidden Gems",
     label: "Ver tour Monsanto e Centro de Portugal",
+    priceFrom: "€113",
   },
   {
     href: "/tours/lisboa",
@@ -54,6 +52,7 @@ const destinations = [
     placesKey: "destination_lisboa_places",
     places: "Capital Vibrante",
     label: "Ver detalhes do tour Lisboa",
+    priceFrom: "€90",
   },
   {
     href: "/tours/porto",
@@ -63,6 +62,7 @@ const destinations = [
     placesKey: "destination_porto_places",
     places: "Um Dia de Patrimônio, História & Vinho",
     label: "Ver detalhes do tour Porto",
+    priceFrom: "€700",
   },
   {
     href: "/tours/arraabida",
@@ -72,6 +72,7 @@ const destinations = [
     placesKey: "destination_arrabida_places",
     places: "Natureza, História e Vistas Incríveis",
     label: "Ver detalhes do tour Arrábida, Setúbal e Sesimbra",
+    priceFrom: "€75",
   },
   {
     href: "/tours/aveiro",
@@ -81,6 +82,7 @@ const destinations = [
     placesKey: "destination_aveiro_places",
     places: "Canais, moliceiros e casas às riscas",
     label: "Ver detalhes do tour Aveiro e Costa Nova",
+    priceFrom: "€100",
   },
   {
     href: "/tours/alentejo",
@@ -90,6 +92,7 @@ const destinations = [
     placesKey: "destination_alentejo_places",
     places: "Premium · Património, vinha & mesa alentejana",
     label: "Ver Premium Alentejo Wine, Food & Culture Experience",
+    priceFrom: "€145",
   },
   {
     href: "/tours/algarve",
@@ -99,6 +102,7 @@ const destinations = [
     placesKey: "destination_algarve_places",
     places: "Costa do Sol",
     label: "Ver detalhes do tour Algarve",
+    priceFrom: "€600",
   },
 ];
 
@@ -323,9 +327,7 @@ export function HomePage() {
               tour é uma experiência única e inesquecível!
             </p>
             <a
-              href={whatsappSiteUrl(
-                "Olá! Gostaria de conhecer mais sobre a DiscoverLixboaTours disponíveis.",
-              )}
+              href={whatsappSiteUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-about"
@@ -384,10 +386,7 @@ export function HomePage() {
             </h2>
           </div>
 
-          <DestinationsGrid
-            destinations={destinations}
-            groupPriceByHref={GROUP_PRICE_BY_TOUR_HREF}
-          />
+          <DestinationsGrid destinations={destinations} />
         </div>
       </section>
 

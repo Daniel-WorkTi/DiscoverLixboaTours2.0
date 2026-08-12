@@ -31,26 +31,10 @@ function parseGuestQty(qty: number): number | null {
 
 /**
  * Máximo de passageiros com preço comercial definido.
- * Capacidade física do van = MAX_TOUR_PASSENGERS (8); preço 8 pode faltar em alguns tours.
+ * Capacidade física do van = MAX_TOUR_PASSENGERS (8) em todos os tours.
  */
-export function getMaxBookablePassengers(tourId: string): number {
-  switch (tourId) {
-    case "sintra-cascais":
-    case "algarve":
-    case "porto":
-    case "arraabida":
-    case "3-destinos":
-    case "monsanto":
-    case "aveiro":
-    case "alentejo":
-      return MAX_TOUR_PASSENGERS;
-    // Sem taxa comercial confirmada para o 8.º
-    case "lisboa":
-    case "fatima-tomar":
-      return 7;
-    default:
-      return MAX_TOUR_PASSENGERS;
-  }
+export function getMaxBookablePassengers(_tourId: string): number {
+  return MAX_TOUR_PASSENGERS;
 }
 
 /** Mínimo comercialmente reservável (tabelas que começam em 2 convidados). */
@@ -144,13 +128,13 @@ export function getPricingRuleFromTable(
     return null;
   }
 
-  // Lisboa — preçário confirmado só até 7 (não inventar preço para 8)
+  // Lisboa — por pessoa até 8 (6–8 = €90)
   if (tourId === "lisboa") {
     if (q === 1) return { kind: "per_group", centsTotal: 24000 };
     if (q === 2) return { kind: "per_person", centsPerPerson: 12000 };
     if (q === 3) return { kind: "per_person", centsPerPerson: 11000 };
     if (q >= 4 && q <= 5) return { kind: "per_person", centsPerPerson: 10000 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 9000 };
+    if (q >= 6 && q <= 8) return { kind: "per_person", centsPerPerson: 9000 };
     return null;
   }
 
@@ -182,11 +166,12 @@ export function getPricingRuleFromTable(
     return { kind: "per_group", centsTotal: total };
   }
 
+  // Fátima & Tomar — preço total por grupo privado
   if (tourId === "fatima-tomar") {
-    if (q === 1) return { kind: "per_person", centsPerPerson: 13000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 13000 };
-    if (q >= 3 && q <= 5) return { kind: "per_person", centsPerPerson: 11500 };
-    if (q >= 6 && q <= 7) return { kind: "per_person", centsPerPerson: 10000 };
+    if (q <= 2) return { kind: "per_group", centsTotal: 31000 };
+    if (q <= 4) return { kind: "per_group", centsTotal: 40000 };
+    if (q <= 6) return { kind: "per_group", centsTotal: 49000 };
+    if (q <= 8) return { kind: "per_group", centsTotal: 59000 };
     return null;
   }
 
@@ -303,7 +288,14 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
     };
   }
 
-  if (tourId === "fatima-tomar" || tourId === "alentejo") {
+  if (tourId === "fatima-tomar") {
+    if (rule.kind !== "per_group") return null;
+    const label =
+      q <= 2 ? "1–2 pessoas" : q <= 4 ? "3–4 pessoas" : q <= 6 ? "5–6 pessoas" : "7–8 pessoas";
+    return { kind: "per_group", totalCents: rule.centsTotal, label };
+  }
+
+  if (tourId === "alentejo") {
     if (rule.kind !== "per_person") return null;
     return {
       kind: "per_person",
@@ -323,7 +315,7 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   if (tourId === "porto") {
     if (rule.kind !== "per_group") return null;
     const label =
-      q <= 4 ? "1–4 pessoas" : q <= 6 ? "5–6 pessoas" : "7–8 pessoas";
+      q <= 4 ? "1–4 pessoas" : q <= 6 ? "5–6 pessoas" : "até 8 pessoas";
     return { kind: "per_group", totalCents: rule.centsTotal, label };
   }
 

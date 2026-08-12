@@ -198,11 +198,11 @@ describe("Capacidade partilhada", () => {
     });
   });
 
-  it("tours sem taxa 8 não inventam preço nem usam a regra de 7", () => {
+  it("todos os tours permitem 8 passageiros com preço definido", () => {
     for (const id of ["lisboa", "fatima-tomar"] as const) {
-      expect(getMaxBookablePassengers(id)).toBe(7);
-      expect(getPricingRuleFromTable(id, 8)).toBeNull();
-      expect(estimateFromTable(id, 8)).toBeNull();
+      expect(getMaxBookablePassengers(id)).toBe(8);
+      expect(getPricingRuleFromTable(id, 8)).not.toBeNull();
+      expect(estimateFromTable(id, 8)?.totalCents).toBeTruthy();
     }
   });
 
@@ -220,8 +220,8 @@ describe("Capacidade partilhada", () => {
   });
 });
 
-describe("Lisboa — preçário 1–7 preservado; 8 sem preço", () => {
-  it("totais confirmados 1–7", () => {
+describe("Lisboa — preçário 1–8", () => {
+  it("totais confirmados 1–8", () => {
     expect(getPricingRuleFromTable("lisboa", 1)).toEqual({
       kind: "per_group",
       centsTotal: 24000,
@@ -256,13 +256,16 @@ describe("Lisboa — preçário 1–7 preservado; 8 sem preço", () => {
       centsPerPerson: 9000,
     });
     expect(totalFromRule("lisboa", 7)).toBe(63000);
+    expect(getPricingRuleFromTable("lisboa", 8)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 9000,
+    });
+    expect(totalFromRule("lisboa", 8)).toBe(72000);
   });
 
-  it("8 pessoas não reutiliza a regra de 7 nem inventa preço", () => {
-    expect(getMaxBookablePassengers("lisboa")).toBe(7);
-    expect(getPricingRuleFromTable("lisboa", 8)).toBeNull();
-    expect(estimateFromTable("lisboa", 8)).toBeNull();
-    expect(totalFromRule("lisboa", 8)).toBeNull();
+  it("8 pessoas é bookable (mesma taxa €90 da faixa 6–8)", () => {
+    expect(getMaxBookablePassengers("lisboa")).toBe(8);
+    expect(estimateFromTable("lisboa", 8)?.totalCents).toBe(72000);
   });
 });
 
@@ -398,14 +401,43 @@ describe("Outros destinos (amostras)", () => {
     expect(totalFromRule("monsanto", 8)).toBe(90000); // não 90400
   });
 
-  it("Fátima & Tomar tem tabela própria", () => {
+  it("Fátima & Tomar — totais por grupo 1–8", () => {
+    expect(getPricingRuleFromTable("fatima-tomar", 1)).toEqual({
+      kind: "per_group",
+      centsTotal: 31000,
+    });
     expect(getPricingRuleFromTable("fatima-tomar", 2)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 13000,
+      kind: "per_group",
+      centsTotal: 31000,
+    });
+    expect(getPricingRuleFromTable("fatima-tomar", 3)).toEqual({
+      kind: "per_group",
+      centsTotal: 40000,
+    });
+    expect(getPricingRuleFromTable("fatima-tomar", 4)).toEqual({
+      kind: "per_group",
+      centsTotal: 40000,
     });
     expect(getPricingRuleFromTable("fatima-tomar", 5)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 11500,
+      kind: "per_group",
+      centsTotal: 49000,
+    });
+    expect(getPricingRuleFromTable("fatima-tomar", 6)).toEqual({
+      kind: "per_group",
+      centsTotal: 49000,
+    });
+    expect(getPricingRuleFromTable("fatima-tomar", 7)).toEqual({
+      kind: "per_group",
+      centsTotal: 59000,
+    });
+    expect(getPricingRuleFromTable("fatima-tomar", 8)).toEqual({
+      kind: "per_group",
+      centsTotal: 59000,
+    });
+    expect(estimateFromTable("fatima-tomar", 8)).toEqual({
+      kind: "per_group",
+      totalCents: 59000,
+      label: "7–8 pessoas",
     });
   });
 

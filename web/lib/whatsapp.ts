@@ -4,9 +4,18 @@ export const WHATSAPP_E164 = "351934483853";
 /** Número formatado para exibição (tel / texto). */
 export const WHATSAPP_DISPLAY = "+351 934 483 853";
 
+/** Mensagem pré-preenchida em todos os botões de contacto WhatsApp do site. */
+export const WHATSAPP_CONTACT_MESSAGE =
+  "Thank you for contacting us! We are at your service. Descubralixboatours";
+
 /** Link wa.me para o número oficial do site (botões WhatsApp públicos). */
-export function whatsappSiteUrl(text: string): string {
+export function whatsappSiteUrl(text: string = WHATSAPP_CONTACT_MESSAGE): string {
   return `https://wa.me/${WHATSAPP_E164}?text=${encodeURIComponent(text)}`;
+}
+
+/** Atalho: contacto WhatsApp com a mensagem padrão do site. */
+export function whatsappContactUrl(): string {
+  return whatsappSiteUrl(WHATSAPP_CONTACT_MESSAGE);
 }
 
 /** wa.me link after booking, with a prefilled message. */

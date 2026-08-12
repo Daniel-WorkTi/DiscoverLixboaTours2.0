@@ -44,9 +44,7 @@ export function HomePageRest({
               teu Portugal ideal — casal, família ou grupo de amigos.
             </p>
             <a
-              href={whatsappSiteUrl(
-                "Olá! Gostaria de criar um tour personalizado em Portugal.",
-              )}
+              href={whatsappSiteUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-personalized"
@@ -162,9 +160,7 @@ export function HomePageRest({
                 Experiências privadas para dois: tempo, discreção e personalização (surpresas, ritmo slow, mesas especiais). Falamos contigo e desenhamos o dia.
               </p>
               <a
-                href={whatsappSiteUrl(
-                  "Olá! Gostaria de um tour privado para casal / experiência romântica personalizada em Portugal.",
-                )}
+                href={whatsappSiteUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="experience-pillar-link experience-pillar-link--wa"
@@ -495,9 +491,7 @@ export function HomePageRest({
       </section>
 
       <a
-        href={whatsappSiteUrl(
-          "Olá! Gostaria de saber mais sobre os tours da DiscoverLixboaTours.",
-        )}
+        href={whatsappSiteUrl()}
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-float"

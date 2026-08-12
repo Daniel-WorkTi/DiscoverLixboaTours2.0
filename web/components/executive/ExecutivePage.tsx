@@ -14,9 +14,7 @@ import {
 import { ExecutiveToursCarousel } from "@/components/executive/ExecutiveToursCarousel";
 import { WHATSAPP_DISPLAY, whatsappSiteUrl } from "@/lib/whatsapp";
 
-const WA_HREF = whatsappSiteUrl(
-  "Olá! Gostaria de informações sobre Private Tours & Concierge — DiscoverLixboaTours.",
-);
+const WA_HREF = whatsappSiteUrl();
 const SITE_HREF = "https://www.discoverlixboatours.com/";
 const ASSET_VERSION = process.env.NEXT_PUBLIC_ASSET_VERSION?.trim() || "1";
 /** Aumentar quando substituir PNGs da galeria executive (cache do browser / otimizador). */

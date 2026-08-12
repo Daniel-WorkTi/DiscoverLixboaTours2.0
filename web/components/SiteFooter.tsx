@@ -120,9 +120,7 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
                 </svg>
               </a>
               <a
-                href={whatsappSiteUrl(
-                  "Olá! Vim do site da DiscoverLixboaTours e gostaria de mais informações.",
-                )}
+                href={whatsappSiteUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"

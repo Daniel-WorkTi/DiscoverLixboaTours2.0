@@ -1690,10 +1690,10 @@ body {
 
 .destination-card {
     background: #FFFFFF;
-    border-radius: 25px;
+    border-radius: 22px;
     overflow: hidden;
     position: relative;
-    height: 450px;
+    height: 540px;
     width: 100%;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: all 0.4s ease;
@@ -1701,49 +1701,37 @@ body {
 
 .destination-badge {
     position: absolute;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 18px;
+    right: 18px;
+    left: auto;
     z-index: 3;
     display: inline-flex;
     align-items: baseline;
-    gap: 0.45rem;
-    padding: 0.42rem 0.6rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(255, 102, 0, 0.22);
+    gap: 0.35rem;
+    max-width: calc(100% - 36px);
+    padding: 0.5rem 0.8rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     color: #333333;
 }
 
-.destination-badge--group {
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(255, 102, 0, 0.26);
-}
-
 .destination-badge__label {
-    font-weight: 800;
-    font-size: 0.72rem;
-    letter-spacing: 0.2px;
-    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0;
+    text-transform: none;
     white-space: nowrap;
     color: #FF6600;
 }
 
 .destination-badge__value {
-    font-weight: 900;
+    font-weight: 700;
     font-size: 0.95rem;
     line-height: 1;
     white-space: nowrap;
-    color: #333333;
-}
-
-.destination-badge__suffix {
-    font-weight: 700;
-    font-size: 0.72rem;
-    opacity: 0.85;
-    white-space: nowrap;
-    color: #666666;
+    color: #1a1a1a;
 }
 
 .destination-image-link {
@@ -1761,7 +1749,7 @@ body {
 
 .destination-image {
     width: 100%;
-    height: 450px;
+    height: 540px;
     position: absolute;
     top: 0;
     left: 0;
@@ -1773,8 +1761,8 @@ body {
 .destination-image img {
     width: 100%;
     height: 100%;
-    min-height: 450px;
-    max-height: 450px;
+    min-height: 540px;
+    max-height: 540px;
     object-fit: cover;
     object-position: center;
     display: block;
@@ -1936,11 +1924,11 @@ body {
 @media (max-width: 768px) {
     .destination-card {
         min-width: 100%;
-        height: 400px;
+        height: 480px;
     }
     
     .destination-image {
-        height: 400px;
+        height: 480px;
         position: absolute;
         top: 0;
         left: 0;
@@ -1950,8 +1938,8 @@ body {
     
     .destination-image img {
         height: 100%;
-        min-height: 400px;
-        max-height: 400px;
+        min-height: 480px;
+        max-height: 480px;
         position: absolute;
         top: 0;
         left: 0;

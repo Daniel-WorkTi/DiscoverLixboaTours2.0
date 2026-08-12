@@ -68,7 +68,7 @@ export function validateCheckoutPayload(
   );
   const minBookable = getMinBookablePassengers(tourId);
   const rawQty = Number(b.quantity);
-  // Dentro da capacidade do veículo mas sem preço definido (ex.: Lisboa 8)
+  // Dentro da capacidade do veículo mas sem preço definido
   if (
     Number.isFinite(rawQty) &&
     rawQty > maxBookable &&
@@ -79,10 +79,7 @@ export function validateCheckoutPayload(
       failure: {
         status: 400,
         body: {
-          error:
-            tourId === "lisboa"
-              ? `Lisboa aceita no máximo ${maxBookable} pessoas por reserva. O preço para 8 pessoas ainda não está disponível.`
-              : `Máximo de ${maxBookable} pessoas para este tour.`,
+          error: `Máximo de ${maxBookable} pessoas para este tour.`,
           code: "UNSUPPORTED_QUANTITY",
         },
       },

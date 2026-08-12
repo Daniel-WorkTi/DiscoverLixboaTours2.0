@@ -63,12 +63,10 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     ).toBe(false);
   });
 
-  it("rejeita quantidade acima do máximo bookable do tour (Lisboa = 7)", () => {
-    const highLisboa = validateCheckoutPayload({ ...baseGood, quantity: 8 });
-    expect(highLisboa.ok).toBe(false);
-    if (!highLisboa.ok) {
-      expect(highLisboa.failure.body.code).toBe("UNSUPPORTED_QUANTITY");
-    }
+  it("aceita 8 passageiros em todos os tours bookable e rejeita 9 (clamp)", () => {
+    const lisboa8 = validateCheckoutPayload({ ...baseGood, quantity: 8 });
+    expect(lisboa8.ok).toBe(true);
+    if (lisboa8.ok) expect(lisboa8.data.quantity).toBe(8);
 
     const highSintra = validateCheckoutPayload({
       ...baseGood,

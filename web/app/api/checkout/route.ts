@@ -122,10 +122,7 @@ export async function POST(req: Request) {
     const maxBookable = getMaxBookablePassengers(tourId);
     return NextResponse.json(
       {
-        error:
-          tourId === "lisboa"
-            ? `Lisboa aceita no máximo ${maxBookable} pessoas por reserva. O preço para 8 pessoas ainda não está disponível.`
-            : `Esta quantidade não está disponível para este tour (máx. ${maxBookable} pessoas).`,
+        error: `Esta quantidade não está disponível para este tour (máx. ${maxBookable} pessoas).`,
         code: "UNSUPPORTED_QUANTITY",
       },
       { status: 400 },
