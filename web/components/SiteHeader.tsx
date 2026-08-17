@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { key: "menu_about", label: "Sobre", hash: "sobre" },
   { key: "menu_services", label: "Serviços", hash: "servicos" },
   { key: "menu_executive", label: "Executive", href: "/executive" },
-  { key: "menu_contact", label: "Contato", hash: "instagram" },
+  { key: "menu_contact", label: "Contacto", hash: "instagram" },
 ] as const;
 
 function navHref(base: "" | "/", hash: string): string {

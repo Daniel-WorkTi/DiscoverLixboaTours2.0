@@ -13,6 +13,7 @@ const destinations = [
     places: "Palácios & Praias Secretas",
     label: "Ver detalhes do tour Sintra e Cascais",
     priceFrom: "€250",
+    priceUnit: "group" as const,
   },
   {
     href: "/tours/3-destinos",
@@ -23,6 +24,7 @@ const destinations = [
     places: "Fátima • Nazaré • Óbidos",
     label: "Ver detalhes do tour 3 Destinos",
     priceFrom: "€85",
+    priceUnit: "person" as const,
   },
   {
     href: "/tours/fatima-tomar",
@@ -33,6 +35,7 @@ const destinations = [
     places: "Peregrinação & património UNESCO",
     label: "Ver detalhes do tour Fátima e Tomar",
     priceFrom: "€310",
+    priceUnit: "group" as const,
   },
   {
     href: "/tours/monsanto",
@@ -43,6 +46,7 @@ const destinations = [
     places: "Portugal Autêntico · Hidden Gems",
     label: "Ver tour Monsanto e Centro de Portugal",
     priceFrom: "€600",
+    priceUnit: "group" as const,
   },
   {
     href: "/tours/lisboa",
@@ -53,6 +57,7 @@ const destinations = [
     places: "Capital Vibrante",
     label: "Ver detalhes do tour Lisboa",
     priceFrom: "€250",
+    priceUnit: "group" as const,
   },
   {
     href: "/tours/porto",
@@ -60,9 +65,10 @@ const destinations = [
     alt: "Porto",
     nameKey: "destination_porto_name",
     placesKey: "destination_porto_places",
-    places: "Um Dia de Patrimônio, História & Vinho",
+    places: "Um Dia de Património, História & Vinho",
     label: "Ver detalhes do tour Porto",
     priceFrom: "€700",
+    priceUnit: "group" as const,
   },
   {
     href: "/tours/arraabida",
@@ -73,6 +79,7 @@ const destinations = [
     places: "Natureza, História e Vistas Incríveis",
     label: "Ver detalhes do tour Arrábida, Setúbal e Sesimbra",
     priceFrom: "€75",
+    priceUnit: "person" as const,
   },
   {
     href: "/tours/aveiro",
@@ -83,6 +90,7 @@ const destinations = [
     places: "Canais, moliceiros e casas às riscas",
     label: "Ver detalhes do tour Aveiro e Costa Nova",
     priceFrom: "€100",
+    priceUnit: "person" as const,
   },
   {
     href: "/tours/alentejo",
@@ -93,6 +101,7 @@ const destinations = [
     places: "Premium · Património, vinha & mesa alentejana",
     label: "Ver Premium Alentejo Wine, Food & Culture Experience",
     priceFrom: "€145",
+    priceUnit: "person" as const,
   },
   {
     href: "/tours/algarve",
@@ -103,6 +112,7 @@ const destinations = [
     places: "Costa do Sol",
     label: "Ver detalhes do tour Algarve",
     priceFrom: "€600",
+    priceUnit: "group" as const,
   },
 ];
 
@@ -299,7 +309,7 @@ export function HomePage() {
           <div className="about-image">
             <Image
               src="/assets/images/sobre/img-sobre.webp"
-              alt="Sobre Nós - DiscoverTour Portugal"
+              alt="Sobre Nós - DiscoverLixboaTours Portugal"
               width={600}
               height={700}
             />
@@ -313,7 +323,7 @@ export function HomePage() {
               Explore Portugal com um toque local!
             </h2>
             <p className="about-description" data-translate="about_description1">
-              Com base em Sintra, a Discoverlix Boatours oferece tours autênticos
+              Com base em Sintra, a DiscoverLixboaTours oferece tours autênticos
               de palácios, montanhas e praias em Sintra e Cascais, além de Lisboa,
               Nazaré, Fátima, Óbidos, Porto e Algarve.
             </p>

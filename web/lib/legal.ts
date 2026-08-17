@@ -1,3 +1,5 @@
+import { BRAND_EMAIL, BRAND_SITE_URL } from "@/lib/brand";
+
 export type LegalCompanyInfo = {
   legalName: string;
   vatNumber: string;
@@ -22,9 +24,9 @@ export const COMPANY: LegalCompanyInfo = {
   address: "Rua dos Ourives, nº 24, Linhó, 2710-333 Sintra",
   country: "Portugal",
   operatingCountries: "Portugal e Espanha",
-  publicSiteUrl: "https://www.discoverlixboatours.com/",
-  bookingNotifyEmail: "websitediscoverlixboatours@gmail.com",
-  privacyEmail: "websitediscoverlixboatours@gmail.com",
+  publicSiteUrl: BRAND_SITE_URL,
+  bookingNotifyEmail: BRAND_EMAIL,
+  privacyEmail: BRAND_EMAIL,
   phone: "+351 934 483 853",
   retentionBookings:
     "Retenção: seguimos os prazos padrão definidos pela Stripe para dados de pagamento e registos associados. Mantemos apenas o necessário para gestão operacional de reservas e cumprimento de obrigações aplicáveis.",

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BRAND_EMAIL, BRAND_NAME } from "@/lib/brand";
 import { getSiteNavBase, type SiteNavVariant } from "@/lib/site-nav";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 
@@ -18,7 +19,7 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
           <div className="footer-brand">
             <Image
               src="/assets/images/hero/logo.png.webp"
-              alt="DiscoverTour Logo"
+              alt={`${BRAND_NAME} Logo`}
               width={180}
               height={72}
               className="footer-logo"
@@ -77,7 +78,7 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
           </div>
 
           <div className="footer-contact">
-            <h3 data-translate="footer_contact">Contato</h3>
+            <h3 data-translate="footer_contact">Contacto</h3>
             <ul>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -91,7 +92,7 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
                   <rect width="20" height="16" x="2" y="4" rx="2" />
                   <path d="m2 7 10 7 10-7" />
                 </svg>
-                <span data-translate="footer_email">websitediscoverlixboatours@gmail.com</span>
+                <span data-translate="footer_email">{BRAND_EMAIL}</span>
               </li>
             </ul>
           </div>
@@ -135,7 +136,7 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
 
         <div className="footer-bottom">
           <p>
-            &copy; {new Date().getFullYear()} DiscoverTour.{" "}
+            &copy; {new Date().getFullYear()} {BRAND_NAME}.{" "}
             <span data-translate="footer_rights_part">Todos os direitos reservados.</span>
           </p>
           <p>

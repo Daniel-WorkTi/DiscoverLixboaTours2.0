@@ -1734,6 +1734,14 @@ body {
     color: #1a1a1a;
 }
 
+.destination-badge__unit {
+    font-weight: 600;
+    font-size: 0.7rem;
+    line-height: 1;
+    white-space: nowrap;
+    color: #555555;
+}
+
 .destination-image-link {
     display: block;
     width: 100%;

@@ -181,7 +181,7 @@ export function HomePageRest({
             <div className="instagram-profile">
               <Image
                 src="/assets/images/hero/logo.png.webp"
-                alt="DiscoverTour Logo"
+                alt="DiscoverLixboaTours Logo"
                 width={64}
                 height={64}
                 className="profile-pic"

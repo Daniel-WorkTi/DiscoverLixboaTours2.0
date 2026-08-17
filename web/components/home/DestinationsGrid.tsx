@@ -12,6 +12,8 @@ export type DestinationCard = {
   places: string;
   label: string;
   priceFrom: string;
+  /** Unidade do preço mostrado no badge da home. */
+  priceUnit: "group" | "person";
 };
 
 type Props = {
@@ -181,11 +183,17 @@ export function DestinationsGrid({ destinations }: Props) {
       <div className="destinations-grid" role="list">
         {filtered.map((d) => (
           <div className="destination-card" key={d.href} role="listitem">
-            <div className="destination-badge" aria-label={`A partir de ${d.priceFrom}`}>
+            <div
+              className="destination-badge"
+              aria-label={`A partir de ${d.priceFrom} ${d.priceUnit === "group" ? "por grupo" : "por pessoa"}`}
+            >
               <span className="destination-badge__label" data-translate="price_label">
                 A partir de
               </span>
               <span className="destination-badge__value">{d.priceFrom}</span>
+              <span className="destination-badge__unit">
+                {d.priceUnit === "group" ? "/ grupo" : "/ pessoa"}
+              </span>
             </div>
 
             <a href={d.href} className="destination-image-link">
