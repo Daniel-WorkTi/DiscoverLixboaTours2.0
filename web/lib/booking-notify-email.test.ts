@@ -13,7 +13,7 @@ describe("getBookingNotifyEmail", () => {
 
   it("usa o email oficial do site por defeito", () => {
     delete process.env.BOOKING_NOTIFY_EMAIL;
-    expect(getBookingNotifyEmail()).toBe("discoverlixboatours@gmail.com");
+    expect(getBookingNotifyEmail()).toBe("websitediscoverlixboatours@gmail.com");
   });
 
   it("respeita BOOKING_NOTIFY_EMAIL quando definido", () => {

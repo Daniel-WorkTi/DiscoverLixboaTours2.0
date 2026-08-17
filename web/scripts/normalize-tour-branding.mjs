@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dir = path.join(root, "tour-sources");
 const BRAND = "DiscoverLixboaTours";
-const EMAIL = "discoverlixboatours@gmail.com";
+const EMAIL = "websitediscoverlixboatours@gmail.com";
 const WA =
   "https://wa.me/351934483853?text=Thank%20you%20for%20contacting%20us!%20We%20are%20at%20your%20service.%20Descubralixboatours";
 const YEAR = String(new Date().getFullYear());
