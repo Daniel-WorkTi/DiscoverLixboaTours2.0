@@ -224,48 +224,48 @@ describe("Lisboa — preçário 1–8", () => {
   it("totais confirmados 1–8", () => {
     expect(getPricingRuleFromTable("lisboa", 1)).toEqual({
       kind: "per_group",
-      centsTotal: 24000,
+      centsTotal: 25000,
     });
     expect(getPricingRuleFromTable("lisboa", 2)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 12000,
+      kind: "per_group",
+      centsTotal: 25000,
     });
-    expect(totalFromRule("lisboa", 2)).toBe(24000);
+    expect(totalFromRule("lisboa", 2)).toBe(25000);
     expect(getPricingRuleFromTable("lisboa", 3)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 11000,
+      kind: "per_group",
+      centsTotal: 30000,
     });
-    expect(totalFromRule("lisboa", 3)).toBe(33000);
+    expect(totalFromRule("lisboa", 3)).toBe(30000);
     expect(getPricingRuleFromTable("lisboa", 4)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 10000,
+      kind: "per_group",
+      centsTotal: 35000,
     });
-    expect(totalFromRule("lisboa", 4)).toBe(40000);
+    expect(totalFromRule("lisboa", 4)).toBe(35000);
     expect(getPricingRuleFromTable("lisboa", 5)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 10000,
+      kind: "per_group",
+      centsTotal: 40000,
     });
-    expect(totalFromRule("lisboa", 5)).toBe(50000);
+    expect(totalFromRule("lisboa", 5)).toBe(40000);
     expect(getPricingRuleFromTable("lisboa", 6)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 9000,
+      kind: "per_group",
+      centsTotal: 45000,
     });
-    expect(totalFromRule("lisboa", 6)).toBe(54000);
+    expect(totalFromRule("lisboa", 6)).toBe(45000);
     expect(getPricingRuleFromTable("lisboa", 7)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 9000,
+      kind: "per_group",
+      centsTotal: 50000,
     });
-    expect(totalFromRule("lisboa", 7)).toBe(63000);
+    expect(totalFromRule("lisboa", 7)).toBe(50000);
     expect(getPricingRuleFromTable("lisboa", 8)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 9000,
+      kind: "per_group",
+      centsTotal: 55000,
     });
-    expect(totalFromRule("lisboa", 8)).toBe(72000);
+    expect(totalFromRule("lisboa", 8)).toBe(55000);
   });
 
-  it("8 pessoas é bookable (mesma taxa €90 da faixa 6–8)", () => {
+  it("8 pessoas é bookable (€550 grupo)", () => {
     expect(getMaxBookablePassengers("lisboa")).toBe(8);
-    expect(estimateFromTable("lisboa", 8)?.totalCents).toBe(72000);
+    expect(estimateFromTable("lisboa", 8)?.totalCents).toBe(55000);
   });
 });
 
@@ -323,10 +323,10 @@ describe("Arrábida & Sesimbra — novo preçário por pessoa (1–8)", () => {
 });
 
 describe("Outros destinos (amostras)", () => {
-  it("Lisboa 1 pessoa = 240 € (total grupo)", () => {
+  it("Lisboa 1 pessoa = 250 € (total grupo)", () => {
     expect(getPricingRuleFromTable("lisboa", 1)).toEqual({
       kind: "per_group",
-      centsTotal: 24000,
+      centsTotal: 25000,
     });
   });
 

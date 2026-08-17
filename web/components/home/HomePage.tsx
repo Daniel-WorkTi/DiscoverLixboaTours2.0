@@ -52,7 +52,7 @@ const destinations = [
     placesKey: "destination_lisboa_places",
     places: "Capital Vibrante",
     label: "Ver detalhes do tour Lisboa",
-    priceFrom: "€90",
+    priceFrom: "€250",
   },
   {
     href: "/tours/porto",

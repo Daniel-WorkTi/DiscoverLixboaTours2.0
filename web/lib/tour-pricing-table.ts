@@ -128,13 +128,15 @@ export function getPricingRuleFromTable(
     return null;
   }
 
-  // Lisboa — por pessoa até 8 (6–8 = €90)
+  // Lisboa — totais por grupo privado (1–8)
   if (tourId === "lisboa") {
-    if (q === 1) return { kind: "per_group", centsTotal: 24000 };
-    if (q === 2) return { kind: "per_person", centsPerPerson: 12000 };
-    if (q === 3) return { kind: "per_person", centsPerPerson: 11000 };
-    if (q >= 4 && q <= 5) return { kind: "per_person", centsPerPerson: 10000 };
-    if (q >= 6 && q <= 8) return { kind: "per_person", centsPerPerson: 9000 };
+    if (q <= 2) return { kind: "per_group", centsTotal: 25000 };
+    if (q === 3) return { kind: "per_group", centsTotal: 30000 };
+    if (q === 4) return { kind: "per_group", centsTotal: 35000 };
+    if (q === 5) return { kind: "per_group", centsTotal: 40000 };
+    if (q === 6) return { kind: "per_group", centsTotal: 45000 };
+    if (q === 7) return { kind: "per_group", centsTotal: 50000 };
+    if (q === 8) return { kind: "per_group", centsTotal: 55000 };
     return null;
   }
 
@@ -240,15 +242,10 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "lisboa") {
-    if (rule.kind === "per_group") {
-      return { kind: "per_group", totalCents: rule.centsTotal, label: "1 pessoa (240 €)" };
-    }
-    return {
-      kind: "per_person",
-      centsPerPerson: rule.centsPerPerson,
-      totalCents: rule.centsPerPerson * q,
-      label: q === 2 ? "2 pessoas (240 € total)" : `${q} pessoas`,
-    };
+    if (rule.kind !== "per_group") return null;
+    const label =
+      q <= 2 ? "1–2 pessoas" : q === 3 ? "3 pessoas" : `${q} pessoas`;
+    return { kind: "per_group", totalCents: rule.centsTotal, label };
   }
 
   if (tourId === "arraabida") {
