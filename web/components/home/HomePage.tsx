@@ -42,7 +42,7 @@ const destinations = [
     placesKey: "destination_monsanto_places",
     places: "Portugal Autêntico · Hidden Gems",
     label: "Ver tour Monsanto e Centro de Portugal",
-    priceFrom: "€113",
+    priceFrom: "€600",
   },
   {
     href: "/tours/lisboa",

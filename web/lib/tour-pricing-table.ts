@@ -84,15 +84,12 @@ const MONSANTO_EXACT_TOTALS: Record<number, number> = {
   7: 85000,
   8: 90000,
 };
-const MONSANTO_DISPLAY_CPP: Record<number, number> = {
-  2: 30000,
-  3: 21700,
-  4: 17500,
-  5: 15000,
-  6: 13300,
-  7: 12100,
-  8: 11300,
-};
+const MONSANTO_DISPLAY_CPP: Record<number, number> = Object.fromEntries(
+  Object.entries(MONSANTO_EXACT_TOTALS).map(([q, total]) => [
+    Number(q),
+    Math.round(total / Number(q)),
+  ]),
+);
 
 /** Regra para o Stripe Checkout (sem labels). */
 export function getPricingRuleFromTable(

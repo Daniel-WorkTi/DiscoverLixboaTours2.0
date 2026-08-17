@@ -368,12 +368,12 @@ describe("Outros destinos (amostras)", () => {
     };
     const display: Record<number, number> = {
       2: 30000,
-      3: 21700,
+      3: 21667, // 650÷3
       4: 17500,
       5: 15000,
-      6: 13300,
-      7: 12100,
-      8: 11300,
+      6: 13333, // 800÷6
+      7: 12143, // 850÷7
+      8: 11250, // 900÷8
     };
     expect(getMinBookablePassengers("monsanto")).toBe(2);
     expect(getMaxBookablePassengers("monsanto")).toBe(8);
