@@ -14,6 +14,7 @@ const destinations = [
     label: "Ver detalhes do tour Sintra e Cascais",
     priceFrom: "€250",
     priceUnit: "group" as const,
+    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
     href: "/tours/3-destinos",
@@ -25,6 +26,7 @@ const destinations = [
     label: "Ver detalhes do tour 3 Destinos",
     priceFrom: "€85",
     priceUnit: "person" as const,
+    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
     href: "/tours/fatima-tomar",
@@ -36,6 +38,7 @@ const destinations = [
     label: "Ver detalhes do tour Fátima e Tomar",
     priceFrom: "€310",
     priceUnit: "group" as const,
+    cardMeta: "Private Tour · 9–10 Hours · Up to 8 Guests",
   },
   {
     href: "/tours/monsanto",
@@ -45,8 +48,9 @@ const destinations = [
     placesKey: "destination_monsanto_places",
     places: "Portugal Autêntico · Hidden Gems",
     label: "Ver tour Monsanto e Centro de Portugal",
-    priceFrom: "€600",
-    priceUnit: "group" as const,
+    priceFrom: "€113",
+    priceUnit: "person" as const,
+    cardMeta: "Private Full-Day · Up to 8 Guests",
   },
   {
     href: "/tours/lisboa",
@@ -58,6 +62,7 @@ const destinations = [
     label: "Ver detalhes do tour Lisboa",
     priceFrom: "€250",
     priceUnit: "group" as const,
+    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
     href: "/tours/porto",
@@ -69,6 +74,7 @@ const destinations = [
     label: "Ver detalhes do tour Porto",
     priceFrom: "€700",
     priceUnit: "group" as const,
+    cardMeta: "Private Tour · Full Day · Up to 8 Guests",
   },
   {
     href: "/tours/arraabida",
@@ -80,6 +86,7 @@ const destinations = [
     label: "Ver detalhes do tour Arrábida, Setúbal e Sesimbra",
     priceFrom: "€75",
     priceUnit: "person" as const,
+    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
     href: "/tours/aveiro",
@@ -91,6 +98,7 @@ const destinations = [
     label: "Ver detalhes do tour Aveiro e Costa Nova",
     priceFrom: "€100",
     priceUnit: "person" as const,
+    cardMeta: "Private Tour · 8–9 Hours · Up to 8 Guests",
   },
   {
     href: "/tours/alentejo",
@@ -102,6 +110,7 @@ const destinations = [
     label: "Ver Premium Alentejo Wine, Food & Culture Experience",
     priceFrom: "€145",
     priceUnit: "person" as const,
+    cardMeta: "Private Tour · Full Day · Up to 8 Guests",
   },
   {
     href: "/tours/algarve",
@@ -113,6 +122,7 @@ const destinations = [
     label: "Ver detalhes do tour Algarve",
     priceFrom: "€600",
     priceUnit: "group" as const,
+    cardMeta: "Private Tour · Full Day · Up to 8 Guests",
   },
 ];
 

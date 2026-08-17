@@ -1834,6 +1834,17 @@ body {
     text-overflow: ellipsis;
 }
 
+.destination-meta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #555555;
+    margin: 0.35rem 0 0;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .destination-btn {
     flex-shrink: 0;
     width: 50px;

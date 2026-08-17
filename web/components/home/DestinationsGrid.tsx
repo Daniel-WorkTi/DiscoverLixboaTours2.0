@@ -14,6 +14,8 @@ export type DestinationCard = {
   priceFrom: string;
   /** Unidade do preço mostrado no badge da home. */
   priceUnit: "group" | "person";
+  /** Linha comercial curta (duração / privado / capacidade). */
+  cardMeta: string;
 };
 
 type Props = {
@@ -216,6 +218,7 @@ export function DestinationsGrid({ destinations }: Props) {
                 <p className="destination-places" data-translate={d.placesKey}>
                   {d.places}
                 </p>
+                <p className="destination-meta">{d.cardMeta}</p>
               </div>
               <a href={d.href} className="destination-btn" aria-label={d.label}>
                 <svg viewBox="0 0 256 256" fill="currentColor">
