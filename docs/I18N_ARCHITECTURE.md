@@ -66,17 +66,24 @@ O checkout usa `getPricingRuleFromTable` → `pricingRuleFromMigratedSlug` (font
 
 `LanguageSwitcher` troca entre path PT e `/en` + mesmo path; grava cookie `dl_lang` e `localStorage.language`.
 
-## Legado removido (fases D/E)
+## Legado removido
 
-- ~~`translate.js`~~ — removido
-- ~~`TranslateBridge`~~ — removido
-- ~~`data-translate` em componentes React~~ — zero
+- `translate.js` / `TranslateBridge` / `data-translate` em React
+- HTML `public/tour-*.html` e `tour-sources/`
+- Scripts `patch-tours` / normalize HTML
+- Fallbacks de preço em `tour-pricing-table.ts` (só `content/tours`)
+
+## Páginas legais
+
+`/privacidade`, `/cookies`, `/termos`, `/sgpd` (+ `/en/...`) via `messages/legal.ts`.
 
 ## Validação
 
 ```bash
 cd web
-npm test -- content/tours/tours.integrity.test.ts
+npm test -- content/tours/tours.integrity.test.ts lib/tour-pricing-table.test.ts
 npm run lint
 npm run build
 ```
+
+Checklist manual: `docs/I18N_AUDIT_CHECKLIST.md`.

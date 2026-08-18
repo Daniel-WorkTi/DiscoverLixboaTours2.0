@@ -25,6 +25,8 @@ export type Messages = {
     executiveLink: string;
     terms: string;
     privacy: string;
+    cookies: string;
+    sgpd: string;
     dev: string;
   };
   tour: {
@@ -324,6 +326,8 @@ export const messagesPt: Messages = {
     executiveLink: "Executive & Concierge",
     terms: "Termos de Uso",
     privacy: "Política de Privacidade",
+    cookies: "Cookies",
+    sgpd: "Direitos SGPD",
     dev: "Desenvolvido por",
   },
   tour: {
@@ -754,6 +758,8 @@ export const messagesEn: Messages = {
     executiveLink: "Executive & Concierge",
     terms: "Terms of Use",
     privacy: "Privacy Policy",
+    cookies: "Cookies",
+    sgpd: "GDPR Rights",
     dev: "Developed by",
   },
   tour: {

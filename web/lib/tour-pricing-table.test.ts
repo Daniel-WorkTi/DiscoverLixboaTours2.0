@@ -374,15 +374,6 @@ describe("Outros destinos (amostras)", () => {
       7: 85000,
       8: 90000,
     };
-    const display: Record<number, number> = {
-      2: 30000,
-      3: 21700,
-      4: 17500,
-      5: 15000,
-      6: 13300,
-      7: 12100,
-      8: 11300,
-    };
     expect(getMinBookablePassengers("monsanto")).toBe(2);
     expect(getMaxBookablePassengers("monsanto")).toBe(8);
     expect(getPricingRuleFromTable("monsanto", 1)).toBeNull();
@@ -395,7 +386,7 @@ describe("Outros destinos (amostras)", () => {
       const est = estimateFromTable("monsanto", q);
       expect(est?.kind).toBe("per_person");
       if (est?.kind === "per_person") {
-        expect(est.centsPerPerson).toBe(display[q]);
+        expect(est.centsPerPerson).toBe(Math.round(totals[q] / q));
         expect(est.totalCents).toBe(totals[q]);
       }
     }
@@ -445,7 +436,7 @@ describe("Outros destinos (amostras)", () => {
     expect(estimateFromTable("fatima-tomar", 8)).toEqual({
       kind: "per_group",
       totalCents: 59000,
-      label: "7–8 pessoas",
+      label: "8 pessoas",
     });
   });
 
@@ -499,15 +490,6 @@ describe("Outros destinos (amostras)", () => {
       7: 75000,
       8: 80000,
     };
-    const display: Record<number, number> = {
-      2: 25000,
-      3: 18300,
-      4: 15000,
-      5: 13000,
-      6: 11700,
-      7: 10800,
-      8: 10000,
-    };
     expect(getMinBookablePassengers("aveiro")).toBe(2);
     expect(getMaxBookablePassengers("aveiro")).toBe(8);
     expect(getPricingRuleFromTable("aveiro", 1)).toBeNull();
@@ -520,7 +502,7 @@ describe("Outros destinos (amostras)", () => {
       const est = estimateFromTable("aveiro", q);
       expect(est?.kind).toBe("per_person");
       if (est?.kind === "per_person") {
-        expect(est.centsPerPerson).toBe(display[q]);
+        expect(est.centsPerPerson).toBe(Math.round(totals[q] / q));
         expect(est.totalCents).toBe(totals[q]);
       }
     }

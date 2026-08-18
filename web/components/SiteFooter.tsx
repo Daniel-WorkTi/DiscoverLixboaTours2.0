@@ -60,13 +60,13 @@ export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps)
                 <Link href={withLocalePrefix("/privacidade", locale)}>{m.footer.privacy}</Link>
               </li>
               <li>
-                <Link href={withLocalePrefix("/cookies", locale)}>Cookies</Link>
+                <Link href={withLocalePrefix("/cookies", locale)}>{m.footer.cookies}</Link>
               </li>
               <li>
                 <Link href={withLocalePrefix("/termos", locale)}>{m.footer.terms}</Link>
               </li>
               <li>
-                <Link href={withLocalePrefix("/sgpd", locale)}>Direitos SGPD</Link>
+                <Link href={withLocalePrefix("/sgpd", locale)}>{m.footer.sgpd}</Link>
               </li>
             </ul>
           </div>

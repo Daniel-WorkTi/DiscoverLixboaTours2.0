@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { COMPANY, DATA_PROCESSORS } from "@/lib/legal";
-export const metadata: Metadata = {
-  title: "Política de Privacidade | DiscoverLixboaTours",
-  description:
-    "Informação sobre tratamento de dados pessoais, finalidades, base legal, prazos de retenção e direitos dos titulares (SGPD/GDPR).",
-};
+import { COMPANY } from "@/lib/legal";
+import { withLocalePrefix } from "@/lib/i18n/locale";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { getLegalMessages } from "@/messages/legal";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const m = getLegalMessages(locale).privacy;
+  return { title: m.metaTitle, description: m.metaDescription };
+}
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
@@ -16,105 +20,107 @@ function Row({ k, v }: { k: string; v: string }) {
   );
 }
 
-export default function PrivacidadePage() {
+export default async function PrivacidadePage() {
+  const locale = await getRequestLocale();
+  const L = getLegalMessages(locale);
+  const m = L.privacy;
+  const processors = [
+    { name: "Stripe", purpose: L.processors.stripe },
+    { name: "Google Calendar", purpose: L.processors.googleCalendar },
+    { name: "Vercel", purpose: L.processors.vercel },
+  ];
+
   return (
     <main className="reservar-main">
-        <div className="reservar-shell">
-          <Link href="/" className="reservar-back">
-            ← Voltar ao site
-          </Link>
+      <div className="reservar-shell">
+        <Link href={withLocalePrefix("/", locale)} className="reservar-back">
+          {L.back}
+        </Link>
 
-          <h1>Política de Privacidade</h1>
-          <p className="reservar-lead">
-            Como tratamos dados pessoais no âmbito das reservas e do apoio ao cliente (SGPD/GDPR).
-          </p>
+        <h1>{m.title}</h1>
+        <p className="reservar-lead">{m.lead}</p>
 
-          <section className="legal-grid-info">
-            <Row k="Responsável pelo tratamento" v={COMPANY.legalName} />
-            <Row k="NIF" v={COMPANY.vatNumber} />
-            <Row k="Morada" v={COMPANY.address} />
-            <Row k="Email (privacidade)" v={COMPANY.privacyEmail} />
-            <Row k="Âmbito" v={COMPANY.operatingCountries} />
-          </section>
+        <section className="legal-grid-info">
+          <Row k={m.rows.controller} v={COMPANY.legalName} />
+          <Row k={m.rows.vat} v={COMPANY.vatNumber} />
+          <Row k={m.rows.address} v={COMPANY.address} />
+          <Row k={m.rows.email} v={COMPANY.privacyEmail} />
+          <Row k={m.rows.scope} v={L.company.operatingCountries} />
+        </section>
 
-          <section className="legal-stack">
-            <article className="legal-card">
-              <h2 className="legal-card__title">Que dados recolhemos</h2>
-              <div className="legal-card__content">
-                <ul className="legal-list">
-                  <li>Nome, email e telefone.</li>
-                  <li>Tour escolhido, nº de pessoas e data preferida.</li>
-                  <li>Notas do cliente (ex.: pickup, preferências, restrições).</li>
-                  <li>Dados técnicos essenciais (cookies essenciais e logs de segurança).</li>
-                </ul>
+        <section className="legal-stack">
+          <article className="legal-card">
+            <h2 className="legal-card__title">{m.dataTitle}</h2>
+            <div className="legal-card__content">
+              <ul className="legal-list">
+                {m.dataItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          <article className="legal-card">
+            <h2 className="legal-card__title">{m.purposesTitle}</h2>
+            <div className="legal-card__content">
+              <p>{m.purposesP1}</p>
+              <p>{m.purposesP2}</p>
+            </div>
+          </article>
+
+          <article className="legal-card">
+            <h2 className="legal-card__title">{m.processorsTitle}</h2>
+            <div className="legal-card__content">
+              <p>{L.processorsIntro}</p>
+              <ul className="legal-processor-list">
+                {processors.map((p) => (
+                  <li key={p.name}>
+                    <strong>{p.name}</strong>
+                    <span className="muted"> — {p.purpose}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          <article className="legal-card">
+            <h2 className="legal-card__title">{m.retentionTitle}</h2>
+            <div className="legal-card__content">
+              <p>{L.company.retentionBookings}</p>
+            </div>
+          </article>
+
+          <article className="legal-card">
+            <h2 className="legal-card__title">{m.rightsTitle}</h2>
+            <div className="legal-card__content">
+              <p>{m.rightsP}</p>
+              <div className="legal-actions">
+                <a
+                  className="legal-btn legal-btn--primary"
+                  href={`mailto:${COMPANY.privacyEmail}?subject=${encodeURIComponent(m.emailSubject)}`}
+                >
+                  {m.emailCta}
+                </a>
+                <Link
+                  className="legal-btn legal-btn--ghost"
+                  href={withLocalePrefix("/cookies", locale)}
+                >
+                  {m.linkCookies}
+                </Link>
+                <Link
+                  className="legal-btn legal-btn--ghost"
+                  href={withLocalePrefix("/sgpd", locale)}
+                >
+                  {m.linkSgpd}
+                </Link>
               </div>
-            </article>
-
-            <article className="legal-card">
-              <h2 className="legal-card__title">Finalidades e bases legais</h2>
-              <div className="legal-card__content">
-                <p>
-                  Gestão de reservas, comunicação com o cliente e, quando aplicável, cumprimento de
-                  obrigações legais.
-                </p>
-                <p>
-                  A base legal pode incluir execução de contrato (reserva), diligências
-                  pré-contratuais, obrigação legal e interesse legítimo (segurança/prevenção de
-                  fraude).
-                </p>
-              </div>
-            </article>
-
-            <article className="legal-card">
-              <h2 className="legal-card__title">Subcontratantes</h2>
-              <div className="legal-card__content">
-                <p>Prestadores usados para operar o website e processar pagamentos:</p>
-                <ul className="legal-processor-list">
-                  {DATA_PROCESSORS.map((p) => (
-                    <li key={p.name}>
-                      <strong>{p.name}</strong>
-                      <span className="muted"> — {p.purpose}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-
-            <article className="legal-card">
-              <h2 className="legal-card__title">Retenção</h2>
-              <div className="legal-card__content">
-                <p>{COMPANY.retentionBookings}</p>
-              </div>
-            </article>
-
-            <article className="legal-card">
-              <h2 className="legal-card__title">Direitos do titular</h2>
-              <div className="legal-card__content">
-                <p>
-                  Pode exercer direitos de acesso, retificação, apagamento, limitação, oposição e
-                  portabilidade (quando aplicável). Para pedidos SGPD, contacte-nos por email.
-                </p>
-                <div className="legal-actions">
-                  <a
-                    className="legal-btn legal-btn--primary"
-                    href={`mailto:${COMPANY.privacyEmail}?subject=${encodeURIComponent("Pedido SGPD (Privacidade)")}`}
-                  >
-                    Enviar pedido por email
-                  </a>
-                  <Link className="legal-btn legal-btn--ghost" href="/cookies">
-                    Política de Cookies
-                  </Link>
-                  <Link className="legal-btn legal-btn--ghost" href="/sgpd">
-                    Direitos SGPD
-                  </Link>
-                </div>
-                <p className="legal-meta">
-                  Última atualização: {new Date().toISOString().slice(0, 10)}
-                </p>
-              </div>
-            </article>
-          </section>
-        </div>
+              <p className="legal-meta">
+                {L.lastUpdated}: {new Date().toISOString().slice(0, 10)}
+              </p>
+            </div>
+          </article>
+        </section>
+      </div>
     </main>
   );
 }
