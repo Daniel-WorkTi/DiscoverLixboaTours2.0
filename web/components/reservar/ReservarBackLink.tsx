@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { localeFromPathname, withLocalePrefix } from "@/lib/i18n/locale";
+import { useLocale, useMessages } from "@/lib/i18n/LocaleProvider";
+import { withLocalePrefix } from "@/lib/i18n/locale";
 
 export function ReservarBackLink() {
-  const locale = localeFromPathname(usePathname() || "/");
+  const locale = useLocale();
+  const m = useMessages();
   return (
     <Link href={withLocalePrefix("/", locale)} className="reservar-back">
-      <span data-translate="reservar_back">← Voltar ao site</span>
+      <span>{m.booking.back}</span>
     </Link>
   );
 }

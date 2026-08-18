@@ -1,16 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useId, useMemo, useRef, useState } from "react";
-import { localeFromPathname, withLocalePrefix } from "@/lib/i18n/locale";
+import { useLocale, useMessages } from "@/lib/i18n/LocaleProvider";
+import { withLocalePrefix } from "@/lib/i18n/locale";
 
 export type DestinationCard = {
   href: string;
   img: string;
   alt: string;
-  nameKey: string;
-  placesKey: string;
+  name: string;
   places: string;
   label: string;
   priceFrom: string;
@@ -25,8 +24,8 @@ type Props = {
 };
 
 export function DestinationsGrid({ destinations }: Props) {
-  const pathname = usePathname() || "/";
-  const locale = localeFromPathname(pathname);
+  const locale = useLocale();
+  const m = useMessages();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -38,7 +37,7 @@ export function DestinationsGrid({ destinations }: Props) {
     const s = q.trim().toLowerCase();
     if (!s) return destinations;
     return destinations.filter((d) => {
-      const hay = `${d.alt} ${d.places}`.toLowerCase();
+      const hay = `${d.name} ${d.places}`.toLowerCase();
       return hay.includes(s);
     });
   }, [destinations, q]);
@@ -48,7 +47,7 @@ export function DestinationsGrid({ destinations }: Props) {
     if (!s) return destinations.slice(0, 6);
     const scored = destinations
       .map((d) => {
-        const hay = `${d.alt} ${d.places}`.toLowerCase();
+        const hay = `${d.name} ${d.places}`.toLowerCase();
         const idx = hay.indexOf(s);
         return { d, idx };
       })
@@ -86,8 +85,7 @@ export function DestinationsGrid({ destinations }: Props) {
               setQ(e.target.value);
               setOpen(true);
             }}
-            placeholder="Pesquisar tours…"
-            data-translate-placeholder="tours_search_placeholder"
+            placeholder={m.destinations.searchPlaceholder}
             inputMode="search"
             autoComplete="off"
             spellCheck={false}
@@ -98,7 +96,7 @@ export function DestinationsGrid({ destinations }: Props) {
             aria-activedescendant={
               open && activeIndex >= 0 ? `${listId}-opt-${activeIndex}` : undefined
             }
-            aria-label="Pesquisar tours"
+            aria-label={m.destinations.searchPlaceholder}
             onFocus={() => setOpen(true)}
             onBlur={(e) => {
               if (e.relatedTarget && (e.relatedTarget as HTMLElement).dataset.role === "search-option") {
@@ -127,7 +125,7 @@ export function DestinationsGrid({ destinations }: Props) {
               } else if (e.key === "Enter") {
                 if (activeIndex >= 0 && suggestions[activeIndex]) {
                   e.preventDefault();
-                  applySuggestion(suggestions[activeIndex].alt);
+                  applySuggestion(suggestions[activeIndex].name);
                 }
               }
             }}
@@ -138,7 +136,7 @@ export function DestinationsGrid({ destinations }: Props) {
               className="destinations-search__clear"
               onClick={clear}
             >
-              <span data-translate="tours_search_clear">Limpar pesquisa</span>
+              <span>{m.destinations.searchClear}</span>
             </button>
           ) : null}
           <span className="destinations-search__icon" aria-hidden>
@@ -151,8 +149,7 @@ export function DestinationsGrid({ destinations }: Props) {
 
         <div className="destinations-search__meta" aria-live="polite">
           <span className="destinations-search__count">
-            {filtered.length}{" "}
-            <span data-translate="tours_search_results">resultados</span>
+            {filtered.length} <span>{m.destinations.searchResults}</span>
           </span>
         </div>
 
@@ -170,15 +167,15 @@ export function DestinationsGrid({ destinations }: Props) {
                     role="option"
                     aria-selected={i === activeIndex}
                     onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => applySuggestion(d.alt)}
+                    onClick={() => applySuggestion(d.name)}
                   >
-                    <span className="destinations-search__option-title">{d.alt}</span>
+                    <span className="destinations-search__option-title">{d.name}</span>
                     <span className="destinations-search__option-sub">{d.places}</span>
                   </button>
                 ))
               ) : (
                 <div className="destinations-search__empty">
-                  <span data-translate="tours_search_no_results">Sem resultados</span>
+                  <span>{m.destinations.searchNoResults}</span>
                 </div>
               )}
             </div>
@@ -191,14 +188,12 @@ export function DestinationsGrid({ destinations }: Props) {
           <div className="destination-card" key={d.href} role="listitem">
             <div
               className="destination-badge"
-              aria-label={`A partir de ${d.priceFrom} ${d.priceUnit === "group" ? "por grupo" : "por pessoa"}`}
+              aria-label={`${m.common.priceLabel} ${d.priceFrom} ${d.priceUnit === "group" ? "/ grupo" : m.common.priceUnit}`}
             >
-              <span className="destination-badge__label" data-translate="price_label">
-                A partir de
-              </span>
+              <span className="destination-badge__label">{m.common.priceLabel}</span>
               <span className="destination-badge__value">{d.priceFrom}</span>
               <span className="destination-badge__unit">
-                {d.priceUnit === "group" ? "/ grupo" : "/ pessoa"}
+                {d.priceUnit === "group" ? "/ grupo" : m.common.priceUnit}
               </span>
             </div>
 
@@ -216,12 +211,8 @@ export function DestinationsGrid({ destinations }: Props) {
 
             <div className="destination-content">
               <div className="destination-info">
-                <h3 className="destination-name" data-translate={d.nameKey}>
-                  {d.alt}
-                </h3>
-                <p className="destination-places" data-translate={d.placesKey}>
-                  {d.places}
-                </p>
+                <h3 className="destination-name">{d.name}</h3>
+                <p className="destination-places">{d.places}</p>
                 <p className="destination-meta">{d.cardMeta}</p>
               </div>
               <a
@@ -240,4 +231,3 @@ export function DestinationsGrid({ destinations }: Props) {
     </div>
   );
 }
-

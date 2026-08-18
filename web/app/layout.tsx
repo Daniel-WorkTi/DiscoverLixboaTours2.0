@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk, Outfit } from "next/font/google";
-import Script from "next/script";
-import { TranslateBridge } from "@/components/TranslateBridge";
 import { getRequestLocale } from "@/lib/i18n/server";
 import { htmlLang } from "@/lib/i18n/types";
 import "./globals.css";
@@ -54,28 +52,7 @@ export default async function RootLayout({
 
   return (
     <html lang={htmlLang(locale)} className={`${hanken.variable} ${outfit.variable}`} data-lang={locale}>
-      <body suppressHydrationWarning>
-        <Script id="dl-lang-boot" strategy="beforeInteractive">{`
-(function(){
-  try {
-    var p = location.pathname;
-    var fromPath = (p === "/en" || p.indexOf("/en/") === 0) ? "en" : null;
-    var m = document.cookie.match(/(?:^|; )dl_lang=(pt|en)/);
-    var fromCookie = m ? m[1] : null;
-    var fromStore = null;
-    try { fromStore = localStorage.getItem("language"); } catch (e) {}
-    var lang = fromPath || fromStore || fromCookie || "pt";
-    if (lang !== "pt" && lang !== "en") lang = "pt";
-    document.documentElement.lang = lang === "en" ? "en" : "pt-PT";
-    document.documentElement.setAttribute("data-lang", lang);
-  } catch (e) {}
-})();
-        `}</Script>
-        <TranslateBridge />
-        {children}
-        {/* Legado: ainda usado por HTML de tours não migrados e páginas com data-translate */}
-        <Script src="/assets/js/translate.js" strategy="afterInteractive" />
-      </body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

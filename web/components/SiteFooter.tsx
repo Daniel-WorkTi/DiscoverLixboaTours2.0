@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BRAND_EMAIL, BRAND_NAME } from "@/lib/brand";
 import { withLocalePrefix, type AppLocale } from "@/lib/i18n/locale";
+import { getMessages } from "@/messages";
 import { getSiteNavBase, type SiteNavVariant } from "@/lib/site-nav";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 
@@ -13,6 +14,7 @@ type SiteFooterProps = {
 
 export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps) {
   const base = getSiteNavBase(variant, locale);
+  const m = getMessages(locale);
 
   return (
     <footer className="footer">
@@ -26,52 +28,42 @@ export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps)
               height={72}
               className="footer-logo"
             />
-            <p className="footer-tagline" data-translate="footer_tagline">
-              Tours Autênticos em Portugal com Veículos Históricos Portugueses
-            </p>
+            <p className="footer-tagline">{m.footer.tagline}</p>
           </div>
 
           <div className="footer-links">
-            <h3 data-translate="footer_quick_links">Links Rápidos</h3>
+            <h3>{m.footer.quickLinks}</h3>
             <ul>
               <li>
-                <a href={`${base}#home`} data-translate="footer_home">
-                  Início
-                </a>
+                <a href={`${base}#home`}>{m.footer.home}</a>
               </li>
               <li>
-                <a href={`${base}#sobre`} data-translate="footer_about">
-                  Sobre Nós
-                </a>
+                <a href={`${base}#sobre`}>{m.footer.about}</a>
               </li>
               <li>
-                <a href={`${base}#servicos`} data-translate="footer_destinations">
-                  Destinos
-                </a>
+                <a href={`${base}#servicos`}>{m.footer.destinations}</a>
               </li>
               <li>
-                <a href={`${base}#tours`} data-translate="footer_tours">
-                  Tours Personalizados
-                </a>
+                <a href={`${base}#tours`}>{m.footer.tours}</a>
               </li>
               <li>
                 <Link href={withLocalePrefix("/executive", locale)}>
-                  <span data-translate="footer_executive_link">Executive &amp; Concierge</span>
+                  {m.footer.executiveLink}
                 </Link>
               </li>
               <li>
                 <Link href={withLocalePrefix("/reservar", locale)}>
-                  <span data-translate="footer_book_link">Reservar com quantidade</span>
+                  {m.footer.bookLink}
                 </Link>
               </li>
               <li>
-                <Link href={withLocalePrefix("/privacidade", locale)}>Privacidade</Link>
+                <Link href={withLocalePrefix("/privacidade", locale)}>{m.footer.privacy}</Link>
               </li>
               <li>
                 <Link href={withLocalePrefix("/cookies", locale)}>Cookies</Link>
               </li>
               <li>
-                <Link href={withLocalePrefix("/termos", locale)}>Termos</Link>
+                <Link href={withLocalePrefix("/termos", locale)}>{m.footer.terms}</Link>
               </li>
               <li>
                 <Link href={withLocalePrefix("/sgpd", locale)}>Direitos SGPD</Link>
@@ -80,27 +72,27 @@ export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps)
           </div>
 
           <div className="footer-contact">
-            <h3 data-translate="footer_contact">Contacto</h3>
+            <h3>{m.footer.contact}</h3>
             <ul>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-                <span data-translate="footer_address">Rua dos Ourives, n° 24 Linho 2710-333</span>
+                <span>{m.footer.address}</span>
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect width="20" height="16" x="2" y="4" rx="2" />
                   <path d="m2 7 10 7 10-7" />
                 </svg>
-                <span data-translate="footer_email">{BRAND_EMAIL}</span>
+                <span>{BRAND_EMAIL}</span>
               </li>
             </ul>
           </div>
 
           <div className="footer-social">
-            <h3 data-translate="footer_follow_us">Siga-nos</h3>
+            <h3>{m.footer.followUs}</h3>
             <div className="social-icons">
               <a
                 href="https://www.instagram.com/discoverlixboatours/"
@@ -138,11 +130,10 @@ export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps)
 
         <div className="footer-bottom">
           <p>
-            &copy; {new Date().getFullYear()} {BRAND_NAME}.{" "}
-            <span data-translate="footer_rights_part">Todos os direitos reservados.</span>
+            &copy; {new Date().getFullYear()} {BRAND_NAME}. {m.footer.rights}
           </p>
           <p>
-            <span data-translate="footer_dev_prefix">Desenvolvido por</span>{" "}
+            {m.footer.dev}{" "}
             <a href="https://dm-lab.netlify.app/" target="_blank" rel="noopener noreferrer" className="dev-credit">
               DMLab
             </a>

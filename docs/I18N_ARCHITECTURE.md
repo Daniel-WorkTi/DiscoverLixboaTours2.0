@@ -7,14 +7,16 @@
   - `/en/tours/lisboa` → inglês (`en`)
 - O `middleware` detecta o prefixo `/en`, define o header `x-dl-locale` e o cookie `dl_lang` (preferência).
 - Páginas App Router leem o locale com `getRequestLocale()` **no servidor** e renderizam HTML já no idioma certo (sem flash PT→EN).
+- `LocaleProvider` em `app/(site)/layout.tsx` disponibiliza `useLocale()` / `useMessages()` aos client components.
 
-Cookie / `localStorage` servem só para **lembrar preferência** e para o language switcher — **não** para corrigir HTML depois do load.
+Cookie / `localStorage` (`language`) servem só para **lembrar preferência** no language switcher — **não** para corrigir HTML depois do load.
 
 ## Traduções globais (UI)
 
 Ficheiro: `web/messages/index.ts`
 
-- `getMessages(locale)` → labels de nav, footer, booking, secções de tour.
+- `getMessages(locale)` → nav, footer, home, executive, booking, obrigado, destinos, secções de tour.
+- Client: `useMessages()` via `LocaleProvider`.
 - Formatadores: `web/lib/i18n/format.ts`.
 
 ## Conteúdo dos tours
@@ -49,9 +51,10 @@ O checkout usa `getPricingRuleFromTable` → `pricingRuleFromMigratedSlug` (font
 ## Rotas
 
 - `web/app/(site)/tours/[slug]/page.tsx` — SSR por locale
+- Home, executive, reservar, obrigado — React + `messages` (sem `data-translate`)
 - Rewrites HTML de tours **removidos** do `next.config.ts`
 - Redirects `tour-*.html` → `/tours/*` mantidos
-- HTML em `public/tour-*.html` ainda existem como backup, mas **não** são servidos nas URLs `/tours/*`
+- HTML em `public/tour-*.html` são **arquivo morto** (não servidos nas URLs ativas)
 
 ## Criar um novo tour
 
@@ -61,16 +64,19 @@ O checkout usa `getPricingRuleFromTable` → `pricingRuleFromMigratedSlug` (font
 
 ## Language switcher
 
-`LanguageSwitcher` troca entre path PT e `/en` + mesmo path.
+`LanguageSwitcher` troca entre path PT e `/en` + mesmo path; grava cookie `dl_lang` e `localStorage.language`.
 
-## Legado restante
+## Legado removido (fases D/E)
 
-- `translate.js` ainda carregado no root layout para home/páginas com `data-translate` residual.
-- Objetivo seguinte: migrar home/executive fully para `messages` e remover `translate.js`.
+- ~~`translate.js`~~ — removido
+- ~~`TranslateBridge`~~ — removido
+- ~~`data-translate` em componentes React~~ — zero
 
 ## Validação
 
 ```bash
+cd web
 npm test -- content/tours/tours.integrity.test.ts
+npm run lint
 npm run build
 ```

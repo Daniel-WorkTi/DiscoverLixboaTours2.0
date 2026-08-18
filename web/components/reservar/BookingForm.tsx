@@ -8,6 +8,8 @@ import {
   getMinBookablePassengers,
 } from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
+import { useLocale, useMessages } from "@/lib/i18n/LocaleProvider";
+import type { Messages } from "@/messages";
 
 const MAX_NAME_LEN = 120;
 const MAX_PHONE_DIGITS = 15;
@@ -101,24 +103,36 @@ type BookingFormProps = {
   initialTourId?: string;
 };
 
+type BookingErrKey =
+  | "errPickDate"
+  | "errInvalidResponse"
+  | "errCheckoutDefault"
+  | "errNoUrl"
+  | "errTimeout"
+  | "errNetwork";
+
 type BookingFormError =
-  | { kind: "i18n"; key: string }
+  | { kind: "i18n"; key: BookingErrKey }
   | { kind: "server"; message: string };
 
-/** PT default copy — mirror `booking_err_*` in translate.js */
-const BOOKING_ERR_PT: Record<string, string> = {
-  booking_err_pick_date:
-    "Escolhe um dia no calendário em cima («Data do tour») antes de continuar para o pagamento.",
-  booking_err_invalid_response: "Resposta inválida do servidor. Tenta novamente.",
-  booking_err_checkout_default: "Não foi possível iniciar o pagamento.",
-  booking_err_no_url:
-    "Resposta inválida: não há URL de pagamento. Confirma STRIPE_SECRET_KEY e os logs do servidor.",
-  booking_err_timeout:
-    "O servidor demorou demasiado a responder (timeout). Verifica a ligação, se a chave Stripe está na Vercel (Environment Variables) e tenta de novo.",
-  booking_err_network: "Erro de rede. Tenta novamente.",
+type TourMsgKey = keyof Messages["booking"]["tours"];
+
+const TOUR_MSG_KEYS: Record<string, TourMsgKey> = {
+  "sintra-cascais": "sintraCascais",
+  "3-destinos": "threeDestinos",
+  monsanto: "monsanto",
+  "fatima-tomar": "fatimaTomar",
+  lisboa: "lisboa",
+  porto: "porto",
+  arraabida: "arraabida",
+  aveiro: "aveiro",
+  alentejo: "alentejo",
+  algarve: "algarve",
 };
 
 export function BookingForm({ initialTourId }: BookingFormProps) {
+  const m = useMessages();
+  const locale = useLocale();
   const titleId = useId();
   const tourPickerTitleId = useId();
   const [tourId, setTourId] = useState(() => {
@@ -148,7 +162,6 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [tourPickerOpen, setTourPickerOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [uiLang, setUiLang] = useState<"pt" | "en">("pt");
 
   const today = useMemo(() => startOfToday(), []);
 
@@ -157,17 +170,6 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const read = () => {
-      const l = localStorage.getItem("language") || "pt";
-      setUiLang(l === "en" ? "en" : "pt");
-    };
-    read();
-    const onLang = () => read();
-    window.addEventListener("discoverlangchange", onLang);
-    return () => window.removeEventListener("discoverlangchange", onLang);
   }, []);
 
   useEffect(() => {
@@ -197,8 +199,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     };
   }, [modalOpen, tourPickerOpen]);
 
-  const tourLabel = toursBooking.find((t) => t.id === tourId)?.label ?? "";
-  const tourLabelKey = `tour_booking_${tourId.replace(/-/g, "_")}`;
+  const tourLabelFallback = toursBooking.find((t) => t.id === tourId)?.label ?? "";
+  const tourMsgKey = TOUR_MSG_KEYS[tourId];
+  const tourLabel = (tourMsgKey ? m.booking.tours[tourMsgKey] : null) ?? tourLabelFallback;
+  function labelForTour(id: string): string {
+    const key = TOUR_MSG_KEYS[id];
+    return (key ? m.booking.tours[key] : null) ?? toursBooking.find((t) => t.id === id)?.label ?? id;
+  }
   const maxTravelers = useMemo(() => getMaxBookablePassengers(tourId), [tourId]);
   const minTravelers = useMemo(() => getMinBookablePassengers(tourId), [tourId]);
   const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
@@ -207,7 +214,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     setQuantity((q) => Math.min(maxTravelers, Math.max(minTravelers, q)));
   }, [maxTravelers, minTravelers]);
 
-  const dateLocale = uiLang === "en" ? "en-GB" : "pt-PT";
+  const dateLocale = locale === "en" ? "en-GB" : "pt-PT";
 
   const monthLabel = useMemo(() => {
     return new Date(viewYear, viewMonth, 1).toLocaleDateString(dateLocale, {
@@ -269,7 +276,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!preferredDate) {
-      setError({ kind: "i18n", key: "booking_err_pick_date" });
+      setError({ kind: "i18n", key: "errPickDate" });
       document.getElementById("br-booking-cal")?.scrollIntoView({
         behavior: "smooth",
         block: "center",
@@ -336,7 +343,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             })
           : {};
       } catch {
-        setError({ kind: "i18n", key: "booking_err_invalid_response" });
+        setError({ kind: "i18n", key: "errInvalidResponse" });
         return;
       }
       if (!res.ok) {
@@ -352,7 +359,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         if (typeof data.error === "string" && data.error.trim()) {
           setError({ kind: "server", message: data.error.trim() });
         } else {
-          setError({ kind: "i18n", key: "booking_err_checkout_default" });
+          setError({ kind: "i18n", key: "errCheckoutDefault" });
         }
         return;
       }
@@ -364,13 +371,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
       if (typeof data.error === "string" && data.error.trim()) {
         setError({ kind: "server", message: data.error.trim() });
       } else {
-        setError({ kind: "i18n", key: "booking_err_no_url" });
+        setError({ kind: "i18n", key: "errNoUrl" });
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
-        setError({ kind: "i18n", key: "booking_err_timeout" });
+        setError({ kind: "i18n", key: "errTimeout" });
       } else {
-        setError({ kind: "i18n", key: "booking_err_network" });
+        setError({ kind: "i18n", key: "errNetwork" });
       }
     } finally {
       window.clearTimeout(timeoutId);
@@ -397,11 +404,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         >
           <div className="br-modal-header">
             <div>
-              <h2 id={tourPickerTitleId} className="br-modal-title" data-translate="booking_modal_destino">
-                Destino
+              <h2 id={tourPickerTitleId} className="br-modal-title">
+                {m.booking.modalDestino}
               </h2>
-              <p className="br-modal-sub" data-translate="booking_modal_choose">
-                Escolhe o teu tour
+              <p className="br-modal-sub">
+                {m.booking.modalChoose}
               </p>
             </div>
             <button
@@ -427,15 +434,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 }}
               >
                 <span className="br-tour-option__meta">
-                  <span
-                    className="br-tour-option__label"
-                    data-translate={`tour_booking_${t.id.replace(/-/g, "_")}`}
-                  >
-                    {t.label}
+                  <span className="br-tour-option__label">
+                    {labelForTour(t.id)}
                   </span>
                   {GROUP_PRICE_TOUR_IDS.has(t.id) ? (
-                    <span className="br-tour-option__badge" data-translate="price_group_badge">
-                      Preço de grupo
+                    <span className="br-tour-option__badge">
+                      {m.common.priceGroupBadge}
                     </span>
                   ) : null}
                 </span>
@@ -477,10 +481,10 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         >
           <div className="br-modal-header">
             <div>
-              <h2 id={titleId} className="br-modal-title" data-translate="booking_modal_title">
-                Reserva o teu tour
+              <h2 id={titleId} className="br-modal-title">
+                {m.booking.modalTitle}
               </h2>
-              <p className="br-modal-sub" data-translate={tourLabelKey}>
+              <p className="br-modal-sub">
                 {tourLabel}
               </p>
             </div>
@@ -496,7 +500,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
           <div className="br-modal-body">
             <div id="br-booking-cal">
-              <p className="br-section-title">Data do tour</p>
+              <p className="br-section-title">{m.booking.sectionDate}</p>
               <div className="br-cal-nav">
                 <button
                   type="button"
@@ -555,11 +559,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
             <div className="br-travelers">
               <div>
-                <div className="br-travelers-label" data-translate="booking_travelers">
-                  Viajantes
+                <div className="br-travelers-label">
+                  {m.booking.travelers}
                 </div>
-                <div className="br-travelers-sub" data-translate="booking_travelers_hint">
-                  Escolhe quantas pessoas vão no tour (máx. {maxTravelers})
+                <div className="br-travelers-sub">
+                  {m.booking.travelersHint}
                 </div>
               </div>
               <div className="br-stepper" aria-label="Quantidade de pessoas">
@@ -590,41 +594,41 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     <>
                       <div className="br-total__grid">
                         <div className="br-total__cell">
-                          <div className="br-total__label" data-translate="booking_per_person">
-                            Por pessoa
+                          <div className="br-total__label">
+                            {m.booking.perPerson}
                           </div>
                           <div className="br-total__value">
                             {formatEurFromCents(estimate.centsPerPerson)}
                           </div>
                         </div>
                         <div className="br-total__cell br-total__cell--right">
-                          <div className="br-total__label" data-translate="booking_total">
-                            Total
+                          <div className="br-total__label">
+                            {m.booking.total}
                           </div>
                           <div className="br-total__value">
                             {formatEurFromCents(estimate.totalCents)}
                           </div>
                         </div>
                       </div>
-                      <div className="br-total__sub" data-translate="booking_checkout_note">
-                        Valor final confirmado no checkout.
+                      <div className="br-total__sub">
+                        {m.booking.checkoutNote}
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="br-total__badge" data-translate="price_group_badge">
-                        Preço de grupo
+                      <div className="br-total__badge">
+                        {m.common.priceGroupBadge}
                       </div>
                       <div className="br-total__row">
-                        <span className="br-total__label" data-translate="booking_total_group">
-                          Total do grupo
+                        <span className="br-total__label">
+                          {m.booking.totalGroup}
                         </span>
                         <span className="br-total__value">
                           {formatEurFromCents(estimate.totalCents)}
                         </span>
                       </div>
-                      <div className="br-total__sub" data-translate="booking_checkout_note">
-                        Valor final confirmado no checkout.
+                      <div className="br-total__sub">
+                        {m.booking.checkoutNote}
                       </div>
                     </>
                   )}
@@ -632,11 +636,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               ) : (
                 <>
                   <div className="br-total__row">
-                    <span className="br-total__label" data-translate="booking_total">
-                      Total
+                    <span className="br-total__label">
+                      {m.booking.total}
                     </span>
-                    <span className="br-total__value" data-translate="booking_total_tbd">
-                      Calculado no checkout
+                    <span className="br-total__value">
+                      {m.booking.totalTbd}
                     </span>
                   </div>
                 </>
@@ -645,12 +649,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
 
             <form onSubmit={handleSubmit} className="br-fields">
               <div>
-                <p className="br-section-title" data-translate="booking_your_details">
-                  Os teus dados
+                <p className="br-section-title">
+                  {m.booking.yourDetails}
                 </p>
                 <div className="br-row2">
                   <label className="br-label">
-                    <span data-translate="booking_full_name">Nome completo</span>
+                    <span>{m.booking.fullName}</span>
                     <input
                       className="br-input"
                       value={customerName}
@@ -664,7 +668,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     />
                   </label>
                   <label className="br-label">
-                    <span data-translate="booking_phone_opt">Telefone (opcional)</span>
+                    <span>{m.booking.phoneOpt}</span>
                     <div className="br-phone-row">
                       <select
                         className="br-input br-dial-select"
@@ -696,7 +700,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   </label>
                 </div>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
-                  <span data-translate="booking_email">Email</span>
+                  <span>{m.booking.email}</span>
                   <input
                     className="br-input"
                     type="email"
@@ -708,13 +712,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   />
                 </label>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
-                  <span data-translate="booking_pickup">Pickup / ponto de encontro</span>
+                  <span>{m.booking.pickup}</span>
                   <input
                     className="br-input"
                     value={pickup}
                     onChange={(e) => setPickup(e.target.value.slice(0, 140))}
-                    placeholder="Hotel, morada ou ponto de encontro"
-                    data-translate-placeholder="booking_pickup_ph"
+                    placeholder={m.booking.pickupPh}
                     required
                     minLength={2}
                     maxLength={140}
@@ -722,13 +725,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   />
                 </label>
                 <label className="br-label" style={{ marginTop: "0.65rem" }}>
-                  <span data-translate="booking_notes">Notas (opcional)</span>
+                  <span>{m.booking.notes}</span>
                   <textarea
                     className="br-input br-textarea"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value.slice(0, MAX_NOTES_LEN))}
-                    placeholder="Horário preferido, idioma (PT/EN), crianças, etc."
-                    data-translate-placeholder="booking_notes_ph"
+                    placeholder={m.booking.notesPh}
                     maxLength={MAX_NOTES_LEN}
                   />
                   <span className="br-char-hint">
@@ -742,8 +744,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   {error.kind === "server" ? (
                     error.message
                   ) : (
-                    <span data-translate={error.key}>
-                      {BOOKING_ERR_PT[error.key] ?? error.key}
+                    <span>
+                      {m.booking[error.key]}
                     </span>
                   )}
                 </p>
@@ -756,11 +758,11 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 aria-busy={loading}
               >
                 {loading ? (
-                  <span data-translate="booking_submit_loading">
-                    A redirecionar para o pagamento…
+                  <span>
+                    {m.booking.submitLoading}
                   </span>
                 ) : (
-                  <span data-translate="booking_submit">Continuar para pagamento seguro</span>
+                  <span>{m.booking.submit}</span>
                 )}
               </button>
             </form>
@@ -781,8 +783,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             role="region"
             aria-label="Destino do tour"
           >
-            <span className="br-card-label" data-translate="booking_card_destino">
-              Destino
+            <span className="br-card-label">
+              {m.booking.cardDestino}
             </span>
             <button
               type="button"
@@ -790,10 +792,10 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               onClick={() => setTourPickerOpen(true)}
               aria-haspopup="dialog"
               aria-expanded={tourPickerOpen}
-              aria-label="Escolher destino do tour"
+              aria-label={m.booking.ariaPickDestino}
             >
               <div className="br-pick-btn__text">
-                <span className="br-pick-btn__value" data-translate={tourLabelKey}>
+                <span className="br-pick-btn__value">
                   {tourLabel}
                 </span>
               </div>
@@ -804,8 +806,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           </div>
 
           <div className="br-card br-card--grow">
-            <span className="br-card-label" data-translate="booking_card_data">
-              Data
+            <span className="br-card-label">
+              {m.booking.cardData}
             </span>
             <button
               type="button"
@@ -820,9 +822,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 ) : (
                   <span
                     className="br-pick-btn__value br-pick-btn__value--muted"
-                    data-translate="booking_pick_date"
                   >
-                    Toca para escolher
+                    {m.booking.pickDate}
                   </span>
                 )}
               </div>
@@ -833,8 +834,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           </div>
 
           <div className="br-card br-card--grow">
-            <span className="br-card-label" data-translate="booking_card_viajantes">
-              Viajantes
+            <span className="br-card-label">
+              {m.booking.cardViajantes}
             </span>
             <button
               type="button"
@@ -845,12 +846,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 <span className="br-pick-btn__value">
                   {quantity}{" "}
                   <span
-                    data-translate={
-                      quantity === 1 ? "booking_person_singular" : "booking_person_plural"
-                    }
                   >
-                    <span data-translate={quantity === 1 ? "booking_guest_one" : "booking_guest_many"}>
-                      {quantity === 1 ? "passageiro" : "passageiros"}
+                    <span>
+                      {quantity === 1 ? m.booking.guestOne : m.booking.guestMany}
                     </span>
                   </span>
                 </span>
@@ -868,9 +866,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               onClick={() => setModalOpen(true)}
             >
               {preferredDate ? (
-                <span data-translate="booking_cta_review">Rever e pagar</span>
+                <span>{m.booking.ctaReview}</span>
               ) : (
-                <span data-translate="booking_cta_choose">Escolher data e reservar</span>
+                <span>{m.booking.ctaChoose}</span>
               )}
             </button>
           </div>
@@ -885,19 +883,15 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             {" · "}
             {quantity}{" "}
             <span
-              data-translate={
-                quantity === 1 ? "booking_guest_one" : "booking_guest_many"
-              }
             >
-              {quantity === 1 ? "passageiro" : "passageiros"}
+              {quantity === 1 ? m.booking.guestOne : m.booking.guestMany}
             </span>
             {" · "}
-            <span data-translate={tourLabelKey}>{tourLabel}</span>
+            <span>{tourLabel}</span>
           </>
         ) : (
-          <span data-translate="booking_hint_long">
-            Abre o calendário no botão laranja, escolhe até 8 passageiros e conclui os teus dados para
-            ires ao pagamento seguro.
+          <span>
+            {m.booking.hintLong}
           </span>
         )}
       </p>

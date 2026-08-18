@@ -3,13 +3,10 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { useMessages } from "@/lib/i18n/LocaleProvider";
 
 export type ExecutiveTourBanner = {
-  key: string;
-  titlePt: string;
-  linePt: string;
-  titleKey: string;
-  lineKey: string;
+  key: "sintra" | "fatima" | "arrabida";
   src: string;
   alt: string;
 };
@@ -21,6 +18,7 @@ type Props = {
 const AUTO_MS = 6500;
 
 export function ExecutiveToursCarousel({ slides }: Props) {
+  const m = useMessages();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -42,6 +40,7 @@ export function ExecutiveToursCarousel({ slides }: Props) {
   }, [len, paused]);
 
   const current = slides[index];
+  const currentCard = m.executive.cards[current.key];
 
   return (
     <div
@@ -68,30 +67,29 @@ export function ExecutiveToursCarousel({ slides }: Props) {
           className="exec-tour-carousel__track"
           style={{ transform: `translate3d(-${index * 100}%, 0, 0)` }}
         >
-          {slides.map((slide, i) => (
-            <div
-              key={slide.key}
-              className="exec-tour-carousel__slide"
-              aria-hidden={i !== index}
-            >
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                sizes="(max-width: 639px) 100vw, min(94vw, 90rem)"
-                className="object-cover object-center"
-                priority={i === 0}
-              />
-              <div className="exec-tour-carousel__caption">
-                <h3 className="exec-tour-carousel__title" data-translate={slide.titleKey}>
-                  {slide.titlePt}
-                </h3>
-                <p className="exec-tour-carousel__line" data-translate={slide.lineKey}>
-                  {slide.linePt}
-                </p>
+          {slides.map((slide, i) => {
+            const card = m.executive.cards[slide.key];
+            return (
+              <div
+                key={slide.key}
+                className="exec-tour-carousel__slide"
+                aria-hidden={i !== index}
+              >
+                <Image
+                  src={slide.src}
+                  alt={slide.alt}
+                  fill
+                  sizes="(max-width: 639px) 100vw, min(94vw, 90rem)"
+                  className="object-cover object-center"
+                  priority={i === 0}
+                />
+                <div className="exec-tour-carousel__caption">
+                  <h3 className="exec-tour-carousel__title">{card.title}</h3>
+                  <p className="exec-tour-carousel__line">{card.line}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <button
@@ -113,21 +111,24 @@ export function ExecutiveToursCarousel({ slides }: Props) {
       </div>
 
       <div className="exec-tour-carousel__dots" role="tablist" aria-label="Seleção de passeio">
-        {slides.map((slide, i) => (
-          <button
-            key={slide.key}
-            type="button"
-            role="tab"
-            aria-selected={i === index}
-            aria-label={`${slide.titlePt} — slide ${i + 1} / ${len}`}
-            className={`exec-tour-carousel__dot ${i === index ? "exec-tour-carousel__dot--active" : ""}`}
-            onClick={() => setIndex(i)}
-          />
-        ))}
+        {slides.map((slide, i) => {
+          const card = m.executive.cards[slide.key];
+          return (
+            <button
+              key={slide.key}
+              type="button"
+              role="tab"
+              aria-selected={i === index}
+              aria-label={`${card.title} — slide ${i + 1} / ${len}`}
+              className={`exec-tour-carousel__dot ${i === index ? "exec-tour-carousel__dot--active" : ""}`}
+              onClick={() => setIndex(i)}
+            />
+          );
+        })}
       </div>
 
       <p className="exec-tour-carousel__live" aria-live="polite">
-        {current.titlePt}. {current.linePt}
+        {currentCard.title}. {currentCard.line}
       </p>
     </div>
   );
