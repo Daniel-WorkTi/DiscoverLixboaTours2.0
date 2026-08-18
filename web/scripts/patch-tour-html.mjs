@@ -95,6 +95,26 @@ function patchContent(raw) {
   s = s.replace(/\+351934483351/g, `+${WHATSAPP_E164}`);
   s = s.replace(/\+351 934 483 351/g, "+351 934 483 853");
 
+  // Sticky Book Now (mobile) — CSS inline para não depender do App Router
+  if (!s.includes("sticky-mobile-book")) {
+    const tourMatch = s.match(/href="\/reservar\?tour=([^"&]+)"/);
+    const tourQ = tourMatch ? `?tour=${tourMatch[1]}` : "";
+    const sticky = `
+<div class="sticky-mobile-book" role="complementary" aria-label="Reservar">
+  <a href="/reservar${tourQ}" class="sticky-mobile-book__btn"><span data-translate="book_now">Reservar Agora</span></a>
+</div>
+<style>
+.sticky-mobile-book{display:none}
+@media (max-width:768px){
+  .sticky-mobile-book{display:block;position:fixed;left:0;right:0;bottom:0;z-index:90;padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.92) 28%,#fff 100%);pointer-events:none}
+  .sticky-mobile-book__btn{pointer-events:auto;display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border-radius:12px;background:#ff6600;color:#fff;font-weight:700;font-size:1rem;text-decoration:none;box-shadow:0 8px 24px rgba(255,102,0,.35)}
+  body{padding-bottom:5.5rem}
+}
+</style>
+`;
+    s = s.replace(/<\/body>/i, `${sticky}\n</body>`);
+  }
+
   return s;
 }
 

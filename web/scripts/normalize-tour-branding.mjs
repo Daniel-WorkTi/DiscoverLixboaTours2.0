@@ -22,8 +22,15 @@ for (const name of fs.readdirSync(dir)) {
 
   html = html.replace(/Discoverlix Boatours/gi, BRAND);
   html = html.replace(/DiscoverTour/g, BRAND);
-  html = html.replace(/Discoverlixboatours@gmail\.com/gi, EMAIL);
-  html = html.replace(/websitediscoverlixboatours@gmail\.com/gi, EMAIL);
+  // Nunca fazer replace de "Discoverlixboatours@gmail" dentro de "website…"
+  html = html.replace(
+    /(?:website)*websitediscoverlixboatours@gmail\.com/gi,
+    EMAIL,
+  );
+  html = html.replace(
+    /(?<![a-zA-Z])discoverlixboatours@gmail\.com/gi,
+    EMAIL,
+  );
 
   html = html.replace(
     /&copy;\s*20\d{2}\s+DiscoverLixboaTours\./g,
