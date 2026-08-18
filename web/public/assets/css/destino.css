@@ -409,8 +409,7 @@
 ======================================== */
 
 .tour-sidebar {
-    position: sticky;
-    top: 100px;
+    position: static;
     display: flex;
     flex-direction: column;
     gap: 2rem;

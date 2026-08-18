@@ -74,7 +74,7 @@ export const sintraCascaisTour = {
           badge: "Regaleira",
           title: "Quinta da Regaleira",
           descriptionHtml:
-            "Arquitetura romântica e mistérios esotéricos. Poço Iniciático, jardins labirínticos e simbolismo maçónico. Obra-prima de António Augusto Carvalho Monteiro e Luigi Manini. <strong>Entrada: €15/pessoa (não incluída)</strong>",
+            "Arquitetura romântica e mistérios esotéricos. Poço Iniciático, jardins labirínticos e simbolismo maçónico. Obra-prima de António Augusto Carvalho Monteiro e Luigi Manini. <strong>Entrada: €20/pessoa (não incluída)</strong>",
         },
         {
           badge: "Monserrate",
@@ -120,7 +120,7 @@ export const sintraCascaisTour = {
       notIncluded: [
         "Despesas pessoais",
         "Entrada no Palácio da Pena (€20/pessoa)",
-        "Entrada na Quinta da Regaleira (€15/pessoa)",
+        "Entrada na Quinta da Regaleira (€20/pessoa)",
         "Entrada no Castelo dos Mouros (€12/pessoa)",
         "Entrada no Palácio de Monserrate (opcional)",
         "Refeições (recomendações incluídas)",
@@ -175,7 +175,7 @@ export const sintraCascaisTour = {
           badge: "Regaleira",
           title: "Quinta da Regaleira",
           descriptionHtml:
-            "Romantic architecture and esoteric mysteries. Initiatic Well, labyrinthine gardens and Masonic symbolism. Masterpiece by António Augusto Carvalho Monteiro and Luigi Manini. <strong>Entry: €15/person (not included)</strong>",
+            "Romantic architecture and esoteric mysteries. Initiatic Well, labyrinthine gardens and Masonic symbolism. Masterpiece by António Augusto Carvalho Monteiro and Luigi Manini. <strong>Entry: €20/person (not included)</strong>",
         },
         {
           badge: "Monserrate",
@@ -221,7 +221,7 @@ export const sintraCascaisTour = {
       notIncluded: [
         "Personal expenses",
         "Palácio da Pena entry (€20/person)",
-        "Quinta da Regaleira entry (€15/person)",
+        "Quinta da Regaleira entry (€20/person)",
         "Castelo dos Mouros entry (€12/person)",
         "Palácio de Monserrate entry (optional)",
         "Meals (recommendations included)",
