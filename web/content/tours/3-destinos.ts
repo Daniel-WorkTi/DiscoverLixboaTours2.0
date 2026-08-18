@@ -1,8 +1,9 @@
 import type { TourDefinition } from "./types";
 
 /**
- * Fátima, Nazaré & Óbidos (3-destinos) — totais de grupo convertidos da tabela híbrida 2026.
- * 1: €280; 2–8: pp × n → totais 28000…68000.
+ * Fátima, Nazaré & Óbidos (3-destinos) — van privada completa.
+ * Mike: €250 pela van (até 7); capacidade global → 8 sem novo tier (mesmo total).
+ * Confirmar com Mike se o 8.º deve ter preço diferente.
  */
 export const tresDestinosTour = {
   slug: "3-destinos",
@@ -12,16 +13,16 @@ export const tresDestinosTour = {
   privateTour: true,
   hotelPickup: true,
   groupTotalsCents: {
-    1: 28000,
-    2: 28000,
-    3: 34500,
-    4: 42000,
-    5: 50000,
-    6: 57000,
-    7: 66500,
-    8: 68000,
+    1: 25000,
+    2: 25000,
+    3: 25000,
+    4: 25000,
+    5: 25000,
+    6: 25000,
+    7: 25000,
+    8: 25000,
   },
-  priceDisplay: "person",
+  priceDisplay: "group" as const,
   heroImage: "/assets/images/galeria-tour3destinations/img2.webp",
   videoYoutubeId: "WOlJMWA8YmQ",
   gallery: [
@@ -202,13 +203,13 @@ export const tresDestinosTour = {
       title:
         "Tour 3 Destinos — Fátima, Nazaré & Óbidos | DiscoverLixboaTours",
       description:
-        "Tour privado por Fátima, Nazaré e Óbidos. Até 8 passageiros. A partir de €85 por pessoa. Espiritualidade, natureza e tradição.",
+        "Tour privado por Fátima, Nazaré e Óbidos. Até 8 passageiros. A partir de €250 por grupo privado. Espiritualidade, natureza e tradição.",
     },
     en: {
       title:
         "3 Destinations Tour — Fátima, Nazaré & Óbidos | DiscoverLixboaTours",
       description:
-        "Private Fátima, Nazaré and Óbidos tour. Up to 8 guests. From €85 per person. Spirituality, nature and tradition.",
+        "Private Fátima, Nazaré and Óbidos tour. Up to 8 guests. From €250 per private group. Spirituality, nature and tradition.",
     },
   },
 } as const satisfies TourDefinition;

@@ -118,6 +118,7 @@ export type Messages = {
     priceLabel: string;
     priceGroupBadge: string;
     priceUnit: string;
+    priceGroupUnit: string;
   };
   home: {
     hero: {
@@ -424,6 +425,7 @@ export const messagesPt: Messages = {
     priceLabel: "A partir de",
     priceGroupBadge: "Preço de grupo",
     priceUnit: "/ pessoa",
+    priceGroupUnit: "/ grupo",
   },
   home: {
     hero: {
@@ -856,6 +858,7 @@ export const messagesEn: Messages = {
     priceLabel: "Starting from",
     priceGroupBadge: "Group price",
     priceUnit: "/ person",
+    priceGroupUnit: "/ group",
   },
   home: {
     hero: {

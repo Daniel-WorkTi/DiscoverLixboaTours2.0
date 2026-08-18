@@ -49,4 +49,5 @@ export type { TourDefinition, TourContent, TourItineraryItem } from "./types";
 export {
   getFromPriceCents,
   getGroupTotalCents,
+  getCardFromPrice,
 } from "./types";

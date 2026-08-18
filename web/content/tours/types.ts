@@ -56,13 +56,46 @@ export type TourDefinition = {
   seo: Record<Locale, TourSeo>;
 };
 
-/** Menor total de grupo definido (para “A partir de”). */
+/** Menor total de grupo definido (para “A partir de” em modo group). */
 export function getFromPriceCents(tour: TourDefinition): number {
   const values = Object.values(tour.groupTotalsCents).filter(
     (v): v is number => typeof v === "number" && v > 0,
   );
   if (!values.length) return 0;
   return Math.min(...values);
+}
+
+/**
+ * Preço “A partir de” para cards da home — derivado só de groupTotalsCents.
+ * - group: menor total do grupo
+ * - person: menor €/pessoa arredondado (total / n)
+ */
+export function getCardFromPrice(tour: TourDefinition): {
+  cents: number;
+  eurosLabel: string;
+  unit: "group" | "person";
+} {
+  if (tour.priceDisplay === "person") {
+    let minPpCents = Number.POSITIVE_INFINITY;
+    for (const [key, total] of Object.entries(tour.groupTotalsCents)) {
+      const n = Number(key);
+      if (!Number.isFinite(n) || typeof total !== "number" || total <= 0) continue;
+      if (n < tour.minGuests || n > tour.maxGuests) continue;
+      minPpCents = Math.min(minPpCents, Math.round(total / n));
+    }
+    const cents = Number.isFinite(minPpCents) ? minPpCents : 0;
+    return {
+      cents,
+      eurosLabel: `€${Math.round(cents / 100)}`,
+      unit: "person",
+    };
+  }
+  const cents = getFromPriceCents(tour);
+  return {
+    cents,
+    eurosLabel: `€${Math.round(cents / 100)}`,
+    unit: "group",
+  };
 }
 
 export function getGroupTotalCents(

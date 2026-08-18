@@ -15,8 +15,6 @@ export type DestinationCard = {
   priceFrom: string;
   /** Unidade do preço mostrado no badge da home. */
   priceUnit: "group" | "person";
-  /** Linha comercial curta (duração / privado / capacidade). */
-  cardMeta: string;
 };
 
 type Props = {
@@ -188,12 +186,12 @@ export function DestinationsGrid({ destinations }: Props) {
           <div className="destination-card" key={d.href} role="listitem">
             <div
               className="destination-badge"
-              aria-label={`${m.common.priceLabel} ${d.priceFrom} ${d.priceUnit === "group" ? "/ grupo" : m.common.priceUnit}`}
+              aria-label={`${m.common.priceLabel} ${d.priceFrom} ${d.priceUnit === "group" ? m.common.priceGroupUnit : m.common.priceUnit}`}
             >
               <span className="destination-badge__label">{m.common.priceLabel}</span>
               <span className="destination-badge__value">{d.priceFrom}</span>
               <span className="destination-badge__unit">
-                {d.priceUnit === "group" ? "/ grupo" : m.common.priceUnit}
+                {d.priceUnit === "group" ? m.common.priceGroupUnit : m.common.priceUnit}
               </span>
             </div>
 

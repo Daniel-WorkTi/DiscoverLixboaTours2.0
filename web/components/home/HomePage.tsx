@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { getCardFromPrice, getMigratedTour } from "@/content/tours";
 import { useMessages } from "@/lib/i18n/LocaleProvider";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 import { DestinationsGrid, type DestinationCard } from "./DestinationsGrid";
@@ -8,84 +9,64 @@ import { HomePageRest } from "./HomePageRest";
 
 const DESTINATION_BASE = [
   {
+    slug: "sintra-cascais" as const,
     href: "/tours/sintra-cascais",
     img: "/assets/images/destinations/roteiro-sintra-e-cascais.webp",
     itemKey: "sintra" as const,
-    priceFrom: "€250",
-    priceUnit: "group" as const,
-    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
+    slug: "3-destinos" as const,
     href: "/tours/3-destinos",
     img: "/assets/images/galeria-tour3destinations/img2.webp",
     itemKey: "threeDestinos" as const,
-    priceFrom: "€85",
-    priceUnit: "person" as const,
-    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
+    slug: "fatima-tomar" as const,
     href: "/tours/fatima-tomar",
     img: "/assets/images/TOMAR/BANNER.png",
     itemKey: "fatimaTomar" as const,
-    priceFrom: "€310",
-    priceUnit: "group" as const,
-    cardMeta: "Private Tour · 9–10 Hours · Up to 8 Guests",
   },
   {
+    slug: "monsanto" as const,
     href: "/tours/monsanto",
     img: "/assets/images/Monsanto/monsanto1.webp",
     itemKey: "monsanto" as const,
-    priceFrom: "€113",
-    priceUnit: "person" as const,
-    cardMeta: "Private Full-Day · Up to 8 Guests",
   },
   {
+    slug: "lisboa" as const,
     href: "/tours/lisboa",
     img: "/assets/images/destinations/lisboa.webp",
     itemKey: "lisboa" as const,
-    priceFrom: "€250",
-    priceUnit: "group" as const,
-    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
+    slug: "porto" as const,
     href: "/tours/porto",
     img: "/assets/images/destinations/porto.webp",
     itemKey: "porto" as const,
-    priceFrom: "€700",
-    priceUnit: "group" as const,
-    cardMeta: "Private Tour · Full Day · Up to 8 Guests",
   },
   {
+    slug: "arraabida" as const,
     href: "/tours/arraabida",
     img: "/assets/images/arrabida-galeria/imgi_1_0718_credit-paulo-ribeiro_660x371.webp",
     itemKey: "arrabida" as const,
-    priceFrom: "€75",
-    priceUnit: "person" as const,
-    cardMeta: "Private Tour · ~8 Hours · Up to 8 Guests",
   },
   {
+    slug: "aveiro" as const,
     href: "/tours/aveiro",
     img: "/assets/images/AVEIRO/Banner.webp",
     itemKey: "aveiro" as const,
-    priceFrom: "€100",
-    priceUnit: "person" as const,
-    cardMeta: "Private Tour · 8–9 Hours · Up to 8 Guests",
   },
   {
+    slug: "alentejo" as const,
     href: "/tours/alentejo",
     img: "/assets/images/alentejo-galeria/estremoz.webp",
     itemKey: "alentejo" as const,
-    priceFrom: "€145",
-    priceUnit: "person" as const,
-    cardMeta: "Private Tour · Full Day · Up to 8 Guests",
   },
   {
+    slug: "algarve" as const,
     href: "/tours/algarve",
     img: "/assets/images/destinations/algarve.webp",
     itemKey: "algarve" as const,
-    priceFrom: "€600",
-    priceUnit: "group" as const,
-    cardMeta: "Private Tour · Full Day · Up to 8 Guests",
   },
 ] as const;
 
@@ -109,6 +90,10 @@ export function HomePage() {
 
   const destinations: DestinationCard[] = DESTINATION_BASE.map((d) => {
     const item = items[d.itemKey];
+    const tour = getMigratedTour(d.slug);
+    const from = tour
+      ? getCardFromPrice(tour)
+      : { eurosLabel: "€—", unit: "group" as const };
     return {
       href: d.href,
       img: d.img,
@@ -116,9 +101,8 @@ export function HomePage() {
       name: item.name,
       places: item.places,
       label: item.name,
-      priceFrom: d.priceFrom,
-      priceUnit: d.priceUnit,
-      cardMeta: d.cardMeta,
+      priceFrom: from.eurosLabel,
+      priceUnit: from.unit,
     };
   });
 
