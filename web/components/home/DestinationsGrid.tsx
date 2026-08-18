@@ -203,7 +203,7 @@ export function DestinationsGrid({ destinations }: Props) {
                   src={d.img}
                   alt={d.alt}
                   width={640}
-                  height={800}
+                  height={640}
                   sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
                 />
               </div>
@@ -212,8 +212,6 @@ export function DestinationsGrid({ destinations }: Props) {
             <div className="destination-content">
               <div className="destination-info">
                 <h3 className="destination-name">{d.name}</h3>
-                <p className="destination-places">{d.places}</p>
-                <p className="destination-meta">{d.cardMeta}</p>
               </div>
               <a
                 href={withLocalePrefix(d.href, locale)}

@@ -700,12 +700,12 @@ export const messagesPt: Messages = {
     items: {
       sintra: { name: "Sintra & Cascais", places: "Palácios & Praias Secretas" },
       threeDestinos: {
-        name: "Tour 3 Destinos",
-        places: "Fátima • Nazaré • Óbidos",
+        name: "Fátima, Nazaré & Óbidos",
+        places: "Tour 3 Destinos",
       },
       monsanto: {
-        name: "Monsanto & Centro de Portugal",
-        places: "Portugal Autêntico · Hidden Gems",
+        name: "Monsanto",
+        places: "Centro de Portugal",
       },
       fatimaTomar: {
         name: "Fátima & Tomar",
@@ -714,19 +714,19 @@ export const messagesPt: Messages = {
       lisboa: { name: "Lisboa", places: "Capital Vibrante" },
       porto: {
         name: "Porto",
-        places: "Um Dia de Património, História & Vinho",
+        places: "Património, História & Vinho",
       },
       arrabida: {
-        name: "Arrábida, Setúbal & Sesimbra",
-        places: "Natureza, História e Vistas Incríveis",
+        name: "Arrábida",
+        places: "Setúbal & Sesimbra",
       },
       aveiro: {
         name: "Aveiro & Costa Nova",
-        places: "Canais, moliceiros e casas às riscas",
+        places: "Canais e moliceiros",
       },
       alentejo: {
-        name: "Premium Alentejo Wine, Food & Culture",
-        places: "Premium · Património, vinha & mesa alentejana",
+        name: "Alentejo",
+        places: "Vinho, comida & cultura",
       },
       algarve: { name: "Algarve", places: "Costa do Sol" },
     },
@@ -1132,12 +1132,12 @@ export const messagesEn: Messages = {
     items: {
       sintra: { name: "Sintra & Cascais", places: "Palaces & Secret Beaches" },
       threeDestinos: {
-        name: "3 Destinations Tour",
-        places: "Fátima • Nazaré • Óbidos",
+        name: "Fátima, Nazaré & Óbidos",
+        places: "3 Destinations Tour",
       },
       monsanto: {
-        name: "Monsanto & Central Portugal",
-        places: "Authentic Portugal · Hidden Gems",
+        name: "Monsanto",
+        places: "Central Portugal",
       },
       fatimaTomar: {
         name: "Fátima & Tomar",
@@ -1146,19 +1146,19 @@ export const messagesEn: Messages = {
       lisboa: { name: "Lisbon", places: "Vibrant Capital" },
       porto: {
         name: "Porto",
-        places: "A Day of Heritage, History & Wine",
+        places: "Heritage, History & Wine",
       },
       arrabida: {
-        name: "Arrábida, Setúbal & Sesimbra",
-        places: "Nature, History and Amazing Views",
+        name: "Arrábida",
+        places: "Setúbal & Sesimbra",
       },
       aveiro: {
         name: "Aveiro & Costa Nova",
-        places: "Canals, moliceiros and striped houses",
+        places: "Canals and moliceiros",
       },
       alentejo: {
-        name: "Premium Alentejo Wine, Food & Culture",
-        places: "Premium · Heritage, vineyard & Alentejo table",
+        name: "Alentejo",
+        places: "Wine, food & culture",
       },
       algarve: { name: "Algarve", places: "Sun Coast" },
     },
