@@ -23,5 +23,8 @@ describe("i18n locale helpers", () => {
     expect(withLocalePrefix("/reservar", "en")).toBe("/en/reservar");
     expect(withLocalePrefix("/en/reservar", "pt")).toBe("/reservar");
     expect(withLocalePrefix("/tours/lisboa", "pt")).toBe("/tours/lisboa");
+    expect(withLocalePrefix("/reservar?tour=lisboa", "en")).toBe(
+      "/en/reservar?tour=lisboa",
+    );
   });
 });

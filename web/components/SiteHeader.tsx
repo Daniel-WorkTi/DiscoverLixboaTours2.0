@@ -1,21 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { withLocalePrefix, type AppLocale } from "@/lib/i18n/locale";
+import { getMessages } from "@/messages";
 import { getSiteNavBase, type SiteNavVariant } from "@/lib/site-nav";
 
 type SiteHeaderProps = {
-  /** Omitir para derivar na rota via SiteChrome; útil em testes. */
   variant?: SiteNavVariant;
   locale?: AppLocale;
 };
-
-const NAV_ITEMS = [
-  { key: "menu_home", label: "Início", hash: "home" },
-  { key: "menu_about", label: "Sobre", hash: "sobre" },
-  { key: "menu_services", label: "Serviços", hash: "servicos" },
-  { key: "menu_executive", label: "Executive", href: "/executive" },
-  { key: "menu_contact", label: "Contacto", hash: "instagram" },
-] as const;
 
 function navHref(base: "" | "/" | "/en", hash: string): string {
   return `${base}#${hash}`;
@@ -26,8 +19,17 @@ export function SiteHeader({
   locale = "pt",
 }: SiteHeaderProps) {
   const base = getSiteNavBase(variant, locale);
+  const m = getMessages(locale);
   const bookHref = withLocalePrefix("/reservar", locale);
   const executiveHref = withLocalePrefix("/executive", locale);
+
+  const navItems = [
+    { key: "home", label: m.nav.home, hash: "home" as const },
+    { key: "about", label: m.nav.about, hash: "sobre" as const },
+    { key: "services", label: m.nav.services, hash: "servicos" as const },
+    { key: "executive", label: m.nav.executive, href: executiveHref },
+    { key: "contact", label: m.nav.contact, hash: "instagram" as const },
+  ] as const;
 
   return (
     <header className="main-header" aria-label="Cabeçalho do site">
@@ -36,7 +38,7 @@ export function SiteHeader({
           <Link href={withLocalePrefix("/", locale)}>
             <Image
               src="/assets/images/hero/logo.png.webp"
-              alt="Discover Portugal Logo"
+              alt="DiscoverLixboaTours Logo"
               width={200}
               height={80}
               className="logo-image"
@@ -46,17 +48,13 @@ export function SiteHeader({
         </div>
 
         <nav className="header-nav" aria-label="Navegação principal">
-          {NAV_ITEMS.map((item) =>
+          {navItems.map((item) =>
             "href" in item ? (
-              <a key={item.key} href={executiveHref} data-translate={item.key}>
+              <a key={item.key} href={item.href}>
                 {item.label}
               </a>
             ) : (
-              <a
-                key={item.key}
-                href={navHref(base, item.hash)}
-                data-translate={item.key}
-              >
+              <a key={item.key} href={navHref(base, item.hash)}>
                 {item.label}
               </a>
             ),
@@ -64,7 +62,7 @@ export function SiteHeader({
         </nav>
 
         <Link href={bookHref} className="header-cta">
-          <span data-translate="book_now">Reservar Agora</span>
+          <span>{m.nav.book}</span>
           <svg
             width="20"
             height="20"
@@ -82,10 +80,7 @@ export function SiteHeader({
           </svg>
         </Link>
 
-        <div className="language-selector">
-          <div className="language-flag flag-pt" data-lang="pt" title="Português" />
-          <div className="language-flag flag-en" data-lang="en" title="English" />
-        </div>
+        <LanguageSwitcher />
 
         <button
           className="mobile-menu-toggle"
@@ -99,23 +94,22 @@ export function SiteHeader({
       </div>
 
       <nav className="mobile-menu" aria-label="Navegação móvel">
-        {NAV_ITEMS.map((item) =>
+        {navItems.map((item) =>
           "href" in item ? (
-            <a key={item.key} href={executiveHref} data-translate={item.key}>
+            <a key={item.key} href={item.href}>
               {item.label}
             </a>
           ) : (
-            <a key={item.key} href={navHref(base, item.hash)} data-translate={item.key}>
+            <a key={item.key} href={navHref(base, item.hash)}>
               {item.label}
             </a>
           ),
         )}
         <div className="language-selector-mobile">
-          <div className="language-flag flag-pt" data-lang="pt" title="Português" />
-          <div className="language-flag flag-en" data-lang="en" title="English" />
+          <LanguageSwitcher />
         </div>
         <Link href={bookHref} className="mobile-cta">
-          <span data-translate="book_now">Reservar Agora</span>
+          <span>{m.nav.book}</span>
         </Link>
       </nav>
     </header>

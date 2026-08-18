@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk, Outfit } from "next/font/google";
 import Script from "next/script";
 import { TranslateBridge } from "@/components/TranslateBridge";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { htmlLang } from "@/lib/i18n/types";
 import "./globals.css";
 import "./styles/booking-reservar.css";
 
@@ -43,13 +45,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getRequestLocale();
+
   return (
-    <html lang="pt-PT" className={`${hanken.variable} ${outfit.variable}`}>
+    <html lang={htmlLang(locale)} className={`${hanken.variable} ${outfit.variable}`} data-lang={locale}>
       <body suppressHydrationWarning>
         <Script id="dl-lang-boot" strategy="beforeInteractive">{`
 (function(){
@@ -69,6 +73,7 @@ export default function RootLayout({
         `}</Script>
         <TranslateBridge />
         {children}
+        {/* Legado: ainda usado por HTML de tours não migrados e páginas com data-translate */}
         <Script src="/assets/js/translate.js" strategy="afterInteractive" />
       </body>
     </html>

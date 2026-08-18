@@ -4,6 +4,8 @@
  */
 
 import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
+import { pricingRuleFromMigratedSlug } from "@/lib/tour-pricing-from-content";
+import { getMigratedTour } from "@/content/tours";
 
 export type PricingRule =
   | { kind: "per_person"; centsPerPerson: number }
@@ -39,6 +41,8 @@ export function getMaxBookablePassengers(_tourId: string): number {
 
 /** Mínimo comercialmente reservável (tabelas que começam em 2 convidados). */
 export function getMinBookablePassengers(tourId: string): number {
+  const tour = getMigratedTour(tourId);
+  if (tour) return tour.minGuests;
   switch (tourId) {
     case "aveiro":
     case "alentejo":
@@ -103,6 +107,10 @@ export function getPricingRuleFromTable(
   const q = parseGuestQty(qty);
   if (q === null) return null;
 
+  // Tours migrados: pricing vem da definição em content/tours (fonte única)
+  const fromContent = pricingRuleFromMigratedSlug(tourId, q);
+  if (fromContent) return fromContent;
+
   // Sintra & Cascais — tour privado, preço total por grupo (até 8)
   if (tourId === "sintra-cascais") {
     if (q <= 2) return { kind: "per_group", centsTotal: 25000 };
@@ -128,7 +136,7 @@ export function getPricingRuleFromTable(
     return null;
   }
 
-  // Lisboa — totais por grupo privado (1–8)
+  // Lisboa — legado (só se ainda não migrado; migrado usa content/tours)
   if (tourId === "lisboa") {
     if (q <= 2) return { kind: "per_group", centsTotal: 25000 };
     if (q === 3) return { kind: "per_group", centsTotal: 30000 };
@@ -230,8 +238,21 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "3-destinos") {
+    // Migrado: billing = per_group; UI 2–8 continua a mostrar €/pessoa
     if (rule.kind === "per_group") {
-      return { kind: "per_group", totalCents: rule.centsTotal, label: "1 pessoa (280 €)" };
+      if (q === 1) {
+        return {
+          kind: "per_group",
+          totalCents: rule.centsTotal,
+          label: "1 pessoa (280 €)",
+        };
+      }
+      return {
+        kind: "per_person",
+        centsPerPerson: Math.round(rule.centsTotal / q),
+        totalCents: rule.centsTotal,
+        label: `${q} pessoas`,
+      };
     }
     return {
       kind: "per_person",
@@ -249,8 +270,21 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "arraabida") {
+    // Migrado: billing = per_group; UI 2–8 continua a mostrar €/pessoa
     if (rule.kind === "per_group") {
-      return { kind: "per_group", totalCents: rule.centsTotal, label: "1 pessoa (260 €)" };
+      if (q === 1) {
+        return {
+          kind: "per_group",
+          totalCents: rule.centsTotal,
+          label: "1 pessoa (260 €)",
+        };
+      }
+      return {
+        kind: "per_person",
+        centsPerPerson: Math.round(rule.centsTotal / q),
+        totalCents: rule.centsTotal,
+        label: `${q} pessoas`,
+      };
     }
     return {
       kind: "per_person",
@@ -293,7 +327,15 @@ export function estimateFromTable(tourId: string, quantity: number): PriceEstima
   }
 
   if (tourId === "alentejo") {
-    if (rule.kind !== "per_person") return null;
+    // Migrado: billing = per_group; UI mostra €/pessoa exacto (total / q)
+    if (rule.kind === "per_group") {
+      return {
+        kind: "per_person",
+        centsPerPerson: Math.round(rule.centsTotal / q),
+        totalCents: rule.centsTotal,
+        label: `${q} pessoas`,
+      };
+    }
     return {
       kind: "per_person",
       centsPerPerson: rule.centsPerPerson,

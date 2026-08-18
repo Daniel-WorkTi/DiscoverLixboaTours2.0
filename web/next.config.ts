@@ -33,37 +33,11 @@ const nextConfig: NextConfig = {
     ];
   },
   /**
-   * Serve o HTML estático completo (sem iframe). Sem isto, /tours/* ficava só no iframe e podia aparecer em branco.
-   */
-  /**
-   * beforeFiles: corre antes da resolução de rotas App Router (necessário para /tours/* → HTML em public).
+   * beforeFiles: rewrites de tours HTML legado removidos — todos os tours estão no App Router.
    */
   async rewrites() {
     return {
-      beforeFiles: [
-        {
-          source: "/tours/sintra-cascais",
-          destination: "/tour-sintra-cascais.html",
-        },
-        {
-          source: "/tours/3-destinos",
-          destination: "/tour-3-destinos.html",
-        },
-        { source: "/tours/lisboa", destination: "/tour-lisboa.html" },
-        { source: "/tours/porto", destination: "/tour-porto.html" },
-        { source: "/tours/arraabida", destination: "/tour-arraabida.html" },
-        { source: "/tours/aveiro", destination: "/tour-aveiro.html" },
-        {
-          source: "/tours/monsanto",
-          destination: "/tour-monsanto.html",
-        },
-        {
-          source: "/tours/fatima-tomar",
-          destination: "/tour-fatima-tomar.html",
-        },
-        { source: "/tours/alentejo", destination: "/tour-alentejo.html" },
-        { source: "/tours/algarve", destination: "/tour-algarve.html" },
-      ],
+      beforeFiles: [],
     };
   },
   async redirects() {

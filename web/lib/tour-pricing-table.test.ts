@@ -154,7 +154,7 @@ describe("Fátima, Nazaré & Óbidos (3-destinos) — 1–8", () => {
     });
   });
 
-  it("2–8 por pessoa com totais corretos (8 ≠ 7)", () => {
+  it("2–8 totais de grupo (migrado; display UI €/pessoa)", () => {
     const cpp: Record<number, number> = {
       2: 14000,
       3: 11500,
@@ -175,11 +175,16 @@ describe("Fátima, Nazaré & Óbidos (3-destinos) — 1–8", () => {
     };
     for (let q = 2; q <= 8; q++) {
       expect(getPricingRuleFromTable("3-destinos", q)).toEqual({
-        kind: "per_person",
-        centsPerPerson: cpp[q],
+        kind: "per_group",
+        centsTotal: totals[q],
       });
       expect(totalFromRule("3-destinos", q)).toBe(totals[q]);
-      expect(estimateFromTable("3-destinos", q)?.totalCents).toBe(totals[q]);
+      const est = estimateFromTable("3-destinos", q);
+      expect(est?.kind).toBe("per_person");
+      expect(est?.totalCents).toBe(totals[q]);
+      if (est?.kind === "per_person") {
+        expect(est.centsPerPerson).toBe(cpp[q]);
+      }
     }
     expect(getPricingRuleFromTable("3-destinos", 8)).not.toEqual(
       getPricingRuleFromTable("3-destinos", 7),
@@ -214,8 +219,8 @@ describe("Capacidade partilhada", () => {
       centsTotal: 80000,
     });
     expect(getPricingRuleFromTable("alentejo", 8)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 14500,
+      kind: "per_group",
+      centsTotal: 116000,
     });
   });
 });
@@ -278,7 +283,7 @@ describe("Arrábida & Sesimbra — novo preçário por pessoa (1–8)", () => {
     expect(estimateFromTable("arraabida", 1)?.totalCents).toBe(26000);
   });
 
-  it("2–8 por pessoa com totais corretos", () => {
+  it("2–8 totais de grupo (migrado; display UI €/pessoa)", () => {
     const expected: Record<number, number> = {
       2: 13000,
       3: 11000,
@@ -299,24 +304,27 @@ describe("Arrábida & Sesimbra — novo preçário por pessoa (1–8)", () => {
     };
     for (let q = 2; q <= 8; q++) {
       expect(getPricingRuleFromTable("arraabida", q)).toEqual({
-        kind: "per_person",
-        centsPerPerson: expected[q],
+        kind: "per_group",
+        centsTotal: totals[q],
       });
       expect(totalFromRule("arraabida", q)).toBe(totals[q]);
       const est = estimateFromTable("arraabida", q);
       expect(est?.kind).toBe("per_person");
       expect(est?.totalCents).toBe(totals[q]);
+      if (est?.kind === "per_person") {
+        expect(est.centsPerPerson).toBe(expected[q]);
+      }
     }
   });
 
   it("8 passageiros não usam o preço de 7", () => {
     expect(getPricingRuleFromTable("arraabida", 7)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 8000,
+      kind: "per_group",
+      centsTotal: 56000,
     });
     expect(getPricingRuleFromTable("arraabida", 8)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 7500,
+      kind: "per_group",
+      centsTotal: 60000,
     });
     expect(totalFromRule("arraabida", 8)).toBe(60000);
   });
@@ -330,29 +338,29 @@ describe("Outros destinos (amostras)", () => {
     });
   });
 
-  it("3 destinos 2 pessoas = 140 € / pessoa", () => {
+  it("3 destinos 2 pessoas = 280 € grupo (140 € / pessoa na UI)", () => {
     expect(getPricingRuleFromTable("3-destinos", 2)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 14000,
+      kind: "per_group",
+      centsTotal: 28000,
     });
   });
 
-  it("3 destinos segue o preçário por pessoa (3–6+)", () => {
+  it("3 destinos segue o preçário por totais de grupo (3–6+)", () => {
     expect(getPricingRuleFromTable("3-destinos", 3)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 11500,
+      kind: "per_group",
+      centsTotal: 34500,
     });
     expect(getPricingRuleFromTable("3-destinos", 4)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 10500,
+      kind: "per_group",
+      centsTotal: 42000,
     });
     expect(getPricingRuleFromTable("3-destinos", 5)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 10000,
+      kind: "per_group",
+      centsTotal: 50000,
     });
     expect(getPricingRuleFromTable("3-destinos", 6)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 9500,
+      kind: "per_group",
+      centsTotal: 57000,
     });
   });
 
@@ -441,7 +449,7 @@ describe("Outros destinos (amostras)", () => {
     });
   });
 
-  it("Premium Alentejo — por pessoa exacto 2–8", () => {
+  it("Premium Alentejo — totais de grupo 2–8 (migrado; UI €/pessoa)", () => {
     const cpp: Record<number, number> = {
       2: 27500,
       3: 22000,
@@ -465,15 +473,19 @@ describe("Outros destinos (amostras)", () => {
     expect(getPricingRuleFromTable("alentejo", 1)).toBeNull();
     for (let q = 2; q <= 8; q++) {
       expect(getPricingRuleFromTable("alentejo", q)).toEqual({
-        kind: "per_person",
-        centsPerPerson: cpp[q],
+        kind: "per_group",
+        centsTotal: totals[q],
       });
       expect(totalFromRule("alentejo", q)).toBe(totals[q]);
-      expect(estimateFromTable("alentejo", q)?.totalCents).toBe(totals[q]);
+      const est = estimateFromTable("alentejo", q);
+      expect(est?.totalCents).toBe(totals[q]);
+      if (est?.kind === "per_person") {
+        expect(est.centsPerPerson).toBe(cpp[q]);
+      }
     }
     expect(getPricingRuleFromTable("alentejo", 8)).toEqual({
-      kind: "per_person",
-      centsPerPerson: 14500,
+      kind: "per_group",
+      centsTotal: 116000,
     });
   });
 
