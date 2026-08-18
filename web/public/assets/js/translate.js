@@ -11,16 +11,17 @@ const translations = {
         
         // Hero Section
         hero_badge: "Tours Exclusivos em Portugal",
-        hero_title_line1: "Transforme Portugal",
-        hero_title_line2: "No Seu Parque de Aventuras",
-        hero_subtitle1: "Experiência incomparável para viagens únicas. Estamos aqui para levá-lo em suas",
-        hero_subtitle2: "viagens dos sonhos por Portugal.",
-        hero_cta: "Explorar Tours",
+        hero_title_line1: "Descubra Portugal",
+        hero_title_line2: "como um local.",
+        hero_subtitle1: "Tours privados por Sintra, Lisboa e todo o país, com guia local, itinerários personalizados e total liberdade para viajar ao seu ritmo.",
+        hero_subtitle2: "",
+        hero_cta: "Explorar tours",
+        hero_cta_secondary: "Falar connosco",
         
         // About Section
         about_subtitle: "Sobre Nós",
         about_title: "Explore Portugal com um toque local!",
-        about_description1: "Com base em Sintra, a Discoverlix Boatours oferece tours autênticos de palácios, montanhas e praias em Sintra e Cascais, além de Lisboa, Nazaré, Fátima, Óbidos, Porto e Algarve.",
+        about_description1: "Com base em Sintra, a DiscoverLixboaTours oferece tours autênticos de palácios, montanhas e praias em Sintra e Cascais, além de Lisboa, Nazaré, Fátima, Óbidos, Porto e Algarve.",
         about_description2: "Guiados por Mike, nascido e criado em Sintra, cada tour combina aventura, cultura e histórias locais em um jeep conversível vintage ou van confortável.",
         about_description3: "Sustentável e apaixonado por mostrar o verdadeiro Portugal — cada tour é uma experiência única e inesquecível!",
         learn_more: "Saiba Mais",
@@ -32,7 +33,7 @@ const translations = {
         widget_trips: "Viagens Completas",
         
         // Ticker
-        ticker_text: "Tours Autênticos em Portugal com DiscoverLixboatours",
+        ticker_text: "Tours Autênticos em Portugal com DiscoverLixboaTours",
         
         // Quote Carousel
         quote_text_laranja: "Experiências Autênticas • Guias Locais • Momentos Inesquecíveis",
@@ -52,7 +53,7 @@ const translations = {
         destination_lisboa_name: "Lisboa",
         destination_lisboa_places: "Capital Vibrante",
         destination_porto_name: "Porto",
-        destination_porto_places: "Um Dia de Patrimônio, História & Vinho",
+        destination_porto_places: "Um Dia de Património, História & Vinho",
         destination_arrabida_name: "Arrábida, Setúbal & Sesimbra",
         destination_arrabida_places: "Natureza, História e Vistas Incríveis",
         destination_aveiro_name: "Aveiro & Costa Nova",
@@ -103,8 +104,8 @@ const translations = {
         
         // Testimonials Section
         testimonials_subtitle: "Depoimentos",
-        testimonials_title: "O Que Nossos Clientes Dizem",
-        testimonials_description: "Feedback real de clientes que viveram experiências únicas conosco",
+        testimonials_title: "O que os nossos clientes dizem",
+        testimonials_description: "Avaliações reais de viajantes no TripAdvisor",
         tripadvisor_btn_text: "Ver mais avaliações no TripAdvisor",
         testimonial1: "100% recomendado! Mike é um ótimo guia que nos fez aproveitar ao máximo essa experiência. As explicações foram muito claras e ele cuidou de nós do início ao fim.",
         testimonial2: "Diversão garantida! Mike foi o melhor! Tornou a experiência dos meus filhos super divertida. Levou-nos a lugares que nunca imaginei visitar, foi paciente, simpático, educado e ótimo fotógrafo. Recomendo muito!",
@@ -152,9 +153,9 @@ const translations = {
         footer_rights_part: "Todos os direitos reservados.",
 
         reservar_back: "← Voltar ao site",
-        reservar_h1: "Reserva o teu tour",
+        reservar_h1: "Reserve o seu tour privado",
         reservar_lead:
-            "Escolhe destino, data e viajantes (até 8 passageiros). No passo seguinte confirmas os dados e segues para o pagamento seguro.",
+            "Escolha o destino, a data e o número de passageiros.",
 
         obrigado_eyebrow: "Bilhete digital",
         obrigado_title_paid: "Reserva paga com sucesso",
@@ -202,9 +203,9 @@ const translations = {
 
         booking_modal_destino: "Destino",
         booking_modal_choose: "Escolhe o teu tour",
-        booking_modal_title: "Reserva o teu tour",
+        booking_modal_title: "Reserve o seu tour privado",
         booking_section_date: "Data do tour",
-        booking_travelers: "Viajantes",
+        booking_travelers: "Passageiros",
         booking_travelers_hint: "Escolhe quantas pessoas vão no tour (máx. 8 passageiros)",
         booking_per_person: "Por pessoa",
         booking_total: "Total",
@@ -223,13 +224,15 @@ const translations = {
         booking_submit: "Continuar para pagamento seguro",
         booking_card_destino: "Destino",
         booking_card_data: "Data",
-        booking_card_viajantes: "Viajantes",
+        booking_card_viajantes: "Passageiros",
         booking_aria_pick_destino: "Escolher destino do tour",
         booking_pick_date: "Toca para escolher",
         booking_cta_review: "Rever e pagar",
         booking_cta_choose: "Escolher data e reservar",
-        booking_person_singular: "pessoa",
-        booking_person_plural: "pessoas",
+        booking_guest_one: "passageiro",
+        booking_guest_many: "passageiros",
+        booking_person_singular: "passageiro",
+        booking_person_plural: "passageiros",
         booking_hint_long:
             "Abre o calendário no botão laranja, escolhe até 8 passageiros e conclui os teus dados para ires ao pagamento seguro.",
 
@@ -560,8 +563,8 @@ const translations = {
         section_gallery: "Galeria",
         section_why_choose: "Porquê escolher este tour",
         section_visualize_route: "Visualize todo o percurso do tour",
-        tour_arrabida_why_choose_text: "Porque a natureza portuguesa tem segredos que só os locais conhecem.<br>E com a Discoverlix Boatours, vais descobrir a Arrábida, Setúbal e Sesimbra da forma mais autêntica e exclusiva possível.",
-        tour_alentejo_why_choose_text: "Porque o Alentejo é a alma de Portugal.<br>E com a Discoverlix Boatours, vais descobrir Évora, Estremoz e Arraiolos da forma mais autêntica e exclusiva possível.",
+        tour_arrabida_why_choose_text: "Porque a natureza portuguesa tem segredos que só os locais conhecem.<br>E com a DiscoverLixboaTours, vais descobrir a Arrábida, Setúbal e Sesimbra da forma mais autêntica e exclusiva possível.",
+        tour_alentejo_why_choose_text: "Porque o Alentejo é a alma de Portugal.<br>E com a DiscoverLixboaTours, vais descobrir Évora, Estremoz e Arraiolos da forma mais autêntica e exclusiva possível.",
         
         // Itens comuns incluídos
         included_transport: "Transporte privado em veículo confortável com ar-condicionado",
@@ -685,16 +688,17 @@ const translations = {
         
         // Hero Section
         hero_badge: "Exclusive Tours in Portugal",
-        hero_title_line1: "Transform Portugal",
-        hero_title_line2: "Into Your Adventure Park",
-        hero_subtitle1: "Unparalleled experience for unique trips. We are here to take you on your",
-        hero_subtitle2: "dream trips through Portugal.",
-        hero_cta: "Explore Tours",
+        hero_title_line1: "Experience Portugal",
+        hero_title_line2: "Like a Local.",
+        hero_subtitle1: "Private tours across Sintra, Lisbon and beyond, with a local guide, flexible itineraries and your own private vehicle.",
+        hero_subtitle2: "",
+        hero_cta: "Explore Private Tours",
+        hero_cta_secondary: "Talk to Us",
         
         // About Section
         about_subtitle: "About Us",
         about_title: "Explore Portugal with a local touch!",
-        about_description1: "Based in Sintra, Discoverlix Boatours offers authentic tours of palaces, mountains and beaches in Sintra and Cascais, as well as Lisbon, Nazaré, Fátima, Óbidos, Porto and Algarve.",
+        about_description1: "Based in Sintra, DiscoverLixboaTours offers authentic tours of palaces, mountains and beaches in Sintra and Cascais, as well as Lisbon, Nazaré, Fátima, Óbidos, Porto and Algarve.",
         about_description2: "Guided by Mike, born and raised in Sintra, each tour combines adventure, culture and local stories in a vintage convertible jeep or comfortable van.",
         about_description3: "Sustainable and passionate about showing the real Portugal — each tour is a unique and unforgettable experience!",
         learn_more: "Learn More",
@@ -706,7 +710,7 @@ const translations = {
         widget_trips: "Complete Trips",
         
         // Ticker
-        ticker_text: "Authentic Tours in Portugal with DiscoverLixboatours",
+        ticker_text: "Authentic Tours in Portugal with DiscoverLixboaTours",
         
         // Quote Carousel
         quote_text_laranja: "Authentic Experiences • Local Guides • Unforgettable Moments",
@@ -826,7 +830,7 @@ const translations = {
         footer_rights_part: "All rights reserved.",
 
         reservar_back: "← Back to site",
-        reservar_h1: "Book your tour",
+        reservar_h1: "Book Your Private Tour",
         reservar_lead:
             "Choose destination, date and travellers (up to 8 passengers). On the next step you confirm your details and continue to secure payment.",
 
@@ -876,9 +880,9 @@ const translations = {
 
         booking_modal_destino: "Destination",
         booking_modal_choose: "Choose your tour",
-        booking_modal_title: "Book your tour",
+        booking_modal_title: "Book Your Private Tour",
         booking_section_date: "Tour date",
-        booking_travelers: "Travellers",
+        booking_travelers: "Guests",
         booking_travelers_hint: "Choose how many people on the tour (max. 8 passengers)",
         booking_per_person: "Per person",
         booking_total: "Total",
@@ -897,13 +901,15 @@ const translations = {
         booking_submit: "Continue to secure payment",
         booking_card_destino: "Destination",
         booking_card_data: "Date",
-        booking_card_viajantes: "Travellers",
+        booking_card_viajantes: "Guests",
         booking_aria_pick_destino: "Choose tour destination",
         booking_pick_date: "Tap to choose",
         booking_cta_review: "Review & pay",
-        booking_cta_choose: "Pick date & book",
-        booking_person_singular: "person",
-        booking_person_plural: "people",
+        booking_cta_choose: "Choose a Date & Book",
+        booking_guest_one: "Guest",
+        booking_guest_many: "Guests",
+        booking_person_singular: "Guest",
+        booking_person_plural: "Guests",
         booking_hint_long:
             "Open the calendar on the orange button, choose up to 8 passengers and complete your details to go to secure payment.",
 
@@ -1237,8 +1243,8 @@ const translations = {
         section_gallery: "Gallery",
         section_why_choose: "Why choose this tour",
         section_visualize_route: "View the entire tour route",
-        tour_arrabida_why_choose_text: "Because Portuguese nature has secrets that only locals know.<br>And with Discoverlix Boatours, you'll discover Arrábida, Setúbal and Sesimbra in the most authentic and exclusive way possible.",
-        tour_alentejo_why_choose_text: "Because Alentejo is the soul of Portugal.<br>And with Discoverlix Boatours, you'll discover Évora, Estremoz and Arraiolos in the most authentic and exclusive way possible.",
+        tour_arrabida_why_choose_text: "Because Portuguese nature has secrets that only locals know.<br>And with DiscoverLixboaTours, you'll discover Arrábida, Setúbal and Sesimbra in the most authentic and exclusive way possible.",
+        tour_alentejo_why_choose_text: "Because Alentejo is the soul of Portugal.<br>And with DiscoverLixboaTours, you'll discover Évora, Estremoz and Arraiolos in the most authentic and exclusive way possible.",
         
         // Common included items
         included_transport: "Private transport in comfortable air-conditioned vehicle",
@@ -1352,78 +1358,147 @@ const translations = {
     }
 };
 
-// Função para definir idioma
-function setLanguage(lang) {
-    var normalized = (lang === 'en' || lang === 'pt') ? lang : 'pt';
-
-    // Salva o idioma escolhido no localStorage
-    localStorage.setItem('language', normalized);
-    
-    // Atualiza o atributo lang do HTML
-    document.documentElement.lang = normalized;
-    
-    // Traduz todos os elementos com data-translate
-    document.querySelectorAll('[data-translate]').forEach(element => {
-        const key = element.getAttribute('data-translate');
-        if (translations[normalized] && translations[normalized][key]) {
-            // Se tem atributo data-html, preserva o HTML interno
-            if (element.hasAttribute('data-html')) {
-                element.innerHTML = translations[normalized][key];
-            } else {
-                element.textContent = translations[normalized][key];
-            }
-        }
-    });
-
-    document.querySelectorAll('[data-translate-placeholder]').forEach((element) => {
-        const key = element.getAttribute('data-translate-placeholder');
-        if (translations[normalized] && translations[normalized][key]) {
-            element.setAttribute('placeholder', translations[normalized][key]);
-        }
-    });
-    
-    // Atualiza as bandeiras ativas
-    document.querySelectorAll('.language-flag').forEach(flag => {
-        flag.classList.remove('active');
-    });
-    var activeFlag = document.querySelector('.flag-' + normalized);
-    if (activeFlag) {
-        activeFlag.classList.add('active');
-    }
-
-    try {
-        window.dispatchEvent(new CustomEvent("discoverlangchange", { detail: normalized }));
-    } catch { /* ignore */ }
-}
-
-// Função para inicializar tradução
-function initTranslation() {
-    // Carrega idioma salvo ou usa português como padrão
-    const savedLang = localStorage.getItem('language') || 'pt';
-    
-    // Define o idioma inicial
-    setLanguage(savedLang);
-    
-    // Adiciona event listeners para as bandeiras
-    document.querySelectorAll('.language-flag').forEach(flag => {
-        flag.addEventListener('click', () => {
-            const lang = flag.getAttribute('data-lang');
-            if (lang) {
-                setLanguage(lang);
-            }
-        });
-    });
-}
-
-// Inicializa quando o DOM estiver carregado (compatível com Next.js / script tardio)
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initTranslation);
-} else {
-    initTranslation();
-}
-
-/** App Router: re-aplicar idioma após navegação client-side (Next.js). */
-if (typeof window !== "undefined") {
-    window.setLanguage = setLanguage;
-    window.initTranslation = initTranslation;
-}
+function dlStripLocalePrefix(pathname) {
+    if (pathname === '/en') return '/';
+    if (pathname.indexOf('/en/') === 0) {
+        var rest = pathname.slice(3);
+        return rest.charAt(0) === '/' ? rest : '/' + rest;
+    }
+    return pathname;
+}
+
+function dlPathForLang(lang) {
+    var bare = dlStripLocalePrefix(location.pathname) || '/';
+    if (lang === 'en') return bare === '/' ? '/en' : '/en' + bare;
+    return bare;
+}
+
+function dlPathLang() {
+    var p = location.pathname;
+    return (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : null;
+}
+
+function dlReadCookieLang() {
+    var m = document.cookie.match(/(?:^|; )dl_lang=(pt|en)/);
+    return m ? m[1] : null;
+}
+
+function dlShouldLocalizePath(path) {
+    return path === '/' ||
+        path.indexOf('/reservar') === 0 ||
+        path.indexOf('/tours/') === 0 ||
+        path.indexOf('/executive') === 0 ||
+        path.indexOf('/privacidade') === 0 ||
+        path.indexOf('/cookies') === 0 ||
+        path.indexOf('/termos') === 0 ||
+        path.indexOf('/sgpd') === 0;
+}
+
+/** Mantém links internos alinhados com /en quando o idioma é inglês. */
+function localizeInternalLinks(lang) {
+    document.querySelectorAll('a[href]').forEach(function (a) {
+        var href = a.getAttribute('href');
+        if (!href || href.charAt(0) !== '/') return;
+        if (href.indexOf('//') === 0) return;
+
+        var path = href;
+        var qs = '';
+        var hash = '';
+        var qi = path.indexOf('?');
+        if (qi >= 0) { qs = path.slice(qi); path = path.slice(0, qi); }
+        var hi = path.indexOf('#');
+        if (hi >= 0) { hash = path.slice(hi); path = path.slice(0, hi); }
+
+        path = dlStripLocalePrefix(path);
+        if (!dlShouldLocalizePath(path)) return;
+
+        if (lang === 'en') {
+            path = path === '/' ? '/en' : '/en' + path;
+        }
+        a.setAttribute('href', path + qs + hash);
+    });
+}
+
+// Função para definir idioma
+function setLanguage(lang, opts) {
+    var normalized = (lang === 'en' || lang === 'pt') ? lang : 'pt';
+    opts = opts || {};
+
+    localStorage.setItem('language', normalized);
+    try {
+        document.cookie = 'dl_lang=' + normalized + ';path=/;max-age=31536000;SameSite=Lax';
+    } catch (e) { /* ignore */ }
+
+    document.documentElement.lang = normalized === 'en' ? 'en' : 'pt-PT';
+    document.documentElement.setAttribute('data-lang', normalized);
+
+    if (opts.navigate) {
+        var next = dlPathForLang(normalized);
+        if (next !== location.pathname) {
+            location.assign(next + location.search + location.hash);
+            return;
+        }
+    }
+
+    document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[normalized] && translations[normalized][key] !== undefined) {
+            if (element.hasAttribute('data-html')) {
+                element.innerHTML = translations[normalized][key];
+            } else {
+                element.textContent = translations[normalized][key];
+            }
+        }
+    });
+
+    document.querySelectorAll('[data-translate-placeholder]').forEach((element) => {
+        const key = element.getAttribute('data-translate-placeholder');
+        if (translations[normalized] && translations[normalized][key]) {
+            element.setAttribute('placeholder', translations[normalized][key]);
+        }
+    });
+
+    document.querySelectorAll('.language-flag').forEach(flag => {
+        flag.classList.remove('active');
+    });
+    var activeFlag = document.querySelector('.flag-' + normalized);
+    if (activeFlag) {
+        activeFlag.classList.add('active');
+    }
+
+    localizeInternalLinks(normalized);
+
+    try {
+        window.dispatchEvent(new CustomEvent("discoverlangchange", { detail: normalized }));
+    } catch (e) { /* ignore */ }
+}
+
+function initTranslation() {
+    var pathLang = dlPathLang();
+    var saved = localStorage.getItem('language');
+    var cookieLang = dlReadCookieLang();
+    var initial = pathLang || saved || cookieLang || 'pt';
+    if (initial !== 'pt' && initial !== 'en') initial = 'pt';
+
+    setLanguage(initial);
+
+    document.querySelectorAll('.language-flag').forEach(flag => {
+        flag.addEventListener('click', () => {
+            const lang = flag.getAttribute('data-lang');
+            if (lang) {
+                setLanguage(lang, { navigate: true });
+            }
+        });
+    });
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTranslation);
+} else {
+    initTranslation();
+}
+
+if (typeof window !== "undefined") {
+    window.setLanguage = setLanguage;
+    window.initTranslation = initTranslation;
+}

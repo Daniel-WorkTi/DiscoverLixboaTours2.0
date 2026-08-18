@@ -131,12 +131,42 @@ const instagramPhotos = [1, 2, 3, 4, 5, 6].map(
 );
 
 const testimonials = [
-  { key: "testimonial1", author: "Lorenzo M" },
-  { key: "testimonial2", author: "FarAway12287983537" },
-  { key: "testimonial3", author: "Carmen C" },
-  { key: "testimonial4", author: "Pol D" },
-  { key: "testimonial5", author: "Mario P" },
-  { key: "testimonial6", author: "Hannah J" },
+  {
+    key: "testimonial1",
+    author: "Lorenzo M",
+    fallback:
+      "100% recomendado! Mike é um ótimo guia que nos fez aproveitar ao máximo essa experiência. As explicações foram muito claras e ele cuidou de nós do início ao fim.",
+  },
+  {
+    key: "testimonial2",
+    author: "FarAway12287983537",
+    fallback:
+      "Experiência incrível em Sintra. O Mike conhece todos os cantos e torna o dia especial — o destaque da nossa viagem a Portugal.",
+  },
+  {
+    key: "testimonial3",
+    author: "Carmen C",
+    fallback:
+      "Mike tornou o nosso dia em Sintra inesquecível. Profissional, simpático e com um conhecimento local fantástico.",
+  },
+  {
+    key: "testimonial4",
+    author: "Pol D",
+    fallback:
+      "Tour privado perfeito. Ritmo flexível, história bem contada e lugares que não teríamos encontrado sozinhos.",
+  },
+  {
+    key: "testimonial5",
+    author: "Mario P",
+    fallback:
+      "Excelente organização e um guia apaixonado por Portugal. Voltaremos a reservar sem dúvida.",
+  },
+  {
+    key: "testimonial6",
+    author: "Hannah J",
+    fallback:
+      "Do pick-up ao regresso, tudo impecável. Uma forma autêntica de descobrir o país com um local.",
+  },
 ];
 
 const faqItems = [
@@ -198,29 +228,25 @@ export function HomePage() {
 
             <h1 className="hero-title">
               <span className="title-line" data-translate="hero_title_line1">
-                Transforme Portugal
+                Descubra Portugal
               </span>
               <span
                 className="title-line highlight"
                 data-translate="hero_title_line2"
               >
-                No Seu Parque de Aventuras
+                como um local.
               </span>
             </h1>
 
-            <p className="hero-subtitle">
-              <span data-translate="hero_subtitle1">
-                Experiência incomparável para viagens únicas. Estamos aqui para
-                levá-lo em suas
-              </span>{" "}
-              <strong data-translate="hero_subtitle2">
-                viagens dos sonhos por Portugal.
-              </strong>
+            <p className="hero-subtitle" data-translate="hero_subtitle1">
+              Tours privados por Sintra, Lisboa e todo o país, com guia local,
+              itinerários personalizados e total liberdade para viajar ao seu
+              ritmo.
             </p>
 
             <div className="hero-cta">
               <a href="#servicos" className="btn-primary">
-                <span data-translate="hero_cta">Explorar Tours</span>
+                <span data-translate="hero_cta">Explorar tours</span>
                 <svg
                   width="20"
                   height="20"
@@ -231,6 +257,13 @@ export function HomePage() {
                 >
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
+              </a>
+              <a
+                href="#instagram"
+                className="btn-secondary hero-cta-secondary"
+                data-translate="hero_cta_secondary"
+              >
+                Falar connosco
               </a>
             </div>
           </div>
@@ -366,9 +399,9 @@ export function HomePage() {
               {[1, 2, 3, 4, 5, 6, 7].map((i) => (
                 <li className="ticker-item" key={i}>
                   {i % 2 === 1 ? (
-                    <h2 className="ticker-text" data-translate="ticker_text">
-                      Tours Autênticos em Portugal com DiscoverLixboatours
-                    </h2>
+                    <p className="ticker-text" data-translate="ticker_text">
+                      Tours Autênticos em Portugal com DiscoverLixboaTours
+                    </p>
                   ) : (
                     <svg
                       className="ticker-icon"

@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useId, useMemo, useRef, useState } from "react";
+import { localeFromPathname, withLocalePrefix } from "@/lib/i18n/locale";
 
 export type DestinationCard = {
   href: string;
@@ -23,6 +25,8 @@ type Props = {
 };
 
 export function DestinationsGrid({ destinations }: Props) {
+  const pathname = usePathname() || "/";
+  const locale = localeFromPathname(pathname);
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -198,7 +202,7 @@ export function DestinationsGrid({ destinations }: Props) {
               </span>
             </div>
 
-            <a href={d.href} className="destination-image-link">
+            <a href={withLocalePrefix(d.href, locale)} className="destination-image-link">
               <div className="destination-image">
                 <Image
                   src={d.img}
@@ -220,7 +224,11 @@ export function DestinationsGrid({ destinations }: Props) {
                 </p>
                 <p className="destination-meta">{d.cardMeta}</p>
               </div>
-              <a href={d.href} className="destination-btn" aria-label={d.label}>
+              <a
+                href={withLocalePrefix(d.href, locale)}
+                className="destination-btn"
+                aria-label={d.label}
+              >
                 <svg viewBox="0 0 256 256" fill="currentColor">
                   <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
                 </svg>

@@ -17,7 +17,13 @@ const MAX_NOTES_LEN = 500;
 const CHECKOUT_FETCH_TIMEOUT_MS = 55_000;
 
 /** Badge “Preço de grupo” só para tours comercialmente flat/grupo (não Aveiro/Monsanto exact-total). */
-const GROUP_PRICE_TOUR_IDS = new Set(["sintra-cascais", "algarve", "porto"]);
+const GROUP_PRICE_TOUR_IDS = new Set([
+  "sintra-cascais",
+  "algarve",
+  "porto",
+  "lisboa",
+  "fatima-tomar",
+]);
 
 /** Indicativo só com bandeira + código (sem nome do país por extenso). */
 const PHONE_DIAL_OPTIONS = [
@@ -843,7 +849,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                       quantity === 1 ? "booking_person_singular" : "booking_person_plural"
                     }
                   >
-                    {quantity === 1 ? "pessoa" : "pessoas"}
+                    <span data-translate={quantity === 1 ? "booking_guest_one" : "booking_guest_many"}>
+                      {quantity === 1 ? "passageiro" : "passageiros"}
+                    </span>
                   </span>
                 </span>
               </div>
@@ -878,10 +886,10 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             {quantity}{" "}
             <span
               data-translate={
-                quantity === 1 ? "booking_person_singular" : "booking_person_plural"
+                quantity === 1 ? "booking_guest_one" : "booking_guest_many"
               }
             >
-              {quantity === 1 ? "pessoa" : "pessoas"}
+              {quantity === 1 ? "passageiro" : "passageiros"}
             </span>
             {" · "}
             <span data-translate={tourLabelKey}>{tourLabel}</span>

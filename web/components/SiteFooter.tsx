@@ -1,16 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BRAND_EMAIL, BRAND_NAME } from "@/lib/brand";
+import { withLocalePrefix, type AppLocale } from "@/lib/i18n/locale";
 import { getSiteNavBase, type SiteNavVariant } from "@/lib/site-nav";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 
 type SiteFooterProps = {
   /** Derivado automaticamente em SiteChrome. */
   variant?: SiteNavVariant;
+  locale?: AppLocale;
 };
 
-export function SiteFooter({ variant = "home" }: SiteFooterProps) {
-  const base = getSiteNavBase(variant);
+export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps) {
+  const base = getSiteNavBase(variant, locale);
 
   return (
     <footer className="footer">
@@ -53,26 +55,26 @@ export function SiteFooter({ variant = "home" }: SiteFooterProps) {
                 </a>
               </li>
               <li>
-                <Link href="/executive">
+                <Link href={withLocalePrefix("/executive", locale)}>
                   <span data-translate="footer_executive_link">Executive &amp; Concierge</span>
                 </Link>
               </li>
               <li>
-                <Link href="/reservar">
+                <Link href={withLocalePrefix("/reservar", locale)}>
                   <span data-translate="footer_book_link">Reservar com quantidade</span>
                 </Link>
               </li>
               <li>
-                <Link href="/privacidade">Privacidade</Link>
+                <Link href={withLocalePrefix("/privacidade", locale)}>Privacidade</Link>
               </li>
               <li>
-                <Link href="/cookies">Cookies</Link>
+                <Link href={withLocalePrefix("/cookies", locale)}>Cookies</Link>
               </li>
               <li>
-                <Link href="/termos">Termos</Link>
+                <Link href={withLocalePrefix("/termos", locale)}>Termos</Link>
               </li>
               <li>
-                <Link href="/sgpd">Direitos SGPD</Link>
+                <Link href={withLocalePrefix("/sgpd", locale)}>Direitos SGPD</Link>
               </li>
             </ul>
           </div>

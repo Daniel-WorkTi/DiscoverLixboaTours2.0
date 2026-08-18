@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { withLocalePrefix, type AppLocale } from "@/lib/i18n/locale";
 import { getSiteNavBase, type SiteNavVariant } from "@/lib/site-nav";
 
 type SiteHeaderProps = {
   /** Omitir para derivar na rota via SiteChrome; útil em testes. */
   variant?: SiteNavVariant;
+  locale?: AppLocale;
 };
 
 const NAV_ITEMS = [
@@ -15,18 +17,23 @@ const NAV_ITEMS = [
   { key: "menu_contact", label: "Contacto", hash: "instagram" },
 ] as const;
 
-function navHref(base: "" | "/", hash: string): string {
+function navHref(base: "" | "/" | "/en", hash: string): string {
   return `${base}#${hash}`;
 }
 
-export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
-  const base = getSiteNavBase(variant);
+export function SiteHeader({
+  variant = "home",
+  locale = "pt",
+}: SiteHeaderProps) {
+  const base = getSiteNavBase(variant, locale);
+  const bookHref = withLocalePrefix("/reservar", locale);
+  const executiveHref = withLocalePrefix("/executive", locale);
 
   return (
     <header className="main-header" aria-label="Cabeçalho do site">
       <div className="header-content">
         <div className="header-logo">
-          <Link href="/">
+          <Link href={withLocalePrefix("/", locale)}>
             <Image
               src="/assets/images/hero/logo.png.webp"
               alt="Discover Portugal Logo"
@@ -41,7 +48,7 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
         <nav className="header-nav" aria-label="Navegação principal">
           {NAV_ITEMS.map((item) =>
             "href" in item ? (
-              <a key={item.key} href={item.href} data-translate={item.key}>
+              <a key={item.key} href={executiveHref} data-translate={item.key}>
                 {item.label}
               </a>
             ) : (
@@ -56,7 +63,7 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
           )}
         </nav>
 
-        <Link href="/reservar" className="header-cta">
+        <Link href={bookHref} className="header-cta">
           <span data-translate="book_now">Reservar Agora</span>
           <svg
             width="20"
@@ -94,7 +101,7 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
       <nav className="mobile-menu" aria-label="Navegação móvel">
         {NAV_ITEMS.map((item) =>
           "href" in item ? (
-            <a key={item.key} href={item.href} data-translate={item.key}>
+            <a key={item.key} href={executiveHref} data-translate={item.key}>
               {item.label}
             </a>
           ) : (
@@ -107,7 +114,7 @@ export function SiteHeader({ variant = "home" }: SiteHeaderProps) {
           <div className="language-flag flag-pt" data-lang="pt" title="Português" />
           <div className="language-flag flag-en" data-lang="en" title="English" />
         </div>
-        <Link href="/reservar" className="mobile-cta">
+        <Link href={bookHref} className="mobile-cta">
           <span data-translate="book_now">Reservar Agora</span>
         </Link>
       </nav>

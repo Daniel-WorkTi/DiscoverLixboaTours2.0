@@ -3,7 +3,7 @@ export {};
 
 declare global {
   interface Window {
-    setLanguage?: (lang: string) => void;
+    setLanguage?: (lang: string, opts?: { navigate?: boolean }) => void;
     initTranslation?: () => void;
   }
 }

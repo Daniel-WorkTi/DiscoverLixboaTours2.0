@@ -2,16 +2,25 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { localeFromPathname } from "@/lib/i18n/locale";
 
 /**
- * Re-aplica o idioma guardado em localStorage após navegação client-side (Next.js App Router),
- * para que todos os `data-translate` voltem a ser atualizados.
+ * Re-aplica o idioma após navegação App Router.
+ * Prioridade: prefixo /en na URL → localStorage → pt.
  */
-function applyStoredLanguage(): void {
+function applyLanguageForPath(pathname: string): void {
   if (typeof window === "undefined") return;
-  const lang = (localStorage.getItem("language") || "pt") as "pt" | "en";
+  const fromPath = localeFromPathname(pathname);
+  const stored = (localStorage.getItem("language") || "").toLowerCase();
+  const lang =
+    fromPath === "en"
+      ? "en"
+      : stored === "en" || stored === "pt"
+        ? stored
+        : "pt";
+
   const w = window as Window & {
-    setLanguage?: (l: string) => void;
+    setLanguage?: (l: string, opts?: { navigate?: boolean }) => void;
   };
   if (typeof w.setLanguage === "function") {
     w.setLanguage(lang);
@@ -30,10 +39,10 @@ function applyStoredLanguage(): void {
 }
 
 export function TranslateBridge() {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/";
 
   useEffect(() => {
-    applyStoredLanguage();
+    applyLanguageForPath(pathname);
   }, [pathname]);
 
   return null;

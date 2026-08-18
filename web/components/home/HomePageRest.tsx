@@ -1,10 +1,14 @@
+"use client";
+
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Fragment } from "react";
+import { localeFromPathname, withLocalePrefix } from "@/lib/i18n/locale";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 
 type Props = {
   instagramPhotos: string[];
-  testimonials: { key: string; author: string }[];
+  testimonials: { key: string; author: string; fallback: string }[];
   faqItems: readonly string[];
 };
 
@@ -13,6 +17,7 @@ export function HomePageRest({
   testimonials,
   faqItems,
 }: Props) {
+  const locale = localeFromPathname(usePathname() || "/");
   return (
     <>
       <section className="personalized-section" id="tours">
@@ -117,7 +122,10 @@ export function HomePageRest({
               <p className="experience-pillar-card-text" data-translate="pillar_jeep_desc">
                 Acesso a caminhos e miradouros fora do circuito turístico habitual — UMM 4x4 conversível, ritmo seu e narrativa local que diferencia da concorrência.
               </p>
-              <a href="/tours/sintra-cascais" className="experience-pillar-link">
+              <a
+                href={withLocalePrefix("/tours/sintra-cascais", locale)}
+                className="experience-pillar-link"
+              >
                 <span data-translate="pillar_jeep_cta">Explorar Sintra & Cascais</span>
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden>
                   <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
@@ -140,7 +148,10 @@ export function HomePageRest({
               <p className="experience-pillar-card-text" data-translate="pillar_wine_desc">
                 O teu Alentejo como experiência de vinha e mesa: património UNESCO, provas e sabores regionais — packaging premium e roteiro contado ao pormenor.
               </p>
-              <a href="/tours/alentejo" className="experience-pillar-link">
+              <a
+                href={withLocalePrefix("/tours/alentejo", locale)}
+                className="experience-pillar-link"
+              >
                 <span data-translate="pillar_wine_cta">Ver Food & Wine Tour</span>
                 <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden>
                   <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
@@ -398,17 +409,17 @@ export function HomePageRest({
               Depoimentos
             </span>
             <h2 className="testimonials-title" data-translate="testimonials_title">
-              O Que Nossos Clientes Dizem
+              O que os nossos clientes dizem
             </h2>
             <p className="testimonials-description" data-translate="testimonials_description">
-              Feedback real de clientes que viveram experiências únicas conosco
+              Avaliações reais de viajantes no TripAdvisor
             </p>
           </div>
 
           <div className="testimonials-grid">
             {testimonials.map((t) => (
               <div className="testimonial-card" key={t.key}>
-                <div className="testimonial-stars">
+                <div className="testimonial-stars" aria-label="5 de 5 estrelas">
                   {[1, 2, 3, 4, 5].map((s) => (
                     <StarIcon key={s} />
                   ))}
@@ -419,7 +430,9 @@ export function HomePageRest({
                     fill="currentColor"
                   />
                 </svg>
-                <p className="testimonial-text" data-translate={t.key} />
+                <p className="testimonial-text" data-translate={t.key}>
+                  {t.fallback}
+                </p>
                 <div className="testimonial-author">
                   <div className="author-info">
                     <h4 className="author-name">{t.author}</h4>
