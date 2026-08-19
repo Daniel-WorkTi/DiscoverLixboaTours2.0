@@ -86,7 +86,8 @@ export function TourPage({ tour, locale }: Props) {
 
       <section className="tour-info-section">
         <div className="container">
-          <div className="tour-info-grid">
+          {/* Sobre + booking lado a lado; resto a largura total (sem coluna vazia no PC) */}
+          <div className="tour-info-grid tour-info-grid--intro">
             <div className="tour-main-content">
               <div className="info-card">
                 <h2 className="info-card-title">{t.tour.about}</h2>
@@ -98,130 +99,6 @@ export function TourPage({ tour, locale }: Props) {
                   />
                 ))}
               </div>
-
-              <div className="info-card">
-                <h2 className="info-card-title">{t.tour.itinerary}</h2>
-                <p className="tour-note">{t.tour.itineraryNote}</p>
-                <div className="itinerary-list">
-                  {c.itinerary.map((item) => (
-                    <div className="itinerary-item" key={item.badge + item.title}>
-                      <div className="itinerary-time">
-                        <span className="time-badge">{item.badge}</span>
-                      </div>
-                      <div className="itinerary-content">
-                        <h3>{item.title}</h3>
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: item.descriptionHtml,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="info-card">
-                <h2 className="info-card-title">{t.tour.included}</h2>
-                <div className="included-grid">
-                  {c.included.map((line) => (
-                    <div className="included-item included" key={line}>
-                      <CheckIcon />
-                      <span>{line}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="info-card">
-                <h2 className="info-card-title">{t.tour.notIncluded}</h2>
-                <div className="included-grid">
-                  {c.notIncluded.map((line) => (
-                    <div className="included-item not-included" key={line}>
-                      <XIcon />
-                      <span>{line}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {c.whyChooseHtml ? (
-                <div className="info-card info-card-highlight">
-                  <h2 className="info-card-title">{t.tour.whyChoose}</h2>
-                  <p
-                    className="info-card-text"
-                    dangerouslySetInnerHTML={{ __html: c.whyChooseHtml }}
-                  />
-                </div>
-              ) : null}
-
-              {c.pickupItems?.length ? (
-                <div className="info-card">
-                  <h2 className="info-card-title">{t.tour.pickup}</h2>
-                  {c.pickupHeading ? (
-                    <h3 className="pickup-heading">{c.pickupHeading}</h3>
-                  ) : null}
-                  <ul className="pickup-list">
-                    {c.pickupItems.map((p) => (
-                      <li
-                        key={p.title}
-                        className={
-                          p.highlight
-                            ? "pickup-item pickup-item--highlight"
-                            : "pickup-item"
-                        }
-                      >
-                        <div>
-                          <strong className="pickup-title">{p.title}</strong>
-                          <div className="pickup-label">{p.detail}</div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {(tour.videoYoutubeId || tour.gallery.length > 0) && (
-                <div className="info-card">
-                  {tour.videoYoutubeId ? (
-                    <>
-                      <h2 className="info-card-title">{t.tour.video}</h2>
-                      <div className="tour-video-embed">
-                        <div className="tour-video-embed-inner">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${tour.videoYoutubeId}?controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&color=white`}
-                            title={`${c.title} — video`}
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            referrerPolicy="strict-origin-when-cross-origin"
-                          />
-                        </div>
-                      </div>
-                    </>
-                  ) : null}
-                  {tour.gallery.length > 0 ? (
-                    <>
-                      <h3 className="tour-aveiro-gallery-heading">
-                        {t.tour.gallery}
-                      </h3>
-                      <div className="tour-gallery tour-gallery--below-video">
-                        {tour.gallery.map((g) => (
-                          <div className="gallery-item" key={g.src}>
-                            <Image
-                              src={g.src}
-                              alt={g.alt[locale]}
-                              width={1200}
-                              height={800}
-                              sizes="(max-width: 768px) 100vw, 50vw"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              )}
             </div>
 
             <aside className="tour-sidebar">
@@ -269,6 +146,132 @@ export function TourPage({ tour, locale }: Props) {
                 </div>
               </div>
             </aside>
+          </div>
+
+          <div className="tour-main-content tour-main-content--full">
+            <div className="info-card">
+              <h2 className="info-card-title">{t.tour.itinerary}</h2>
+              <p className="tour-note">{t.tour.itineraryNote}</p>
+              <div className="itinerary-list">
+                {c.itinerary.map((item) => (
+                  <div className="itinerary-item" key={item.badge + item.title}>
+                    <div className="itinerary-time">
+                      <span className="time-badge">{item.badge}</span>
+                    </div>
+                    <div className="itinerary-content">
+                      <h3>{item.title}</h3>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: item.descriptionHtml,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="info-card">
+              <h2 className="info-card-title">{t.tour.included}</h2>
+              <div className="included-grid">
+                {c.included.map((line) => (
+                  <div className="included-item included" key={line}>
+                    <CheckIcon />
+                    <span>{line}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="info-card">
+              <h2 className="info-card-title">{t.tour.notIncluded}</h2>
+              <div className="included-grid">
+                {c.notIncluded.map((line) => (
+                  <div className="included-item not-included" key={line}>
+                    <XIcon />
+                    <span>{line}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {c.whyChooseHtml ? (
+              <div className="info-card info-card-highlight">
+                <h2 className="info-card-title">{t.tour.whyChoose}</h2>
+                <p
+                  className="info-card-text"
+                  dangerouslySetInnerHTML={{ __html: c.whyChooseHtml }}
+                />
+              </div>
+            ) : null}
+
+            {c.pickupItems?.length ? (
+              <div className="info-card">
+                <h2 className="info-card-title">{t.tour.pickup}</h2>
+                {c.pickupHeading ? (
+                  <h3 className="pickup-heading">{c.pickupHeading}</h3>
+                ) : null}
+                <ul className="pickup-list">
+                  {c.pickupItems.map((p) => (
+                    <li
+                      key={p.title}
+                      className={
+                        p.highlight
+                          ? "pickup-item pickup-item--highlight"
+                          : "pickup-item"
+                      }
+                    >
+                      <div>
+                        <strong className="pickup-title">{p.title}</strong>
+                        <div className="pickup-label">{p.detail}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {(tour.videoYoutubeId || tour.gallery.length > 0) && (
+              <div className="info-card">
+                {tour.videoYoutubeId ? (
+                  <>
+                    <h2 className="info-card-title">{t.tour.video}</h2>
+                    <div className="tour-video-embed">
+                      <div className="tour-video-embed-inner">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${tour.videoYoutubeId}?controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&color=white`}
+                          title={`${c.title} — video`}
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          referrerPolicy="strict-origin-when-cross-origin"
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {tour.gallery.length > 0 ? (
+                  <>
+                    <h3 className="tour-aveiro-gallery-heading">
+                      {t.tour.gallery}
+                    </h3>
+                    <div className="tour-gallery tour-gallery--below-video">
+                      {tour.gallery.map((g) => (
+                        <div className="gallery-item" key={g.src}>
+                          <Image
+                            src={g.src}
+                            alt={g.alt[locale]}
+                            fill
+                            sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                            className="tour-gallery__img"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            )}
           </div>
         </div>
       </section>

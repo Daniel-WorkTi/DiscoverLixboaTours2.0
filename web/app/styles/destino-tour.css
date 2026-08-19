@@ -22,3 +22,140 @@ button.language-flag {
   cursor: pointer;
   background: transparent;
 }
+
+/* Intro: Sobre + booking; resto full-width (sem coluna vazia no PC) */
+.tour-page-root .tour-info-grid--intro {
+  margin-bottom: clamp(1.35rem, 3vw, 2rem);
+  align-items: start;
+}
+
+.tour-page-root .tour-main-content--full {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Galeria alinhada em grid uniforme (override height fixo do destino.css) */
+.tour-page-root .tour-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.tour-page-root .tour-gallery .gallery-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  height: auto !important;
+  min-height: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f0f2f5;
+  box-shadow: 0 4px 16px rgba(23, 37, 54, 0.08);
+  transform: none;
+}
+
+.tour-page-root .tour-gallery .gallery-item:hover {
+  transform: none;
+  box-shadow: 0 8px 24px rgba(23, 37, 54, 0.12);
+}
+
+.tour-page-root .tour-gallery .gallery-item .tour-gallery__img,
+.tour-page-root .tour-gallery .gallery-item img {
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 1024px) {
+  .tour-page-root .tour-info-grid--intro .tour-sidebar {
+    order: -1;
+  }
+
+  .tour-page-root .tour-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .tour-page-root .tour-gallery {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* Itinerário — visual “viagem” (quente), sem azul navy */
+.tour-page-root .itinerary-list {
+  gap: 1.75rem;
+  position: relative;
+}
+
+.tour-page-root .itinerary-item {
+  grid-template-columns: 7.5rem 1fr;
+  gap: 1.35rem;
+  padding: 0.15rem 0;
+}
+
+.tour-page-root .itinerary-time {
+  min-height: 2.5rem;
+}
+
+.tour-page-root .time-badge {
+  background: linear-gradient(160deg, #fff8f3 0%, #ffe8d6 100%);
+  color: #c2410c;
+  border: 1px solid rgba(255, 102, 0, 0.35);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 4px 14px rgba(255, 102, 0, 0.12);
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  padding: 0.45rem 0.85rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tour-page-root .itinerary-item:not(:last-child) .itinerary-time::after {
+  width: 2px;
+  height: calc(100% + 1.1rem);
+  top: 2.35rem;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 102, 0, 0.45) 0%,
+    rgba(255, 140, 66, 0.2) 55%,
+    rgba(255, 140, 66, 0.05) 100%
+  );
+}
+
+.tour-page-root .itinerary-content h3 {
+  color: #2c1810;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+.tour-page-root .itinerary-content p {
+  color: #5c534c;
+}
+
+.tour-page-root .tour-note {
+  color: #8a7a6b;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .tour-page-root .itinerary-item {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .tour-page-root .itinerary-time {
+    align-items: flex-start;
+  }
+
+  .tour-page-root .itinerary-item:not(:last-child) .itinerary-time::after {
+    display: none;
+  }
+
+  .tour-page-root .time-badge {
+    margin: 0;
+  }
+}
