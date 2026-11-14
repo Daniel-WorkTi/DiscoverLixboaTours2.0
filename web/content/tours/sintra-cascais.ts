@@ -22,8 +22,35 @@ export const sintraCascaisTour = {
     8: 54000,
   },
   priceDisplay: "group",
-  heroImage: "/assets/images/destinations/roteiro-sintra-e-cascais.webp",
-  videoYoutubeId: "Vu5JHrcV-Ok",
+  heroImage: "/assets/images/SINTRA/herobg.jpg",
+  /**
+   * Fotos reais de cada paragem (Wikimedia Commons).
+   * 3840 px de largura quando o original é maior; Azenhas fica no original (2816 px).
+   * O Wikimedia não gera miniaturas de 2048 px — o patamar seguinte é 3840 px.
+   */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Palais_national_Pena_Sintra_111.jpg/3840px-Palais_national_Pena_Sintra_111.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Castelo_dos_Mouros%2C_Sintra%2C_Portugal%2C_2019-05-25%2C_DD_85.jpg/3840px-Castelo_dos_Mouros%2C_Sintra%2C_Portugal%2C_2019-05-25%2C_DD_85.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Quinta_da_Regaleira%2C_Sintra%2C_Portugal%2C_2022-07-25%2C_DD_16.jpg/3840px-Quinta_da_Regaleira%2C_Sintra%2C_Portugal%2C_2022-07-25%2C_DD_16.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/The_beautiful_Palace_of_Monserrate_near_Sintra_%2827752301440%29.jpg/3840px-The_beautiful_Palace_of_Monserrate_near_Sintra_%2827752301440%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/a/ac/Azenhas_do_Mar.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Monument_of_Cabo_da_Roca%2C_Portugal%2C_20250606_1513_0230.jpg/3840px-Monument_of_Cabo_da_Roca%2C_Portugal%2C_20250606_1513_0230.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Boca_do_Inferno_%2822357700018%29.jpg/3840px-Boca_do_Inferno_%2822357700018%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Marina_de_Cascais_%28Portugal%29.jpg/3840px-Marina_de_Cascais_%28Portugal%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Palacio_Nacional%2C_Sintra%2C_Portugal%2C_2022-07-25%2C_DD_19.jpg/3840px-Palacio_Nacional%2C_Sintra%2C_Portugal%2C_2022-07-25%2C_DD_19.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Guincho_June_2013-1.jpg/3840px-Guincho_June_2013-1.jpg",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Pal%C3%A1cio+Nacional+da+Pena%2C+Sintra",
+    "https://www.google.com/maps/search/?api=1&query=Castelo+dos+Mouros%2C+Sintra",
+    "https://www.google.com/maps/search/?api=1&query=Quinta+da+Regaleira%2C+Sintra",
+    "https://www.google.com/maps/search/?api=1&query=Pal%C3%A1cio+de+Monserrate%2C+Sintra",
+    "https://www.google.com/maps/search/?api=1&query=Azenhas+do+Mar%2C+Sintra",
+    "https://www.google.com/maps/search/?api=1&query=Cabo+da+Roca%2C+Sintra",
+    "https://www.google.com/maps/search/?api=1&query=Boca+do+Inferno%2C+Cascais",
+    "https://www.google.com/maps/search/?api=1&query=Cascais+Marina%2C+Cascais",
+  ],
+  videoYoutubeId: "Hpp4McD2Bmw",
   gallery: [
     {
       src: "/assets/images/galeria-sintra/img1.webp",
@@ -41,6 +68,10 @@ export const sintraCascaisTour = {
       src: "/assets/images/galeria-sintra/img4.webp",
       alt: { pt: "Sintra — vista 4", en: "Sintra — view 4" },
     },
+    {
+      src: "/assets/images/galeria-sintra/img5.webp",
+      alt: { pt: "Sintra — vista 5", en: "Sintra — view 5" },
+    },
   ],
   content: {
     pt: {
@@ -57,6 +88,9 @@ export const sintraCascaisTour = {
         "E então… a cena é revelada. Uma vista de tirar o fôlego aparece diante dos seus olhos: falésias douradas, falésias impressionantes e um mar azul cristalino que se estende até onde a vista alcança. Selvagem. Intocado. Pura magia.",
         "A localização exata? Isso fica em segredo. Porque há lugares que devem permanecer misteriosos… Mas uma coisa é certa — será um momento que nunca esquecerá.",
       ],
+      highlightTitle: "A Praia Secreta",
+      highlightText:
+        "Um refúgio escondido entre falésias e mar, acessível por caminhos off-road que poucos conhecem.",
       itinerary: [
         {
           badge: "Pena",
@@ -158,16 +192,19 @@ export const sintraCascaisTour = {
         "And then… the scene is revealed. A breathtaking view appears before your eyes: golden cliffs, impressive cliffs, and a crystal blue sea that stretches as far as the eye can see. Wild. Untouched. Pure magic.",
         "The exact location? That stays a secret. Because there are places that must remain mysterious… But one thing is certain — it will be a moment you will never forget.",
       ],
+      highlightTitle: "The Secret Beach",
+      highlightText:
+        "A hidden refuge between cliffs and sea, reached by off-road paths few people know.",
       itinerary: [
         {
           badge: "Pena",
-          title: "Palácio Nacional da Pena",
+          title: "Pena National Palace",
           descriptionHtml:
             "Sacred jewel that crowns the Sintra mountains. The surrounding park awakens emotions of mystery and discovery. Your guide will tell the fascinating history of this colorful and romantic palace. <strong>Entry: €20/person (not included). Option to visit gardens only: €10/person</strong>",
         },
         {
           badge: "Moors",
-          title: "Castelo dos Mouros",
+          title: "Moorish Castle",
           descriptionHtml:
             "Privileged view over the Atlantic Coast and Sintra mountains. Millennium castle of Muslim foundation (inhabited by the Moors until 1147). Fundamental strategic position in defending Lisbon. <strong>Entry: €12/person (not included)</strong>",
         },
@@ -179,13 +216,13 @@ export const sintraCascaisTour = {
         },
         {
           badge: "Monserrate",
-          title: "Palácio de Monserrate",
+          title: "Monserrate Palace",
           descriptionHtml:
             "Palace visit or viewpoint stop for panoramic photos. Exotic Indo-Arabic architecture in spectacular botanical gardens. <strong>Entry not included (optional)</strong>",
         },
         {
           badge: "Azenhas",
-          title: "Praia das Azenhas do Mar",
+          title: "Azenhas do Mar Beach",
           descriptionHtml:
             "Perhaps the most beautiful beach in Sintra! Very similar to Santorini in Greece due to the white houses on the slope. Spectacular views and opportunity for amazing photos.",
         },
@@ -203,7 +240,7 @@ export const sintraCascaisTour = {
         },
         {
           badge: "Cascais",
-          title: "Cascais - Final Stop",
+          title: "Cascais — Final Stop",
           descriptionHtml:
             "Portuguese fishing village famous for its beautiful beaches, fresh fish and seafood restaurants. Modern internationally renowned marina. Area of bars, hotels and nightlife.",
         },

@@ -22,7 +22,26 @@ export const portoTour = {
     8: 80000,
   },
   priceDisplay: "group",
-  heroImage: "/assets/images/destinations/porto.webp",
+  heroImage: "/assets/images/destinations/hero-porto.jpg",
+  /** Ordem = itinerário: Lello/centro → Ribeira/ponte → Caves → Foz. */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Interior_view_of_Livraria_Lello_01.jpg/3840px-Interior_view_of_Livraria_Lello_01.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Ponte_de_Dom_Lu%C3%ADs_I_and_Ribeira%2C_Porto_%2854795128175%29.jpg/3840px-Ponte_de_Dom_Lu%C3%ADs_I_and_Ribeira%2C_Porto_%2854795128175%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Cave_Porto_Sandeman.jpg/3840px-Cave_Porto_Sandeman.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Foz_do_Douro_%2826347207321%29.jpg/3840px-Foz_do_Douro_%2826347207321%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Igreja_e_Torre_dos_Cl%C3%A9rigos.jpg/3840px-Igreja_e_Torre_dos_Cl%C3%A9rigos.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Estaci%C3%B3n_de_tren_S%C3%A3o_Bento%2C_Oporto%2C_Portugal%2C_2019-06-02%2C_DD_05.jpg/3840px-Estaci%C3%B3n_de_tren_S%C3%A3o_Bento%2C_Oporto%2C_Portugal%2C_2019-06-02%2C_DD_05.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Cais_da_Ribeira%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_08.JPG/3840px-Cais_da_Ribeira%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_08.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Catedral_de_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_03.JPG/3840px-Catedral_de_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_03.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Ayuntamiento_de_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_10.JPG/3840px-Ayuntamiento_de_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_10.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Cais_da_Ribeira%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_03.JPG/3840px-Cais_da_Ribeira%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_03.JPG",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Livraria+Lello%2C+Porto",
+    "https://www.google.com/maps/search/?api=1&query=Ribeira%2C+Porto",
+    "https://www.google.com/maps/search/?api=1&query=Caves+de+Vinho+do+Porto%2C+Vila+Nova+de+Gaia",
+    "https://www.google.com/maps/search/?api=1&query=Foz+do+Douro%2C+Porto",
+  ],
   videoYoutubeId: "7chyxBvCYd8",
   gallery: [
     {
@@ -47,6 +66,9 @@ export const portoTour = {
         "Explore o Porto, a segunda maior cidade de Portugal e berço do famoso Vinho do Porto. Esta cidade histórica é um verdadeiro museu ao ar livre, com o seu centro histórico classificado como Património Mundial da UNESCO. Das ruas medievais da Ribeira às modernas caves de vinho em Vila Nova de Gaia, o Porto oferece uma experiência única e inesquecível.",
         "Com o nosso guia experiente, descobrirá não apenas as atrações turísticas mais famosas, mas também segredos locais, histórias fascinantes e os melhores locais para saborear a autêntica culinária portuense. Prepare-se para se apaixonar pela energia contagiante desta cidade que respira história e tradição.",
       ],
+      highlightTitle: "O Porto sobre o Douro",
+      highlightText:
+        "A Ribeira, a Ponte Dom Luís I e as caves de Gaia filmadas em 4K. O norte de Portugal visto do ar, entre granito, azulejo e rio.",
       itinerary: [
         {
           badge: "Centro",
@@ -88,20 +110,20 @@ export const portoTour = {
       pickupHeading: "Opções de recolha",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — Sem custo adicional",
+          title: "Hotel em Lisboa",
+          detail: "Partida do seu hotel em Lisboa — Sem custo adicional",
         },
         {
-          title: "Estação Portela Sintra",
-          detail: "Local tranquilo — Sem custo adicional",
+          title: "Aeroporto de Lisboa",
+          detail: "Recolha no aeroporto — Sem custo adicional",
         },
         {
-          title: "Lisboa / Aeroporto / Hotel",
-          detail:
-            "Disponível com custo adicional (valor a combinar após a reserva)",
+          title: "Hotel no Porto",
+          detail: "Recolha no Porto disponível — custo adicional a combinar",
           highlight: true,
         },
       ],
+
     },
     en: {
       title: "Private Porto Day Tour",
@@ -111,6 +133,9 @@ export const portoTour = {
         "Explore Porto, Portugal's second largest city and birthplace of the famous Port Wine. This historic city is a true open-air museum, with its historic center classified as a UNESCO World Heritage Site. From the medieval streets of Ribeira to the modern wine cellars in Vila Nova de Gaia, Porto offers a unique and unforgettable experience.",
         "With our experienced guide, you'll discover not only the most famous tourist attractions, but also local secrets, fascinating stories and the best places to taste authentic Porto cuisine. Get ready to fall in love with the contagious energy of this city that breathes history and tradition.",
       ],
+      highlightTitle: "Porto over the Douro",
+      highlightText:
+        "Ribeira, the Dom Luís I Bridge and the Gaia cellars filmed in 4K. Northern Portugal from the air, between granite, tile and river.",
       itinerary: [
         {
           badge: "Centre",
@@ -152,19 +177,20 @@ export const portoTour = {
       pickupHeading: "Pickup options",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — No extra cost",
+          title: "Lisbon hotel",
+          detail: "Departure from your Lisbon hotel — No extra cost",
         },
         {
-          title: "Portela Sintra Station",
-          detail: "Quiet meeting point — No extra cost",
+          title: "Lisbon Airport",
+          detail: "Airport pickup — No extra cost",
         },
         {
-          title: "Lisbon / Airport / Hotel",
-          detail: "Available with an extra fee (arranged after booking)",
+          title: "Porto hotel",
+          detail: "Porto pickup available — extra fee on request",
           highlight: true,
         },
       ],
+
     },
   },
   seo: {

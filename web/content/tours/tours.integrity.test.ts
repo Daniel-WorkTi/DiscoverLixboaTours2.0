@@ -53,10 +53,45 @@ describe("migrated tours content integrity", () => {
         expect(tour.seo.pt.title).toContain("DiscoverLixboaTours");
         expect(tour.seo.en.title).toContain("DiscoverLixboaTours");
       });
+
+      it("has notIncluded and pickup options", () => {
+        expect(tour.content.pt.notIncluded.length).toBeGreaterThan(0);
+        expect(tour.content.en.notIncluded.length).toBe(
+          tour.content.pt.notIncluded.length,
+        );
+        expect(tour.content.pt.pickupItems?.length ?? 0).toBeGreaterThan(0);
+        expect(tour.content.en.pickupItems?.length).toBe(
+          tour.content.pt.pickupItems?.length,
+        );
+      });
+
+      it("does not reuse Sintra pickup outside sintra-cascais", () => {
+        if (slug === "sintra-cascais") return;
+        for (const locale of ["pt", "en"] as const) {
+          const titles = (tour.content[locale].pickupItems ?? []).map((p) =>
+            p.title.toLowerCase(),
+          );
+          expect(titles.some((t) => t === "sintra")).toBe(false);
+          expect(titles.some((t) => t.includes("portela"))).toBe(false);
+        }
+      });
     });
   }
 
   it("lists all migrated tours", () => {
     expect(listMigratedTours().length).toBe(MIGRATED_TOUR_SLUGS.length);
+  });
+
+  it("TourPage UI copy is not hardcoded to Sintra", async () => {
+    const fs = await import("node:fs/promises");
+    const path = await import("node:path");
+    const file = path.join(
+      process.cwd(),
+      "components/tours/TourPage.tsx",
+    );
+    const src = await fs.readFile(file, "utf8");
+    expect(src).not.toMatch(/Descobre Sintra e Cascais/);
+    expect(src).not.toMatch(/O melhor de Sintra e Cascais/);
+    expect(src).not.toMatch(/Por grupo \(1–2 passageiros\)/);
   });
 });

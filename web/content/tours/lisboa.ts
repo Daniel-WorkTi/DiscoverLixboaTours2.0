@@ -23,6 +23,27 @@ export const lisboaTour = {
   },
   priceDisplay: "group",
   heroImage: "/assets/images/destinations/lisboa.webp",
+  /** Ordem = itinerário: Belém → Alfama → Miradouros → Castelo → Cristo Rei → Almoço. */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Torre_de_Bel%C3%A9m_por_Rodrigo_Tetsuo_Argenton_%282%29.jpg/3840px-Torre_de_Bel%C3%A9m_por_Rodrigo_Tetsuo_Argenton_%282%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Alfama_0002.jpg/3840px-Alfama_0002.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Miradouro_da_Senhora_do_Monte_-_Lisboa_-_Portugal_%285284675897%29.jpg/3840px-Miradouro_da_Senhora_do_Monte_-_Lisboa_-_Portugal_%285284675897%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Castelo_de_S%C3%A3o_Jorge%2C_Lisboa_116.jpg/3840px-Castelo_de_S%C3%A3o_Jorge%2C_Lisboa_116.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Statue_of_Sacred_Heart_of_Jesus_Christ%2C_Almada%2C_Portugal%2C_20250604_1922_9473.jpg/3840px-Statue_of_Sacred_Heart_of_Jesus_Christ%2C_Almada%2C_Portugal%2C_20250604_1922_9473.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/a/ab/Pra%C3%A7a_do_Com%C3%A9rcio.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Gothic_Grandeur_at_the_Entrance_to_Jer%C3%B3nimos_Monastery_in_Lisbon_%2854692352495%29.jpg/3840px-Gothic_Grandeur_at_the_Entrance_to_Jer%C3%B3nimos_Monastery_in_Lisbon_%2854692352495%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/f/fd/Padr%C3%A3o_dos_Descobrimentos.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/5/5f/Elevador_de_Santa_Justa.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/14/S%C3%A9_de_Lisboa.jpg",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Mosteiro+dos+Jer%C3%B3nimos%2C+Bel%C3%A9m%2C+Lisboa",
+    "https://www.google.com/maps/search/?api=1&query=Alfama%2C+Lisboa",
+    "https://www.google.com/maps/search/?api=1&query=Miradouro+da+Senhora+do+Monte%2C+Lisboa",
+    "https://www.google.com/maps/search/?api=1&query=Castelo+de+S%C3%A3o+Jorge%2C+Lisboa",
+    "https://www.google.com/maps/search/?api=1&query=Cristo+Rei%2C+Almada",
+    "https://www.google.com/maps/search/?api=1&query=Restaurantes+t%C3%ADpicos%2C+Alfama%2C+Lisboa",
+  ],
   videoYoutubeId: "hWRmyqrq2MM",
   gallery: [
     {
@@ -51,6 +72,9 @@ export const lisboaTour = {
         "Desde miradouros panorâmicos, bairros históricos e cantos secretos que só os locais conhecem, este dia é uma jornada pela história, cultura e emoções genuínas.",
         "Viaja com estilo na nossa van confortável e climatizada, com boa música, boa energia e um guia local apaixonado, pronto para te mostrar o melhor de Lisboa — desde o seu passado real até à sua vibe moderna e cosmopolita.",
       ],
+      highlightTitle: "Lisboa vista de cima",
+      highlightText:
+        "Belém, Alfama e o Tejo num só olhar. Um voo em 4K sobre a cidade das sete colinas, dos miradouros ao Castelo de São Jorge.",
       itinerary: [
         {
           badge: "Belém",
@@ -108,20 +132,20 @@ export const lisboaTour = {
       pickupHeading: "Opções de recolha",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — Sem custo adicional",
+          title: "Hotel em Lisboa",
+          detail: "Pick-up e drop-off no seu hotel em Lisboa — Sem custo adicional",
         },
         {
-          title: "Estação Portela Sintra",
-          detail: "Local tranquilo — Sem custo adicional",
+          title: "Aeroporto de Lisboa",
+          detail: "Recolha no aeroporto Humberto Delgado — Sem custo adicional",
         },
         {
-          title: "Lisboa / Aeroporto / Hotel",
-          detail:
-            "Disponível com custo adicional (valor a combinar após a reserva)",
+          title: "Fora de Lisboa",
+          detail: "Cascais, Sintra ou outras zonas — custo adicional a combinar",
           highlight: true,
         },
       ],
+
     },
     en: {
       title: "Private Lisbon Tour",
@@ -131,6 +155,9 @@ export const lisboaTour = {
         "From panoramic viewpoints, historic neighbourhoods and secret corners that only locals know, this day is a journey through history, culture and genuine emotions.",
         "Travel in style in our comfortable air-conditioned van, with good music, good energy and a passionate local guide, ready to show you the best of Lisbon — from its royal past to its modern cosmopolitan vibe.",
       ],
+      highlightTitle: "Lisbon from above",
+      highlightText:
+        "Belém, Alfama and the Tagus in one view. A 4K flight over the city of seven hills, from the viewpoints to São Jorge Castle.",
       itinerary: [
         {
           badge: "Belém",
@@ -188,19 +215,20 @@ export const lisboaTour = {
       pickupHeading: "Pickup options",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — No extra cost",
+          title: "Lisbon hotel",
+          detail: "Pick-up and drop-off at your Lisbon hotel — No extra cost",
         },
         {
-          title: "Portela Sintra Station",
-          detail: "Quiet meeting point — No extra cost",
+          title: "Lisbon Airport",
+          detail: "Pickup at Humberto Delgado Airport — No extra cost",
         },
         {
-          title: "Lisbon / Airport / Hotel",
-          detail: "Available with an extra fee (arranged after booking)",
+          title: "Outside Lisbon",
+          detail: "Cascais, Sintra or other areas — extra fee on request",
           highlight: true,
         },
       ],
+
     },
   },
   seo: {

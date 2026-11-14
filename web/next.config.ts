@@ -1,7 +1,23 @@
 import type { NextConfig } from "next";
+import path from "path";
+import { fileURLToPath } from "url";
+
+/** Pasta `web/` — evita Turbopack/PostCSS resolver a partir do package.json do monorepo. */
+const webRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: webRoot,
+    resolveAlias: {
+      tailwindcss: path.join(webRoot, "node_modules/tailwindcss"),
+      "@tailwindcss/postcss": path.join(
+        webRoot,
+        "node_modules/@tailwindcss/postcss",
+      ),
+    },
+  },
   images: {
+    qualities: [75, 90, 92, 100],
     localPatterns: [
       {
         pathname: "/assets/images/**",
@@ -9,6 +25,23 @@ const nextConfig: NextConfig = {
       {
         pathname: "/assets/images/**",
         search: "*",
+      },
+    ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        pathname: "/wikipedia/commons/**",
+      },
+      {
+        protocol: "https",
+        hostname: "thumb.wikimedia.org",
+        pathname: "/wikipedia/commons/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/photos/**",
       },
     ],
   },

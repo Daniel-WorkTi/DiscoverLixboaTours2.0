@@ -7,7 +7,7 @@ import { SiteClientEffects } from "@/components/SiteClientEffects";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { StickyMobileBookCta } from "@/components/StickyMobileBookCta";
-import { localeFromPathname } from "@/lib/i18n/locale";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getSiteNavVariant } from "@/lib/site-nav";
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 export function SiteChrome({ children }: Props) {
   const pathname = usePathname() || "/";
   const variant = getSiteNavVariant(pathname);
-  const locale = localeFromPathname(pathname);
+  const locale = useLocale();
 
   return (
     <>

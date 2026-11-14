@@ -1,13 +1,19 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useId, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  localeFromPathname,
   withLocalePrefix,
   stripLocalePrefix,
   LOCALE_COOKIE,
   type AppLocale,
 } from "@/lib/i18n/locale";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
+
+const OPTIONS: { locale: AppLocale; short: string; label: string }[] = [
+  { locale: "pt", short: "PT", label: "Português" },
+  { locale: "en", short: "EN", label: "English" },
+];
 
 function persistPreference(locale: AppLocale) {
   try {
@@ -21,41 +27,103 @@ function persistPreference(locale: AppLocale) {
 }
 
 /**
- * Troca de idioma preservando a página atual (URL = fonte de verdade).
+ * Troca de idioma: texto atual + menu simples ao clicar.
  */
 export function LanguageSwitcher() {
   const pathname = usePathname() || "/";
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const current = localeFromPathname(pathname);
+  const current = useLocale();
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
+
+  const active = OPTIONS.find((o) => o.locale === current) ?? OPTIONS[0];
 
   function go(next: AppLocale) {
+    setOpen(false);
     if (next === current) return;
     persistPreference(next);
     const bare = stripLocalePrefix(pathname);
-    const target = withLocalePrefix(bare, next);
+    const qs = searchParams?.toString();
+    const withQuery = qs ? `${bare}?${qs}` : bare;
+    const target = withLocalePrefix(withQuery, next);
     router.push(target);
   }
 
+  useEffect(() => {
+    if (!open) return;
+
+    function onPointerDown(e: PointerEvent) {
+      if (!rootRef.current?.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
   return (
-    <div className="language-selector">
+    <div
+      className={`language-selector${open ? " language-selector--open" : ""}`}
+      ref={rootRef}
+    >
       <button
         type="button"
-        className={`language-flag flag-pt${current === "pt" ? " active" : ""}`}
-        data-lang="pt"
-        title="Português"
-        aria-label="Português"
-        aria-pressed={current === "pt"}
-        onClick={() => go("pt")}
-      />
-      <button
-        type="button"
-        className={`language-flag flag-en${current === "en" ? " active" : ""}`}
-        data-lang="en"
-        title="English"
-        aria-label="English"
-        aria-pressed={current === "en"}
-        onClick={() => go("en")}
-      />
+        className="language-selector__trigger"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={listId}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span>{active.short}</span>
+        <svg viewBox="0 0 12 12" aria-hidden className="language-selector__chevron">
+          <path
+            d="M3 4.5 L6 7.5 L9 4.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
+      {open ? (
+        <ul
+          id={listId}
+          className="language-selector__menu"
+          role="listbox"
+          aria-label={current === "en" ? "Language" : "Idioma"}
+        >
+          {OPTIONS.map((option) => (
+            <li key={option.locale} role="presentation">
+              <button
+                type="button"
+                role="option"
+                aria-selected={option.locale === current}
+                className={
+                  option.locale === current
+                    ? "language-selector__option language-selector__option--active"
+                    : "language-selector__option"
+                }
+                onClick={() => go(option.locale)}
+              >
+                {option.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </div>
   );
 }

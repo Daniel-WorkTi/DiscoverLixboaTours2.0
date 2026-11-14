@@ -23,7 +23,26 @@ export const tresDestinosTour = {
     8: 25000,
   },
   priceDisplay: "group" as const,
-  heroImage: "/assets/images/galeria-tour3destinations/img2.webp",
+  heroImage: "/assets/images/heronazaresection.jpg",
+  /** Ordem = itinerário: Fátima → Nazaré → Óbidos → Almoço. */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/F%C3%A1tima_September_2021-5.jpg/3840px-F%C3%A1tima_September_2021-5.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/2025-12-21_Nazar%C3%A9%2C_Praia_do_Norte_in_December_3.jpg/3840px-2025-12-21_Nazar%C3%A9%2C_Praia_do_Norte_in_December_3.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Castillo_de_%C3%93bidos%2C_%C3%93bidos%2C_Portugal%2C_2021-09-09%2C_DD_33.jpg/3840px-Castillo_de_%C3%93bidos%2C_%C3%93bidos%2C_Portugal%2C_2021-09-09%2C_DD_33.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/12/Portugal2019OktoberObidos017_%2849036665528%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/b/b1/Capelinha_das_Apari%C3%A7%C3%B5es%2C_2011.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/f/fa/Farol_da_Nazar%C3%A9.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Nazar%C3%A9_.Portugal_%2853451390098%29.jpg/3840px-Nazar%C3%A9_.Portugal_%2853451390098%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Santu%C3%A1rio_de_F%C3%A1tima_%2836885881530%29.jpg/3840px-Santu%C3%A1rio_de_F%C3%A1tima_%2836885881530%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/20190529_Spain_and_Portugal_El_Camino_Pilgrimage_1095_%2848002594858%29.jpg/3840px-20190529_Spain_and_Portugal_El_Camino_Pilgrimage_1095_%2848002594858%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/20190530_Spain_and_Portugal_El_Camino_Pilgrimage_0218_%2848002496321%29.jpg/3840px-20190530_Spain_and_Portugal_El_Camino_Pilgrimage_0218_%2848002496321%29.jpg",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Santu%C3%A1rio+de+F%C3%A1tima%2C+F%C3%A1tima",
+    "https://www.google.com/maps/search/?api=1&query=Praia+do+Norte%2C+Nazar%C3%A9",
+    "https://www.google.com/maps/search/?api=1&query=%C3%93bidos%2C+Portugal",
+    "https://www.google.com/maps/search/?api=1&query=%C3%93bidos%2C+Portugal",
+  ],
   videoYoutubeId: "WOlJMWA8YmQ",
   gallery: [
     {
@@ -78,6 +97,9 @@ export const tresDestinosTour = {
         "Embarque numa jornada única por três dos destinos mais emblemáticos de Portugal. <strong>Visite o Santuário de Fátima, descubra o Farol e museu do surf em Nazaré e explore as muralhas e ruas medievais da vila histórica de Óbidos.</strong>",
         "Com o nosso guia local experiente e o icónico UMM Alter II 4x4, terá acesso a perspetivas únicas, histórias locais autênticas e momentos inesquecíveis. Cada paragem é cuidadosamente planeada para maximizar a sua experiência, com muito tempo para explorar, fotografar e absorver a atmosfera única de cada local.",
       ],
+      highlightTitle: "Fátima, Nazaré e Óbidos",
+      highlightText:
+        "Três lugares num dia: a fé de Fátima, as ondas da Nazaré e a vila muralhada de Óbidos, filmados em 4K.",
       itinerary: [
         {
           badge: "Fátima",
@@ -119,20 +141,20 @@ export const tresDestinosTour = {
       pickupHeading: "Opções de recolha",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — Sem custo adicional",
+          title: "Hotel em Lisboa",
+          detail: "Pick-up e drop-off no hotel em Lisboa — Sem custo adicional",
         },
         {
-          title: "Estação Portela Sintra",
-          detail: "Local tranquilo — Sem custo adicional",
+          title: "Aeroporto de Lisboa",
+          detail: "Recolha no aeroporto — Sem custo adicional",
         },
         {
-          title: "Lisboa / Aeroporto / Hotel",
-          detail:
-            "Disponível com custo adicional (valor a combinar após a reserva)",
+          title: "Outras localizações",
+          detail: "Disponível com custo adicional (valor a combinar após a reserva)",
           highlight: true,
         },
       ],
+
     },
     en: {
       title: "3 Destinations Tour — Fátima, Nazaré & Óbidos",
@@ -142,6 +164,9 @@ export const tresDestinosTour = {
         "Embark on a unique journey through three of Portugal's most emblematic destinations. <strong>Visit the Sanctuary of Fátima, discover the Lighthouse and surf museum in Nazaré and explore the medieval walls and streets of the historic village of Óbidos.</strong>",
         "With our experienced local guide and the iconic UMM Alter II 4x4, you'll have access to unique perspectives, authentic local stories and unforgettable moments. Each stop is carefully planned to maximize your experience, with plenty of time to explore, photograph and absorb the unique atmosphere of each location.",
       ],
+      highlightTitle: "Fátima, Nazaré and Óbidos",
+      highlightText:
+        "Three places in one day: the faith of Fátima, Nazaré's waves and the walled village of Óbidos, filmed in 4K.",
       itinerary: [
         {
           badge: "Fátima",
@@ -183,19 +208,20 @@ export const tresDestinosTour = {
       pickupHeading: "Pickup options",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — No extra cost",
+          title: "Lisbon hotel",
+          detail: "Hotel pick-up and drop-off in Lisbon — No extra cost",
         },
         {
-          title: "Portela Sintra Station",
-          detail: "Quiet meeting point — No extra cost",
+          title: "Lisbon Airport",
+          detail: "Airport pickup — No extra cost",
         },
         {
-          title: "Lisbon / Airport / Hotel",
+          title: "Other locations",
           detail: "Available with an extra fee (arranged after booking)",
           highlight: true,
         },
       ],
+
     },
   },
   seo: {

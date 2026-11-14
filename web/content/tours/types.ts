@@ -13,6 +13,15 @@ export type TourContent = {
   title: string;
   subtitle: string;
   aboutHtml: string[];
+  /** Título e texto ao lado do vídeo 4K. A Praia Secreta fica só em Sintra. */
+  highlightTitle: string;
+  highlightText: string;
+  /** Copy da secção Experiência (se omitido, usa aboutHtml[0] ou subtitle). */
+  experienceText?: string;
+  /** Lead curto sob “O Itinerário”. */
+  itineraryLead?: string;
+  /** Nota sob o itinerário detalhado. */
+  itineraryNote?: string;
   itinerary: TourItineraryItem[];
   included: string[];
   notIncluded: string[];
@@ -51,6 +60,16 @@ export type TourDefinition = {
   priceDisplay: "group" | "person";
   heroImage: string;
   gallery: { src: string; alt: Record<Locale, string> }[];
+  /**
+   * Foto real de cada paragem, na mesma ordem do itinerário.
+   * URLs externas de alta resolução (cerca de 2K ou mais).
+   */
+  stopImages?: readonly string[];
+  /**
+   * Link Google Maps de cada paragem, na mesma ordem do itinerário.
+   * String vazia = paragem sem local fixo (ex.: tempo livre / almoço a combinar).
+   */
+  stopMapsUrls?: readonly string[];
   videoYoutubeId?: string;
   content: Record<Locale, TourContent>;
   seo: Record<Locale, TourSeo>;

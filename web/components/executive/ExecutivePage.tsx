@@ -19,7 +19,6 @@ import { withLocalePrefix } from "@/lib/i18n/locale";
 import { WHATSAPP_DISPLAY, whatsappSiteUrl } from "@/lib/whatsapp";
 
 const WA_HREF = whatsappSiteUrl();
-const SITE_HREF = "https://www.discoverlixboatours.com/";
 const ASSET_VERSION = process.env.NEXT_PUBLIC_ASSET_VERSION?.trim() || "1";
 const EXEC_SHOWCASE_IMG_V = process.env.NEXT_PUBLIC_EXEC_SHOWCASE_IMG_V?.trim() || "3";
 const EXEC_TRANSFERS_IMG_V =
@@ -89,6 +88,7 @@ export function ExecutivePage() {
   const locale = useLocale();
   const e = m.executive;
   const reservarHref = withLocalePrefix("/reservar", locale);
+  const siteHref = withLocalePrefix("/", locale);
 
   return (
     <div className="executive-page">
@@ -412,7 +412,7 @@ export function ExecutivePage() {
                 <div className="exec-contact-item">
                   <dt>{e.ctaDtWebsite}</dt>
                   <dd>
-                    <a href={SITE_HREF} target="_blank" rel="noopener noreferrer">
+                    <a href={siteHref}>
                       discoverlixboatours.com
                     </a>
                   </dd>

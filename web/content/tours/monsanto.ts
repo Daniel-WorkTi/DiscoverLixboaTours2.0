@@ -22,8 +22,35 @@ export const monsantoTour = {
   },
   priceDisplay: "person",
   heroImage: "/assets/images/Monsanto/monsanto1.webp",
+  /** Ordem = itinerário: Aldeia → Castelo → Interior → Restaurante → Ritmo. */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Monsanto_April_2015-2a.jpg/3840px-Monsanto_April_2015-2a.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/f/fa/Castelo_de_Monsanto.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Granite_boulder_formations_near_the_Monsanto_Castle_at_sunrise%2C_Aldeia_de_Monsanto%2C_Portugal_%282%29_julesvernex2-3.jpg/3840px-Granite_boulder_formations_near_the_Monsanto_Castle_at_sunrise%2C_Aldeia_de_Monsanto%2C_Portugal_%282%29_julesvernex2-3.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/9/91/Aldeia_velha_de_Monsanto_-_Casa_entre_as_pedras.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/e/e1/Aldeia_de_Monsanto.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Monsanto_April_2015-1a.jpg/3840px-Monsanto_April_2015-1a.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Monsanto_April_2015-3a.jpg/3840px-Monsanto_April_2015-3a.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Stairway_Monsanto_Castle_April_2015-1.jpg/3840px-Stairway_Monsanto_Castle_April_2015-1.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/49/Monsanto_e_Idanha-a-Velha_-_Aldeia_Velha_de_Monsanto_-_20210417152804.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Monsanto_Portugal.jpg/3840px-Monsanto_Portugal.jpg",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Monsanto%2C+Idanha-a-Nova%2C+Portugal",
+    "https://www.google.com/maps/search/?api=1&query=Castelo+de+Monsanto%2C+Idanha-a-Nova",
+    "https://www.google.com/maps/search/?api=1&query=Aldeia+de+Monsanto%2C+Portugal",
+    "https://www.google.com/maps/search/?api=1&query=Restaurantes+Monsanto%2C+Idanha-a-Nova",
+    "",
+  ],
   videoYoutubeId: "44MNaDCyR4A",
   gallery: [
+    {
+      src: "/assets/images/Monsanto/monsanto.webp",
+      alt: {
+        pt: "Monsanto — aldeia de pedra",
+        en: "Monsanto — stone village",
+      },
+    },
     {
       src: "/assets/images/Monsanto/monsanto1.webp",
       alt: {
@@ -63,6 +90,9 @@ export const monsantoTour = {
         "O dia inclui ainda uma viagem por <strong>zonas menos turísticas</strong>: paisagens rurais autênticas, pequenas aldeias e um <strong>Portugal genuíno e pouco explorado</strong>.",
         "<strong>Tour privado e personalizado</strong>, em <strong>carrinha confortável</strong>, com <strong>horários flexíveis</strong> — ideal para quem procura um “lugar secreto” e fotos memoráveis.",
       ],
+      highlightTitle: "Monsanto, a aldeia de pedra",
+      highlightText:
+        "Casas entre penedos graníticos, filmadas em 4K. A aldeia mais portuguesa de Portugal, no alto da serra.",
       itinerary: [
         {
           badge: "Monsanto",
@@ -108,6 +138,22 @@ export const monsantoTour = {
       whyChooseHtml:
         "Destino único e diferente, sensação de “lugar secreto”, ligação a uma série de renome e excelente para fotos — um dia memorável fora dos circuitos óbvios, com a DiscoverLixboaTours.",
       stopsLabel: "Monsanto & Centro de Portugal",
+      pickupHeading: "Opções de recolha",
+      pickupItems: [
+        {
+          title: "Hotel em Lisboa",
+          detail: "Pick-up e drop-off no hotel em Lisboa — Sem custo adicional",
+        },
+        {
+          title: "Aeroporto de Lisboa",
+          detail: "Recolha no aeroporto — Sem custo adicional",
+        },
+        {
+          title: "Outras localizações",
+          detail: "Disponível com custo adicional (valor a combinar após a reserva)",
+          highlight: true,
+        },
+      ],
     },
     en: {
       title: "Private Tour Monsanto & Central Portugal",
@@ -118,6 +164,9 @@ export const monsantoTour = {
         "The day also takes you through <strong>less touristy areas</strong>: authentic rural landscapes, small villages and a <strong>genuine, off-the-beaten-path Portugal</strong>.",
         "<strong>Private, tailor-made tour</strong> in a <strong>comfortable van</strong> with <strong>flexible timing</strong> — perfect for a “secret place” feel and memorable photos.",
       ],
+      highlightTitle: "Monsanto, the stone village",
+      highlightText:
+        "Houses set among granite boulders, filmed in 4K. Portugal's most Portuguese village, high in the hills.",
       itinerary: [
         {
           badge: "Monsanto",
@@ -163,6 +212,22 @@ export const monsantoTour = {
       whyChooseHtml:
         "A unique, off-radar destination with a “secret place” feel, a tie-in to a major TV series and great photo opportunities — a memorable day away from the obvious circuits, with DiscoverLixboaTours.",
       stopsLabel: "Monsanto & Central Portugal",
+      pickupHeading: "Pickup options",
+      pickupItems: [
+        {
+          title: "Lisbon hotel",
+          detail: "Hotel pick-up and drop-off in Lisbon — No extra cost",
+        },
+        {
+          title: "Lisbon Airport",
+          detail: "Airport pickup — No extra cost",
+        },
+        {
+          title: "Other locations",
+          detail: "Available with an extra fee (arranged after booking)",
+          highlight: true,
+        },
+      ],
     },
   },
   seo: {

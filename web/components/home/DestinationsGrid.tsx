@@ -13,8 +13,12 @@ export type DestinationCard = {
   places: string;
   label: string;
   priceFrom: string;
-  /** Unidade do preço mostrado no badge da home. */
+  /** Unidade do preço mostrado no card da home. */
   priceUnit: "group" | "person";
+  durationHours: number;
+  /** Placeholder até avaliações reais. */
+  ratingScore: string;
+  ratingCount: number;
 };
 
 type Props = {
@@ -27,6 +31,8 @@ export function DestinationsGrid({ destinations }: Props) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [expanded, setExpanded] = useState(false);
+  const INITIAL_VISIBLE = 9;
   const inputId = useId();
   const listId = useId();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -182,48 +188,83 @@ export function DestinationsGrid({ destinations }: Props) {
       </div>
 
       <div className="destinations-grid" role="list">
-        {filtered.map((d) => (
-          <div className="destination-card" key={d.href} role="listitem">
-            <div
-              className="destination-badge"
-              aria-label={`${m.common.priceLabel} ${d.priceFrom} ${d.priceUnit === "group" ? m.common.priceGroupUnit : m.common.priceUnit}`}
-            >
-              <span className="destination-badge__label">{m.common.priceLabel}</span>
-              <span className="destination-badge__value">{d.priceFrom}</span>
-              <span className="destination-badge__unit">
-                {d.priceUnit === "group" ? m.common.priceGroupUnit : m.common.priceUnit}
-              </span>
-            </div>
+        {(q.trim() || expanded
+          ? filtered
+          : filtered.slice(0, INITIAL_VISIBLE)
+        ).map((d) => {
+          const href = withLocalePrefix(d.href, locale);
+          const unitLabel =
+            d.priceUnit === "group"
+              ? m.common.priceGroupUnit.replace(/^\/\s*/, "")
+              : m.common.priceUnit.replace(/^\/\s*/, "");
 
-            <a href={withLocalePrefix(d.href, locale)} className="destination-image-link">
-              <div className="destination-image">
-                <Image
-                  src={d.img}
-                  alt={d.alt}
-                  width={640}
-                  height={640}
-                  sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
-                />
-              </div>
-            </a>
-
-            <div className="destination-content">
-              <div className="destination-info">
-                <h3 className="destination-name">{d.name}</h3>
-              </div>
-              <a
-                href={withLocalePrefix(d.href, locale)}
-                className="destination-btn"
-                aria-label={d.label}
-              >
-                <svg viewBox="0 0 256 256" fill="currentColor">
-                  <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
-                </svg>
+          return (
+            <article className="destination-card" key={d.href} role="listitem">
+              <a href={href} className="destination-image-link" aria-label={d.name}>
+                <div className="destination-image">
+                  <Image
+                    src={d.img}
+                    alt={d.alt}
+                    width={640}
+                    height={420}
+                    sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                  />
+                </div>
               </a>
-            </div>
-          </div>
-        ))}
+
+              <div className="destination-body">
+                <h3 className="destination-name">
+                  <a href={href}>{d.name}</a>
+                </h3>
+
+                <p className="destination-rating">
+                  <span className="destination-rating__stars" aria-hidden>
+                    {[0, 1, 2].map((i) => (
+                      <svg key={i} className="destination-rating__star" viewBox="0 0 24 24">
+                        <path
+                          fill="currentColor"
+                          d="M12 2.5l2.9 6.1 6.7.7-5 4.6 1.4 6.6L12 17.8 5.9 20.5 7.3 14 2.4 9.3l6.7-.7L12 2.5z"
+                        />
+                      </svg>
+                    ))}
+                  </span>
+                  <span className="destination-rating__score">{d.ratingScore}</span>
+                  <span className="destination-rating__reviews">
+                    {m.destinations.ratingReviews(d.ratingCount)}
+                  </span>
+                </p>
+
+                <div className="destination-footer">
+                  <p className="destination-price">
+                    <span className="destination-price__amount">{d.priceFrom}</span>
+                    <span className="destination-price__meta">
+                      {" "}
+                      / {m.destinations.durationLabel(d.durationHours)} · {unitLabel}
+                    </span>
+                  </p>
+                  <a href={href} className="destination-book">
+                    {m.nav.book}
+                    <span aria-hidden>→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
+
+      {!q.trim() && filtered.length > INITIAL_VISIBLE ? (
+        <div className="destinations-more">
+          <button
+            type="button"
+            className="destinations-more__btn"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+          >
+            {expanded ? m.destinations.showLess : m.destinations.showMore}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

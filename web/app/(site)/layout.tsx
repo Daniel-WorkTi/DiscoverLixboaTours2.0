@@ -2,6 +2,9 @@ import { SiteChrome } from "@/components/SiteChrome";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { getRequestLocale } from "@/lib/i18n/server";
 
+/** Locale vem do middleware (rewrite /en) — nunca cachear HTML num único idioma. */
+export const dynamic = "force-dynamic";
+
 export default async function SiteLayout({
   children,
 }: Readonly<{

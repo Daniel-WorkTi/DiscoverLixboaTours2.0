@@ -8,6 +8,18 @@ export function SiteClientEffects() {
     let lastScrollTop = 0;
     const scrollThreshold = 100;
 
+    const syncHeaderSurface = () => {
+      if (!mainHeader) return;
+      const hero = document.querySelector(".hero, .destino-hero, .exec-hero");
+      if (!hero) {
+        mainHeader.classList.add("is-solid");
+        return;
+      }
+      const headerHeight = (mainHeader as HTMLElement).offsetHeight || 96;
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      mainHeader.classList.toggle("is-solid", heroBottom <= headerHeight + 8);
+    };
+
     const onScrollHeader = () => {
       if (!mainHeader) return;
       const scrollTop =
@@ -22,6 +34,7 @@ export function SiteClientEffects() {
         mainHeader.classList.remove("hidden");
       }
       lastScrollTop = scrollTop;
+      syncHeaderSurface();
     };
 
     const sections = document.querySelectorAll("section[id]");
@@ -64,7 +77,9 @@ export function SiteClientEffects() {
       }
     };
 
-    window.addEventListener("scroll", onScrollHeader);
+    syncHeaderSurface();
+    window.addEventListener("scroll", onScrollHeader, { passive: true });
+    window.addEventListener("resize", syncHeaderSurface);
     window.addEventListener("scroll", updateActiveLink);
     window.addEventListener("load", updateActiveLink);
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -91,6 +106,7 @@ export function SiteClientEffects() {
 
     return () => {
       window.removeEventListener("scroll", onScrollHeader);
+      window.removeEventListener("resize", syncHeaderSurface);
       window.removeEventListener("scroll", updateActiveLink);
       window.removeEventListener("load", updateActiveLink);
       document.querySelectorAll('a[href^="#"]').forEach((a) => {

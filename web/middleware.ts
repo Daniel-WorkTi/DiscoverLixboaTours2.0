@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import {
+  isAppLocale,
   LOCALE_COOKIE,
   localeFromPathname,
   stripLocalePrefix,
 } from "@/lib/i18n/locale";
 
 const ADMIN_COOKIE_NAME = "dl_admin";
+const LOCALE_HEADER = "x-dl-locale";
+const PATH_HEADER = "x-dl-path";
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -34,11 +37,17 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Evita 2ª passagem após rewrite /en → / (senão o locale volta a PT).
+  const already = req.headers.get(LOCALE_HEADER);
+  if (isAppLocale(already)) {
+    return NextResponse.next();
+  }
+
   const locale = localeFromPathname(pathname);
   const barePath = stripLocalePrefix(pathname);
   const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-dl-locale", locale);
-  requestHeaders.set("x-dl-path", barePath);
+  requestHeaders.set(LOCALE_HEADER, locale);
+  requestHeaders.set(PATH_HEADER, barePath);
 
   // /en/... → rewrite interno para path PT (URLs indexadas PT intactas; /en é alias EN)
   if (locale === "en") {
@@ -58,14 +67,11 @@ export function middleware(req: NextRequest) {
   const res = NextResponse.next({
     request: { headers: requestHeaders },
   });
-  // Não forçar PT se o user já escolheu EN sem /en (bandeira) — só define se ausente
-  if (!req.cookies.get(LOCALE_COOKIE)?.value) {
-    res.cookies.set(LOCALE_COOKIE, "pt", {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-    });
-  }
+  res.cookies.set(LOCALE_COOKIE, "pt", {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+  });
   return res;
 }
 

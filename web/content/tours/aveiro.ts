@@ -21,7 +21,27 @@ export const aveiroTour = {
     8: 80000,
   },
   priceDisplay: "person",
-  heroImage: "/assets/images/AVEIRO/Banner.webp",
+  heroImage: "/assets/images/AVEIRO/hero-aveiro.jpg",
+  /** Ordem = itinerário: Centro → Canais/moliceiros → Salinas → Costa Nova → Tempo livre. */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/b/b8/Rua_da_Pra%C3%A7a_do_Peixe_-_Aveiro_-_Portugal.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/20200203_Moliceiro_5440.jpg/3840px-20200203_Moliceiro_5440.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/2025-08-03_Salinas_de_Aveiro.jpg/3840px-2025-08-03_Salinas_de_Aveiro.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Palheiros_da_Costa_Nova_-_Portugal_%2816367348673%29.jpg/3840px-Palheiros_da_Costa_Nova_-_Portugal_%2816367348673%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Canal_in_Aveiro_17.jpg/3840px-Canal_in_Aveiro_17.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Canal_in_Aveiro_12.jpg/3840px-Canal_in_Aveiro_12.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/20200203_Moliceiro_5441.jpg/3840px-20200203_Moliceiro_5441.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/20200203_Aveiro_5401_%2849655231976%29.jpg/3840px-20200203_Aveiro_5401_%2849655231976%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/14/Costa_Nova_do_Prado.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/b/b0/Palheiros_da_Costa_Nova.jpg",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Centro+de+Aveiro%2C+Portugal",
+    "https://www.google.com/maps/search/?api=1&query=Canais+de+Aveiro%2C+Portugal",
+    "https://www.google.com/maps/search/?api=1&query=Salinas+de+Aveiro%2C+Portugal",
+    "https://www.google.com/maps/search/?api=1&query=Costa+Nova%2C+Aveiro",
+    "",
+  ],
   videoYoutubeId: "4obWb9N3l1s",
   gallery: [
     {
@@ -63,6 +83,9 @@ export const aveiroTour = {
         "Inclui uma visita à icónica <strong>Costa Nova</strong>, famosa pelas <strong>casas às riscas</strong> coloridas, e tempo para explorar ao teu ritmo.",
         "<strong>Tour privado e totalmente personalizável</strong>, adaptado ao ritmo e às preferências do cliente.",
       ],
+      highlightTitle: "Aveiro e a Costa Nova",
+      highlightText:
+        "Canais, moliceiros e os palheiros coloridos da Costa Nova. A Veneza de Portugal em 4K, da ria ao Atlântico.",
       itinerary: [
         {
           badge: "Centro",
@@ -109,20 +132,20 @@ export const aveiroTour = {
       pickupHeading: "Opções de recolha",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — Sem custo adicional",
+          title: "Hotel em Lisboa",
+          detail: "Pick-up e drop-off no hotel em Lisboa — Sem custo adicional",
         },
         {
-          title: "Estação Portela Sintra",
-          detail: "Local tranquilo — Sem custo adicional",
+          title: "Aeroporto de Lisboa",
+          detail: "Recolha no aeroporto — Sem custo adicional",
         },
         {
-          title: "Lisboa / Aeroporto / Hotel",
-          detail:
-            "Disponível com custo adicional (valor a combinar após a reserva)",
+          title: "Outras localizações",
+          detail: "Disponível com custo adicional (valor a combinar após a reserva)",
           highlight: true,
         },
       ],
+
     },
     en: {
       title: "Aveiro & Costa Nova Private Tour",
@@ -133,6 +156,9 @@ export const aveiroTour = {
         "Includes a visit to iconic <strong>Costa Nova</strong>, famous for its colourful <strong>striped houses</strong>, and time to explore at your own pace.",
         "<strong>Fully private and customizable</strong> — adapted to your pace and preferences.",
       ],
+      highlightTitle: "Aveiro and Costa Nova",
+      highlightText:
+        "Canals, moliceiro boats and the colourful Costa Nova houses. Portugal's Venice in 4K, from the lagoon to the Atlantic.",
       itinerary: [
         {
           badge: "Centre",
@@ -180,19 +206,20 @@ export const aveiroTour = {
       pickupHeading: "Pickup options",
       pickupItems: [
         {
-          title: "Sintra",
-          detail: "Largo Vasco da Gama 7, 2710-423 — No extra cost",
+          title: "Lisbon hotel",
+          detail: "Hotel pick-up and drop-off in Lisbon — No extra cost",
         },
         {
-          title: "Portela Sintra Station",
-          detail: "Quiet meeting point — No extra cost",
+          title: "Lisbon Airport",
+          detail: "Airport pickup — No extra cost",
         },
         {
-          title: "Lisbon / Airport / Hotel",
+          title: "Other locations",
           detail: "Available with an extra fee (arranged after booking)",
           highlight: true,
         },
       ],
+
     },
   },
   seo: {

@@ -16,15 +16,18 @@ export function stripLocalePrefix(pathname: string): string {
   return pathname;
 }
 
-/** Pathname com prefixo de locale (PT = sem prefixo). Aceita query string. */
+/** Pathname com prefixo de locale (PT = sem prefixo). Aceita query string e hash. */
 export function withLocalePrefix(pathname: string, locale: AppLocale): string {
-  const qi = pathname.indexOf("?");
-  const pathOnly = qi >= 0 ? pathname.slice(0, qi) : pathname;
-  const qs = qi >= 0 ? pathname.slice(qi) : "";
+  const hashIndex = pathname.indexOf("#");
+  const withoutHash = hashIndex >= 0 ? pathname.slice(0, hashIndex) : pathname;
+  const hash = hashIndex >= 0 ? pathname.slice(hashIndex) : "";
+  const qi = withoutHash.indexOf("?");
+  const pathOnly = qi >= 0 ? withoutHash.slice(0, qi) : withoutHash;
+  const qs = qi >= 0 ? withoutHash.slice(qi) : "";
   const bare = stripLocalePrefix(pathOnly) || "/";
-  if (locale === "pt") return `${bare}${qs}`;
-  if (bare === "/") return `/en${qs}`;
-  return `/en${bare}${qs}`;
+  if (locale === "pt") return `${bare}${qs}${hash}`;
+  if (bare === "/") return `/en${qs}${hash}`;
+  return `/en${bare}${qs}${hash}`;
 }
 
 export function localeFromPathname(pathname: string): AppLocale {

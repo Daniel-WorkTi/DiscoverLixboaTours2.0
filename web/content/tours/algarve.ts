@@ -23,6 +23,25 @@ export const algarveTour = {
   },
   priceDisplay: "group",
   heroImage: "/assets/images/destinations/algarve.webp",
+  /** Ordem = itinerário: Marinha → Benagil → Almoço Lagoa → Lagos/Piedade. */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Praia_da_Marinha-Algarve-Portugal.jpg/3840px-Praia_da_Marinha-Algarve-Portugal.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/02-05-2017_Algar_de_Benagil_%284%29.JPG/3840px-02-05-2017_Algar_de_Benagil_%284%29.JPG",
+    "https://upload.wikimedia.org/wikipedia/commons/3/39/Carvoeiro.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Ponta_da_Piedade%2C_Lagos_%2820083809934%29.jpg/3840px-Ponta_da_Piedade%2C_Lagos_%2820083809934%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Arco_Natural_da_Praia_da_Marinha.jpg/3840px-Arco_Natural_da_Praia_da_Marinha.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Algar_Seco_october_2024.jpg/3840px-Algar_Seco_october_2024.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Algarve_Ponta_da_Piedade_Von_Oben.jpg/3840px-Algarve_Ponta_da_Piedade_Von_Oben.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Praia_Dona_Ana.jpg/3840px-Praia_Dona_Ana.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Algarve_K%C3%BCste_Lagos.jpg/3840px-Algarve_K%C3%BCste_Lagos.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Cidade_e_concelho_de_Lagos%2C_Portugal_MG_8985_%2815273718392%29.jpg/3840px-Cidade_e_concelho_de_Lagos%2C_Portugal_MG_8985_%2815273718392%29.jpg",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Praia+da+Marinha%2C+Lagoa%2C+Algarve",
+    "https://www.google.com/maps/search/?api=1&query=Gruta+de+Benagil%2C+Lagoa%2C+Algarve",
+    "https://www.google.com/maps/search/?api=1&query=Lagoa%2C+Algarve%2C+Portugal",
+    "https://www.google.com/maps/search/?api=1&query=Ponta+da+Piedade%2C+Lagos%2C+Algarve",
+  ],
   videoYoutubeId: "-GcMIReDJVs",
   gallery: [
     {
@@ -63,6 +82,9 @@ export const algarveTour = {
         "Descubra o melhor do Algarve — praias de postal, grutas mundialmente famosas e falésias que desafiam a imaginação. Um dia relaxado, mas cheio de aventura e paisagens inesquecíveis!",
         "Vamos explorar a Costa do Sol em conforto total, com paragens nos melhores spots para fotos, tempo para relaxar nas praias mais bonitas de Portugal e descobrir os segredos que só os locais conhecem. Tudo isto ao som de boa música e com um guia local que conhece cada canto especial desta região única.",
       ],
+      highlightTitle: "A costa do Algarve",
+      highlightText:
+        "Praia da Marinha, Benagil e a Ponta da Piedade em 4K. Falésias douradas e água clara no sul de Portugal.",
       itinerary: [
         {
           badge: "Marinha",
@@ -101,6 +123,22 @@ export const algarveTour = {
         "Refeições e despesas pessoais",
       ],
       stopsLabel: "Algarve",
+      pickupHeading: "Opções de recolha",
+      pickupItems: [
+        {
+          title: "Hotel em Lisboa",
+          detail: "Pick-up e drop-off no hotel em Lisboa — Sem custo adicional",
+        },
+        {
+          title: "Aeroporto de Lisboa",
+          detail: "Recolha no aeroporto — Sem custo adicional",
+        },
+        {
+          title: "Outras localizações",
+          detail: "Disponível com custo adicional (valor a combinar após a reserva)",
+          highlight: true,
+        },
+      ],
     },
     en: {
       title: "Private Algarve Day Tour",
@@ -110,6 +148,9 @@ export const algarveTour = {
         "Discover the best of the Algarve — postcard beaches, world-famous caves and cliffs that challenge the imagination. A relaxed day, but full of adventure and unforgettable landscapes!",
         "We'll explore the Costa do Sol in total comfort, with stops at the best photo spots, time to relax on Portugal's most beautiful beaches and discover secrets that only locals know. All this to the sound of good music and with a local guide who knows every special corner of this unique region.",
       ],
+      highlightTitle: "The Algarve coast",
+      highlightText:
+        "Marinha Beach, Benagil and Ponta da Piedade in 4K. Golden cliffs and clear water in the south of Portugal.",
       itinerary: [
         {
           badge: "Marinha",
@@ -148,6 +189,22 @@ export const algarveTour = {
         "Meals and personal expenses",
       ],
       stopsLabel: "Algarve",
+      pickupHeading: "Pickup options",
+      pickupItems: [
+        {
+          title: "Lisbon hotel",
+          detail: "Hotel pick-up and drop-off in Lisbon — No extra cost",
+        },
+        {
+          title: "Lisbon Airport",
+          detail: "Airport pickup — No extra cost",
+        },
+        {
+          title: "Other locations",
+          detail: "Available with an extra fee (arranged after booking)",
+          highlight: true,
+        },
+      ],
     },
   },
   seo: {

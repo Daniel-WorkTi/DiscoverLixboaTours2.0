@@ -1,23 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Hanken_Grotesk, Outfit } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import { getRequestLocale } from "@/lib/i18n/server";
 import { htmlLang } from "@/lib/i18n/types";
 import "./globals.css";
 import "./styles/booking-reservar.css";
 
-const hanken = Hanken_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-hanken",
-  display: "swap",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-outfit",
-  display: "swap",
-});
+/** Locale por pedido (header/cookie do middleware). */
+export const dynamic = "force-dynamic";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -51,8 +40,14 @@ export default async function RootLayout({
   const locale = await getRequestLocale();
 
   return (
-    <html lang={htmlLang(locale)} className={`${hanken.variable} ${outfit.variable}`} data-lang={locale}>
-      <body suppressHydrationWarning>{children}</body>
+    <html
+      lang={htmlLang(locale)}
+      className={GeistSans.variable}
+      data-lang={locale}
+    >
+      <body className={GeistSans.className} suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

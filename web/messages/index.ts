@@ -51,6 +51,41 @@ export type Messages = {
     needHelp: string;
     needHelpText: string;
     breadcrumbDestinations: string;
+    highlightsLabel: string;
+    experienceTitle: string;
+    experienceLink: string;
+    itineraryTitle: string;
+    itineraryLink: string;
+    highlightEyebrow: string;
+    highlightMapLink: string;
+    highlightItineraryLink: string;
+    pickupTitle: string;
+    freeBadge: string;
+    paidBadge: string;
+    bookLabel: string;
+    fromLabel: string;
+    photoCredit: string;
+    trustLabel: string;
+    trustCta: string;
+    trustSource: string;
+    trustReviews: (n: number) => string;
+    hoursUnit: string;
+    hoursSub: string;
+    guestsUnit: string;
+    guestsSub: string;
+    stopsUnit: string;
+    stopsSub: string;
+    privateUnit: string;
+    privateSub: string;
+    prevPhotos: string;
+    nextPhotos: string;
+    prevStops: string;
+    nextStops: string;
+    itineraryLeadDefault: string;
+    itineraryNoteDefault: string;
+    bookMetaPerson: (guestRange: string) => string;
+    bookMetaGroup: (guestRange: string) => string;
+    starsOf: (score: string, max: number) => string;
     fullDayApprox: (hours: number) => string;
     maxGuests: (n: number) => string;
     groupFromHint: (euros: number) => string;
@@ -99,6 +134,16 @@ export type Messages = {
     errNoUrl: string;
     errTimeout: string;
     errNetwork: string;
+    close: string;
+    prevMonth: string;
+    nextMonth: string;
+    weekdays: [string, string, string, string, string, string, string];
+    guestsStepper: string;
+    lessGuest: string;
+    moreGuest: string;
+    estimatedTotal: string;
+    dialCode: string;
+    tourDestination: string;
     tours: {
       sintraCascais: string;
       threeDestinos: string;
@@ -143,6 +188,7 @@ export type Messages = {
       destinations: string;
       guides: string;
       trips: string;
+      years: string;
     };
     ticker: string;
     quotes: {
@@ -169,6 +215,16 @@ export type Messages = {
       wine: { badge: string; title: string; desc: string; cta: string };
       romantic: { title: string; desc: string; cta: string };
     };
+    whyUs: {
+      badge: string;
+      title: string;
+      lead: string;
+      featured: { title: string; desc: string };
+      jeep: { title: string; desc: string };
+      wine: { title: string; desc: string };
+      support: { title: string; desc: string };
+      romantic: { title: string; desc: string };
+    };
     instagram: {
       follow: string;
       description: string;
@@ -183,6 +239,11 @@ export type Messages = {
         diesel: { title: string; desc: string };
         fourByFour: { title: string; desc: string };
       };
+    };
+    exploreVideo: {
+      title: string;
+      description: string;
+      playLabel: string;
     };
     testimonials: {
       subtitle: string;
@@ -286,6 +347,10 @@ export type Messages = {
     searchClear: string;
     searchResults: string;
     searchNoResults: string;
+    ratingReviews: (count: number) => string;
+    durationLabel: (hours: number) => string;
+    showMore: string;
+    showLess: string;
     /** Opcional — nomes/places podem continuar como props. */
     items: {
       sintra: { name: string; places: string };
@@ -353,6 +418,45 @@ export const messagesPt: Messages = {
     needHelp: "Precisa de ajuda?",
     needHelpText: "A nossa equipa está disponível para responder às suas perguntas.",
     breadcrumbDestinations: "Destinos",
+    highlightsLabel: "Destaques do tour",
+    experienceTitle: "A Experiência",
+    experienceLink: "Conhecer a experiência",
+    itineraryTitle: "O Itinerário",
+    itineraryLink: "Ver itinerário completo",
+    highlightEyebrow: "Destaque do tour",
+    highlightMapLink: "Ver no mapa",
+    highlightItineraryLink: "Ver itinerário",
+    pickupTitle: "Onde começa a aventura",
+    freeBadge: "Sem custo adicional",
+    paidBadge: "Custo adicional a combinar",
+    bookLabel: "Tour Privado",
+    fromLabel: "A partir de",
+    photoCredit:
+      "Fotografias dos locais, acima de 2K, via Wikimedia Commons (CC BY / CC BY-SA).",
+    trustLabel: "Avaliações no Google",
+    trustCta: "Ver todas as avaliações no Google",
+    trustSource: "Verificado no Google",
+    trustReviews: (n) => `${n} críticas no Google`,
+    hoursUnit: "HORAS",
+    hoursSub: "Dia inteiro",
+    guestsUnit: "PESSOAS",
+    guestsSub: "Máx. grupo",
+    stopsUnit: "PARADAS",
+    stopsSub: "No roteiro",
+    privateUnit: "PRIVADO",
+    privateSub: "Só vosso",
+    prevPhotos: "Fotos anteriores",
+    nextPhotos: "Próximas fotos",
+    prevStops: "Paragens anteriores",
+    nextStops: "Próximas paragens",
+    itineraryLeadDefault: "Roteiro privado ajustado ao teu grupo.",
+    itineraryNoteDefault:
+      "Percurso sugerido e personalizável. Horários e paragens podem ser ajustados no dia.",
+    bookMetaPerson: (guestRange) =>
+      `A partir de · por pessoa (${guestRange} hóspedes)`,
+    bookMetaGroup: (guestRange) =>
+      `A partir de · por grupo (${guestRange} passageiros)`,
+    starsOf: (score, max) => `${score} de ${max} estrelas`,
     fullDayApprox: (hours) => `Dia completo · Aprox. ${hours} horas`,
     maxGuests: (n) => `Máx. ${n} passageiros`,
     groupFromHint: (euros) =>
@@ -406,16 +510,26 @@ export const messagesPt: Messages = {
     errTimeout:
       "O servidor demorou demasiado a responder (timeout). Verifica a ligação, se a chave Stripe está na Vercel (Environment Variables) e tenta de novo.",
     errNetwork: "Erro de rede. Tenta novamente.",
+    close: "Fechar",
+    prevMonth: "Mês anterior",
+    nextMonth: "Mês seguinte",
+    weekdays: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+    guestsStepper: "Quantidade de pessoas",
+    lessGuest: "Menos uma pessoa",
+    moreGuest: "Mais uma pessoa",
+    estimatedTotal: "Total estimado",
+    dialCode: "Indicativo",
+    tourDestination: "Destino do tour",
     tours: {
       sintraCascais: "Sintra & Cascais",
       threeDestinos: "Tour 3 Destinos (Fátima, Nazaré, Óbidos)",
       monsanto: "Monsanto & Centro de Portugal",
-      fatimaTomar: "Fátima & Tomar Private Tour",
+      fatimaTomar: "Fátima & Tomar",
       lisboa: "Lisboa",
       porto: "Porto",
       arraabida: "Arrábida, Setúbal & Sesimbra",
       aveiro: "Aveiro & Costa Nova",
-      alentejo: "Premium Alentejo Wine, Food & Culture Experience",
+      alentejo: "Alentejo — Vinho, Gastronomia & Cultura",
       algarve: "Algarve",
     },
   },
@@ -430,10 +544,10 @@ export const messagesPt: Messages = {
   home: {
     hero: {
       badge: "Tours Exclusivos em Portugal",
-      titleLine1: "Descubra Portugal",
-      titleLine2: "como um local.",
+      titleLine1: "Explore Portugal com",
+      titleLine2: "DISCOVERLIXBOATOURS",
       subtitle1:
-        "Tours privados por Sintra, Lisboa e todo o país, com guia local, itinerários personalizados e total liberdade para viajar ao seu ritmo.",
+        "Tours privados em Portugal com motorista-guia local — Sintra, Lisboa, Fátima, Arrábida e mais.",
       subtitle2: "",
       cta: "Explorar tours",
       ctaSecondary: "Falar connosco",
@@ -451,9 +565,10 @@ export const messagesPt: Messages = {
     },
     widgets: {
       tours: "Pacotes de Tour",
-      destinations: "Diferentes Destinos",
+      destinations: "Destinos em Portugal",
       guides: "Guias de Tour",
       trips: "Viagens Completas",
+      years: "Anos de Experiência",
     },
     ticker: "Tours Autênticos em Portugal com DiscoverLixboaTours",
     quotes: {
@@ -496,8 +611,33 @@ export const messagesPt: Messages = {
         cta: "Personalizar com o guia",
       },
     },
+    whyUs: {
+      badge: "Porquê a Discover Lixboa",
+      title: "Cada viagem tem a sua história.",
+      lead: "Experiências autênticas, roteiros exclusivos e momentos pensados ao teu ritmo. Descobre Portugal de uma forma diferente.",
+      featured: {
+        title: "Tours Personalizados",
+        desc: "Roteiros feitos à tua medida, com liberdade para descobrir Portugal ao teu ritmo.",
+      },
+      jeep: {
+        title: "Jeep Off-road Experience",
+        desc: "Explora trilhos escondidos, miradouros e paisagens a bordo do icónico UMM 4x4.",
+      },
+      wine: {
+        title: "Wine & Food Experience",
+        desc: "Descobre vinhos, sabores regionais e tradições que contam a verdadeira história de Portugal.",
+      },
+      support: {
+        title: "Storytelling de guia local",
+        desc: "Com guia local e veículos icónicos, o foco é autenticidade e privacidade — desenhamos o teu Portugal ideal.",
+      },
+      romantic: {
+        title: "Experiências a Dois",
+        desc: "Momentos privados, detalhes especiais e surpresas para tornar cada ocasião inesquecível.",
+      },
+    },
     instagram: {
-      follow: "Seguir",
+      follow: "Seguir no Instagram",
       description: "Siga-nos no Instagram para mais aventuras!",
     },
     transporte: {
@@ -523,6 +663,11 @@ export const messagesPt: Messages = {
           desc: "Off-road seguro para explorar zonas menos turísticas e ganhar ângulos que autocarros não alcançam",
         },
       },
+    },
+    exploreVideo: {
+      title: "Começa a explorar",
+      description: "A tua aventura começa com a DiscoverLixboaTours.",
+      playLabel: "Ver vídeo",
     },
     testimonials: {
       subtitle: "Depoimentos",
@@ -699,6 +844,10 @@ export const messagesPt: Messages = {
     searchClear: "Limpar pesquisa",
     searchResults: "resultados",
     searchNoResults: "Sem resultados",
+    ratingReviews: (count) => `( ${count}+ avaliações )`,
+    durationLabel: (hours) => `${hours}h`,
+    showMore: "Ver mais",
+    showLess: "Ver menos",
     items: {
       sintra: { name: "Sintra & Cascais", places: "Palácios & Praias Secretas" },
       threeDestinos: {
@@ -786,6 +935,45 @@ export const messagesEn: Messages = {
     needHelp: "Need Help?",
     needHelpText: "Our team is available to answer your questions.",
     breadcrumbDestinations: "Destinations",
+    highlightsLabel: "Tour highlights",
+    experienceTitle: "The Experience",
+    experienceLink: "Discover the experience",
+    itineraryTitle: "The Itinerary",
+    itineraryLink: "View full itinerary",
+    highlightEyebrow: "Tour highlight",
+    highlightMapLink: "See on the map",
+    highlightItineraryLink: "View itinerary",
+    pickupTitle: "Where the adventure begins",
+    freeBadge: "No extra cost",
+    paidBadge: "Extra cost on request",
+    bookLabel: "Private Tour",
+    fromLabel: "From",
+    photoCredit:
+      "Photos of the places, above 2K, via Wikimedia Commons (CC BY / CC BY-SA).",
+    trustLabel: "Google reviews",
+    trustCta: "See all reviews on Google",
+    trustSource: "Verified on Google",
+    trustReviews: (n) => `${n} Google reviews`,
+    hoursUnit: "HOURS",
+    hoursSub: "Full day",
+    guestsUnit: "GUESTS",
+    guestsSub: "Max group",
+    stopsUnit: "STOPS",
+    stopsSub: "On route",
+    privateUnit: "PRIVATE",
+    privateSub: "Just you",
+    prevPhotos: "Previous photos",
+    nextPhotos: "Next photos",
+    prevStops: "Previous stops",
+    nextStops: "Next stops",
+    itineraryLeadDefault: "A private route tailored to your group.",
+    itineraryNoteDefault:
+      "Suggested and customizable route. Timings and stops can be adjusted on the day.",
+    bookMetaPerson: (guestRange) =>
+      `From · per person (${guestRange} guests)`,
+    bookMetaGroup: (guestRange) =>
+      `From · per group (${guestRange} guests)`,
+    starsOf: (score, max) => `${score} of ${max} stars`,
     fullDayApprox: (hours) => `Full Day · Approx. ${hours} Hours`,
     maxGuests: (n) => `Max. ${n} Guests`,
     groupFromHint: (euros) =>
@@ -839,16 +1027,26 @@ export const messagesEn: Messages = {
     errTimeout:
       "The server took too long (timeout). Check your connection, Stripe env on Vercel, and try again.",
     errNetwork: "Network error. Please try again.",
+    close: "Close",
+    prevMonth: "Previous month",
+    nextMonth: "Next month",
+    weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    guestsStepper: "Number of guests",
+    lessGuest: "One less guest",
+    moreGuest: "One more guest",
+    estimatedTotal: "Estimated total",
+    dialCode: "Country code",
+    tourDestination: "Tour destination",
     tours: {
       sintraCascais: "Sintra & Cascais",
       threeDestinos: "3-Destination Tour (Fátima, Nazaré, Óbidos)",
       monsanto: "Monsanto & Central Portugal",
-      fatimaTomar: "Fátima & Tomar Private Tour",
+      fatimaTomar: "Fátima & Tomar",
       lisboa: "Lisbon",
       porto: "Porto",
       arraabida: "Arrábida, Setúbal & Sesimbra",
       aveiro: "Aveiro & Costa Nova",
-      alentejo: "Premium Alentejo Wine, Food & Culture Experience",
+      alentejo: "Alentejo — Wine, Food & Culture",
       algarve: "Algarve",
     },
   },
@@ -863,12 +1061,12 @@ export const messagesEn: Messages = {
   home: {
     hero: {
       badge: "Exclusive Tours in Portugal",
-      titleLine1: "Experience Portugal",
-      titleLine2: "Like a Local.",
+      titleLine1: "Explore Portugal with",
+      titleLine2: "DISCOVERLIXBOATOURS",
       subtitle1:
-        "Private tours across Sintra, Lisbon and beyond, with a local guide, flexible itineraries and your own private vehicle.",
+        "Private tours in Portugal with a local driver-guide — Sintra, Lisbon, Fátima, Arrábida and more.",
       subtitle2: "",
-      cta: "Explore Private Tours",
+      cta: "Explore tours",
       ctaSecondary: "Talk to Us",
     },
     about: {
@@ -884,9 +1082,10 @@ export const messagesEn: Messages = {
     },
     widgets: {
       tours: "Tour Packages",
-      destinations: "Different Destinations",
+      destinations: "Destinations in Portugal",
       guides: "Tour Guides",
       trips: "Complete Trips",
+      years: "Years of Experience",
     },
     ticker: "Authentic Tours in Portugal with DiscoverLixboaTours",
     quotes: {
@@ -929,8 +1128,33 @@ export const messagesEn: Messages = {
         cta: "Plan with your guide",
       },
     },
+    whyUs: {
+      badge: "Why Discover Lixboa",
+      title: "Every journey has its story.",
+      lead: "Authentic experiences, exclusive routes and moments designed around your pace. Discover Portugal differently.",
+      featured: {
+        title: "Personalized Tours",
+        desc: "Itineraries made for you, with the freedom to discover Portugal at your own pace.",
+      },
+      jeep: {
+        title: "Jeep Off-road Experience",
+        desc: "Explore hidden trails, viewpoints and landscapes aboard the iconic UMM 4x4.",
+      },
+      wine: {
+        title: "Wine & Food Experience",
+        desc: "Discover wines, regional flavours and traditions that tell the real story of Portugal.",
+      },
+      support: {
+        title: "Local guide storytelling",
+        desc: "With a local guide and iconic vehicles, the focus is authenticity and privacy — we sketch your ideal Portugal.",
+      },
+      romantic: {
+        title: "Experiences for Two",
+        desc: "Private moments, special details and surprises to make every occasion unforgettable.",
+      },
+    },
     instagram: {
-      follow: "Follow",
+      follow: "Follow on Instagram",
       description: "Follow us on Instagram for more adventures!",
     },
     transporte: {
@@ -956,6 +1180,11 @@ export const messagesEn: Messages = {
           desc: "Safe off-road access to less touristy areas and angles coaches simply cannot reach",
         },
       },
+    },
+    exploreVideo: {
+      title: "Start Exploring",
+      description: "Your adventure begins with DiscoverLixboaTours.",
+      playLabel: "Watch video",
     },
     testimonials: {
       subtitle: "Testimonials",
@@ -1132,6 +1361,10 @@ export const messagesEn: Messages = {
     searchClear: "Clear search",
     searchResults: "results",
     searchNoResults: "No results",
+    ratingReviews: (count) => `( ${count}+ reviews )`,
+    durationLabel: (hours) => `${hours}h`,
+    showMore: "See more",
+    showLess: "See less",
     items: {
       sintra: { name: "Sintra & Cascais", places: "Palaces & Secret Beaches" },
       threeDestinos: {

@@ -1,11 +1,57 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { getCardFromPrice, getMigratedTour } from "@/content/tours";
-import { useMessages } from "@/lib/i18n/LocaleProvider";
+import { useLocale, useMessages } from "@/lib/i18n/LocaleProvider";
+import { withLocalePrefix } from "@/lib/i18n/locale";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
+import { getTourRating } from "@/lib/tour-ratings";
 import { DestinationsGrid, type DestinationCard } from "./DestinationsGrid";
+import { HeroBackgroundSlideshow } from "./HeroBackgroundSlideshow";
+import { HeroServicesTicker } from "./HeroServicesTicker";
 import { HomePageRest } from "./HomePageRest";
+
+const HERO_TICKER_SLUGS = [
+  "sintra-cascais",
+  "lisboa",
+  "porto",
+  "algarve",
+] as const;
+
+/** Região no título do carrossel (estilo Travixa: “Cidade, Loc”) */
+const HERO_TICKER_REGION: Record<
+  (typeof HERO_TICKER_SLUGS)[number],
+  { pt: string; en: string }
+> = {
+  "sintra-cascais": { pt: "Centro", en: "Centre" },
+  lisboa: { pt: "Centro", en: "Centre" },
+  porto: { pt: "Norte", en: "North" },
+  algarve: { pt: "Sul", en: "South" },
+};
+
+/** Subtítulo em 2 linhas no carrossel (não altera a grelha de destinos) */
+const HERO_TICKER_PLACES: Record<
+  (typeof HERO_TICKER_SLUGS)[number],
+  { pt: string; en: string }
+> = {
+  "sintra-cascais": {
+    pt: "Palácios icónicos e praias secretas na costa",
+    en: "Iconic palaces and secret beaches on the coast",
+  },
+  lisboa: {
+    pt: "Capital vibrante com miradouros e história",
+    en: "Vibrant capital with viewpoints and history",
+  },
+  porto: {
+    pt: "Património, história e vinho no Norte",
+    en: "Heritage, history and wine in the North",
+  },
+  algarve: {
+    pt: "Costa do Sol, falésias e praias do Sul",
+    en: "Sun coast, cliffs and beaches of the South",
+  },
+};
 
 const DESTINATION_BASE = [
   {
@@ -85,8 +131,9 @@ const instagramPhotos = [1, 2, 3, 4, 5, 6].map(
 
 export function HomePage() {
   const m = useMessages();
-  const assetVersion = process.env.NEXT_PUBLIC_ASSET_VERSION?.trim() || "1";
+  const locale = useLocale();
   const items = m.destinations.items;
+  const bookHref = withLocalePrefix("/reservar", locale);
 
   const destinations: DestinationCard[] = DESTINATION_BASE.map((d) => {
     const item = items[d.itemKey];
@@ -94,6 +141,7 @@ export function HomePage() {
     const from = tour
       ? getCardFromPrice(tour)
       : { eurosLabel: "€—", unit: "group" as const };
+    const rating = getTourRating(d.slug);
     return {
       href: d.href,
       img: d.img,
@@ -103,182 +151,116 @@ export function HomePage() {
       label: item.name,
       priceFrom: from.eurosLabel,
       priceUnit: from.unit,
+      durationHours: tour?.durationHours ?? 8,
+      ratingScore: rating.score,
+      ratingCount: rating.reviews,
     };
   });
 
-  const widgets = [
-    {
-      icon: (
-        <>
-          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-          <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-        </>
-      ),
-      num: "+6",
-      label: m.home.widgets.tours,
-    },
-    {
-      icon: (
-        <>
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </>
-      ),
-      num: "+30",
-      label: m.home.widgets.destinations,
-    },
-    {
-      icon: (
-        <>
-          <circle cx="12" cy="12" r="10" />
-          <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88 16.24,7.76" />
-        </>
-      ),
-      num: "+3",
-      label: m.home.widgets.guides,
-    },
-    {
-      icon: (
-        <>
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9,22 9,12 15,12 15,22" />
-        </>
-      ),
-      num: "+100",
-      label: m.home.widgets.trips,
-    },
+  const tickerItems = HERO_TICKER_SLUGS.map((slug) => {
+    const base = DESTINATION_BASE.find((d) => d.slug === slug)!;
+    const item = items[base.itemKey];
+    const tour = getMigratedTour(slug);
+    const from = tour
+      ? getCardFromPrice(tour)
+      : { eurosLabel: "€—", unit: "group" as const };
+    const lang = locale === "en" ? "en" : "pt";
+    const region = HERO_TICKER_REGION[slug][lang];
+    return {
+      href: base.href,
+      img: base.img,
+      name: `${item.name}, ${region}`,
+      places: HERO_TICKER_PLACES[slug][lang],
+      priceFrom: from.eurosLabel,
+      priceUnitLabel:
+        from.unit === "person" ? m.common.priceUnit.replace("/ ", "") : m.common.priceGroupUnit.replace("/ ", ""),
+    };
+  });
+
+  const todayLabel = locale === "en" ? "Today" : "Hoje";
+
+  const aboutStats = [
+    { num: "+100", label: m.home.widgets.trips },
+    { num: "+30", label: m.home.widgets.destinations },
+    { num: "+10", label: m.home.widgets.years },
   ];
 
   return (
     <>
       <section className="hero" id="home">
-        <div className="hero-shapes">
-          <div className="shape shape-wave" />
-          <div className="shape shape-mountain" />
-          <div className="shape shape-circle-1" />
-          <div className="shape shape-circle-2" />
-          <div className="shape shape-path" />
+        <HeroBackgroundSlideshow />
+
+        <div className="hero-main">
+          <div className="hero-inner">
+            <p className="hero-badge">{m.home.hero.badge}</p>
+            <h1 className="hero-title">
+              {m.home.hero.titleLine1}{" "}
+              <span className="hero-title-accent">{m.home.hero.titleLine2}</span>
+            </h1>
+            <div className="hero-cta">
+              <Link href={bookHref} className="btn-hero-primary">
+                {m.nav.book}
+              </Link>
+              <a href="#servicos" className="btn-hero-secondary">
+                {m.home.hero.cta}
+              </a>
+            </div>
+          </div>
         </div>
 
-        <svg width="0" height="0" style={{ position: "absolute" }}>
-          <defs>
-            <linearGradient
-              id="badgeGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop offset="0%" style={{ stopColor: "#FF6600", stopOpacity: 1 }} />
-              <stop offset="50%" style={{ stopColor: "#00B4D8", stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: "#FF6600", stopOpacity: 1 }} />
-            </linearGradient>
-          </defs>
-        </svg>
-
-        <div className="hero-container">
-          <div className="hero-content">
-            <div className="hero-badge">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <span>{m.home.hero.badge}</span>
-            </div>
-
-            <h1 className="hero-title">
-              <span className="title-line">{m.home.hero.titleLine1}</span>
-              <span className="title-line highlight">{m.home.hero.titleLine2}</span>
-            </h1>
-
-            <p className="hero-subtitle">{m.home.hero.subtitle1}</p>
-
-            <div className="hero-cta">
-              <a href="#servicos" className="btn-primary">
-                <span>{m.home.hero.cta}</span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </a>
-              <a href="#instagram" className="btn-secondary hero-cta-secondary">
-                {m.home.hero.ctaSecondary}
-              </a>
-            </div>
-          </div>
-
-          <div className="hero-image">
-            <Image
-              src={`/assets/images/hero/car%20(2).webp?v=${assetVersion}`}
-              alt="Jeep Discover Portugal"
-              width={800}
-              height={600}
-              priority
-            />
-          </div>
+        <div className="hero-ticker-wrap">
+          <HeroServicesTicker
+            items={tickerItems}
+            locale={locale}
+            todayLabel={todayLabel}
+          />
         </div>
       </section>
 
       <section id="sobre" className="about-section">
-        <div className="about-shapes">
-          <div className="shape-1" />
-          <div className="shape-2" />
-          <div className="shape-3" />
+        <div className="about-decor" aria-hidden>
+          <img
+            src="/assets/images/svg-bg.svg"
+            alt=""
+            className="about-decor-palm"
+          />
         </div>
-
         <div className="about-container">
-          <div className="about-widgets">
-            {widgets.map((w, i) => (
-              <div className="widget" key={i}>
-                <div className="widget-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                    {w.icon}
-                  </svg>
+          <div className="about-left">
+            <div className="about-copy">
+              <span className="about-badge">{m.home.about.subtitle}</span>
+              <h2 className="about-title">{m.home.about.title}</h2>
+              <p className="about-description">{m.home.about.description1}</p>
+              <p className="about-description">{m.home.about.description2}</p>
+              <a
+                href={whatsappSiteUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-about"
+              >
+                {m.home.about.learnMore}
+              </a>
+            </div>
+
+            <div className="about-stats" aria-label="Indicadores">
+              {aboutStats.map((stat) => (
+                <div className="about-stat" key={stat.label}>
+                  <span className="about-stat-num">{stat.num}</span>
+                  <span className="about-stat-label">{stat.label}</span>
                 </div>
-                <div className="widget-content">
-                  <div className="widget-number">{w.num}</div>
-                  <h3>{w.label}</h3>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className="about-image">
             <Image
-              src="/assets/images/sobre/img-sobre.webp"
+              src="/assets/images/sobre-pena.jpg"
               alt="Sobre Nós - DiscoverLixboaTours Portugal"
-              width={600}
-              height={700}
+              fill
+              sizes="(max-width: 900px) 100vw, 50vw"
+              className="about-image-img"
+              priority={false}
             />
-          </div>
-
-          <div className="about-content">
-            <span className="about-subtitle">{m.home.about.subtitle}</span>
-            <h2 className="about-title">{m.home.about.title}</h2>
-            <p className="about-description">{m.home.about.description1}</p>
-            <p className="about-description">{m.home.about.description2}</p>
-            <p className="about-description">{m.home.about.description3}</p>
-            <a
-              href={whatsappSiteUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-about"
-            >
-              {m.home.about.learnMore}
-            </a>
           </div>
         </div>
       </section>

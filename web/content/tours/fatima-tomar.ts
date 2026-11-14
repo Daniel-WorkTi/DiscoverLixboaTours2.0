@@ -22,7 +22,30 @@ export const fatimaTomarTour = {
     8: 59000,
   },
   priceDisplay: "group",
-  heroImage: "/assets/images/TOMAR/BANNER.png",
+  heroImage: "/assets/images/TOMAR/hero-fatima-tomar.jpg",
+  /**
+   * Ordem = itinerário: Santuário → Capelinha → Tempo livre → Centro Tomar → Convento.
+   * Restantes alimentam a grelha Experiência (sem repetir Fátima September 2021-3/4).
+   */
+  stopImages: [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/F%C3%A1tima_September_2021-5.jpg/3840px-F%C3%A1tima_September_2021-5.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/b/b1/Capelinha_das_Apari%C3%A7%C3%B5es%2C_2011.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Santu%C3%A1rio_de_F%C3%A1tima_%2836885881530%29.jpg/3840px-Santu%C3%A1rio_de_F%C3%A1tima_%2836885881530%29.jpg",
+    "/assets/images/TOMAR/centro-historico-tomar.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Convento_de_Cristo_-_South_Facade.jpg/3840px-Convento_de_Cristo_-_South_Facade.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Tomar_-_Church_Joao_Baptista.jpg/3840px-Tomar_-_Church_Joao_Baptista.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Tomar_-_Rio_Nabao.jpg/3840px-Tomar_-_Rio_Nabao.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Aqueduto_do_Convento_de_Cristo_ou_Aqueduto_de_Peg%C3%B5es_looking_east.jpg/3840px-Aqueduto_do_Convento_de_Cristo_ou_Aqueduto_de_Peg%C3%B5es_looking_east.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Tomar_Convento_de_Cristo_Charola_750.jpg/3840px-Tomar_Convento_de_Cristo_Charola_750.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Tomar_Pra%C3%A7a_da_Rep%C3%BAblica_868.jpg/3840px-Tomar_Pra%C3%A7a_da_Rep%C3%BAblica_868.jpg",
+  ],
+  stopMapsUrls: [
+    "https://www.google.com/maps/search/?api=1&query=Santu%C3%A1rio+de+F%C3%A1tima%2C+F%C3%A1tima",
+    "https://www.google.com/maps/search/?api=1&query=Capelinha+das+Apari%C3%A7%C3%B5es%2C+F%C3%A1tima",
+    "",
+    "https://www.google.com/maps/search/?api=1&query=Centro+Hist%C3%B3rico+de+Tomar",
+    "https://www.google.com/maps/search/?api=1&query=Convento+de+Cristo%2C+Tomar",
+  ],
   videoYoutubeId: "-QMOm4_Qv3k",
   gallery: [
     {
@@ -64,6 +87,9 @@ export const fatimaTomarTour = {
         "É uma <strong>experiência privada</strong> pensada para o teu ritmo: tempo para reflexão em Fátima e para explorar o centro histórico de Tomar ao detalhe.",
         "<strong>Transporte confortável</strong>, <strong>motorista/guia profissional</strong> e <strong>pick-up e drop-off no hotel</strong> — o itinerário pode ser ajustado ao teu interesse.",
       ],
+      highlightTitle: "Fátima e Tomar",
+      highlightText:
+        "O santuário e o Convento de Cristo em 4K. Do silêncio da Cova da Iria à obra manuelina de Tomar, dois lugares num só dia.",
       itinerary: [
         {
           badge: "Fátima",
@@ -104,6 +130,22 @@ export const fatimaTomarTour = {
       whyChooseHtml:
         "Experiência privada, com possibilidade de ajustar o itinerário conforme o interesse do cliente (mais tempo em Fátima ou Tomar).<br>Dois ícones de Portugal num único dia — espiritualidade e património templário UNESCO, com a DiscoverLixboaTours.",
       stopsLabel: "Fátima & Tomar",
+      pickupHeading: "Opções de recolha",
+      pickupItems: [
+        {
+          title: "Hotel em Lisboa",
+          detail: "Pick-up e drop-off no hotel em Lisboa — Sem custo adicional",
+        },
+        {
+          title: "Aeroporto de Lisboa",
+          detail: "Recolha no aeroporto — Sem custo adicional",
+        },
+        {
+          title: "Outras localizações",
+          detail: "Disponível com custo adicional (valor a combinar após a reserva)",
+          highlight: true,
+        },
+      ],
     },
     en: {
       title: "Fátima & Tomar Private Tour",
@@ -114,6 +156,9 @@ export const fatimaTomarTour = {
         "A <strong>private experience</strong> at your pace: time for reflection in Fátima and to explore Tomar’s old town in depth.",
         "<strong>Comfortable transport</strong>, a <strong>professional driver/guide</strong> and <strong>hotel pick-up and drop-off</strong> — the itinerary can be adjusted to your interests.",
       ],
+      highlightTitle: "Fátima and Tomar",
+      highlightText:
+        "The sanctuary and the Convent of Christ in 4K. From the quiet of Cova da Iria to Tomar's Manueline masterpiece, two places in one day.",
       itinerary: [
         {
           badge: "Fátima",
@@ -154,6 +199,22 @@ export const fatimaTomarTour = {
       whyChooseHtml:
         "Private experience; the itinerary can be adjusted to your interests (more time in Fátima or Tomar).<br>Two Portuguese icons in one day — spirituality and Templar UNESCO heritage, with DiscoverLixboaTours.",
       stopsLabel: "Fátima & Tomar",
+      pickupHeading: "Pickup options",
+      pickupItems: [
+        {
+          title: "Lisbon hotel",
+          detail: "Hotel pick-up and drop-off in Lisbon — No extra cost",
+        },
+        {
+          title: "Lisbon Airport",
+          detail: "Airport pickup — No extra cost",
+        },
+        {
+          title: "Other locations",
+          detail: "Available with an extra fee (arranged after booking)",
+          highlight: true,
+        },
+      ],
     },
   },
   seo: {

@@ -248,18 +248,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileLinks = document.querySelectorAll('.mobile-menu a');
     
     if (menuToggle && mobileMenu) {
+        const mainHeader = document.querySelector('.main-header');
+        const syncMenuOpen = (open) => {
+            menuToggle.classList.toggle('active', open);
+            mobileMenu.classList.toggle('active', open);
+            mainHeader?.classList.toggle('menu-open', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        };
+
         menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            syncMenuOpen(!mobileMenu.classList.contains('active'));
         });
         
         // Fechar menu ao clicar em um link
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = '';
+                syncMenuOpen(false);
             });
         });
     }

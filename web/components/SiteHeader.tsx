@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Suspense } from "react";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { withLocalePrefix, type AppLocale } from "@/lib/i18n/locale";
@@ -14,6 +14,16 @@ function navHref(base: "" | "/" | "/en", hash: string): string {
   return `${base}#${hash}`;
 }
 
+function LanguageSwitcherFallback({ locale }: { locale: AppLocale }) {
+  return (
+    <div className="language-selector" aria-hidden>
+      <button type="button" className="language-selector__trigger" disabled>
+        <span>{locale === "en" ? "EN" : "PT"}</span>
+      </button>
+    </div>
+  );
+}
+
 export function SiteHeader({
   variant = "home",
   locale = "pt",
@@ -25,29 +35,32 @@ export function SiteHeader({
 
   const navItems = [
     { key: "home", label: m.nav.home, hash: "home" as const },
-    { key: "about", label: m.nav.about, hash: "sobre" as const },
     { key: "services", label: m.nav.services, hash: "servicos" as const },
     { key: "executive", label: m.nav.executive, href: executiveHref },
-    { key: "contact", label: m.nav.contact, hash: "instagram" as const },
   ] as const;
 
   return (
-    <header className="main-header" aria-label="Cabeçalho do site">
+    <header className="main-header" aria-label={locale === "en" ? "Site header" : "Cabeçalho do site"}>
       <div className="header-content">
         <div className="header-logo">
-          <Link href={withLocalePrefix("/", locale)}>
-            <Image
-              src="/assets/images/hero/logo.png.webp"
-              alt="DiscoverLixboaTours Logo"
-              width={200}
-              height={80}
-              className="logo-image"
-              priority
+          <Link href={withLocalePrefix("/", locale)} className="header-logo-link">
+            {/* SVG direto — sem Next/Image para não comprimir */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/images/newlogosvg.svg"
+              alt=""
+              width={52}
+              height={52}
+              className="logo-mark"
             />
+            <span className="logo-wordmark">DiscoverLixboaTours</span>
           </Link>
         </div>
 
-        <nav className="header-nav" aria-label="Navegação principal">
+        <nav
+          className="header-nav"
+          aria-label={locale === "en" ? "Main navigation" : "Navegação principal"}
+        >
           {navItems.map((item) =>
             "href" in item ? (
               <a key={item.key} href={item.href}>
@@ -61,39 +74,31 @@ export function SiteHeader({
           )}
         </nav>
 
-        <Link href={bookHref} className="header-cta">
-          <span>{m.nav.book}</span>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
-            <line x1="8" y1="2" x2="8" y2="18" />
-            <line x1="16" y1="6" x2="16" y2="22" />
-          </svg>
-        </Link>
-
-        <LanguageSwitcher />
+        <div className="header-actions">
+          <Suspense fallback={<LanguageSwitcherFallback locale={locale} />}>
+            <LanguageSwitcher />
+          </Suspense>
+          <Link href={bookHref} className="header-cta">
+            <span>{m.nav.book}</span>
+          </Link>
+        </div>
 
         <button
           className="mobile-menu-toggle"
           type="button"
-          aria-label="Abrir menu móvel"
+          aria-label={locale === "en" ? "Open mobile menu" : "Abrir menu móvel"}
         >
-          <span />
           <span />
           <span />
         </button>
       </div>
 
-      <nav className="mobile-menu" aria-label="Navegação móvel">
+      <div className="header-border" aria-hidden />
+
+      <nav
+        className="mobile-menu"
+        aria-label={locale === "en" ? "Mobile navigation" : "Navegação móvel"}
+      >
         {navItems.map((item) =>
           "href" in item ? (
             <a key={item.key} href={item.href}>
@@ -106,7 +111,9 @@ export function SiteHeader({
           ),
         )}
         <div className="language-selector-mobile">
-          <LanguageSwitcher />
+          <Suspense fallback={<LanguageSwitcherFallback locale={locale} />}>
+            <LanguageSwitcher />
+          </Suspense>
         </div>
         <Link href={bookHref} className="mobile-cta">
           <span>{m.nav.book}</span>

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { BRAND_EMAIL, BRAND_NAME } from "@/lib/brand";
 import { withLocalePrefix, type AppLocale } from "@/lib/i18n/locale";
@@ -21,13 +20,17 @@ export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps)
       <div className="footer-container">
         <div className="footer-content">
           <div className="footer-brand">
-            <Image
-              src="/assets/images/hero/logo.png.webp"
-              alt={`${BRAND_NAME} Logo`}
-              width={180}
-              height={72}
-              className="footer-logo"
-            />
+            <Link href={withLocalePrefix("/", locale)} className="footer-logo-link">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/images/newlogosvg.svg"
+                alt=""
+                width={44}
+                height={44}
+                className="footer-logo-mark"
+              />
+              <span className="footer-logo-wordmark">{BRAND_NAME}</span>
+            </Link>
             <p className="footer-tagline">{m.footer.tagline}</p>
           </div>
 

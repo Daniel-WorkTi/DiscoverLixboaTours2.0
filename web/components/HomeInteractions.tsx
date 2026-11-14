@@ -86,20 +86,21 @@ export function HomeInteractions() {
     const menuToggle = document.querySelector(".mobile-menu-toggle");
     const mobileMenu = document.querySelector(".mobile-menu");
     const mobileLinks = document.querySelectorAll(".mobile-menu a");
+    const mainHeader = document.querySelector(".main-header");
+
+    const syncMenuOpen = (open: boolean) => {
+      menuToggle?.classList.toggle("active", open);
+      mobileMenu?.classList.toggle("active", open);
+      mainHeader?.classList.toggle("menu-open", open);
+      document.body.style.overflow = open ? "hidden" : "";
+    };
 
     const onToggle = () => {
-      menuToggle?.classList.toggle("active");
-      mobileMenu?.classList.toggle("active");
-      document.body.style.overflow = mobileMenu?.classList.contains("active")
-        ? "hidden"
-        : "";
+      const open = !mobileMenu?.classList.contains("active");
+      syncMenuOpen(open);
     };
 
-    const closeMenu = () => {
-      menuToggle?.classList.remove("active");
-      mobileMenu?.classList.remove("active");
-      document.body.style.overflow = "";
-    };
+    const closeMenu = () => syncMenuOpen(false);
 
     menuToggle?.addEventListener("click", onToggle);
     mobileLinks.forEach((link) => link.addEventListener("click", closeMenu));
@@ -115,6 +116,7 @@ export function HomeInteractions() {
       mobileLinks.forEach((link) =>
         link.removeEventListener("click", closeMenu),
       );
+      syncMenuOpen(false);
     };
   }, []);
 

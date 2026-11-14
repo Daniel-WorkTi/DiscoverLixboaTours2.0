@@ -293,8 +293,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     const pickupClean = pickup.trim().slice(0, 140);
     const notesClean = notes.trim().slice(0, MAX_NOTES_LEN);
     const combinedNotes = [
-      pickupClean ? `Pickup / Ponto de encontro: ${pickupClean}` : null,
-      notesClean ? `Preferências: ${notesClean}` : null,
+      pickupClean
+        ? `${locale === "en" ? "Pickup / meeting point" : "Pickup / ponto de encontro"}: ${pickupClean}`
+        : null,
+      notesClean
+        ? `${locale === "en" ? "Preferences" : "Preferências"}: ${notesClean}`
+        : null,
     ]
       .filter(Boolean)
       .join("\n")
@@ -414,7 +418,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             <button
               type="button"
               className="br-close"
-              aria-label="Fechar"
+              aria-label={m.booking.close}
               onClick={() => setTourPickerOpen(false)}
             >
               ×
@@ -491,7 +495,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             <button
               type="button"
               className="br-close"
-              aria-label="Fechar"
+              aria-label={m.booking.close}
               onClick={() => setModalOpen(false)}
             >
               ×
@@ -506,7 +510,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   type="button"
                   onClick={goPrevMonth}
                   disabled={!canPrevMonth}
-                  aria-label="Mês anterior"
+                  aria-label={m.booking.prevMonth}
                 >
                   ‹
                 </button>
@@ -515,13 +519,13 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   type="button"
                   onClick={goNextMonth}
                   disabled={!canNextMonth}
-                  aria-label="Mês seguinte"
+                  aria-label={m.booking.nextMonth}
                 >
                   ›
                 </button>
               </div>
               <div className="br-cal-weekdays">
-                {["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"].map((w) => (
+                {m.booking.weekdays.map((w) => (
                   <span key={w}>{w}</span>
                 ))}
               </div>
@@ -566,12 +570,12 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   {m.booking.travelersHint}
                 </div>
               </div>
-              <div className="br-stepper" aria-label="Quantidade de pessoas">
+              <div className="br-stepper" aria-label={m.booking.guestsStepper}>
                 <button
                   type="button"
                   disabled={quantity <= minTravelers}
                   onClick={() => setQuantity((q) => Math.max(minTravelers, q - 1))}
-                  aria-label="Menos uma pessoa"
+                  aria-label={m.booking.lessGuest}
                 >
                   −
                 </button>
@@ -580,14 +584,14 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   type="button"
                   disabled={quantity >= maxTravelers}
                   onClick={() => setQuantity((q) => Math.min(maxTravelers, q + 1))}
-                  aria-label="Mais uma pessoa"
+                  aria-label={m.booking.moreGuest}
                 >
                   +
                 </button>
               </div>
             </div>
 
-            <div className="br-total" aria-label="Total estimado">
+            <div className="br-total" aria-label={m.booking.estimatedTotal}>
               {estimate ? (
                 <>
                   {estimate.kind === "per_person" ? (
@@ -674,7 +678,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                         className="br-input br-dial-select"
                         value={phoneDial}
                         onChange={(e) => setPhoneDial(e.target.value)}
-                        aria-label="Indicativo"
+                        aria-label={m.booking.dialCode}
                       >
                         {PHONE_DIAL_OPTIONS.map((o) => (
                           <option key={o.dial} value={o.dial}>
@@ -781,7 +785,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           <div
             className="br-card br-card--grow br-card--destino"
             role="region"
-            aria-label="Destino do tour"
+            aria-label={m.booking.tourDestination}
           >
             <span className="br-card-label">
               {m.booking.cardDestino}
