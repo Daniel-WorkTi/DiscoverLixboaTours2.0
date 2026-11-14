@@ -1,6 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import {
+  loadYouTubeApi,
+  type YTPlayer,
+} from "@/lib/youtube-iframe-api";
 
 type Props = {
   videoId: string;
@@ -9,73 +13,13 @@ type Props = {
   coverStartSeconds?: number;
 };
 
-type YtPlayer = {
-  playVideo: () => void;
-  pauseVideo: () => void;
-  destroy: () => void;
-  getPlayerState: () => number;
-};
-
-type YtNamespace = {
-  Player: new (
-    el: HTMLElement,
-    opts: {
-      videoId: string;
-      width?: string | number;
-      height?: string | number;
-      playerVars?: Record<string, string | number>;
-      events?: {
-        onReady?: (e: { target: YtPlayer }) => void;
-        onStateChange?: (e: { data: number; target: YtPlayer }) => void;
-      };
-    },
-  ) => YtPlayer;
-  PlayerState: {
-    PLAYING: number;
-    PAUSED: number;
-    ENDED: number;
-  };
-};
-
-declare global {
-  interface Window {
-    YT?: YtNamespace;
-    onYouTubeIframeAPIReady?: () => void;
-  }
-}
-
-let ytApiPromise: Promise<void> | null = null;
-
-function loadYouTubeApi(): Promise<void> {
-  if (typeof window === "undefined") return Promise.resolve();
-  if (window.YT?.Player) return Promise.resolve();
-  if (ytApiPromise) return ytApiPromise;
-
-  ytApiPromise = new Promise((resolve) => {
-    const prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => {
-      prev?.();
-      resolve();
-    };
-    if (!document.querySelector("script[data-yt-api]")) {
-      const script = document.createElement("script");
-      script.src = "https://www.youtube.com/iframe_api";
-      script.async = true;
-      script.dataset.ytApi = "1";
-      document.body.appendChild(script);
-    }
-  });
-
-  return ytApiPromise;
-}
-
 export function TourHighlightVideo({
   videoId,
   label,
   coverStartSeconds = 5,
 }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<YtPlayer | null>(null);
+  const playerRef = useRef<YTPlayer | null>(null);
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
   const hostId = useId().replace(/:/g, "");

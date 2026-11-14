@@ -3,73 +3,16 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import { useMessages } from "@/lib/i18n/LocaleProvider";
+import {
+  loadYouTubeApi,
+  type YTPlayer,
+} from "@/lib/youtube-iframe-api";
 
 const VIDEO_ID = "O1dgtYkfQZU";
 const START_AT = 6;
 /** Pedido nativo grande → YouTube entrega HD/4K; o CSS faz o cover. */
 const PLAYER_W = 3840;
 const PLAYER_H = 2160;
-
-type YTPlayer = {
-  mute: () => void;
-  unMute: () => void;
-  playVideo: () => void;
-  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
-  destroy: () => void;
-  getIframe?: () => HTMLIFrameElement;
-  setPlaybackQuality?: (quality: string) => void;
-  setPlaybackQualityRange?: (min: string, max: string) => void;
-};
-
-type YTNamespace = {
-  Player: new (
-    el: string,
-    opts: {
-      videoId: string;
-      width?: string | number;
-      height?: string | number;
-      playerVars: Record<string, number | string>;
-      events: {
-        onReady?: (e: { target: YTPlayer }) => void;
-        onStateChange?: (e: { data: number; target: YTPlayer }) => void;
-      };
-    },
-  ) => YTPlayer;
-  PlayerState: {
-    ENDED: number;
-    PLAYING: number;
-    BUFFERING: number;
-  };
-};
-
-declare global {
-  interface Window {
-    YT?: YTNamespace;
-    onYouTubeIframeAPIReady?: () => void;
-  }
-}
-
-function loadYouTubeApi(): Promise<void> {
-  if (typeof window === "undefined") return Promise.resolve();
-  if (window.YT?.Player) return Promise.resolve();
-
-  return new Promise((resolve) => {
-    const previous = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => {
-      previous?.();
-      resolve();
-    };
-
-    if (!document.getElementById("yt-iframe-api")) {
-      const script = document.createElement("script");
-      script.id = "yt-iframe-api";
-      script.src = "https://www.youtube.com/iframe_api";
-      document.body.appendChild(script);
-    } else if (window.YT?.Player) {
-      resolve();
-    }
-  });
-}
 
 function forceHighQuality(player: YTPlayer) {
   try {
