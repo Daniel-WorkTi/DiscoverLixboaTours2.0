@@ -289,9 +289,9 @@ export const sintraCascaisTour = {
         "Tour privado por Sintra e Cascais com guia local. Até 8 passageiros. A partir de €250 por grupo. Recolha flexível.",
     },
     en: {
-      title: "Private Sintra & Cascais Tour | DiscoverLixboaTours",
+      title: "Private Sintra Day Trip from Lisbon | Cascais & Cabo da Roca",
       description:
-        "Private Sintra and Cascais tour with a local guide. Up to 8 guests. From €250 per group. Flexible pickup available.",
+        "Private Sintra & Cascais day trip from Lisbon with an English-speaking local driver-guide. Pena Palace, Regaleira, Cabo da Roca. Hotel or airport pickup. From €250/group, up to 8 guests.",
     },
   },
 } as const satisfies TourDefinition;

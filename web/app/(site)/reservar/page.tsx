@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { BookingForm } from "@/components/reservar/BookingForm";
 import { ReservarBackLink } from "@/components/reservar/ReservarBackLink";
+import { withLocalePrefix } from "@/lib/i18n/locale";
 import { getRequestLocale } from "@/lib/i18n/server";
+import { SITE_ORIGIN, socialMetadata } from "@/lib/seo";
 import { getMessages } from "@/messages";
 
 type PageProps = {
@@ -11,9 +13,32 @@ type PageProps = {
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
   const m = getMessages(locale);
+  const title =
+    locale === "en"
+      ? "Book a Private Tour in Portugal | DiscoverLixboaTours"
+      : `${m.booking.title} | DiscoverLixboaTours`;
+  const description =
+    locale === "en"
+      ? "Reserve your private day trip from Lisbon online — Sintra, Cascais, Fátima, Porto and more. English-speaking local driver-guide, hotel or airport pickup."
+      : m.booking.lead;
+  const canonical = SITE_ORIGIN + withLocalePrefix("/reservar", locale);
   return {
-    title: `${m.booking.title} | DiscoverLixboaTours`,
-    description: m.booking.lead,
+    title: { absolute: title },
+    description,
+    alternates: {
+      canonical,
+      languages: {
+        "pt-PT": `${SITE_ORIGIN}/reservar`,
+        en: `${SITE_ORIGIN}/en/reservar`,
+        "x-default": `${SITE_ORIGIN}/en/reservar`,
+      },
+    },
+    ...socialMetadata({
+      title,
+      description,
+      url: canonical,
+      locale,
+    }),
   };
 }
 

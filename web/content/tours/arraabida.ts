@@ -213,10 +213,9 @@ export const arraabidaTour = {
         "Tour privado pela Arrábida, Setúbal e Sesimbra. Até 8 passageiros. A partir de €85 por pessoa. Natureza e vistas do Atlântico.",
     },
     en: {
-      title:
-        "Private Arrábida, Setúbal & Sesimbra Tour | DiscoverLixboaTours",
+      title: "Private Arrábida Tour from Lisbon | Setúbal & Sesimbra",
       description:
-        "Private Arrábida, Setúbal and Sesimbra tour. Up to 8 guests. From €85 per person. Nature and Atlantic views.",
+        "Private Arrábida Natural Park day trip from Lisbon with Setúbal and Sesimbra. Atlantic views, beaches and local food. English-speaking guide. From €85/person.",
     },
   },
 } as const satisfies TourDefinition;

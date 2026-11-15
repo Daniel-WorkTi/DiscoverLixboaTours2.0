@@ -214,9 +214,9 @@ export const algarveTour = {
         "Tour privado pelo Algarve com guia local. Até 8 passageiros. A partir de €600 por grupo. Praia da Marinha, Benagil e Lagos.",
     },
     en: {
-      title: "Private Algarve Day Tour | DiscoverLixboaTours",
+      title: "Private Algarve Day Trip from Lisbon | Benagil & Lagos",
       description:
-        "Private Algarve tour with a local guide. Up to 8 guests. From €600 per group. Marinha Beach, Benagil and Lagos.",
+        "Private Algarve day trip from Lisbon: Marinha Beach, Benagil Cave and Lagos. English-speaking local driver-guide, hotel pickup. From €600/group, up to 8 guests.",
     },
   },
 } as const satisfies TourDefinition;

@@ -224,9 +224,9 @@ export const fatimaTomarTour = {
         "Tour privado Fátima e Tomar com guia. Até 8 passageiros. A partir de €310 por grupo. Recolha no hotel.",
     },
     en: {
-      title: "Private Fátima & Tomar Tour | DiscoverLixboaTours",
+      title: "Private Fátima & Tomar Day Trip from Lisbon",
       description:
-        "Private Fátima and Tomar tour with a guide. Up to 8 guests. From €310 per group. Hotel pickup available.",
+        "Private pilgrimage and history day trip from Lisbon to Fátima Sanctuary and Tomar (Knights Templar). English-speaking guide, hotel pickup. From €310/group, up to 8 guests.",
     },
   },
 } as const satisfies TourDefinition;

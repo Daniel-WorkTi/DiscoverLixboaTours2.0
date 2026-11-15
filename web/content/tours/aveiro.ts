@@ -229,9 +229,9 @@ export const aveiroTour = {
         "Tour privado por Aveiro e Costa Nova. Até 8 passageiros (mín. 2). A partir de €100 por pessoa. Canais, moliceiros e casas às riscas.",
     },
     en: {
-      title: "Aveiro & Costa Nova Private Tour | DiscoverLixboaTours",
+      title: "Private Aveiro & Costa Nova Day Trip from Lisbon",
       description:
-        "Private Aveiro and Costa Nova tour. Up to 8 guests (min. 2). From €100 per person. Canals, moliceiros and striped houses.",
+        "Private Aveiro day trip from Lisbon — canals, moliceiro boats and Costa Nova striped houses. English-speaking driver-guide, hotel pickup. From €100/person (min. 2).",
     },
   },
 } as const satisfies TourDefinition;

@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
-import { BRAND_SITE_URL } from "@/lib/brand";
-
-const origin = BRAND_SITE_URL.replace(/\/$/, "");
+import { SITE_ORIGIN } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -10,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/api/"],
     },
-    sitemap: `${origin}/sitemap.xml`,
-    host: origin,
+    sitemap: `${SITE_ORIGIN}/sitemap.xml`,
+    host: SITE_ORIGIN,
   };
 }

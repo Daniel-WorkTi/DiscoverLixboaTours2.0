@@ -10,11 +10,12 @@ import { TourPage } from "@/components/tours/TourPage";
 import { getRequestLocale } from "@/lib/i18n/server";
 import { htmlLang } from "@/lib/i18n/types";
 import { withLocalePrefix } from "@/lib/i18n/locale";
-import { BRAND_NAME, BRAND_SITE_URL } from "@/lib/brand";
+import { BRAND_NAME } from "@/lib/brand";
 import {
   GOOGLE_BUSINESS_RATING,
   getTourRating,
 } from "@/lib/tour-ratings";
+import { SITE_ORIGIN, socialMetadata } from "@/lib/seo";
 import "@/app/styles/destino-tour.css";
 
 type PageProps = {
@@ -34,15 +35,24 @@ export async function generateMetadata({
 
   const locale = await getRequestLocale();
   const seo = tour.seo[locale];
-  const origin = BRAND_SITE_URL.replace(/\/$/, "");
   const bare = `/tours/${tour.slug}`;
-  const canonical = origin + withLocalePrefix(bare, locale);
-  const pt = origin + bare;
-  const en = origin + `/en${bare}`;
+  const canonical = SITE_ORIGIN + withLocalePrefix(bare, locale);
+  const pt = SITE_ORIGIN + bare;
+  const en = SITE_ORIGIN + `/en${bare}`;
 
   return {
-    title: seo.title,
+    title: { absolute: seo.title },
     description: seo.description,
+    keywords:
+      locale === "en"
+        ? [
+            "private tour Portugal",
+            "day trip from Lisbon",
+            tour.slug.replace(/-/g, " "),
+            "English speaking guide",
+            "hotel pickup Lisbon",
+          ]
+        : undefined,
     alternates: {
       canonical,
       languages: {
@@ -51,14 +61,13 @@ export async function generateMetadata({
         "x-default": en,
       },
     },
-    openGraph: {
+    ...socialMetadata({
       title: seo.title,
       description: seo.description,
-      locale: locale === "en" ? "en_US" : "pt_PT",
       url: canonical,
-      type: "website",
-      images: [{ url: tour.heroImage }],
-    },
+      locale,
+      images: [tour.heroImage],
+    }),
   };
 }
 
@@ -71,25 +80,27 @@ export default async function TourSlugPage({ params }: PageProps) {
 
   const locale = await getRequestLocale();
   const c = tour.content[locale];
-  const origin = BRAND_SITE_URL.replace(/\/$/, "");
-  const pageUrl = origin + withLocalePrefix(`/tours/${tour.slug}`, locale);
+  const pageUrl =
+    SITE_ORIGIN + withLocalePrefix(`/tours/${tour.slug}`, locale);
   const price = getCardFromPrice(tour);
   const rating = getTourRating(tour.slug);
+  const heroAbs = tour.heroImage.startsWith("http")
+    ? tour.heroImage
+    : `${SITE_ORIGIN}${tour.heroImage}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": ["TouristTrip", "Product"],
+    "@type": ["TouristTrip", "Product", "Service"],
     name: c.title,
     description: tour.seo[locale].description,
-    image: tour.heroImage.startsWith("http")
-      ? tour.heroImage
-      : `${origin}${tour.heroImage}`,
+    image: heroAbs,
     url: pageUrl,
+    inLanguage: locale === "en" ? "en" : "pt-PT",
     brand: { "@type": "Brand", name: BRAND_NAME },
     provider: {
       "@type": "TravelAgency",
       name: BRAND_NAME,
-      url: origin,
+      url: SITE_ORIGIN,
       aggregateRating: {
         "@type": "AggregateRating",
         ratingValue: GOOGLE_BUSINESS_RATING.score,
@@ -98,6 +109,10 @@ export default async function TourSlugPage({ params }: PageProps) {
       },
     },
     touristType: tour.privateTour ? "Private tour" : "Group tour",
+    areaServed: {
+      "@type": "Country",
+      name: "Portugal",
+    },
     offers: {
       "@type": "Offer",
       priceCurrency: "EUR",

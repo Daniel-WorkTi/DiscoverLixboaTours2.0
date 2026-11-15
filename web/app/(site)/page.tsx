@@ -1,32 +1,49 @@
 import type { Metadata } from "next";
 import { HomePage } from "@/components/home/HomePage";
-import { BRAND_SITE_URL } from "@/lib/brand";
 import { withLocalePrefix } from "@/lib/i18n/locale";
 import { getRequestLocale } from "@/lib/i18n/server";
-import { getMessages } from "@/messages";
+import {
+  organizationJsonLd,
+  SEO_HOME,
+  SITE_ORIGIN,
+  socialMetadata,
+  websiteJsonLd,
+} from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
-  const m = getMessages(locale);
-  const origin = BRAND_SITE_URL.replace(/\/$/, "");
-  const canonical = origin + withLocalePrefix("/", locale);
+  const copy = SEO_HOME[locale];
+  const canonical = SITE_ORIGIN + withLocalePrefix("/", locale);
   return {
-    title:
-      locale === "en"
-        ? "DiscoverLixboaTours | Private Tours in Portugal"
-        : "DiscoverLixboaTours | Tours Privados em Portugal",
-    description: m.home.hero.subtitle1,
+    title: { absolute: copy.title },
+    description: copy.description,
     alternates: {
       canonical,
       languages: {
-        "pt-PT": `${origin}/`,
-        en: `${origin}/en`,
-        "x-default": `${origin}/en`,
+        "pt-PT": `${SITE_ORIGIN}/`,
+        en: `${SITE_ORIGIN}/en`,
+        "x-default": `${SITE_ORIGIN}/en`,
       },
     },
+    ...socialMetadata({
+      title: copy.title,
+      description: copy.description,
+      url: canonical,
+      locale,
+    }),
   };
 }
 
 export default function Page() {
-  return <HomePage />;
+  const org = organizationJsonLd();
+  const site = websiteJsonLd();
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([org, site]) }}
+      />
+      <HomePage />
+    </>
+  );
 }

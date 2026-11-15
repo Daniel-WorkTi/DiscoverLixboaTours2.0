@@ -237,9 +237,9 @@ export const monsantoTour = {
         "Tour privado Monsanto e Centro de Portugal. Até 8 passageiros (mín. 2). A partir de €300 por pessoa. Recolha no hotel.",
     },
     en: {
-      title: "Private Monsanto Tour | DiscoverLixboaTours",
+      title: "Private Monsanto Tour from Lisbon | Central Portugal",
       description:
-        "Private Monsanto and Central Portugal tour. Up to 8 guests (min. 2). From €300 per person. Hotel pickup available.",
+        "Private day trip from Lisbon to Monsanto — one of Portugal’s most unique stone villages. English-speaking local guide, hotel pickup. From €300/person (min. 2).",
     },
   },
 } as const satisfies TourDefinition;

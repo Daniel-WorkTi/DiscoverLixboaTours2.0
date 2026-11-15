@@ -50,8 +50,15 @@ describe("migrated tours content integrity", () => {
       });
 
       it("has SEO for both locales", () => {
-        expect(tour.seo.pt.title).toContain("DiscoverLixboaTours");
-        expect(tour.seo.en.title).toContain("DiscoverLixboaTours");
+        expect(tour.seo.pt.title.length).toBeGreaterThan(20);
+        expect(tour.seo.pt.description.length).toBeGreaterThan(40);
+        expect(tour.seo.en.title.length).toBeGreaterThan(20);
+        expect(tour.seo.en.description.length).toBeGreaterThan(80);
+        // EN titles target tourist search intent (day trip / private / Lisbon)
+        expect(/private|day trip|tour/i.test(tour.seo.en.title)).toBe(true);
+        expect(/lisbon|portugal|english/i.test(tour.seo.en.description)).toBe(
+          true,
+        );
       });
 
       it("has notIncluded and pickup options", () => {

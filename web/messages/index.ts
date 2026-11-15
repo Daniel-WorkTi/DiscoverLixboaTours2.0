@@ -1064,7 +1064,7 @@ export const messagesEn: Messages = {
       titleLine1: "Explore Portugal with",
       titleLine2: "DISCOVERLIXBOATOURS",
       subtitle1:
-        "Private tours in Portugal with a local driver-guide — Sintra, Lisbon, Fátima, Arrábida and more.",
+        "Private day trips from Lisbon with an English-speaking local driver-guide — Sintra & Cascais, Fátima, Porto, Arrábida and more. Hotel or airport pickup.",
       subtitle2: "",
       cta: "Explore tours",
       ctaSecondary: "Talk to Us",
@@ -1073,11 +1073,11 @@ export const messagesEn: Messages = {
       subtitle: "About Us",
       title: "Explore Portugal with a local touch!",
       description1:
-        "Based in Sintra, DiscoverLixboaTours offers authentic tours of palaces, mountains and beaches in Sintra and Cascais, as well as Lisbon, Nazaré, Fátima, Óbidos, Porto and Algarve.",
+        "Based in Sintra, DiscoverLixboaTours offers private tours for travelers visiting Portugal: Sintra and Cascais palaces, Lisbon highlights, Nazaré, Fátima, Óbidos, Porto and the Algarve.",
       description2:
-        "Guided by Mike, born and raised in Sintra, each tour combines adventure, culture and local stories in a vintage convertible jeep or comfortable van.",
+        "Guided by Mike, born and raised in Sintra, each private tour combines adventure, culture and local stories in a vintage convertible jeep or comfortable van — ideal for couples, families and small groups.",
       description3:
-        "Sustainable and passionate about showing the real Portugal — each tour is a unique and unforgettable experience!",
+        "Book online in English, enjoy flexible itineraries and hotel or airport pickup, and discover the real Portugal beyond the usual tourist checklist.",
       learnMore: "Learn More",
     },
     widgets: {

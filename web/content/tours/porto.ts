@@ -200,9 +200,9 @@ export const portoTour = {
         "Tour privado pelo Porto a partir de Lisboa. Até 8 passageiros. A partir de €700 por grupo. Degustação de vinho do Porto.",
     },
     en: {
-      title: "Private Porto Day Tour | DiscoverLixboaTours",
+      title: "Private Porto Day Trip from Lisbon | Wine Tasting",
       description:
-        "Private Porto tour from Lisbon. Up to 8 guests. From €700 per group. Port wine tasting included.",
+        "Private full-day Porto tour from Lisbon with local driver-guide. Ribeira, historic center and Port wine tasting. Hotel pickup. From €700/group, up to 8 guests.",
     },
   },
 } as const satisfies TourDefinition;

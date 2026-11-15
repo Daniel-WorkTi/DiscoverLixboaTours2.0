@@ -222,10 +222,9 @@ export const alentejoTour = {
         "Experiência premium no Alentejo: Évora, Estremoz e Arraiolos. Até 8 passageiros (mín. 2). A partir de €145 por pessoa.",
     },
     en: {
-      title:
-        "Premium Alentejo Wine, Food & Culture | DiscoverLixboaTours",
+      title: "Private Alentejo Day Trip from Lisbon | Évora & Wine",
       description:
-        "Premium Alentejo experience: Évora, Estremoz and Arraiolos. Up to 8 guests (min. 2). From €145 per person.",
+        "Private Alentejo wine, food and culture tour from Lisbon: Évora, Estremoz and Arraiolos. English-speaking guide, hotel pickup. From €145/person (min. 2).",
     },
   },
 } as const satisfies TourDefinition;

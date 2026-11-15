@@ -238,9 +238,9 @@ export const lisboaTour = {
         "Tour privado por Lisboa com guia local. Até 8 passageiros. A partir de €250 por grupo. Recolha no hotel.",
     },
     en: {
-      title: "Private Lisbon Tour | DiscoverLixboaTours",
+      title: "Private Lisbon City Tour with Local Driver-Guide",
       description:
-        "Private Lisbon tour with a local guide. Up to 8 guests. From €250 per group. Hotel pickup available.",
+        "Private Lisbon sightseeing tour with an English-speaking local guide and private vehicle. Belém, Alfama, viewpoints and more. Hotel pickup. From €250/group, up to 8 guests.",
     },
   },
 } as const satisfies TourDefinition;

@@ -232,10 +232,9 @@ export const tresDestinosTour = {
         "Tour privado por Fátima, Nazaré e Óbidos. Até 8 passageiros. A partir de €250 por grupo privado. Espiritualidade, natureza e tradição.",
     },
     en: {
-      title:
-        "3 Destinations Tour — Fátima, Nazaré & Óbidos | DiscoverLixboaTours",
+      title: "Private Fátima, Nazaré & Óbidos Day Trip from Lisbon",
       description:
-        "Private Fátima, Nazaré and Óbidos tour. Up to 8 guests. From €250 per private group. Spirituality, nature and tradition.",
+        "Private day trip from Lisbon to Fátima, Nazaré and Óbidos. English-speaking local driver-guide, hotel pickup. Spirituality, big waves and a medieval town. From €250/group.",
     },
   },
 } as const satisfies TourDefinition;
