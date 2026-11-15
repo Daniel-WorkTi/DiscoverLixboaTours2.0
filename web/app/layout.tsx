@@ -19,8 +19,11 @@ export const metadata: Metadata = {
   description:
     "Tours privados em Sintra, Lisboa e Portugal com guia local, itinerários flexíveis e veículo exclusivo.",
   icons: {
-    icon: "/assets/images/hero/logo.png.webp",
-    apple: "/assets/images/hero/logo.png.webp",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/assets/images/brand/logo-mark.png", type: "image/png", sizes: "128x128" },
+    ],
+    apple: "/assets/images/brand/logo-mark.png",
   },
   openGraph: {
     title: "DiscoverLixboaTours — Tours privados em Portugal",
