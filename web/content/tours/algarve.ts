@@ -78,6 +78,8 @@ export const algarveTour = {
       title: "Tour Privado pelo Algarve",
       subtitle:
         "Experiência privada exclusiva para o teu grupo — até 8 convidados. Descubra as praias mais bonitas de Portugal, grutas espetaculares e falésias impressionantes numa viagem inesquecível pela Costa do Sol",
+      experienceText:
+        "O Algarve que fica na cabeça: Praia da Marinha, Benagil e falésias douradas — num dia privado só para o teu grupo. Menos corrida, mais tempo na água e nas melhores vistas.\n\nGuia local, conforto e paragens pensadas para fotos e para respirar a Costa do Sol como deve ser.",
       aboutHtml: [
         "Descubra o melhor do Algarve — praias de postal, grutas mundialmente famosas e falésias que desafiam a imaginação. Um dia relaxado, mas cheio de aventura e paisagens inesquecíveis!",
         "Vamos explorar a Costa do Sol em conforto total, com paragens nos melhores spots para fotos, tempo para relaxar nas praias mais bonitas de Portugal e descobrir os segredos que só os locais conhecem. Tudo isto ao som de boa música e com um guia local que conhece cada canto especial desta região única.",
@@ -148,6 +150,8 @@ export const algarveTour = {
       title: "Private Algarve Day Tour",
       subtitle:
         "Exclusive private experience for your group — up to 8 guests. Discover Portugal's most beautiful beaches, spectacular caves and impressive cliffs on an unforgettable journey along the Costa do Sol",
+      experienceText:
+        "The Algarve that sticks in your mind: Marinha Beach, Benagil and golden cliffs — on a private day just for your group. Less rushing, more time in the water and at the best views.\n\nLocal guide, comfort and stops made for photos and for breathing the Costa do Sol the right way.",
       aboutHtml: [
         "Discover the best of the Algarve — postcard beaches, world-famous caves and cliffs that challenge the imagination. A relaxed day, but full of adventure and unforgettable landscapes!",
         "We'll explore the Costa do Sol in total comfort, with stops at the best photo spots, time to relax on Portugal's most beautiful beaches and discover secrets that only locals know. All this to the sound of good music and with a local guide who knows every special corner of this unique region.",

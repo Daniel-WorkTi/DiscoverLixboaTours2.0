@@ -82,6 +82,8 @@ export const fatimaTomarTour = {
       title: "Tour Privado Fátima & Tomar",
       subtitle:
         "Explore dois dos locais mais emblemáticos de Portugal numa experiência privada única.",
+      experienceText:
+        "Fátima pede silêncio; Tomar pede curiosidade. Num só dia privado, vais do Santuário ao Convento de Cristo — património UNESCO — com tempo para sentir, não só para passar.\n\nTransporte confortável, guia atento e ritmo vosso: ideal para quem quer fé, história e uma viagem que fica na memória.",
       aboutHtml: [
         "Visite <strong>Fátima</strong>, um dos maiores centros de peregrinação do mundo, e descubra <strong>Tomar</strong>, cidade histórica ligada aos Cavaleiros Templários e ao impressionante <strong>Convento de Cristo</strong> (Património Mundial UNESCO).",
         "É uma <strong>experiência privada</strong> pensada para o teu ritmo: tempo para reflexão em Fátima e para explorar o centro histórico de Tomar ao detalhe.",
@@ -155,6 +157,8 @@ export const fatimaTomarTour = {
       title: "Fátima & Tomar Private Tour",
       subtitle:
         "Explore two of Portugal’s most iconic places on a unique private experience.",
+      experienceText:
+        "Fátima asks for silence; Tomar asks for curiosity. In one private day, go from the Sanctuary to the Convent of Christ — UNESCO heritage — with time to feel, not just pass through.\n\nComfortable transport, an attentive guide and your own pace: ideal if you want faith, history and a trip that stays with you.",
       aboutHtml: [
         "Visit <strong>Fátima</strong>, one of the world’s great pilgrimage centres, and discover <strong>Tomar</strong>, a historic city linked to the Knights Templar and the stunning <strong>Convent of Christ</strong> (UNESCO World Heritage).",
         "A <strong>private experience</strong> at your pace: time for reflection in Fátima and to explore Tomar’s old town in depth.",

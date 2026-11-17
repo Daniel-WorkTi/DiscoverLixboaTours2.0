@@ -22,8 +22,19 @@ type Props = {
   locale: Locale;
 };
 
-function stripHtml(html: string) {
-  return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+/** Evita double-encoding (%2C → %252C) e thumbs 3840px que disparam 429 no Wikimedia. */
+function normalizeTourImageUrl(src: string) {
+  if (!src.startsWith("http")) return src;
+  try {
+    const url = new URL(src);
+    url.pathname = decodeURIComponent(url.pathname).replace(
+      /\/\d{3,4}px-/g,
+      "/1280px-",
+    );
+    return url.href;
+  } catch {
+    return src;
+  }
 }
 
 export function TourPage({ tour, locale }: Props) {
@@ -62,17 +73,23 @@ export function TourPage({ tour, locale }: Props) {
     return out;
   };
 
-  const experiencePhotos = pickUniqueImages(tour.stopImages ?? [], 10);
+  const normalizedStopImages = (tour.stopImages ?? []).map(normalizeTourImageUrl);
+
+  // stopImages normalizados + unoptimized no mosaic (evita 429 do /_next/image).
+  const experiencePhotos = pickUniqueImages(
+    [...normalizedStopImages, ...tour.gallery.map((g) => g.src), tour.heroImage],
+    9,
+  );
 
   const itineraryImages = (() => {
     const used = new Set<string>();
     const pool = [
-      ...(tour.stopImages ?? []),
+      ...normalizedStopImages,
       ...tour.gallery.map((g) => g.src),
       tour.heroImage,
     ];
     return c.itinerary.map((_, index) => {
-      const preferred = tour.stopImages?.[index];
+      const preferred = normalizedStopImages[index];
       if (preferred) {
         const key = uniqueImageKey(preferred);
         if (!used.has(key)) {
@@ -91,10 +108,18 @@ export function TourPage({ tour, locale }: Props) {
     });
   })();
 
-  const experienceText =
-    c.experienceText?.trim() ||
-    (c.aboutHtml[0] ? stripHtml(c.aboutHtml[0]) : "") ||
-    c.subtitle;
+  const experienceParas = (() => {
+    const custom = c.experienceText?.trim();
+    if (custom) {
+      return custom
+        .split(/\n\n+/)
+        .map((part) => part.trim())
+        .filter(Boolean);
+    }
+    // Fallback: só os 2 primeiros blocos do about (nunca o texto inteiro).
+    if (c.aboutHtml.length) return c.aboutHtml.slice(0, 2);
+    return c.subtitle ? [c.subtitle] : [];
+  })();
 
   const itineraryLead =
     c.itineraryLead?.trim() ||
@@ -242,12 +267,17 @@ export function TourPage({ tour, locale }: Props) {
         <section className="tour-exp" id="experiencia">
           <div className="tour-editorial__inner tour-exp__grid">
             <div className="tour-exp__copy">
+              {tour.privateTour ? (
+                <span className="tour-eyebrow tour-exp__eyebrow">{t.tour.privateTour}</span>
+              ) : null}
               <h2>{t.tour.experienceTitle}</h2>
-              <p>{experienceText}</p>
-              {c.aboutHtml.length > 1 ? (
+              {experienceParas.length ? (
                 <div className="tour-exp__about">
-                  {c.aboutHtml.slice(1).map((html) => (
-                    <p key={html.slice(0, 48)} dangerouslySetInnerHTML={{ __html: html }} />
+                  {experienceParas.map((html, index) => (
+                    <p
+                      key={`exp-${index}-${html.slice(0, 32)}`}
+                      dangerouslySetInnerHTML={{ __html: html }}
+                    />
                   ))}
                 </div>
               ) : null}
@@ -259,8 +289,6 @@ export function TourPage({ tour, locale }: Props) {
               photos={experiencePhotos}
               alts={photoAlts}
               regionLabel={t.tour.experienceTitle}
-              prevLabel={t.tour.prevPhotos}
-              nextLabel={t.tour.nextPhotos}
             />
           </div>
         </section>
@@ -286,10 +314,6 @@ export function TourPage({ tour, locale }: Props) {
                 image: itineraryImages[index] ?? tour.heroImage,
               }))}
             />
-
-            {tour.stopImages?.length ? (
-              <p className="tour-photo-credit">{t.tour.photoCredit}</p>
-            ) : null}
 
             <details className="tour-itinerary-details" id="itinerario-detalhe">
               <summary>{t.tour.itineraryLink}</summary>

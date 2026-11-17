@@ -78,6 +78,8 @@ export const aveiroTour = {
       title: "Tour Aveiro & Costa Nova",
       subtitle:
         "Descubra Aveiro, a “Veneza de Portugal”, com canais pitorescos e moliceiros, e a icónica Costa Nova com as suas casas coloridas — num tour privado à medida.",
+      experienceText:
+        "Aveiro parece postal: canais, moliceiros e a Costa Nova às riscas. Neste tour privado, tens tempo para passear, provar e fotografar sem o stress do autocarro cheio.\n\nUm dia leve, colorido e à vossa medida — a Veneza de Portugal, sem filas e com guia local.",
       aboutHtml: [
         "Descubra <strong>Aveiro</strong>, conhecida como a “Veneza de Portugal”, com os seus <strong>canais pitorescos</strong> e <strong>barcos tradicionais (moliceiros)</strong>. Este tour privado combina charme, cultura e paisagens únicas.",
         "Inclui uma visita à icónica <strong>Costa Nova</strong>, famosa pelas <strong>casas às riscas</strong> coloridas, e tempo para explorar ao teu ritmo.",
@@ -154,6 +156,8 @@ export const aveiroTour = {
       title: "Aveiro & Costa Nova Private Tour",
       subtitle:
         "Discover Aveiro, Portugal’s “Venice”, with picturesque canals and moliceiro boats, and iconic Costa Nova with its colourful striped houses — on a tailor-made private tour.",
+      experienceText:
+        "Aveiro looks like a postcard: canals, moliceiros and striped Costa Nova. On this private tour, you get time to stroll, taste and shoot — without the packed-bus stress.\n\nA light, colourful day made for your group — Portugal’s Venice, with a local guide and no rush.",
       aboutHtml: [
         "Discover <strong>Aveiro</strong>, known as Portugal’s “Venice”, with its <strong>picturesque canals</strong> and <strong>traditional moliceiro boats</strong>. This private tour blends charm, culture and unique landscapes.",
         "Includes a visit to iconic <strong>Costa Nova</strong>, famous for its colourful <strong>striped houses</strong>, and time to explore at your own pace.",

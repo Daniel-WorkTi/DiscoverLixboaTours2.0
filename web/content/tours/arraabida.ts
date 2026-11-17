@@ -65,6 +65,8 @@ export const arraabidaTour = {
       title: "Tour Privado Arrábida, Setúbal & Sesimbra",
       subtitle:
         "Descubra a beleza natural da Serra da Arrábida, a autenticidade de Setúbal e o charme de Sesimbra num tour privado que combina natureza, história e vistas deslumbrantes",
+      experienceText:
+        "A Arrábida é o cartão-postal que Lisboa esconde a sul: serra verde, água clara e miradouros que calham a silêncio. Neste dia privado, o Portinho, Setúbal e Sesimbra ficam no teu ritmo.\n\nJeep conversível, guia local e tempo para respirar o Atlântico — o tipo de dia que faz dizer “ainda bem que viemos”.",
       aboutHtml: [
         "Uma jornada completa pela natureza selvagem e pela história autêntica de Portugal. Começamos no majestoso <strong>Cristo Rei</strong> (subida opcional) com vista panorâmica sobre Lisboa e o Rio Tejo, passando pela icónica <strong>Ponte 25 de Abril</strong>.",
         "Exploramos o <strong>Parque Natural da Arrábida e Portinho da Arrábida</strong>, uma serra protegida com vistas espetaculares e uma praia paradisíaca de águas cristalinas.",
@@ -141,6 +143,8 @@ export const arraabidaTour = {
       title: "Private Arrábida, Setúbal & Sesimbra Tour",
       subtitle:
         "Discover the natural beauty of Serra da Arrábida, the authenticity of Setúbal and the charm of Sesimbra on a private tour that combines nature, history and stunning views",
+      experienceText:
+        "Arrábida is the postcard Lisbon hides to the south: green hills, clear water and viewpoints that hush a crowd. On this private day, Portinho, Setúbal and Sesimbra move at your pace.\n\nConvertible jeep, local guide and time to breathe the Atlantic — the kind of day that makes you say “so glad we came”.",
       aboutHtml: [
         "A complete journey through the wild nature and authentic history of Portugal. We start at the majestic <strong>Christ the King</strong> (optional ascent) with a panoramic view over Lisbon and the Tagus River, passing by the iconic <strong>25th of April Bridge</strong>.",
         "We explore the <strong>Arrábida Natural Park and Portinho da Arrábida</strong>, a protected mountain range with spectacular views and a paradise beach with crystal clear waters.",

@@ -281,6 +281,14 @@ export type Messages = {
       support: { title: string; desc: string };
       romantic: { title: string; desc: string };
     };
+    executiveTeaser: {
+      titleLine1: string;
+      titleAccent: string;
+      titleLine3: string;
+      lead: string;
+      ctaPrimary: string;
+      ctaSecondary: string;
+    };
     instagram: {
       follow: string;
       description: string;
@@ -750,6 +758,15 @@ export const messagesPt: Messages = {
         title: "Experiências a Dois",
         desc: "Momentos privados, detalhes especiais e surpresas para tornar cada ocasião inesquecível.",
       },
+    },
+    executiveTeaser: {
+      titleLine1: "Viagens Executivas",
+      titleAccent: "em Portugal,",
+      titleLine3: "com Distinção",
+      lead:
+        "Transfers privados, viagens corporativas e experiências personalizadas, com o conforto e a exclusividade do nosso serviço Executive.",
+      ctaPrimary: "Conhecer Executive",
+      ctaSecondary: "Pedir orçamento",
     },
     instagram: {
       follow: "Seguir no Instagram",
@@ -1326,6 +1343,15 @@ export const messagesEn: Messages = {
         title: "Experiences for Two",
         desc: "Private moments, special details and surprises to make every occasion unforgettable.",
       },
+    },
+    executiveTeaser: {
+      titleLine1: "Executive Travel",
+      titleAccent: "in Portugal,",
+      titleLine3: "with Distinction",
+      lead:
+        "Private transfers, corporate travel and tailored experiences — with the comfort and exclusivity of our Executive service.",
+      ctaPrimary: "Discover Executive",
+      ctaSecondary: "Request a quote",
     },
     instagram: {
       follow: "Follow on Instagram",

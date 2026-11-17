@@ -92,6 +92,8 @@ export const tresDestinosTour = {
       title: "Tour 3 Destinos — Fátima, Nazaré & Óbidos",
       subtitle:
         "Descubra três dos locais mais icónicos de Portugal: o Santuário de Fátima, Nazaré com o seu farol e museu do surf, e a vila medieval de Óbidos, num tour privado que combina espiritualidade, natureza e tradição",
+      experienceText:
+        "Três Portugais num só dia: a fé de Fátima, as ondas da Nazaré e as muralhas de Óbidos. Um itinerário privado que parece filme — e é só vosso.\n\nCom guia local e tempo em cada paragem, sais com histórias, fotos e vontade de reservar o próximo tour.",
       aboutHtml: [
         "Embarque numa jornada única por três dos destinos mais emblemáticos de Portugal. <strong>Visite o Santuário de Fátima, descubra o Farol e museu do surf em Nazaré e explore as muralhas e ruas medievais da vila histórica de Óbidos.</strong>",
         "Com o nosso guia local experiente e a Mercedes-Benz Vito 116 CDI Select, a mesma da página Executive, terá acesso a perspetivas únicas, histórias locais autênticas e momentos inesquecíveis. Cada paragem é cuidadosamente planeada para maximizar a sua experiência, com muito tempo para explorar, fotografar e absorver a atmosfera única de cada local.",
@@ -162,6 +164,8 @@ export const tresDestinosTour = {
       title: "3 Destinations Tour — Fátima, Nazaré & Óbidos",
       subtitle:
         "Discover three of Portugal's most iconic locations: the Sanctuary of Fátima, Nazaré with its lighthouse and surf museum, and the medieval village of Óbidos, on a private tour that combines spirituality, nature and tradition",
+      experienceText:
+        "Three Portugals in one day: the faith of Fátima, Nazaré’s waves and the walls of Óbidos. A private itinerary that feels like a film — and it’s only yours.\n\nWith a local guide and time at each stop, you leave with stories, photos and the urge to book the next tour.",
       aboutHtml: [
         "Embark on a unique journey through three of Portugal's most emblematic destinations. <strong>Visit the Sanctuary of Fátima, discover the Lighthouse and surf museum in Nazaré and explore the medieval walls and streets of the historic village of Óbidos.</strong>",
         "With our experienced local guide and the Mercedes-Benz Vito 116 CDI Select — the same van as the Executive page — you'll have access to unique perspectives, authentic local stories and unforgettable moments. Each stop is carefully planned to maximize your experience, with plenty of time to explore, photograph and absorb the unique atmosphere of each location.",

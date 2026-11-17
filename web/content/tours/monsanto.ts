@@ -85,6 +85,8 @@ export const monsantoTour = {
       title: "Tour Privado Monsanto & Centro de Portugal",
       subtitle:
         "Um dia por Monsanto e pelo coração de Portugal — com Miguel, guia local e fundador da DiscoverLixboaTours.",
+      experienceText:
+        "Monsanto parece outro planeta: casas entre penedos, ruas de pedra e um Portugal que o turismo de massa ainda não engoliu. Um dia privado pelo centro do país, com quem conhece o caminho.\n\nIdeal para quem quer fotos memoráveis, aldeias genuínas e a sensação de ter encontrado um sítio secreto.",
       aboutHtml: [
         "<strong>Monsanto</strong> — a “aldeia mais portuguesa de Portugal” — com casas entre <strong>enormes rochas de granito</strong>, ruas medievais e um cenário único. Esta aldeia foi também <strong>palco da série House of the Dragon</strong>, o que a torna ainda mais especial.",
         "O dia inclui ainda uma viagem por <strong>zonas menos turísticas</strong>: paisagens rurais autênticas, pequenas aldeias e um <strong>Portugal genuíno e pouco explorado</strong>.",
@@ -163,6 +165,8 @@ export const monsantoTour = {
       title: "Private Tour Monsanto & Central Portugal",
       subtitle:
         "A full day in Monsanto and the heart of Portugal — with Miguel, local guide and founder of DiscoverLixboaTours.",
+      experienceText:
+        "Monsanto feels like another planet: houses among boulders, stone lanes and a Portugal mass tourism hasn’t swallowed yet. A private day through the heart of the country, with someone who knows the road.\n\nPerfect if you want memorable photos, genuine villages and the feeling of finding a secret place.",
       aboutHtml: [
         "<strong>Monsanto</strong> — “the most Portuguese village in Portugal” — with houses tucked among <strong>huge granite boulders</strong>, medieval lanes and a unique setting. The village was also a <strong>filming location for House of the Dragon</strong>, which makes it even more special.",
         "The day also takes you through <strong>less touristy areas</strong>: authentic rural landscapes, small villages and a <strong>genuine, off-the-beaten-path Portugal</strong>.",

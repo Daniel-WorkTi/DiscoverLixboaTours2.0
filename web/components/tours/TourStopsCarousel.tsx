@@ -136,6 +136,7 @@ export function TourStopsCarousel({
                   sizes="(max-width: 700px) 68vw, 480px"
                   quality={90}
                   className="tour-stop-card__img"
+                  unoptimized={item.image.startsWith("http")}
                 />
                 <span className="tour-stop-card__num">
                   {String(index + 1).padStart(2, "0")}

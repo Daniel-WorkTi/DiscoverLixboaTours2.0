@@ -3213,6 +3213,156 @@ body:not(:has(.hero, .destino-hero, .exec-hero)) .main-header .header-cta {
 }
 
 /* ========================================
+   SESSEION EXECUTIVE (home, acima Instagram)
+======================================== */
+
+.sesseionexecutive {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    background: #0b0b0c;
+}
+
+.sesseionexecutive__bg {
+    position: relative;
+    z-index: 0;
+    width: max-content;
+    max-width: 100%;
+    line-height: 0;
+    background: #0b0b0c;
+}
+
+.sesseionexecutive__bg-img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.sesseionexecutive__inner {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem);
+    box-sizing: border-box;
+}
+
+.sesseionexecutive__copy {
+    max-width: 34rem;
+}
+
+.sesseionexecutive__title {
+    margin: 0 0 1.15rem;
+    color: #ffffff;
+    font-family: var(--font-geist-sans), "Geist", sans-serif;
+    font-size: clamp(2.15rem, 5.6vw, 3.75rem);
+    font-weight: 400;
+    line-height: 95%;
+    letter-spacing: clamp(-2px, -0.45vw, -4px);
+    text-wrap: balance;
+}
+
+.sesseionexecutive__line {
+    display: block;
+    color: #fff;
+}
+
+.sesseionexecutive__line--accent {
+    color: #ff6600;
+    font-weight: 700;
+}
+
+.sesseionexecutive__lead {
+    margin: 0 0 1.75rem;
+    max-width: 34ch;
+    font-size: clamp(0.98rem, 1.6vw, 1.12rem);
+    font-weight: 500;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sesseionexecutive__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 0.85rem;
+}
+
+.sesseionexecutive__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.35rem;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.sesseionexecutive__btn svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex-shrink: 0;
+}
+
+.sesseionexecutive__btn--primary {
+    background: #ff6600;
+    color: #fff;
+    border: 1px solid #ff6600;
+}
+
+.sesseionexecutive__btn--primary:hover {
+    background: #e85d00;
+    border-color: #e85d00;
+}
+
+.sesseionexecutive__btn--ghost {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+.sesseionexecutive__btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #fff;
+}
+
+.sesseionexecutive__btn:active {
+    transform: scale(0.99);
+}
+
+@media (max-width: 720px) {
+    .sesseionexecutive__inner {
+        align-items: flex-end;
+        padding-bottom: clamp(1.75rem, 6vw, 2.75rem);
+    }
+
+    .sesseionexecutive__lead {
+        max-width: none;
+    }
+
+    .sesseionexecutive__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sesseionexecutive__btn {
+        width: 100%;
+    }
+}
+
+/* ========================================
    INSTAGRAM SECTION
 ======================================== */
 
@@ -4871,8 +5021,12 @@ iframe.goog-te-menu-frame {
     }
     
     /* Ritmo vertical: menos “apertado” que 3rem fixo em secções densas */
-    section:not(.hero):not(.explore-video-section):not(.why-us-section):not(.br-panel) {
+    section:not(.hero):not(.explore-video-section):not(.why-us-section):not(.br-panel):not(.sesseionexecutive) {
         padding: 2.75rem 0 !important;
+    }
+
+    .sesseionexecutive {
+        padding: 0 !important;
     }
 
     .why-us-section {
@@ -5253,7 +5407,7 @@ iframe.goog-te-menu-frame {
     }
     
     /* Extra Small Mobile - Refined Spacing */
-    section:not(.hero):not(.explore-video-section):not(.why-us-section):not(.br-panel) {
+    section:not(.hero):not(.explore-video-section):not(.why-us-section):not(.br-panel):not(.sesseionexecutive) {
         padding: 2.5rem 0 !important;
     }
 

@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Fragment } from "react";
-import { useMessages } from "@/lib/i18n/LocaleProvider";
+import { useLocale, useMessages } from "@/lib/i18n/LocaleProvider";
+import { withLocalePrefix } from "@/lib/i18n/locale";
 import { whatsappSiteUrl } from "@/lib/whatsapp";
 import { ExploreVideoSection } from "./ExploreVideoSection";
 import { WhyUsSection } from "./WhyUsSection";
@@ -12,13 +14,86 @@ type Props = {
   testimonialAuthors: readonly string[];
 };
 
+const EXEC_QUOTE_WA = whatsappSiteUrl(
+  "Olá! Gostaria de pedir um orçamento para o serviço Executive.",
+);
+
 export function HomePageRest({ instagramPhotos, testimonialAuthors }: Props) {
   const m = useMessages();
+  const locale = useLocale();
   const hp = m.home;
+  const teaser = hp.executiveTeaser;
+  const executiveHref = withLocalePrefix("/executive", locale);
 
   return (
     <>
       <WhyUsSection />
+
+      <section
+        className="sesseionexecutive"
+        id="sesseionexecutive"
+        aria-labelledby="sesseionexecutive-title"
+      >
+        <div className="sesseionexecutive__bg" aria-hidden>
+          <Image
+            src="/assets/images/sesseionexecutive.jpg"
+            alt=""
+            width={1920}
+            height={1080}
+            className="sesseionexecutive__bg-img"
+            sizes="(max-width: 1920px) 100vw, 1920px"
+            quality={90}
+            priority={false}
+            style={{ width: "auto", height: "auto", maxWidth: "100%" }}
+          />
+        </div>
+        <div className="sesseionexecutive__inner">
+          <div className="sesseionexecutive__copy">
+            <h2 id="sesseionexecutive-title" className="sesseionexecutive__title">
+              <span className="sesseionexecutive__line">{teaser.titleLine1}</span>
+              <span className="sesseionexecutive__line sesseionexecutive__line--accent">
+                {teaser.titleAccent}
+              </span>
+              <span className="sesseionexecutive__line">{teaser.titleLine3}</span>
+            </h2>
+            <p className="sesseionexecutive__lead">{teaser.lead}</p>
+            <div className="sesseionexecutive__actions">
+              <Link
+                href={executiveHref}
+                className="sesseionexecutive__btn sesseionexecutive__btn--primary"
+              >
+                <span>{teaser.ctaPrimary}</span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M5 12h14M13 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+              <a
+                href={EXEC_QUOTE_WA}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sesseionexecutive__btn sesseionexecutive__btn--ghost"
+              >
+                <span>{teaser.ctaSecondary}</span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M5 12h14M13 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="instagram-section" id="instagram">
         <div className="instagram-container">

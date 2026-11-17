@@ -71,6 +71,8 @@ export const alentejoTour = {
       title: "Premium Alentejo Wine, Food & Culture Experience",
       subtitle:
         "Wine & Food Experience no Alentejo: uma viagem premium de património, vinha e mesa — Évora, Estremoz e Arraiolos com storytelling local e ritmo de prova, não de correria turística.",
+      experienceText:
+        "No Alentejo o tempo abranda — e isso é o luxo. Évora, vinho em Estremoz e o charme de Arraiolos num dia privado com sabor a terra, pedra e mesa boa.\n\nSem corrida turística: histórias locais, luz larga e o ritmo certo para provar, fotografar e querer voltar.",
       aboutHtml: [
         "Uma jornada pelo Alentejo, a região mais autêntica de Portugal, onde o tempo parece ter parado. Começamos em <strong>Évora</strong> com o <strong>Templo de Diana</strong>, a <strong>Sé</strong> e a famosa <strong>Capela dos Ossos</strong>.",
         "Em <strong>Estremoz</strong>, descobrimos uma vila medieval encantadora e degustamos os famosos <strong>vinhos alentejanos</strong>. Terminamos em <strong>Arraiolos</strong>, famosa pelas suas <strong>tapeçarias tradicionais</strong> artesanais.",
@@ -148,6 +150,8 @@ export const alentejoTour = {
       title: "Premium Alentejo Wine, Food & Culture Experience",
       subtitle:
         "Wine & Food Experience in Alentejo: a premium journey of heritage, vineyard and table — Évora, Estremoz and Arraiolos with local storytelling and tasting pace, not a tourist rush.",
+      experienceText:
+        "In Alentejo, time slows down — and that is the luxury. Évora, wine in Estremoz and the charm of Arraiolos on a private day with stone, soil and a good table.\n\nNo tourist rush: local stories, wide light and the right pace to taste, shoot and want to come back.",
       aboutHtml: [
         "A journey through Alentejo, Portugal's most authentic region, where time seems to have stopped. We start in <strong>Évora</strong> with the <strong>Temple of Diana</strong>, the <strong>Cathedral</strong> and the famous <strong>Chapel of Bones</strong>.",
         "In <strong>Estremoz</strong>, we discover a charming medieval village and taste the famous <strong>Alentejo wines</strong>. We end in <strong>Arraiolos</strong>, famous for its traditional handcrafted <strong>tapestries</strong>.",

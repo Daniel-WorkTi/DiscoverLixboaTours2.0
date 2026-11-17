@@ -62,6 +62,8 @@ export const portoTour = {
       title: "Tour Privado pelo Porto",
       subtitle:
         "Descubra o Porto num dia privado a partir de Lisboa — exclusivamente para o teu grupo. Vinhos únicos, arquitetura histórica e caráter autêntico do norte",
+      experienceText:
+        "O Porto não se explica — prova-se. Ribeira, Ponte Dom Luís e uma cave de Vinho do Porto só para o teu grupo: um dia privado a partir de Lisboa, sem pressa e com alma do norte.\n\nEntre azulejo, granito e o Douro, vais sair com histórias, fotos e aquele brinde que marca a viagem.",
       aboutHtml: [
         "Explore o Porto, a segunda maior cidade de Portugal e berço do famoso Vinho do Porto. Esta cidade histórica é um verdadeiro museu ao ar livre, com o seu centro histórico classificado como Património Mundial da UNESCO. Das ruas medievais da Ribeira às modernas caves de vinho em Vila Nova de Gaia, o Porto oferece uma experiência única e inesquecível.",
         "Com o nosso guia experiente, descobrirá não apenas as atrações turísticas mais famosas, mas também segredos locais, histórias fascinantes e os melhores locais para saborear a autêntica culinária portuense. Prepare-se para se apaixonar pela energia contagiante desta cidade que respira história e tradição.",
@@ -133,6 +135,8 @@ export const portoTour = {
       title: "Private Porto Day Tour",
       subtitle:
         "Discover Porto on a private full-day experience from Lisbon — exclusively for your group. Unique wines, historic architecture and authentic northern character",
+      experienceText:
+        "Porto isn’t explained — it’s tasted. Ribeira, Dom Luís Bridge and a Port wine cellar just for your group: a private day from Lisbon, unhurried, with real northern soul.\n\nBetween tiles, granite and the Douro, you’ll leave with stories, photos and that toast that defines the trip.",
       aboutHtml: [
         "Explore Porto, Portugal's second largest city and birthplace of the famous Port Wine. This historic city is a true open-air museum, with its historic center classified as a UNESCO World Heritage Site. From the medieval streets of Ribeira to the modern wine cellars in Vila Nova de Gaia, Porto offers a unique and unforgettable experience.",
         "With our experienced guide, you'll discover not only the most famous tourist attractions, but also local secrets, fascinating stories and the best places to taste authentic Porto cuisine. Get ready to fall in love with the contagious energy of this city that breathes history and tradition.",

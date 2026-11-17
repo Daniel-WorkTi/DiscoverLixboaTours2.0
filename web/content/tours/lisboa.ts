@@ -68,6 +68,8 @@ export const lisboaTour = {
       title: "Tour Privado por Lisboa",
       subtitle:
         "Descubra a magia de Lisboa, a capital portuguesa banhada pelo sol, num tour privado que combina história milenar, vistas deslumbrantes e caráter lisboeta autêntico.",
+      experienceText:
+        "Lisboa revela-se aos poucos: miradouros, Alfama, Belém e cantos que o autocarro turístico nunca pára. Neste dia privado, a cidade é só vossa — sem pressa, com história e vibe lisboeta de verdade.\n\nNo jeep conversível, com música e um guia apaixonado, vais do Tejo às sete colinas com tempo para fotografar, saborear e apaixonar-te pela capital.",
       aboutHtml: [
         "Desde miradouros panorâmicos, bairros históricos e cantos secretos que só os locais conhecem, este dia é uma jornada pela história, cultura e emoções genuínas.",
         "Viaja no nosso jeep UMM Alter II conversível, com boa música, boa energia e um guia local apaixonado, pronto para te mostrar o melhor de Lisboa — desde o seu passado real até à sua vibe moderna e cosmopolita.",
@@ -155,6 +157,8 @@ export const lisboaTour = {
       title: "Private Lisbon Tour",
       subtitle:
         "Discover the magic of Lisbon, Portugal's sun-kissed capital, on a private tour that combines millennial history, stunning views and authentic Lisbon character.",
+      experienceText:
+        "Lisbon opens slowly: viewpoints, Alfama, Belém and corners the tour bus never stops at. On this private day, the city is yours — unhurried, with real stories and true Lisbon vibe.\n\nIn the convertible jeep, with music and a passionate guide, you’ll go from the Tagus to the seven hills with time to shoot, taste and fall for the capital.",
       aboutHtml: [
         "From panoramic viewpoints, historic neighbourhoods and secret corners that only locals know, this day is a journey through history, culture and genuine emotions.",
         "Ride in our open-top UMM Alter II jeep, with good music, good energy and a passionate local guide, ready to show you the best of Lisbon — from its royal past to its modern cosmopolitan vibe.",
