@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import {
@@ -9,6 +10,16 @@ import {
   getMinBookablePassengers,
 } from "@/lib/tour-pricing-table";
 import { toursBooking } from "@/lib/tours-booking";
+import {
+  defaultPickupZone,
+  formatTransportNotes,
+  isSintraCascaisTour,
+  pickupZonesForTour,
+  resolveTransportPolicy,
+  type TransportSummaryKey,
+  type TransportZone,
+} from "@/lib/transport-rules";
+import { getMigratedTour } from "@/content/tours";
 import { PaymentBadges } from "@/components/reservar/PaymentBadges";
 import { PickupField } from "@/components/reservar/PickupField";
 import { useLocale, useMessages } from "@/lib/i18n/LocaleProvider";
@@ -22,8 +33,12 @@ const MAX_NOTES_LEN = 500;
 /** Se o servidor / Stripe não responder, o fetch não deve ficar “a carregar” para sempre. */
 const CHECKOUT_FETCH_TIMEOUT_MS = 55_000;
 
-/** Jeep só nestes três. Os outros tours vão na van Mercedes. */
+/** Jeep disponível nestes tours. Nos restantes vai a van Mercedes. */
 const JEEP_TOUR_IDS = new Set(["lisboa", "sintra-cascais", "arraabida"]);
+/** No checkout, Lisboa e Sintra permitem escolher jeep ou van. */
+const VEHICLE_CHOICE_TOUR_IDS = new Set(["lisboa", "sintra-cascais"]);
+
+type BookingVehicle = "jeep" | "van";
 
 /** Badge “Preço de grupo” só para tours comercialmente flat/grupo (não Aveiro/Monsanto exact-total). */
 const GROUP_PRICE_TOUR_IDS = new Set([
@@ -33,6 +48,20 @@ const GROUP_PRICE_TOUR_IDS = new Set([
   "lisboa",
   "fatima-tomar",
 ]);
+
+/** Linha curta de locais no cartão do tour (checkout). */
+const TOUR_PLACE_LINE: Record<string, string> = {
+  "sintra-cascais": "Sintra · Cascais · Azenhas do Mar",
+  lisboa: "Lisboa · Belém · Alfama",
+  "fatima-tomar": "Fátima · Tomar · Batalha",
+  "3-destinos": "Fátima · Nazaré · Óbidos",
+  porto: "Porto · Gaia · Douro",
+  arraabida: "Arrábida · Setúbal · Sesimbra",
+  aveiro: "Aveiro · Costa Nova",
+  alentejo: "Alentejo · Évora · Vinhos",
+  algarve: "Algarve · Lagos · Sagres",
+  monsanto: "Monsanto · Centro de Portugal",
+};
 
 /** Indicativo só com o número, sem bandeira. */
 const PHONE_DIAL_OPTIONS = [
@@ -161,8 +190,19 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const [phoneDial, setPhoneDial] = useState("+351");
   const [phoneNational, setPhoneNational] = useState("");
   const [pickup, setPickup] = useState("");
+  const [pickupZone, setPickupZone] = useState<TransportZone>(() => {
+    const id =
+      initialTourId && toursBooking.some((t) => t.id === initialTourId)
+        ? initialTourId
+        : defaultTourId();
+    return defaultPickupZone(id);
+  });
+  const [dropOffLisbonHotel, setDropOffLisbonHotel] = useState(false);
+  const [vehicleChoice, setVehicleChoice] = useState<BookingVehicle>("jeep");
   const [pickupTime, setPickupTime] = useState("");
   const [notes, setNotes] = useState("");
+  const [notesOpen, setNotesOpen] = useState(false);
+  const [pickupResolved, setPickupResolved] = useState(false);
   const [loading, setLoading] = useState(false);
   /** Evita dois pedidos em paralelo (duplo clique antes do re-render com loading=true). */
   const checkoutInFlight = useRef(false);
@@ -196,7 +236,29 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const tourLabelFallback = toursBooking.find((t) => t.id === tourId)?.label ?? "";
   const tourMsgKey = TOUR_MSG_KEYS[tourId];
   const tourLabel = (tourMsgKey ? m.booking.tours[tourMsgKey] : null) ?? tourLabelFallback;
-  const vehicleLabel = JEEP_TOUR_IDS.has(tourId) ? m.booking.vehicleJeep : m.booking.vehicleVan;
+  const canChooseVehicle = VEHICLE_CHOICE_TOUR_IDS.has(tourId);
+  const resolvedVehicle: BookingVehicle = canChooseVehicle
+    ? vehicleChoice
+    : JEEP_TOUR_IDS.has(tourId)
+      ? "jeep"
+      : "van";
+  const vehicleLabel =
+    resolvedVehicle === "jeep" ? m.booking.vehicleJeep : m.booking.vehicleVan;
+  const tourDef = getMigratedTour(tourId);
+  const tourHero = tourDef?.heroImage ?? null;
+  const tourHighlights = useMemo(() => {
+    if (TOUR_PLACE_LINE[tourId]) return TOUR_PLACE_LINE[tourId];
+    const content = tourDef?.content[locale === "en" ? "en" : "pt"];
+    const badges = (content?.itinerary ?? [])
+      .map((stop) => stop.badge?.trim())
+      .filter((b): b is string => Boolean(b));
+    return [...new Set(badges)].slice(0, 3).join(" · ");
+  }, [tourDef, locale, tourId]);
+  const capacityLabel = m.booking.vehicleCapacity.replace(
+    "{n}",
+    String(getMaxBookablePassengers(tourId)),
+  );
+  const vehicleBadge = `${vehicleLabel} (${capacityLabel})`;
   function labelForTour(id: string): string {
     const key = TOUR_MSG_KEYS[id];
     return (key ? m.booking.tours[key] : null) ?? toursBooking.find((t) => t.id === id)?.label ?? id;
@@ -205,10 +267,77 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const minTravelers = useMemo(() => getMinBookablePassengers(tourId), [tourId]);
   const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
   const totalLabel = estimate ? formatEurFromCents(estimate.totalCents) : null;
+  const sintraTour = isSintraCascaisTour(tourId);
+  /** Zona efetiva: no Sintra usa o chip; nos outros tours a recolha é sempre incluída. */
+  const effectivePickupZone: TransportZone = sintraTour
+    ? pickupZone
+    : defaultPickupZone(tourId);
+  const transportPolicy = useMemo(
+    () =>
+      resolveTransportPolicy(tourId, {
+        pickupZone: effectivePickupZone,
+        dropOffLisbonHotel: sintraTour ? dropOffLisbonHotel : false,
+      }),
+    [tourId, effectivePickupZone, dropOffLisbonHotel, sintraTour],
+  );
 
   useEffect(() => {
     setQuantity((q) => Math.min(maxTravelers, Math.max(minTravelers, q)));
   }, [maxTravelers, minTravelers]);
+
+  useEffect(() => {
+    const allowed = pickupZonesForTour(tourId);
+    if (!allowed.includes(pickupZone)) {
+      setPickupZone(defaultPickupZone(tourId));
+    }
+    if (!isSintraCascaisTour(tourId)) {
+      setDropOffLisbonHotel(false);
+    }
+    if (VEHICLE_CHOICE_TOUR_IDS.has(tourId)) {
+      setVehicleChoice((v) => v);
+    } else if (JEEP_TOUR_IDS.has(tourId)) {
+      setVehicleChoice("jeep");
+    } else {
+      setVehicleChoice("van");
+    }
+  }, [tourId, pickupZone]);
+
+  useEffect(() => {
+    setPickup("");
+    setPickupResolved(false);
+    setPickupZone(defaultPickupZone(tourId));
+  }, [tourId]);
+
+  function transportSummaryLabel(key: TransportSummaryKey): string {
+    return m.booking[key];
+  }
+
+  function pickupStatusCopy(): { text: string; tone: "ok" | "quote" | "muted" } {
+    if (pickup.trim().length < 2 && !dropOffLisbonHotel) {
+      return { text: "", tone: "muted" };
+    }
+    if (transportPolicy.summaryKey === "pickupIncluded") {
+      return { text: m.booking.pickupIncluded, tone: "ok" };
+    }
+    if (transportPolicy.summaryKey === "pickupFree") {
+      return { text: m.booking.pickupFree, tone: "ok" };
+    }
+    if (transportPolicy.summaryKey === "pickupOnRequest") {
+      return { text: m.booking.pickupOnRequest, tone: "quote" };
+    }
+    if (transportPolicy.summaryKey === "dropOffOnRequest") {
+      return { text: m.booking.dropOffOnRequest, tone: "quote" };
+    }
+    return { text: m.booking.pickupOutside, tone: "quote" };
+  }
+
+  const pickupStatus = pickupStatusCopy();
+  const summaryPickupLabel =
+    transportPolicy.summaryKey === "pickupIncluded"
+      ? m.booking.pickupIncluded
+      : transportPolicy.summaryKey === "pickupFree"
+        ? m.booking.pickupFree
+        : transportSummaryLabel(transportPolicy.summaryKey);
 
   const dateLocale = locale === "en" ? "en-GB" : "pt-PT";
 
@@ -298,7 +427,22 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     const pickupClean = pickup.trim().slice(0, 140);
     const timeClean = pickupTime.trim();
     const notesClean = notes.trim().slice(0, MAX_NOTES_LEN);
+    const zoneForCheckout = sintraTour ? pickupZone : defaultPickupZone(tourId);
+    const transportLines = formatTransportNotes(
+      tourId,
+      {
+        pickupZone: zoneForCheckout,
+        dropOffLisbonHotel: sintraTour ? dropOffLisbonHotel : false,
+      },
+      locale === "en" ? "en" : "pt",
+    );
+    const vehicleNote =
+      locale === "en"
+        ? `Vehicle: ${resolvedVehicle === "jeep" ? "Open-top UMM Alter II jeep" : "Mercedes-Benz Vito 116 CDI Select van"}`
+        : `Veículo: ${resolvedVehicle === "jeep" ? "Jeep UMM Alter II conversível" : "Van Mercedes-Benz Vito 116 CDI Select"}`;
     const combinedNotes = [
+      vehicleNote,
+      ...transportLines,
       pickupClean
         ? `${locale === "en" ? "Pickup / meeting point" : "Pickup / ponto de encontro"}: ${pickupClean}`
         : null,
@@ -337,6 +481,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
           email: email.trim().slice(0, 254),
           phone,
           notes: combinedNotes,
+          pickupZone: zoneForCheckout,
+          dropOffLisbonHotel: sintraTour ? dropOffLisbonHotel : false,
+          vehicle: resolvedVehicle,
         }),
       });
       const rawText = await res.text();
@@ -483,31 +630,157 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
       <form className="br-book" onSubmit={handleSubmit}>
         <div className="br-book__main">
           <section className="br-panel br-panel--tour" aria-label={m.booking.tourDestination}>
-            <span className="br-card-label">{m.booking.cardDestino}</span>
-            {tourLocked ? (
-              <p className="br-tour-fixed">{tourLabel}</p>
-            ) : (
-              <button
-                type="button"
-                className="br-pick-btn"
-                onClick={() => setTourPickerOpen(true)}
-                aria-haspopup="dialog"
-                aria-expanded={tourPickerOpen}
-                aria-label={m.booking.ariaPickDestino}
-              >
-                <div className="br-pick-btn__text">
-                  <span className="br-pick-btn__value">{tourLabel}</span>
+            <div className="br-tour-card">
+              <div className="br-tour-card__top">
+                {tourHero ? (
+                  <Image
+                    className="br-tour-card__img"
+                    src={tourHero}
+                    alt=""
+                    width={112}
+                    height={96}
+                  />
+                ) : (
+                  <div className="br-tour-card__img br-tour-card__img--empty" aria-hidden />
+                )}
+                <div className="br-tour-card__body">
+                  {tourLocked ? (
+                    <p className="br-tour-card__title">{tourLabel}</p>
+                  ) : (
+                    <button
+                      type="button"
+                      className="br-tour-card__pick"
+                      onClick={() => setTourPickerOpen(true)}
+                      aria-haspopup="dialog"
+                      aria-expanded={tourPickerOpen}
+                      aria-label={m.booking.ariaPickDestino}
+                    >
+                      <span className="br-tour-card__title">{tourLabel}</span>
+                      <span className="br-tour-card__chev" aria-hidden>
+                        ›
+                      </span>
+                    </button>
+                  )}
+                  <p className="br-tour-card__type">{m.booking.privateTourDay}</p>
+                  {tourHighlights ? (
+                    <p className="br-tour-card__places">
+                      <span className="br-tour-card__pin" aria-hidden>
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none">
+                          <path
+                            d="M12 21s6.5-4.8 6.5-10a6.5 6.5 0 1 0-13 0c0 5.2 6.5 10 6.5 10Z"
+                            stroke="currentColor"
+                            strokeWidth="1.7"
+                          />
+                          <circle cx="12" cy="11" r="2.1" stroke="currentColor" strokeWidth="1.7" />
+                        </svg>
+                      </span>
+                      {tourHighlights}
+                    </p>
+                  ) : null}
+                  {!canChooseVehicle ? (
+                    <span className="br-vehicle-badge">{vehicleBadge}</span>
+                  ) : null}
                 </div>
-                <span className="br-pick-btn__chev" aria-hidden>
-                  ›
-                </span>
-              </button>
-            )}
-            <p className="br-vehicle">{vehicleLabel}</p>
+              </div>
+
+              {canChooseVehicle ? (
+                <div className="br-vehicle-pick">
+                  <p className="br-vehicle-pick__title">{m.booking.vehicleChoice}</p>
+                  <div
+                    className="br-vehicle-pick__row"
+                    role="radiogroup"
+                    aria-label={m.booking.vehicleChoice}
+                  >
+                    <label
+                      className={`br-vehicle-card${resolvedVehicle === "jeep" ? " is-active" : ""}`}
+                    >
+                      <input
+                        type="radio"
+                        name="br-vehicle"
+                        value="jeep"
+                        checked={vehicleChoice === "jeep"}
+                        onChange={() => setVehicleChoice("jeep")}
+                      />
+                      <span className="br-vehicle-card__icon" aria-hidden>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+                          <path
+                            d="M4 14.5h16l-1.2-4.2A2 2 0 0 0 16.9 9H7.1a2 2 0 0 0-1.9 1.3L4 14.5Z"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                          />
+                          <path
+                            d="M6.2 17.2a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6ZM17.8 17.2a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6Z"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                          />
+                          <path d="M4 14.5h16" stroke="currentColor" strokeWidth="1.6" />
+                        </svg>
+                      </span>
+                      <span className="br-vehicle-card__text">
+                        <span className="br-vehicle-card__name">{m.booking.vehicleJeepName}</span>
+                        <span className="br-vehicle-card__desc">{m.booking.vehicleJeepDesc}</span>
+                      </span>
+                      <span className="br-vehicle-card__radio" aria-hidden />
+                    </label>
+                    <label
+                      className={`br-vehicle-card${resolvedVehicle === "van" ? " is-active" : ""}`}
+                    >
+                      <input
+                        type="radio"
+                        name="br-vehicle"
+                        value="van"
+                        checked={vehicleChoice === "van"}
+                        onChange={() => setVehicleChoice("van")}
+                      />
+                      <span className="br-vehicle-card__icon" aria-hidden>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+                          <path
+                            d="M3.5 15.5h17V11l-1.4-3.6A2 2 0 0 0 17.2 6H8.3a2 2 0 0 0-1.8 1.1L5 11v4.5Z"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                          />
+                          <path
+                            d="M6.2 17.5a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6ZM17.8 17.5a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6Z"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                          />
+                          <path d="M3.5 12.2h17" stroke="currentColor" strokeWidth="1.6" />
+                        </svg>
+                      </span>
+                      <span className="br-vehicle-card__text">
+                        <span className="br-vehicle-card__name">{m.booking.vehicleVanName}</span>
+                        <span className="br-vehicle-card__desc">{m.booking.vehicleVanDesc}</span>
+                      </span>
+                      <span className="br-vehicle-card__radio" aria-hidden />
+                    </label>
+                  </div>
+                </div>
+              ) : null}
+            </div>
           </section>
 
-          <section className="br-panel br-panel--cal" id="br-booking-cal" aria-label={m.booking.cardData}>
-            <span className="br-card-label">{m.booking.cardData}</span>
+          <section
+            className="br-panel br-panel--cal"
+            id="br-booking-cal"
+            aria-label={m.booking.cardData}
+          >
+            <div className="br-panel__head">
+              <span className="br-panel__head-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <rect
+                    x="3.5"
+                    y="5"
+                    width="17"
+                    height="15"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                  />
+                  <path d="M8 3.5V7M16 3.5V7M3.5 10h17" stroke="currentColor" strokeWidth="1.7" />
+                </svg>
+              </span>
+              <span className="br-card-label">{m.booking.cardData}</span>
+            </div>
             <div className="br-cal-nav">
               <button
                 type="button"
@@ -573,27 +846,24 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 <span className="br-qty__people">
                   {quantity === 1 ? m.booking.guestOne : m.booking.guestMany}
                 </span>
-                <div className="br-qty__end">
-                  <div className="br-stepper" aria-label={m.booking.guestsStepper}>
-                    <button
-                      type="button"
-                      disabled={quantity <= minTravelers}
-                      onClick={() => setQuantity((q) => Math.max(minTravelers, q - 1))}
-                      aria-label={m.booking.lessGuest}
-                    >
-                      −
-                    </button>
-                    <span>{quantity}</span>
-                    <button
-                      type="button"
-                      disabled={quantity >= maxTravelers}
-                      onClick={() => setQuantity((q) => Math.min(maxTravelers, q + 1))}
-                      aria-label={m.booking.moreGuest}
-                    >
-                      +
-                    </button>
-                  </div>
-                  <strong className="br-qty__price">{totalLabel ?? m.booking.totalTbd}</strong>
+                <div className="br-stepper" aria-label={m.booking.guestsStepper}>
+                  <button
+                    type="button"
+                    disabled={quantity <= minTravelers}
+                    onClick={() => setQuantity((q) => Math.max(minTravelers, q - 1))}
+                    aria-label={m.booking.lessGuest}
+                  >
+                    −
+                  </button>
+                  <span>{quantity}</span>
+                  <button
+                    type="button"
+                    disabled={quantity >= maxTravelers}
+                    onClick={() => setQuantity((q) => Math.min(maxTravelers, q + 1))}
+                    aria-label={m.booking.moreGuest}
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             </div>
@@ -609,13 +879,68 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 value={pickup}
                 onChange={(next) => {
                   setPickup(next);
+                  setPickupResolved(false);
+                  // Texto livre: no Sintra assume Sintra (grátis) até haver sugestão geográfica.
+                  if (sintraTour) setPickupZone("sintra");
+                  else setPickupZone(defaultPickupZone(tourId));
                   if (error?.kind === "i18n" && error.key === "errPickup") setError(null);
+                }}
+                onPlaceSelect={(place) => {
+                  setPickupResolved(true);
+                  if (isSintraCascaisTour(tourId)) {
+                    if (place.zone === "lisboa") setPickupZone("lisboa");
+                    else if (place.zone === "cascais") setPickupZone("cascais");
+                    else setPickupZone("sintra");
+                  } else {
+                    setPickupZone(defaultPickupZone(tourId));
+                  }
                 }}
                 placeholder={m.booking.pickupPh}
                 lang={locale === "en" ? "en" : "pt"}
-                invalid={error?.kind === "i18n" && error.key === "errPickup" && pickup.trim().length < 2}
+                invalid={
+                  error?.kind === "i18n" && error.key === "errPickup" && pickup.trim().length < 2
+                }
                 labels={m.booking}
               />
+              {sintraTour ? (
+                <p className="br-field-note br-pickup-lisbon-note">{m.booking.pickupLisbonFeeNote}</p>
+              ) : null}
+              {pickupStatus.text ? (
+                <p
+                  className={`br-pickup-status br-pickup-status--${pickupStatus.tone}`}
+                  role="status"
+                >
+                  {pickupStatus.tone === "ok" ? (
+                    <span className="br-pickup-status__icon" aria-hidden>
+                      ✓
+                    </span>
+                  ) : null}
+                  <span>
+                    {pickupStatus.text}
+                    {pickupStatus.tone === "quote" ? (
+                      <>
+                        {" "}
+                        <span className="br-pickup-status__hint">
+                          {m.booking.pickupOnRequestHint}
+                        </span>
+                      </>
+                    ) : null}
+                  </span>
+                </p>
+              ) : null}
+              {sintraTour ? (
+                <label className="br-check">
+                  <input
+                    type="checkbox"
+                    checked={dropOffLisbonHotel}
+                    onChange={(e) => setDropOffLisbonHotel(e.target.checked)}
+                  />
+                  <span>
+                    <strong>{m.booking.dropOffLisbon}</strong>
+                    <span className="br-field-note">{m.booking.dropOffLisbonHint}</span>
+                  </span>
+                </label>
+              ) : null}
               <label className="br-label">
                 <span>{m.booking.pickupTime}</span>
                 <input
@@ -627,57 +952,74 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                     if (error?.kind === "i18n" && error.key === "errPickup") setError(null);
                   }}
                   step={900}
-                  aria-invalid={error?.kind === "i18n" && error.key === "errPickup" && !pickupTime}
+                  aria-invalid={
+                    error?.kind === "i18n" && error.key === "errPickup" && !pickupTime
+                  }
                   aria-describedby="br-pickup-time-note"
+                  aria-label={
+                    pickupTime ? m.booking.pickupTime : m.booking.pickupTimePlaceholder
+                  }
                 />
                 <span className="br-field-note" id="br-pickup-time-note">
                   {m.booking.pickupTimeNote}
                 </span>
               </label>
-              <label className="br-label">
-                <span>{m.booking.notes}</span>
-                <textarea
-                  className="br-input br-textarea"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value.slice(0, MAX_NOTES_LEN))}
-                  placeholder={m.booking.notesPh}
-                  maxLength={MAX_NOTES_LEN}
-                />
-                <span className="br-char-hint">
-                  {notes.length}/{MAX_NOTES_LEN}
-                </span>
-              </label>
+              {!notesOpen && !notes ? (
+                <button
+                  type="button"
+                  className="br-notes-toggle"
+                  onClick={() => setNotesOpen(true)}
+                >
+                  {m.booking.addNotes}
+                </button>
+              ) : (
+                <label className="br-label">
+                  <span>{m.booking.notes}</span>
+                  <textarea
+                    className="br-input br-textarea"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value.slice(0, MAX_NOTES_LEN))}
+                    placeholder={m.booking.notesPh}
+                    maxLength={MAX_NOTES_LEN}
+                  />
+                  <span className="br-char-hint">
+                    {notes.length}/{MAX_NOTES_LEN}
+                  </span>
+                </label>
+              )}
             </div>
           </section>
 
           <section className="br-panel" aria-label={m.booking.yourDetails}>
             <span className="br-card-label">{m.booking.yourDetails}</span>
             <div className="br-fields">
-              <label className="br-label">
-                <span>{m.booking.fullName}</span>
-                <input
-                  className="br-input"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value.slice(0, MAX_NAME_LEN))}
-                  autoComplete="name"
-                  required
-                  minLength={2}
-                  maxLength={MAX_NAME_LEN}
-                />
-              </label>
-              <label className="br-label">
-                <span>{m.booking.email}</span>
-                <input
-                  className="br-input"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value.slice(0, 254))}
-                  autoComplete="email"
-                  placeholder={m.booking.emailPh}
-                  required
-                  maxLength={254}
-                />
-              </label>
+              <div className="br-fields__row">
+                <label className="br-label">
+                  <span>{m.booking.fullName}</span>
+                  <input
+                    className="br-input"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value.slice(0, MAX_NAME_LEN))}
+                    autoComplete="name"
+                    required
+                    minLength={2}
+                    maxLength={MAX_NAME_LEN}
+                  />
+                </label>
+                <label className="br-label">
+                  <span>{m.booking.email}</span>
+                  <input
+                    className="br-input"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value.slice(0, 254))}
+                    autoComplete="email"
+                    placeholder={m.booking.emailPh}
+                    required
+                    maxLength={254}
+                  />
+                </label>
+              </div>
               <label className="br-label">
                 <span>{m.booking.phoneOpt}</span>
                 <div className="br-phone-row">
@@ -715,9 +1057,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
               {error.kind === "server" ? error.message : m.booking[error.key]}
             </p>
           ) : null}
-        </div>
 
-        <div className="br-book__pay">
           <div
             className="br-summary"
             aria-live="polite"
@@ -725,16 +1065,17 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
             aria-label={m.booking.summaryTitle}
           >
             <p className="br-summary__title">{m.booking.summaryTitle}</p>
-            <div>
-              <p className="br-summary__eyebrow">{m.booking.summaryTour}</p>
-              <p className="br-summary__tour">{tourLabel}</p>
-              <p className="br-summary__vehicle">{vehicleLabel}</p>
-            </div>
             <dl className="br-summary__meta">
+              <div>
+                <dt>{m.booking.summaryTour}</dt>
+                <dd>{tourLabel}</dd>
+              </div>
               <div>
                 <dt>{m.booking.summaryDate}</dt>
                 <dd className={preferredDate ? undefined : "is-empty"}>
-                  {preferredDate ? formatDateShort(preferredDate, dateLocale) : m.booking.summaryDateEmpty}
+                  {preferredDate
+                    ? formatDateShort(preferredDate, dateLocale)
+                    : m.booking.summaryDateEmpty}
                 </dd>
               </div>
               <div>
@@ -742,9 +1083,23 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 <dd>{quantity}</dd>
               </div>
               <div>
-                <dt>{m.booking.summaryTime}</dt>
-                <dd className={pickupTime ? undefined : "is-empty"}>
-                  {pickupTime || m.booking.summaryTimeEmpty}
+                <dt>{m.booking.summaryTransport}</dt>
+                <dd>{vehicleBadge}</dd>
+              </div>
+              <div>
+                <dt>{m.booking.summaryPickup}</dt>
+                <dd
+                  className={
+                    pickup.trim().length < 2 && !dropOffLisbonHotel
+                      ? "is-empty"
+                      : transportPolicy.requiresQuote
+                        ? "is-quote"
+                        : "is-included"
+                  }
+                >
+                  {pickup.trim().length >= 2 || dropOffLisbonHotel
+                    ? summaryPickupLabel
+                    : m.booking.summaryTimeEmpty}
                 </dd>
               </div>
             </dl>
@@ -759,24 +1114,47 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                 {formatEurFromCents(estimate.centsPerPerson)} {m.booking.perPerson.toLowerCase()}
               </p>
             ) : null}
+            {transportPolicy.requiresQuote ? (
+              <p className="br-summary__quote">{m.booking.transportQuoteNote}</p>
+            ) : null}
           </div>
 
           <div className="br-book__checkout">
-          <button type="submit" className="br-submit" disabled={loading} aria-busy={loading}>
-            {loading ? m.booking.submitLoading : m.booking.submit}
-          </button>
-          <PaymentBadges
-            portugalLabel={m.booking.payPortugal}
-            internationalLabel={m.booking.payInternational}
-          />
-          <p className="br-legal">
-            {m.booking.legalBefore}{" "}
-            <Link href={withLocalePrefix("/termos", locale)}>{m.booking.termsLink}</Link>{" "}
-            {m.booking.legalMid}{" "}
-            <Link href={`${withLocalePrefix("/termos", locale)}#cancelamento`}>
-              {m.booking.cancelLink}
-            </Link>.
-          </p>
+            <button type="submit" className="br-submit" disabled={loading} aria-busy={loading}>
+              <span className="br-submit__icon" aria-hidden>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <rect
+                    x="5"
+                    y="11"
+                    width="14"
+                    height="10"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  />
+                  <path
+                    d="M8 11V8a4 4 0 0 1 8 0v3"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+              {loading ? m.booking.submitLoading : m.booking.submit}
+            </button>
+            <PaymentBadges
+              portugalLabel={m.booking.payPortugal}
+              internationalLabel={m.booking.payInternational}
+            />
+            <p className="br-legal">
+              {m.booking.legalBefore}{" "}
+              <Link href={withLocalePrefix("/termos", locale)}>{m.booking.termsLink}</Link>{" "}
+              {m.booking.legalMid}{" "}
+              <Link href={`${withLocalePrefix("/termos", locale)}#cancelamento`}>
+                {m.booking.cancelLink}
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </form>

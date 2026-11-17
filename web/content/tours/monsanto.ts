@@ -141,16 +141,20 @@ export const monsantoTour = {
       pickupHeading: "Opções de recolha",
       pickupItems: [
         {
-          title: "Hotel em Lisboa",
-          detail: "Pick-up e drop-off no hotel em Lisboa — Sem custo adicional",
+          title: "Lisboa",
+          detail: "Hotel, alojamento ou ponto de encontro em Lisboa — Pickup incluído no preço",
         },
         {
-          title: "Aeroporto de Lisboa",
-          detail: "Recolha no aeroporto — Sem custo adicional",
+          title: "Sintra",
+          detail: "Recolha em Sintra — Pickup incluído no preço",
+        },
+        {
+          title: "Cascais",
+          detail: "Recolha em Cascais — Pickup incluído no preço",
         },
         {
           title: "Outras localizações",
-          detail: "Disponível com custo adicional (valor a combinar após a reserva)",
+          detail: "Disponível sob consulta (valor a combinar após a reserva)",
           highlight: true,
         },
       ],
@@ -215,16 +219,20 @@ export const monsantoTour = {
       pickupHeading: "Pickup options",
       pickupItems: [
         {
-          title: "Lisbon hotel",
-          detail: "Hotel pick-up and drop-off in Lisbon — No extra cost",
+          title: "Lisbon",
+          detail: "Hotel, accommodation or meeting point in Lisbon — Pickup included in the price",
         },
         {
-          title: "Lisbon Airport",
-          detail: "Airport pickup — No extra cost",
+          title: "Sintra",
+          detail: "Pickup in Sintra — Pickup included in the price",
+        },
+        {
+          title: "Cascais",
+          detail: "Pickup in Cascais — Pickup included in the price",
         },
         {
           title: "Other locations",
-          detail: "Available with an extra fee (arranged after booking)",
+          detail: "Available on request (arranged after booking)",
           highlight: true,
         },
       ],

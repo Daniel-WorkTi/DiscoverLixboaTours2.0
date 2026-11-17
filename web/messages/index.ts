@@ -116,9 +116,34 @@ export type Messages = {
     pickupNoMatch: string;
     pickupLocateDenied: string;
     pickupSuggest: string;
+    pickupZone: string;
+    zoneLisboa: string;
+    zoneSintra: string;
+    zoneCascais: string;
+    zonePortela: string;
+    zoneOther: string;
+    zoneLisboaPaid: string;
+    zoneSintraFree: string;
+    pickupIncluded: string;
+    pickupFree: string;
+    pickupOnRequest: string;
+    pickupOnRequestHint: string;
+    dropOffOnRequest: string;
+    pickupOutside: string;
+    dropOffLisbon: string;
+    dropOffLisbonHint: string;
+    pickupManualHint: string;
+    pickupLisbonFeeNote: string;
+    summaryTransport: string;
+    summaryPickup: string;
+    transportQuoteNote: string;
     pickupTime: string;
     pickupTimeNote: string;
+    pickupTimePlaceholder: string;
     tripTitle: string;
+    privateTourDay: string;
+    vehicleCapacity: string;
+    addNotes: string;
     notes: string;
     notesPh: string;
     emailPh: string;
@@ -126,6 +151,12 @@ export type Messages = {
     summaryTour: string;
     vehicleVan: string;
     vehicleJeep: string;
+    vehicleJeepName: string;
+    vehicleJeepDesc: string;
+    vehicleVanName: string;
+    vehicleVanDesc: string;
+    vehicleChoice: string;
+    vehicleChoiceHint: string;
     summaryDate: string;
     summaryGuests: string;
     summaryTime: string;
@@ -488,44 +519,78 @@ export const messagesPt: Messages = {
       `Preço por grupo privado. Para 1–2 passageiros o total é €${euros}.`,
   },
   booking: {
-    title: "Finalize a sua reserva",
-    lead: "Confirme os detalhes da sua experiência privada antes de continuar para o pagamento.",
+    title: "Conclua a sua reserva",
+    lead: "Confirme os detalhes da sua experiência privada e avance para o pagamento de forma segura.",
     back: "← Voltar ao site",
     modalDestino: "Destino",
     modalChoose: "Escolhe o teu tour",
     modalTitle: "Reserve o seu tour privado",
     sectionDate: "Data do tour",
-    travelers: "Passageiros",
+    travelers: "Participantes",
     travelersHint: "Escolhe quantas pessoas vão no tour (máx. 8 passageiros)",
     perPerson: "Por pessoa",
     total: "Total",
-    totalGroup: "Total do grupo",
+    totalGroup: "Total",
     checkoutNote: "Valor final confirmado no checkout.",
     totalTbd: "Calculado no checkout",
     yourDetails: "Os seus dados",
-    fullName: "Nome completo",
-    phoneOpt: "Telefone / WhatsApp",
-    email: "Email",
-    pickup: "Ponto de recolha",
+    fullName: "Nome completo *",
+    phoneOpt: "Número de telefone *",
+    email: "Email *",
+    pickup: "Morada de recolha",
     pickupPh: "Hotel, alojamento ou morada de recolha",
     pickupLocate: "Usar a minha localização",
     pickupSearching: "A procurar moradas…",
-    pickupNoMatch: "Sem resultados. Escreve o hotel ou a morada.",
+    pickupNoMatch: "Sem resultados na lista — pode escrever a morada completa à mão.",
     pickupLocateDenied: "Não foi possível ler a localização neste aparelho.",
     pickupSuggest: "Sugestões de morada",
-    pickupTime: "Horário de recolha",
-    pickupTimeNote: "Horário preferido. A equipa confirma a recolha antes do tour.",
+    pickupZone: "Onde é a recolha?",
+    zoneLisboa: "Lisboa",
+    zoneSintra: "Sintra",
+    zoneCascais: "Cascais",
+    zonePortela: "Estação Portela de Sintra",
+    zoneOther: "Outra localização",
+    zoneLisboaPaid: "Pago",
+    zoneSintraFree: "Grátis",
+    pickupIncluded: "Recolha incluída no seu tour",
+    pickupFree: "Recolha em Sintra/Cascais — sem custo adicional",
+    pickupOnRequest: "Recolha em Lisboa — sujeita a taxa adicional",
+    pickupOnRequestHint:
+      "Valor adicional sob consulta — não está incluído no total. Confirmamos antes de qualquer cobrança.",
+    dropOffOnRequest: "Drop-off em Lisboa — custo adicional sob consulta",
+    pickupOutside: "Fora da área padrão — sob consulta",
+    dropOffLisbon: "Drop-off em hotel em Lisboa (pago)",
+    dropOffLisbonHint:
+      "Fora de Sintra o drop-off em Lisboa é pago sob consulta. Em Sintra o drop-off é grátis. O total do grupo não inclui este valor.",
+    pickupManualHint: "Não encontrou? Escreva a morada completa — hotel, rua e localidade.",
+    pickupLisbonFeeNote:
+      "Recolha em Lisboa: taxa adicional sob consulta (não incluída no total). Em Sintra ou Cascais a recolha é grátis.",
+    summaryTransport: "Transporte",
+    summaryPickup: "Recolha",
+    transportQuoteNote: "O valor adicional de transporte será confirmado pela equipa. Não está incluído no total.",
+    pickupTime: "Horário pretendido",
+    pickupTimeNote: "Confirmaremos o horário antes do tour.",
+    pickupTimePlaceholder: "Selecionar horário",
     tripTitle: "Recolha e horário",
+    privateTourDay: "Tour privado de um dia",
+    vehicleCapacity: "até {n} pessoas",
+    addNotes: "+ Adicionar pedido especial (opcional)",
     notes: "Pedidos especiais (opcional)",
     notesPh: "Bagagem, cadeira de criança, acessibilidade ou outros pedidos.",
     emailPh: "nome@email.com",
     summaryTitle: "Resumo da reserva",
-    summaryTour: "Tour privado",
-    vehicleVan: "Van Mercedes-Benz Vito 116 CDI Select",
-    vehicleJeep: "Jeep UMM Alter II conversível",
+    summaryTour: "Tour",
+    vehicleVan: "Mercedes-Benz Vito",
+    vehicleJeep: "Jeep UMM Alter II",
+    vehicleJeepName: "UMM Alter II",
+    vehicleJeepDesc: "Jeep clássico · Aventura",
+    vehicleVanName: "Mercedes-Benz Vito",
+    vehicleVanDesc: "Van executiva · Conforto",
+    vehicleChoice: "Escolha o veículo",
+    vehicleChoiceHint: "Escolhe o jeep conversível ou a van Mercedes.",
     summaryDate: "Data",
-    summaryGuests: "Passageiros",
-    summaryTime: "Recolha",
+    summaryGuests: "Participantes",
+    summaryTime: "Horário",
     summaryDateEmpty: "Por escolher",
     summaryTimeEmpty: "Por indicar",
     legalBefore: "Ao continuar, aceita os",
@@ -537,22 +602,22 @@ export const messagesPt: Messages = {
     payPortugal: "Portugal",
     payInternational: "Internacional",
     cardDestino: "Tour selecionado",
-    cardData: "Data",
-    cardViajantes: "Passageiros",
+    cardData: "Data e participantes",
+    cardViajantes: "Participantes",
     ariaPickDestino: "Escolher destino do tour",
     pickDate: "Toca para escolher",
     ctaReview: "Rever e pagar",
     ctaChoose: "Escolher data e reservar",
-    guestOne: "Passageiro",
-    guestMany: "Passageiros",
-    personSingular: "passageiro",
-    personPlural: "passageiros",
+    guestOne: "Participante",
+    guestMany: "Participantes",
+    personSingular: "participante",
+    personPlural: "participantes",
     hintLong:
-      "Escolhe o dia, os passageiros e o ponto de recolha. O total fica visível antes do pagamento.",
+      "Escolhe o dia, os participantes e o ponto de recolha. O total fica visível antes do pagamento.",
     checkAvailability: "Verificar Disponibilidade",
     errPickDate:
-      "Escolhe um dia no calendário em cima («Data do tour») antes de continuar para o pagamento.",
-    errPickup: "Indica o ponto de pickup e o horário de recolha.",
+      "Escolhe um dia no calendário em cima («Data e participantes») antes de continuar para o pagamento.",
+    errPickup: "Indica a morada de recolha e o horário pretendido.",
     errInvalidResponse: "Resposta inválida do servidor. Tenta novamente.",
     errCheckoutDefault: "Não foi possível iniciar o pagamento.",
     errNoUrl:
@@ -1031,7 +1096,7 @@ export const messagesEn: Messages = {
   },
   booking: {
     title: "Complete your booking",
-    lead: "Confirm the details of your private experience before continuing to payment.",
+    lead: "Confirm the details of your private experience and continue to secure payment.",
     back: "← Back to the site",
     modalDestino: "Destination",
     modalChoose: "Choose your tour",
@@ -1041,33 +1106,67 @@ export const messagesEn: Messages = {
     travelersHint: "Choose how many people on the tour (max. 8 passengers)",
     perPerson: "Per person",
     total: "Total",
-    totalGroup: "Group total",
+    totalGroup: "Total",
     checkoutNote: "Final amount confirmed at checkout.",
     totalTbd: "Calculated at checkout",
     yourDetails: "Your details",
-    fullName: "Full name",
-    phoneOpt: "Phone / WhatsApp",
-    email: "Email",
-    pickup: "Pickup point",
+    fullName: "Full name *",
+    phoneOpt: "Phone number *",
+    email: "Email *",
+    pickup: "Pickup address",
     pickupPh: "Hotel, accommodation or pickup address",
     pickupLocate: "Use my location",
     pickupSearching: "Searching addresses…",
-    pickupNoMatch: "No matches. Type the hotel or the address.",
+    pickupNoMatch: "No list matches — you can type the full address yourself.",
     pickupLocateDenied: "This device could not share its location.",
     pickupSuggest: "Address suggestions",
-    pickupTime: "Pickup time",
-    pickupTimeNote: "Preferred time. The team confirms pickup before the tour.",
+    pickupZone: "Where is pickup?",
+    zoneLisboa: "Lisbon",
+    zoneSintra: "Sintra",
+    zoneCascais: "Cascais",
+    zonePortela: "Portela Sintra station",
+    zoneOther: "Other location",
+    zoneLisboaPaid: "Paid",
+    zoneSintraFree: "Free",
+    pickupIncluded: "Pickup included in your tour",
+    pickupFree: "Pickup in Sintra/Cascais — no extra cost",
+    pickupOnRequest: "Lisbon pickup — subject to an extra fee",
+    pickupOnRequestHint:
+      "Extra fee on request — not included in the total. We confirm before any additional charge.",
+    dropOffOnRequest: "Lisbon drop-off — extra fee on request",
+    pickupOutside: "Outside the standard area — on request",
+    dropOffLisbon: "Drop-off at a Lisbon hotel (paid)",
+    dropOffLisbonHint:
+      "Outside Sintra, Lisbon drop-off is paid on request. In Sintra, drop-off is free. The group total does not include this amount.",
+    pickupManualHint: "Can't find it? Type the full address — hotel, street and locality.",
+    pickupLisbonFeeNote:
+      "Lisbon pickup: extra fee on request (not included in the total). Pickup in Sintra or Cascais is free.",
+    summaryTransport: "Transport",
+    summaryPickup: "Pickup",
+    transportQuoteNote: "Any extra transport fee will be confirmed by the team. It is not included in the total.",
+    pickupTime: "Preferred time",
+    pickupTimeNote: "We will confirm the time before the tour.",
+    pickupTimePlaceholder: "Select a time",
     tripTitle: "Pickup and time",
+    privateTourDay: "Private full-day tour",
+    vehicleCapacity: "up to {n} people",
+    addNotes: "+ Add a special request (optional)",
     notes: "Special requests (optional)",
     notesPh: "Luggage, child seat, accessibility or other requests.",
     emailPh: "name@email.com",
     summaryTitle: "Booking summary",
-    summaryTour: "Private tour",
-    vehicleVan: "Mercedes-Benz Vito 116 CDI Select van",
-    vehicleJeep: "Open-top UMM Alter II jeep",
+    summaryTour: "Tour",
+    vehicleVan: "Mercedes-Benz Vito",
+    vehicleJeep: "UMM Alter II jeep",
+    vehicleJeepName: "UMM Alter II",
+    vehicleJeepDesc: "Classic jeep · Adventure",
+    vehicleVanName: "Mercedes-Benz Vito",
+    vehicleVanDesc: "Executive van · Comfort",
+    vehicleChoice: "Choose the vehicle",
+    vehicleChoiceHint: "Choose the open-top jeep or the Mercedes van.",
     summaryDate: "Date",
     summaryGuests: "Guests",
-    summaryTime: "Pickup",
+    summaryTime: "Time",
     summaryDateEmpty: "To choose",
     summaryTimeEmpty: "To add",
     legalBefore: "By continuing you accept the",
@@ -1079,7 +1178,7 @@ export const messagesEn: Messages = {
     payPortugal: "Portugal",
     payInternational: "International",
     cardDestino: "Selected tour",
-    cardData: "Date",
+    cardData: "Date and guests",
     cardViajantes: "Guests",
     ariaPickDestino: "Choose tour destination",
     pickDate: "Tap to choose",
@@ -1093,8 +1192,8 @@ export const messagesEn: Messages = {
       "Choose the day, the guests and the pickup point. The total stays visible before payment.",
     checkAvailability: "Check Availability",
     errPickDate:
-      'Choose a day in the calendar above ("Tour date") before continuing to payment.',
-    errPickup: "Add the pickup point and the pickup time.",
+      'Choose a day in the calendar above ("Date and guests") before continuing to payment.',
+    errPickup: "Add the pickup address and preferred time.",
     errInvalidResponse: "Invalid server response. Please try again.",
     errCheckoutDefault: "Could not start payment.",
     errNoUrl:

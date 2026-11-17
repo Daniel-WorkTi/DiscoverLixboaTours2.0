@@ -72,14 +72,22 @@ describe("migrated tours content integrity", () => {
         );
       });
 
-      it("does not reuse Sintra pickup outside sintra-cascais", () => {
-        if (slug === "sintra-cascais") return;
+      it("keeps Portela exclusive to sintra-cascais; Lisboa/Sintra/Cascais included elsewhere", () => {
         for (const locale of ["pt", "en"] as const) {
           const titles = (tour.content[locale].pickupItems ?? []).map((p) =>
             p.title.toLowerCase(),
           );
-          expect(titles.some((t) => t === "sintra")).toBe(false);
+          if (slug === "sintra-cascais") {
+            expect(titles.some((t) => t.includes("portela"))).toBe(true);
+            continue;
+          }
           expect(titles.some((t) => t.includes("portela"))).toBe(false);
+          const hasLisboa = titles.some(
+            (t) => t.includes("lisboa") || t.includes("lisbon"),
+          );
+          const hasSintra = titles.some((t) => t === "sintra");
+          const hasCascais = titles.some((t) => t === "cascais");
+          expect(hasLisboa && hasSintra && hasCascais).toBe(true);
         }
       });
     });

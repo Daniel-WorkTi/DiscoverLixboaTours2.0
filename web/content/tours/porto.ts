@@ -110,16 +110,20 @@ export const portoTour = {
       pickupHeading: "Opções de recolha",
       pickupItems: [
         {
-          title: "Hotel em Lisboa",
-          detail: "Partida do seu hotel em Lisboa — Sem custo adicional",
+          title: "Lisboa",
+          detail: "Partida do hotel ou ponto de encontro em Lisboa — Pickup incluído no preço",
         },
         {
-          title: "Aeroporto de Lisboa",
-          detail: "Recolha no aeroporto — Sem custo adicional",
+          title: "Sintra",
+          detail: "Recolha em Sintra — Pickup incluído no preço",
+        },
+        {
+          title: "Cascais",
+          detail: "Recolha em Cascais — Pickup incluído no preço",
         },
         {
           title: "Hotel no Porto",
-          detail: "Recolha no Porto disponível — custo adicional a combinar",
+          detail: "Recolha no Porto disponível — custo adicional sob consulta",
           highlight: true,
         },
       ],
@@ -177,12 +181,16 @@ export const portoTour = {
       pickupHeading: "Pickup options",
       pickupItems: [
         {
-          title: "Lisbon hotel",
-          detail: "Departure from your Lisbon hotel — No extra cost",
+          title: "Lisbon",
+          detail: "Departure from a Lisbon hotel or meeting point — Pickup included in the price",
         },
         {
-          title: "Lisbon Airport",
-          detail: "Airport pickup — No extra cost",
+          title: "Sintra",
+          detail: "Pickup in Sintra — Pickup included in the price",
+        },
+        {
+          title: "Cascais",
+          detail: "Pickup in Cascais — Pickup included in the price",
         },
         {
           title: "Porto hotel",

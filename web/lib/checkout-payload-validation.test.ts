@@ -134,4 +134,76 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     expect(r.data.notes.length).toBe(500);
     expect(r.data.phone.length).toBe(48);
   });
+
+  it("rejeita taxas de transporte inventadas pelo cliente", () => {
+    const r = validateCheckoutPayload({
+      ...baseGood,
+      transportFeeCents: 5000,
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.failure.body.code).toBe("TRANSPORT_FEE_NOT_ALLOWED");
+  });
+
+  it("permite escolher jeep ou van só em Lisboa e Sintra", () => {
+    const lisboaVan = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "lisboa",
+      vehicle: "van",
+    });
+    expect(lisboaVan.ok).toBe(true);
+    if (lisboaVan.ok) expect(lisboaVan.data.vehicle).toBe("van");
+
+    const sintraJeep = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "sintra-cascais",
+      vehicle: "jeep",
+    });
+    expect(sintraJeep.ok).toBe(true);
+    if (sintraJeep.ok) expect(sintraJeep.data.vehicle).toBe("jeep");
+
+    const portoForcedVan = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "porto",
+      vehicle: "jeep",
+    });
+    expect(portoForcedVan.ok).toBe(true);
+    if (portoForcedVan.ok) expect(portoForcedVan.data.vehicle).toBe("van");
+
+    const arraabidaJeep = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "arraabida",
+      quantity: 2,
+      vehicle: "van",
+    });
+    expect(arraabidaJeep.ok).toBe(true);
+    if (arraabidaJeep.ok) expect(arraabidaJeep.data.vehicle).toBe("jeep");
+  });
+
+  it("valida zonas Sintra vs outros sem inventar preço", () => {
+    const sintraLisboa = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "sintra-cascais",
+      pickupZone: "lisboa",
+      dropOffLisbonHotel: true,
+    });
+    expect(sintraLisboa.ok).toBe(true);
+    if (sintraLisboa.ok) {
+      expect(sintraLisboa.data.transportPolicy.status).toBe("on_request");
+      expect(sintraLisboa.data.transportPolicy.extraCents).toBe(0);
+      expect(sintraLisboa.data.dropOffLisbonHotel).toBe(true);
+    }
+
+    const porto = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "porto",
+      pickupZone: "sintra",
+      dropOffLisbonHotel: true,
+    });
+    expect(porto.ok).toBe(true);
+    if (porto.ok) {
+      expect(porto.data.transportPolicy.status).toBe("included");
+      expect(porto.data.dropOffLisbonHotel).toBe(false);
+      expect(porto.data.transportPolicy.extraCents).toBe(0);
+    }
+  });
 });

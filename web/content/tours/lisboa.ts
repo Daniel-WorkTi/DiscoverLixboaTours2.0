@@ -132,16 +132,20 @@ export const lisboaTour = {
       pickupHeading: "Opções de recolha",
       pickupItems: [
         {
-          title: "Hotel em Lisboa",
-          detail: "Pick-up e drop-off no seu hotel em Lisboa — Sem custo adicional",
+          title: "Lisboa",
+          detail: "Pick-up e drop-off no hotel em Lisboa — Pickup incluído no preço",
         },
         {
-          title: "Aeroporto de Lisboa",
-          detail: "Recolha no aeroporto Humberto Delgado — Sem custo adicional",
+          title: "Sintra",
+          detail: "Recolha em Sintra — Pickup incluído no preço",
         },
         {
-          title: "Fora de Lisboa",
-          detail: "Cascais, Sintra ou outras zonas — custo adicional a combinar",
+          title: "Cascais",
+          detail: "Recolha em Cascais — Pickup incluído no preço",
+        },
+        {
+          title: "Outras localizações",
+          detail: "Disponível sob consulta (valor a combinar após a reserva)",
           highlight: true,
         },
       ],
@@ -215,16 +219,20 @@ export const lisboaTour = {
       pickupHeading: "Pickup options",
       pickupItems: [
         {
-          title: "Lisbon hotel",
-          detail: "Pick-up and drop-off at your Lisbon hotel — No extra cost",
+          title: "Lisbon",
+          detail: "Hotel pick-up and drop-off in Lisbon — Pickup included in the price",
         },
         {
-          title: "Lisbon Airport",
-          detail: "Pickup at Humberto Delgado Airport — No extra cost",
+          title: "Sintra",
+          detail: "Pickup in Sintra — Pickup included in the price",
         },
         {
-          title: "Outside Lisbon",
-          detail: "Cascais, Sintra or other areas — extra fee on request",
+          title: "Cascais",
+          detail: "Pickup in Cascais — Pickup included in the price",
+        },
+        {
+          title: "Other locations",
+          detail: "Available on request (arranged after booking)",
           highlight: true,
         },
       ],

@@ -6,6 +6,7 @@ export type PhotonProps = {
   locality?: string;
   district?: string;
   county?: string;
+  state?: string;
   country?: string;
   countrycode?: string;
 };

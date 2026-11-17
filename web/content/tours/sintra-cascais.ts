@@ -173,7 +173,13 @@ export const sintraCascaisTour = {
         {
           title: "Lisboa / Aeroporto / Hotel",
           detail:
-            "Disponível com custo adicional (valor a combinar após a reserva)",
+            "Pickup disponível com custo adicional sob consulta (valor a confirmar após a reserva)",
+          highlight: true,
+        },
+        {
+          title: "Drop-off em hotel em Lisboa",
+          detail:
+            "Regresso ao hotel em Lisboa no final do tour — custo adicional sob consulta",
           highlight: true,
         },
       ],
@@ -276,7 +282,14 @@ export const sintraCascaisTour = {
         },
         {
           title: "Lisbon / Airport / Hotel",
-          detail: "Available with an extra fee (arranged after booking)",
+          detail:
+            "Pickup available with an extra fee on request (confirmed after booking)",
+          highlight: true,
+        },
+        {
+          title: "Drop-off at a Lisbon hotel",
+          detail:
+            "Return to a Lisbon hotel at the end of the tour — extra fee on request",
           highlight: true,
         },
       ],
@@ -291,7 +304,7 @@ export const sintraCascaisTour = {
     en: {
       title: "Private Sintra Day Trip from Lisbon | Cascais & Cabo da Roca",
       description:
-        "Private Sintra & Cascais day trip from Lisbon with an English-speaking local driver-guide. Pena Palace, Regaleira, Cabo da Roca. Hotel or airport pickup. From €250/group, up to 8 guests.",
+        "Private Sintra & Cascais day trip with an English-speaking local driver-guide. Pena Palace, Regaleira, Cabo da Roca. Free pickup in Sintra; Lisbon hotel pickup on request. From €250/group, up to 8 guests.",
     },
   },
 } as const satisfies TourDefinition;

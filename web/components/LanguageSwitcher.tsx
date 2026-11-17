@@ -44,11 +44,20 @@ export function LanguageSwitcher() {
     setOpen(false);
     if (next === current) return;
     persistPreference(next);
-    const bare = stripLocalePrefix(pathname);
+    const urlPath =
+      typeof window !== "undefined" ? window.location.pathname : pathname;
+    const bare = stripLocalePrefix(urlPath);
     const qs = searchParams?.toString();
     const withQuery = qs ? `${bare}?${qs}` : bare;
     const target = withLocalePrefix(withQuery, next);
+    // Soft push + refresh deixa o header em PT com rewrite /en→/.
+    // Navegação completa garante middleware + layout no idioma certo.
+    if (typeof window !== "undefined") {
+      window.location.assign(target);
+      return;
+    }
     router.push(target);
+    router.refresh();
   }
 
   useEffect(() => {

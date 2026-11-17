@@ -1,6 +1,20 @@
 import { toursBooking, type TourBookingOption } from "@/lib/tours-booking";
 import { getMaxBookablePassengers, getMinBookablePassengers } from "@/lib/tour-pricing-table";
+import {
+  defaultPickupZone,
+  isSintraCascaisTour,
+  isTransportZone,
+  resolveTransportPolicy,
+  type TransportPolicy,
+  type TransportZone,
+} from "@/lib/transport-rules";
 import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
+
+/** Tours onde o cliente pode escolher jeep ou van no checkout. */
+const VEHICLE_CHOICE_TOUR_IDS = new Set(["lisboa", "sintra-cascais"]);
+const JEEP_DEFAULT_TOUR_IDS = new Set(["lisboa", "sintra-cascais", "arraabida"]);
+
+export type BookingVehicle = "jeep" | "van";
 
 export type ValidatedCheckoutPayload = {
   tourId: string;
@@ -11,7 +25,23 @@ export type ValidatedCheckoutPayload = {
   phone: string;
   notes: string;
   tourLabel: string;
+  pickupZone: TransportZone;
+  dropOffLisbonHotel: boolean;
+  transportPolicy: TransportPolicy;
+  vehicle: BookingVehicle;
 };
+
+function resolveBookingVehicle(
+  tourId: string,
+  raw: unknown,
+): BookingVehicle {
+  const requested = raw === "jeep" || raw === "van" ? raw : null;
+  if (VEHICLE_CHOICE_TOUR_IDS.has(tourId)) {
+    return requested ?? "jeep";
+  }
+  if (JEEP_DEFAULT_TOUR_IDS.has(tourId)) return "jeep";
+  return "van";
+}
 
 export type CheckoutValidationFailure = {
   status: number;
@@ -58,6 +88,48 @@ export function validateCheckoutPayload(
       failure: {
         status: 400,
         body: { error: "Tour inválido.", code: "INVALID_TOUR" },
+      },
+    };
+  }
+
+  // Nunca aceitar taxas de transporte inventadas pelo cliente.
+  if (
+    b.transportFee != null ||
+    b.transportFeeCents != null ||
+    b.pickupFee != null ||
+    b.extraTransportCents != null
+  ) {
+    return {
+      ok: false,
+      failure: {
+        status: 400,
+        body: {
+          error: "Taxas de transporte não são cobradas automaticamente.",
+          code: "TRANSPORT_FEE_NOT_ALLOWED",
+        },
+      },
+    };
+  }
+
+  const pickupZone: TransportZone = isTransportZone(b.pickupZone)
+    ? b.pickupZone
+    : defaultPickupZone(tourId);
+  const dropOffLisbonHotel =
+    isSintraCascaisTour(tourId) && Boolean(b.dropOffLisbonHotel);
+  const transportPolicy = resolveTransportPolicy(tourId, {
+    pickupZone,
+    dropOffLisbonHotel,
+  });
+  const vehicle = resolveBookingVehicle(tourId, b.vehicle);
+  if (transportPolicy.extraCents !== 0) {
+    return {
+      ok: false,
+      failure: {
+        status: 400,
+        body: {
+          error: "Taxas de transporte não são cobradas automaticamente.",
+          code: "TRANSPORT_FEE_NOT_ALLOWED",
+        },
       },
     };
   }
@@ -149,6 +221,10 @@ export function validateCheckoutPayload(
       phone,
       notes,
       tourLabel,
+      pickupZone,
+      dropOffLisbonHotel,
+      transportPolicy,
+      vehicle,
     },
   };
 }

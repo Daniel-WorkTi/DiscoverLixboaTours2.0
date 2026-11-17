@@ -92,6 +92,10 @@ export async function POST(req: Request) {
     phone,
     notes,
     tourLabel,
+    pickupZone,
+    dropOffLisbonHotel,
+    transportPolicy,
+    vehicle,
   } = validated.data;
 
   // Capacity guard: do not allow more than N paid bookings per date.
@@ -237,6 +241,12 @@ export async function POST(req: Request) {
           customer_name: metaSlice(customerName),
           phone: metaSlice(phone || ""),
           notes: metaSlice(notes || ""),
+          pickup_zone: metaSlice(pickupZone, 40),
+          drop_off_lisbon_hotel: dropOffLisbonHotel ? "1" : "0",
+          transport_status: metaSlice(transportPolicy.status, 40),
+          transport_requires_quote: transportPolicy.requiresQuote ? "1" : "0",
+          transport_extra_cents: "0",
+          vehicle: metaSlice(vehicle, 20),
         },
         custom_text: {
           submit: {
