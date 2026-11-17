@@ -13,13 +13,10 @@ type PageProps = {
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
   const m = getMessages(locale);
-  const title =
-    locale === "en"
-      ? "Book a Private Tour in Portugal | DiscoverLixboaTours"
-      : `${m.booking.title} | DiscoverLixboaTours`;
+  const title = `${m.booking.title} | DiscoverLixboaTours`;
   const description =
     locale === "en"
-      ? "Reserve your private day trip from Lisbon online — Sintra, Cascais, Fátima, Porto and more. English-speaking local driver-guide, hotel or airport pickup."
+      ? `${m.booking.lead} Sintra, Cascais, Fátima, Porto and more, with hotel pickup.`
       : m.booking.lead;
   const canonical = SITE_ORIGIN + withLocalePrefix("/reservar", locale);
   return {

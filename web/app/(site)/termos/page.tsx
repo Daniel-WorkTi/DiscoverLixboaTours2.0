@@ -49,7 +49,7 @@ export default async function TermosPage() {
             </div>
           </article>
 
-          <article className="legal-card">
+          <article className="legal-card" id="cancelamento">
             <h2 className="legal-card__title">{m.cancelTitle}</h2>
             <div className="legal-card__content">
               <p>{m.cancelP}</p>

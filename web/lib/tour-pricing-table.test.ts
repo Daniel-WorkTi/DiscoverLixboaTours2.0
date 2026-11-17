@@ -147,15 +147,44 @@ describe("Porto — preço total por grupo", () => {
 });
 
 describe("Fátima, Nazaré & Óbidos (3-destinos) — 1–8", () => {
-  it("van completa €250 para qualquer tamanho 1–8", () => {
+  const totals: Record<number, number> = {
+    1: 45000,
+    2: 45000,
+    3: 42000,
+    4: 44000,
+    5: 48000,
+    6: 51000,
+    7: 54000,
+    8: 57000,
+  };
+
+  it("totais de grupo atualizados (8 pessoas = €570)", () => {
     for (let q = 1; q <= 8; q++) {
       expect(getPricingRuleFromTable("3-destinos", q)).toEqual({
         kind: "per_group",
-        centsTotal: 25000,
+        centsTotal: totals[q],
       });
-      expect(estimateFromTable("3-destinos", q)?.totalCents).toBe(25000);
-      expect(estimateFromTable("3-destinos", q)?.kind).toBe("per_group");
+      expect(totalFromRule("3-destinos", q)).toBe(totals[q]);
+      const est = estimateFromTable("3-destinos", q);
+      expect(est?.totalCents).toBe(totals[q]);
+      if (q === 1) {
+        expect(est?.kind).toBe("per_group");
+      } else {
+        expect(est?.kind).toBe("per_person");
+        if (est?.kind === "per_person") {
+          expect(est.centsPerPerson).toBe(Math.round(totals[q] / q));
+        }
+      }
     }
+  });
+
+  it("8 pessoas cobra €570 no total (€71,25/pessoa)", () => {
+    expect(estimateFromTable("3-destinos", 8)).toEqual({
+      kind: "per_person",
+      centsPerPerson: 7125,
+      totalCents: 57000,
+      label: "8 pessoas",
+    });
   });
 });
 
@@ -293,29 +322,14 @@ describe("Outros destinos (amostras)", () => {
     });
   });
 
-  it("3 destinos = €250 grupo (van completa)", () => {
+  it("3 destinos 2 pessoas = €450 e 8 pessoas = €570", () => {
     expect(getPricingRuleFromTable("3-destinos", 2)).toEqual({
       kind: "per_group",
-      centsTotal: 25000,
+      centsTotal: 45000,
     });
-  });
-
-  it("3 destinos mantém €250 em todos os tamanhos", () => {
-    expect(getPricingRuleFromTable("3-destinos", 3)).toEqual({
+    expect(getPricingRuleFromTable("3-destinos", 8)).toEqual({
       kind: "per_group",
-      centsTotal: 25000,
-    });
-    expect(getPricingRuleFromTable("3-destinos", 4)).toEqual({
-      kind: "per_group",
-      centsTotal: 25000,
-    });
-    expect(getPricingRuleFromTable("3-destinos", 5)).toEqual({
-      kind: "per_group",
-      centsTotal: 25000,
-    });
-    expect(getPricingRuleFromTable("3-destinos", 6)).toEqual({
-      kind: "per_group",
-      centsTotal: 25000,
+      centsTotal: 57000,
     });
   });
 

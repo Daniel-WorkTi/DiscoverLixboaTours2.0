@@ -97,7 +97,7 @@ export const portoTour = {
       ],
       included: [
         "Guia local especializado",
-        "Transporte confortável",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Degustação de vinho do Porto",
         "Seguro de viagem",
         "Guia gastronómico local",
@@ -164,7 +164,7 @@ export const portoTour = {
       ],
       included: [
         "Specialized local guide",
-        "Comfortable transport",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Port wine tasting",
         "Travel insurance",
         "Local gastronomic guide",

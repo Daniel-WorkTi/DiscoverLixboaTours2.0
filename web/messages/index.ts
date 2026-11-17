@@ -111,10 +111,34 @@ export type Messages = {
     email: string;
     pickup: string;
     pickupPh: string;
+    pickupLocate: string;
+    pickupSearching: string;
+    pickupNoMatch: string;
+    pickupLocateDenied: string;
+    pickupSuggest: string;
+    pickupTime: string;
+    pickupTimeNote: string;
+    tripTitle: string;
     notes: string;
     notesPh: string;
+    emailPh: string;
+    summaryTitle: string;
+    summaryTour: string;
+    vehicleVan: string;
+    vehicleJeep: string;
+    summaryDate: string;
+    summaryGuests: string;
+    summaryTime: string;
+    summaryDateEmpty: string;
+    summaryTimeEmpty: string;
+    legalBefore: string;
+    termsLink: string;
+    legalMid: string;
+    cancelLink: string;
     submitLoading: string;
     submit: string;
+    payPortugal: string;
+    payInternational: string;
     cardDestino: string;
     cardData: string;
     cardViajantes: string;
@@ -129,6 +153,7 @@ export type Messages = {
     hintLong: string;
     checkAvailability: string;
     errPickDate: string;
+    errPickup: string;
     errInvalidResponse: string;
     errCheckoutDefault: string;
     errNoUrl: string;
@@ -463,8 +488,8 @@ export const messagesPt: Messages = {
       `Preço por grupo privado. Para 1–2 passageiros o total é €${euros}.`,
   },
   booking: {
-    title: "Reserve o seu tour privado",
-    lead: "Escolha o destino, a data e o número de passageiros.",
+    title: "Finalize a sua reserva",
+    lead: "Confirme os detalhes da sua experiência privada antes de continuar para o pagamento.",
     back: "← Voltar ao site",
     modalDestino: "Destino",
     modalChoose: "Escolhe o teu tour",
@@ -477,32 +502,57 @@ export const messagesPt: Messages = {
     totalGroup: "Total do grupo",
     checkoutNote: "Valor final confirmado no checkout.",
     totalTbd: "Calculado no checkout",
-    yourDetails: "Os teus dados",
+    yourDetails: "Os seus dados",
     fullName: "Nome completo",
-    phoneOpt: "Telefone (opcional)",
+    phoneOpt: "Telefone / WhatsApp",
     email: "Email",
-    pickup: "Pickup / ponto de encontro",
-    pickupPh: "Hotel, morada ou ponto de encontro",
-    notes: "Preferências (opcional)",
-    notesPh: "Horário preferido, idioma (PT/EN), crianças, etc.",
+    pickup: "Ponto de recolha",
+    pickupPh: "Hotel, alojamento ou morada de recolha",
+    pickupLocate: "Usar a minha localização",
+    pickupSearching: "A procurar moradas…",
+    pickupNoMatch: "Sem resultados. Escreve o hotel ou a morada.",
+    pickupLocateDenied: "Não foi possível ler a localização neste aparelho.",
+    pickupSuggest: "Sugestões de morada",
+    pickupTime: "Horário de recolha",
+    pickupTimeNote: "Horário preferido. A equipa confirma a recolha antes do tour.",
+    tripTitle: "Recolha e horário",
+    notes: "Pedidos especiais (opcional)",
+    notesPh: "Bagagem, cadeira de criança, acessibilidade ou outros pedidos.",
+    emailPh: "nome@email.com",
+    summaryTitle: "Resumo da reserva",
+    summaryTour: "Tour privado",
+    vehicleVan: "Van Mercedes-Benz Vito 116 CDI Select",
+    vehicleJeep: "Jeep UMM Alter II conversível",
+    summaryDate: "Data",
+    summaryGuests: "Passageiros",
+    summaryTime: "Recolha",
+    summaryDateEmpty: "Por escolher",
+    summaryTimeEmpty: "Por indicar",
+    legalBefore: "Ao continuar, aceita os",
+    termsLink: "termos de uso",
+    legalMid: "e a",
+    cancelLink: "política de cancelamento",
     submitLoading: "A redirecionar para o pagamento…",
     submit: "Continuar para pagamento seguro",
-    cardDestino: "Destino",
+    payPortugal: "Portugal",
+    payInternational: "Internacional",
+    cardDestino: "Tour selecionado",
     cardData: "Data",
     cardViajantes: "Passageiros",
     ariaPickDestino: "Escolher destino do tour",
     pickDate: "Toca para escolher",
     ctaReview: "Rever e pagar",
     ctaChoose: "Escolher data e reservar",
-    guestOne: "passageiro",
-    guestMany: "passageiros",
+    guestOne: "Passageiro",
+    guestMany: "Passageiros",
     personSingular: "passageiro",
     personPlural: "passageiros",
     hintLong:
-      "Abre o calendário no botão laranja, escolhe até 8 passageiros e conclui os teus dados para ires ao pagamento seguro.",
+      "Escolhe o dia, os passageiros e o ponto de recolha. O total fica visível antes do pagamento.",
     checkAvailability: "Verificar Disponibilidade",
     errPickDate:
       "Escolhe um dia no calendário em cima («Data do tour») antes de continuar para o pagamento.",
+    errPickup: "Indica o ponto de pickup e o horário de recolha.",
     errInvalidResponse: "Resposta inválida do servidor. Tenta novamente.",
     errCheckoutDefault: "Não foi possível iniciar o pagamento.",
     errNoUrl:
@@ -558,7 +608,7 @@ export const messagesPt: Messages = {
       description1:
         "Com base em Sintra, a DiscoverLixboaTours oferece tours autênticos de palácios, montanhas e praias em Sintra e Cascais, além de Lisboa, Nazaré, Fátima, Óbidos, Porto e Algarve.",
       description2:
-        "Guiados por Mike, nascido e criado em Sintra, cada tour combina aventura, cultura e histórias locais em um jeep conversível vintage ou van confortável.",
+        "Guiados por Mike, nascido e criado em Sintra. O jeep UMM conversível é só em Lisboa, Sintra e Arrábida & Sesimbra. Nos outros tours vais na Mercedes-Benz Vito 116 CDI Select, a mesma da página Executive.",
       description3:
         "Sustentável e apaixonado por mostrar o verdadeiro Portugal — cada tour é uma experiência única e inesquecível!",
       learnMore: "Saiba Mais",
@@ -596,7 +646,7 @@ export const messagesPt: Messages = {
         "Posicionamento claro: aventura fora dos roteiros óbvios, gastronomia premium no Alentejo e privacidade para casais — com storytelling de guia local.",
       jeep: {
         title: "Jeep Off-road Experience",
-        desc: "Acesso a caminhos e miradouros fora do circuito turístico habitual — UMM 4x4 conversível, ritmo seu e narrativa local que diferencia da concorrência.",
+        desc: "O jeep UMM 4x4 conversível é só em Lisboa, Sintra e Arrábida & Sesimbra — trilhos, miradouros e praias fora do circuito habitual.",
         cta: "Explorar Sintra & Cascais",
       },
       wine: {
@@ -621,7 +671,7 @@ export const messagesPt: Messages = {
       },
       jeep: {
         title: "Jeep Off-road Experience",
-        desc: "Explora trilhos escondidos, miradouros e paisagens a bordo do icónico UMM 4x4.",
+        desc: "Jeep UMM 4x4 só em Lisboa, Sintra e Arrábida & Sesimbra: trilhos, miradouros e praias.",
       },
       wine: {
         title: "Wine & Food Experience",
@@ -644,7 +694,7 @@ export const messagesPt: Messages = {
       subtitle: "Jeep & território",
       title: "UMM Alter II Conversível",
       description:
-        "O UMM Alter II 2.5 Diesel é o nosso cartão de visita: 4x4 conversível português que nos leva a estradas secundárias, miradouros e trilhos longe dos circuitos massificados — mais silêncio, mais paisagem, mais diferença face ao óbvio.",
+        "O UMM Alter II 2.5 Diesel é o nosso jeep conversível. Usamo-lo só em Lisboa, Sintra e Arrábida & Sesimbra — estradas secundárias, miradouros e praias. Nos outros tours, Mercedes-Benz Vito 116 CDI Select.",
       features: {
         portuguese: {
           title: "100% Português",
@@ -694,11 +744,11 @@ export const messagesPt: Messages = {
         },
         {
           q: "O que torna o UMM Alter II especial para tours?",
-          a: "O UMM Alter II é um veículo 4x4 português autêntico, fabricado pela União Metalo-Mecânica desde 1977. Com tração integral e capacidade off-road, ele nos permite acessar trilhas e locais únicos que veículos comuns não conseguem alcançar, proporcionando uma experiência verdadeiramente exclusiva.",
+          a: "O UMM Alter II é o nosso jeep 4x4 conversível, fabricado em Portugal desde 1977. Usamo-lo só em três tours: Lisboa, Sintra e Arrábida & Sesimbra, para chegar a trilhos, miradouros e praias que uma van não alcança. Nos restantes tours vais na Mercedes-Benz Vito 116 CDI Select, a mesma da página Executive.",
         },
         {
           q: "Quantas pessoas cabem no veículo?",
-          a: "Nosso UMM Alter II comporta confortavelmente grupos pequenos de até 8 pessoas, garantindo uma experiência personalizada e íntima. Tours privados para casais ou famílias também estão disponíveis.",
+          a: "Tanto o jeep como a van levam até 8 pessoas. O jeep UMM Alter II é só nos tours de Lisboa, Sintra e Arrábida & Sesimbra. Nos outros destinos o transporte é a Mercedes-Benz Vito 116 CDI Select.",
         },
         {
           q: "Os tours são personalizáveis?",
@@ -980,8 +1030,8 @@ export const messagesEn: Messages = {
       `Price is per private group. For 1–2 guests the total is €${euros}.`,
   },
   booking: {
-    title: "Book Your Private Tour",
-    lead: "Choose your destination, date and number of guests.",
+    title: "Complete your booking",
+    lead: "Confirm the details of your private experience before continuing to payment.",
     back: "← Back to the site",
     modalDestino: "Destination",
     modalChoose: "Choose your tour",
@@ -996,15 +1046,39 @@ export const messagesEn: Messages = {
     totalTbd: "Calculated at checkout",
     yourDetails: "Your details",
     fullName: "Full name",
-    phoneOpt: "Phone (optional)",
+    phoneOpt: "Phone / WhatsApp",
     email: "Email",
-    pickup: "Pick-up / meeting point",
-    pickupPh: "Hotel, address, or meeting point",
-    notes: "Preferences (optional)",
-    notesPh: "Preferred time, language (PT/EN), kids, etc.",
+    pickup: "Pickup point",
+    pickupPh: "Hotel, accommodation or pickup address",
+    pickupLocate: "Use my location",
+    pickupSearching: "Searching addresses…",
+    pickupNoMatch: "No matches. Type the hotel or the address.",
+    pickupLocateDenied: "This device could not share its location.",
+    pickupSuggest: "Address suggestions",
+    pickupTime: "Pickup time",
+    pickupTimeNote: "Preferred time. The team confirms pickup before the tour.",
+    tripTitle: "Pickup and time",
+    notes: "Special requests (optional)",
+    notesPh: "Luggage, child seat, accessibility or other requests.",
+    emailPh: "name@email.com",
+    summaryTitle: "Booking summary",
+    summaryTour: "Private tour",
+    vehicleVan: "Mercedes-Benz Vito 116 CDI Select van",
+    vehicleJeep: "Open-top UMM Alter II jeep",
+    summaryDate: "Date",
+    summaryGuests: "Guests",
+    summaryTime: "Pickup",
+    summaryDateEmpty: "To choose",
+    summaryTimeEmpty: "To add",
+    legalBefore: "By continuing you accept the",
+    termsLink: "terms of use",
+    legalMid: "and the",
+    cancelLink: "cancellation policy",
     submitLoading: "Redirecting to payment…",
     submit: "Continue to secure payment",
-    cardDestino: "Destination",
+    payPortugal: "Portugal",
+    payInternational: "International",
+    cardDestino: "Selected tour",
     cardData: "Date",
     cardViajantes: "Guests",
     ariaPickDestino: "Choose tour destination",
@@ -1016,10 +1090,11 @@ export const messagesEn: Messages = {
     personSingular: "Guest",
     personPlural: "Guests",
     hintLong:
-      "Open the calendar on the orange button, choose up to 8 passengers and complete your details to go to secure payment.",
+      "Choose the day, the guests and the pickup point. The total stays visible before payment.",
     checkAvailability: "Check Availability",
     errPickDate:
       'Choose a day in the calendar above ("Tour date") before continuing to payment.',
+    errPickup: "Add the pickup point and the pickup time.",
     errInvalidResponse: "Invalid server response. Please try again.",
     errCheckoutDefault: "Could not start payment.",
     errNoUrl:
@@ -1075,7 +1150,7 @@ export const messagesEn: Messages = {
       description1:
         "Based in Sintra, DiscoverLixboaTours offers private tours for travelers visiting Portugal: Sintra and Cascais palaces, Lisbon highlights, Nazaré, Fátima, Óbidos, Porto and the Algarve.",
       description2:
-        "Guided by Mike, born and raised in Sintra, each private tour combines adventure, culture and local stories in a vintage convertible jeep or comfortable van — ideal for couples, families and small groups.",
+        "Guided by Mike, born and raised in Sintra. The open-top UMM jeep is only on Lisbon, Sintra and Arrábida & Sesimbra. Other tours use the Mercedes-Benz Vito 116 CDI Select, the same van as the Executive page.",
       description3:
         "Book online in English, enjoy flexible itineraries and hotel or airport pickup, and discover the real Portugal beyond the usual tourist checklist.",
       learnMore: "Learn More",
@@ -1113,7 +1188,7 @@ export const messagesEn: Messages = {
         "Clear positioning: adventure beyond the obvious routes, premium gastronomy in Alentejo and privacy for couples — with real local storytelling.",
       jeep: {
         title: "Jeep Off-road Experience",
-        desc: "Paths and viewpoints away from the usual tourist circuit — open-top Portuguese 4x4, your pace and local narrative that sets us apart.",
+        desc: "The open-top UMM 4x4 is only on Lisbon, Sintra and Arrábida & Sesimbra — trails, viewpoints and beaches off the usual circuit.",
         cta: "Explore Sintra & Cascais",
       },
       wine: {
@@ -1138,7 +1213,7 @@ export const messagesEn: Messages = {
       },
       jeep: {
         title: "Jeep Off-road Experience",
-        desc: "Explore hidden trails, viewpoints and landscapes aboard the iconic UMM 4x4.",
+        desc: "UMM 4x4 jeep only on Lisbon, Sintra and Arrábida & Sesimbra: trails, viewpoints and beaches.",
       },
       wine: {
         title: "Wine & Food Experience",
@@ -1161,7 +1236,7 @@ export const messagesEn: Messages = {
       subtitle: "Jeep & territory",
       title: "UMM Alter II Convertible",
       description:
-        "The UMM Alter II 2.5 Diesel is our signature: Portuguese open-top 4x4 that takes us to back roads, viewpoints and trails away from mass routes — more silence, more landscape, more difference from the obvious.",
+        "The UMM Alter II 2.5 Diesel is our open-top jeep. We use it only on Lisbon, Sintra and Arrábida & Sesimbra — back roads, viewpoints and beaches. Other tours run in the Mercedes-Benz Vito 116 CDI Select.",
       features: {
         portuguese: {
           title: "100% Portuguese",
@@ -1211,11 +1286,11 @@ export const messagesEn: Messages = {
         },
         {
           q: "What makes the UMM Alter II special for tours?",
-          a: "The UMM Alter II is an authentic Portuguese 4x4 vehicle, manufactured by União Metalo-Mecânica since 1977. With integral traction and off-road capability, it allows us to access unique trails and locations that common vehicles cannot reach, providing a truly exclusive experience.",
+          a: "The UMM Alter II is our open-top Portuguese 4x4 jeep, built in Portugal since 1977. We use it on only three tours: Lisbon, Sintra and Arrábida & Sesimbra, to reach trails, viewpoints and beaches a van cannot. Every other tour runs in the Mercedes-Benz Vito 116 CDI Select, the same van as the Executive page.",
         },
         {
           q: "How many people fit in the vehicle?",
-          a: "Our UMM Alter II comfortably accommodates small groups of up to 8 people, ensuring a personalized and intimate experience. Private tours for couples or families are also available.",
+          a: "Both the jeep and the van take up to 8 guests. The UMM Alter II jeep is only on the Lisbon, Sintra and Arrábida & Sesimbra tours. Other destinations use the Mercedes-Benz Vito 116 CDI Select.",
         },
         {
           q: "Are the tours customizable?",

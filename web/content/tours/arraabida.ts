@@ -69,7 +69,7 @@ export const arraabidaTour = {
         "Uma jornada completa pela natureza selvagem e pela história autêntica de Portugal. Começamos no majestoso <strong>Cristo Rei</strong> (subida opcional) com vista panorâmica sobre Lisboa e o Rio Tejo, passando pela icónica <strong>Ponte 25 de Abril</strong>.",
         "Exploramos o <strong>Parque Natural da Arrábida e Portinho da Arrábida</strong>, uma serra protegida com vistas espetaculares e uma praia paradisíaca de águas cristalinas.",
         "Em <strong>Setúbal</strong>, desfrutamos de um <strong>almoço típico</strong> com a gastronomia local autêntica. Terminamos com uma <strong>paragem em Sesimbra</strong>, uma vila piscatória com charme único e vistas deslumbrantes sobre o mar.",
-        "Viaja com conforto na nossa van privada climatizada, com um guia local experiente que te levará aos locais mais espetaculares e autênticos desta região única de Portugal.",
+        "Viaja no nosso jeep UMM Alter II conversível, com um guia local experiente que te levará às praias e aos locais mais espetaculares desta região única de Portugal.",
       ],
       highlightTitle: "Arrábida, Setúbal e Sesimbra",
       highlightText:
@@ -101,7 +101,7 @@ export const arraabidaTour = {
         },
       ],
       included: [
-        "Van privada com ar-condicionado + guia",
+        "Jeep UMM Alter II conversível + guia",
         "Pick-up e drop-off no hotel",
         "Água a bordo",
         "Guia local com histórias e dicas",
@@ -141,7 +141,7 @@ export const arraabidaTour = {
         "A complete journey through the wild nature and authentic history of Portugal. We start at the majestic <strong>Christ the King</strong> (optional ascent) with a panoramic view over Lisbon and the Tagus River, passing by the iconic <strong>25th of April Bridge</strong>.",
         "We explore the <strong>Arrábida Natural Park and Portinho da Arrábida</strong>, a protected mountain range with spectacular views and a paradise beach with crystal clear waters.",
         "In <strong>Setúbal</strong>, we enjoy a <strong>typical lunch</strong> with authentic local cuisine. We end with a <strong>stop in Sesimbra</strong>, a fishing village with unique charm and stunning views over the sea.",
-        "Travel in comfort in our private air-conditioned van, with an experienced local guide who will take you to the most spectacular and authentic places in this unique region of Portugal.",
+        "Ride in our open-top UMM Alter II jeep, with an experienced local guide who will take you to the beaches and the most spectacular places in this unique region of Portugal.",
       ],
       highlightTitle: "Arrábida, Setúbal and Sesimbra",
       highlightText:
@@ -173,7 +173,7 @@ export const arraabidaTour = {
         },
       ],
       included: [
-        "Private air-conditioned van + experienced guide",
+        "Open-top UMM Alter II jeep + experienced guide",
         "Hotel pick-up and drop-off",
         "Water on board",
         "Local guide with stories and tips",

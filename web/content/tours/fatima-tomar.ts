@@ -85,7 +85,7 @@ export const fatimaTomarTour = {
       aboutHtml: [
         "Visite <strong>Fátima</strong>, um dos maiores centros de peregrinação do mundo, e descubra <strong>Tomar</strong>, cidade histórica ligada aos Cavaleiros Templários e ao impressionante <strong>Convento de Cristo</strong> (Património Mundial UNESCO).",
         "É uma <strong>experiência privada</strong> pensada para o teu ritmo: tempo para reflexão em Fátima e para explorar o centro histórico de Tomar ao detalhe.",
-        "<strong>Transporte confortável</strong>, <strong>motorista/guia profissional</strong> e <strong>pick-up e drop-off no hotel</strong> — o itinerário pode ser ajustado ao teu interesse.",
+        "<strong>Transporte na Mercedes-Benz Vito 116 CDI Select</strong>, <strong>motorista/guia profissional</strong> e <strong>pick-up e drop-off no hotel</strong> — o itinerário pode ser ajustado ao teu interesse.",
       ],
       highlightTitle: "Fátima e Tomar",
       highlightText:
@@ -122,7 +122,7 @@ export const fatimaTomarTour = {
         },
       ],
       included: [
-        "Transporte privado confortável",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Motorista/guia profissional",
         "Pick-up e drop-off no hotel",
       ],
@@ -154,7 +154,7 @@ export const fatimaTomarTour = {
       aboutHtml: [
         "Visit <strong>Fátima</strong>, one of the world’s great pilgrimage centres, and discover <strong>Tomar</strong>, a historic city linked to the Knights Templar and the stunning <strong>Convent of Christ</strong> (UNESCO World Heritage).",
         "A <strong>private experience</strong> at your pace: time for reflection in Fátima and to explore Tomar’s old town in depth.",
-        "<strong>Comfortable transport</strong>, a <strong>professional driver/guide</strong> and <strong>hotel pick-up and drop-off</strong> — the itinerary can be adjusted to your interests.",
+        "<strong>Mercedes-Benz Vito 116 CDI Select</strong>, a <strong>professional driver/guide</strong> and <strong>hotel pick-up and drop-off</strong> — the itinerary can be adjusted to your interests.",
       ],
       highlightTitle: "Fátima and Tomar",
       highlightText:
@@ -191,7 +191,7 @@ export const fatimaTomarTour = {
         },
       ],
       included: [
-        "Comfortable private transport",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Professional driver/guide",
         "Hotel pick-up and drop-off",
       ],

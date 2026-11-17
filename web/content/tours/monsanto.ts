@@ -88,7 +88,7 @@ export const monsantoTour = {
       aboutHtml: [
         "<strong>Monsanto</strong> — a “aldeia mais portuguesa de Portugal” — com casas entre <strong>enormes rochas de granito</strong>, ruas medievais e um cenário único. Esta aldeia foi também <strong>palco da série House of the Dragon</strong>, o que a torna ainda mais especial.",
         "O dia inclui ainda uma viagem por <strong>zonas menos turísticas</strong>: paisagens rurais autênticas, pequenas aldeias e um <strong>Portugal genuíno e pouco explorado</strong>.",
-        "<strong>Tour privado e personalizado</strong>, em <strong>carrinha confortável</strong>, com <strong>horários flexíveis</strong> — ideal para quem procura um “lugar secreto” e fotos memoráveis.",
+        "<strong>Tour privado e personalizado</strong>, na <strong>Mercedes-Benz Vito 116 CDI Select</strong>, com <strong>horários flexíveis</strong> — ideal para quem procura um “lugar secreto” e fotos memoráveis.",
       ],
       highlightTitle: "Monsanto, a aldeia de pedra",
       highlightText:
@@ -122,11 +122,11 @@ export const monsantoTour = {
           badge: "Privado",
           title: "O teu ritmo",
           descriptionHtml:
-            "Carrinha confortável, horários flexíveis e rota ajustada ao que mais queres explorar.",
+            "Mercedes-Benz Vito 116 CDI Select, horários flexíveis e rota ajustada ao que mais queres explorar.",
         },
       ],
       included: [
-        "Veículo privado Mercedes",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Motorista/guia local",
         "Pick-up e drop-off no hotel",
         "Experiência privada de dia completo",
@@ -162,7 +162,7 @@ export const monsantoTour = {
       aboutHtml: [
         "<strong>Monsanto</strong> — “the most Portuguese village in Portugal” — with houses tucked among <strong>huge granite boulders</strong>, medieval lanes and a unique setting. The village was also a <strong>filming location for House of the Dragon</strong>, which makes it even more special.",
         "The day also takes you through <strong>less touristy areas</strong>: authentic rural landscapes, small villages and a <strong>genuine, off-the-beaten-path Portugal</strong>.",
-        "<strong>Private, tailor-made tour</strong> in a <strong>comfortable van</strong> with <strong>flexible timing</strong> — perfect for a “secret place” feel and memorable photos.",
+        "<strong>Private, tailor-made tour</strong> in the <strong>Mercedes-Benz Vito 116 CDI Select</strong> with <strong>flexible timing</strong> — perfect for a “secret place” feel and memorable photos.",
       ],
       highlightTitle: "Monsanto, the stone village",
       highlightText:
@@ -196,11 +196,11 @@ export const monsantoTour = {
           badge: "Private",
           title: "Your pace",
           descriptionHtml:
-            "Comfortable van, flexible schedule and a route adapted to what you want to explore most.",
+            "Mercedes-Benz Vito 116 CDI Select, flexible schedule and a route adapted to what you want to explore most.",
         },
       ],
       included: [
-        "Private Mercedes vehicle",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Local driver/guide",
         "Hotel pick-up & drop-off",
         "Full-day private experience",

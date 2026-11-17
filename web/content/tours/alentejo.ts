@@ -74,7 +74,7 @@ export const alentejoTour = {
       aboutHtml: [
         "Uma jornada pelo Alentejo, a região mais autêntica de Portugal, onde o tempo parece ter parado. Começamos em <strong>Évora</strong> com o <strong>Templo de Diana</strong>, a <strong>Sé</strong> e a famosa <strong>Capela dos Ossos</strong>.",
         "Em <strong>Estremoz</strong>, descobrimos uma vila medieval encantadora e degustamos os famosos <strong>vinhos alentejanos</strong>. Terminamos em <strong>Arraiolos</strong>, famosa pelas suas <strong>tapeçarias tradicionais</strong> artesanais.",
-        "Viaja com conforto na nossa van privada climatizada, com um guia experiente que te levará pelos segredos mais bem guardados desta região única, onde a história, a cultura e a tradição se encontram.",
+        "Viaja com conforto na Mercedes-Benz Vito 116 CDI Select, a mesma da página Executive, com um guia experiente que te levará pelos segredos mais bem guardados desta região única, onde a história, a cultura e a tradição se encontram.",
       ],
       highlightTitle: "O Alentejo em aberto",
       highlightText:
@@ -106,7 +106,7 @@ export const alentejoTour = {
         },
       ],
       included: [
-        "Veículo privado Mercedes",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Motorista/guia local",
         "Pick-up e drop-off no hotel",
       ],
@@ -147,7 +147,7 @@ export const alentejoTour = {
       aboutHtml: [
         "A journey through Alentejo, Portugal's most authentic region, where time seems to have stopped. We start in <strong>Évora</strong> with the <strong>Temple of Diana</strong>, the <strong>Cathedral</strong> and the famous <strong>Chapel of Bones</strong>.",
         "In <strong>Estremoz</strong>, we discover a charming medieval village and taste the famous <strong>Alentejo wines</strong>. We end in <strong>Arraiolos</strong>, famous for its traditional handcrafted <strong>tapestries</strong>.",
-        "Travel in comfort in our private air-conditioned van, with an experienced guide who will take you through the best-kept secrets of this unique region, where history, culture and tradition meet.",
+        "Travel in comfort in the Mercedes-Benz Vito 116 CDI Select, the same van as the Executive page, with an experienced guide who will take you through the best-kept secrets of this unique region, where history, culture and tradition meet.",
       ],
       highlightTitle: "The open Alentejo",
       highlightText:
@@ -179,7 +179,7 @@ export const alentejoTour = {
         },
       ],
       included: [
-        "Private Mercedes vehicle",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Local driver/guide",
         "Hotel pick-up & drop-off",
       ],

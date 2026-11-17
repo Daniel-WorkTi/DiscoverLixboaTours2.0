@@ -142,7 +142,7 @@ export const sintraCascaisTour = {
         },
       ],
       included: [
-        "Veículo com ar-condicionado",
+        "Jeep UMM Alter II conversível",
         "Seguro obrigatório (lei portuguesa)",
         "Degustação de doces tradicionais de Sintra",
         "Degustação de Vinho do Porto Reserva",
@@ -246,7 +246,7 @@ export const sintraCascaisTour = {
         },
       ],
       included: [
-        "Air-conditioned vehicle",
+        "Open-top UMM Alter II jeep",
         "Mandatory insurance (Portuguese law)",
         "Tasting of traditional Sintra sweets",
         "Porto Reserve Liqueur Wine tasting",

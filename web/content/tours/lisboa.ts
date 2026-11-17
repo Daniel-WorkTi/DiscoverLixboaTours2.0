@@ -70,7 +70,7 @@ export const lisboaTour = {
         "Descubra a magia de Lisboa, a capital portuguesa banhada pelo sol, num tour privado que combina história milenar, vistas deslumbrantes e caráter lisboeta autêntico.",
       aboutHtml: [
         "Desde miradouros panorâmicos, bairros históricos e cantos secretos que só os locais conhecem, este dia é uma jornada pela história, cultura e emoções genuínas.",
-        "Viaja com estilo na nossa van confortável e climatizada, com boa música, boa energia e um guia local apaixonado, pronto para te mostrar o melhor de Lisboa — desde o seu passado real até à sua vibe moderna e cosmopolita.",
+        "Viaja no nosso jeep UMM Alter II conversível, com boa música, boa energia e um guia local apaixonado, pronto para te mostrar o melhor de Lisboa — desde o seu passado real até à sua vibe moderna e cosmopolita.",
       ],
       highlightTitle: "Lisboa vista de cima",
       highlightText:
@@ -114,7 +114,7 @@ export const lisboaTour = {
         },
       ],
       included: [
-        "Transporte privado em carrinha confortável e climatizada",
+        "Jeep UMM Alter II conversível",
         "Guia / motorista local profissional",
         "Pick-up e drop-off no seu hotel em Lisboa",
         "Wi-Fi e água engarrafada a bordo",
@@ -153,7 +153,7 @@ export const lisboaTour = {
         "Discover the magic of Lisbon, Portugal's sun-kissed capital, on a private tour that combines millennial history, stunning views and authentic Lisbon character.",
       aboutHtml: [
         "From panoramic viewpoints, historic neighbourhoods and secret corners that only locals know, this day is a journey through history, culture and genuine emotions.",
-        "Travel in style in our comfortable air-conditioned van, with good music, good energy and a passionate local guide, ready to show you the best of Lisbon — from its royal past to its modern cosmopolitan vibe.",
+        "Ride in our open-top UMM Alter II jeep, with good music, good energy and a passionate local guide, ready to show you the best of Lisbon — from its royal past to its modern cosmopolitan vibe.",
       ],
       highlightTitle: "Lisbon from above",
       highlightText:
@@ -197,7 +197,7 @@ export const lisboaTour = {
         },
       ],
       included: [
-        "Private transport in a comfortable air-conditioned van",
+        "Open-top UMM Alter II jeep",
         "Professional local guide / driver",
         "Hotel pick-up and drop-off in Lisbon",
         "Wi-Fi and bottled water on board",

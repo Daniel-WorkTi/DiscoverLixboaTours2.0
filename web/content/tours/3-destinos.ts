@@ -1,9 +1,8 @@
 import type { TourDefinition } from "./types";
 
 /**
- * Fátima, Nazaré & Óbidos (3-destinos) — van privada completa.
- * Mike: €250 pela van (até 7); capacidade global → 8 sem novo tier (mesmo total).
- * Confirmar com Mike se o 8.º deve ter preço diferente.
+ * Fátima, Nazaré & Óbidos (3-destinos) — totais de grupo atualizados.
+ * 1–2 €450; 3 €420; 4 €440; 5 €480; 6 €510; 7 €540; 8 €570.
  */
 export const tresDestinosTour = {
   slug: "3-destinos",
@@ -13,16 +12,16 @@ export const tresDestinosTour = {
   privateTour: true,
   hotelPickup: true,
   groupTotalsCents: {
-    1: 25000,
-    2: 25000,
-    3: 25000,
-    4: 25000,
-    5: 25000,
-    6: 25000,
-    7: 25000,
-    8: 25000,
+    1: 45000,
+    2: 45000,
+    3: 42000,
+    4: 44000,
+    5: 48000,
+    6: 51000,
+    7: 54000,
+    8: 57000,
   },
-  priceDisplay: "group" as const,
+  priceDisplay: "person" as const,
   heroImage: "/assets/images/heronazaresection.jpg",
   /** Ordem = itinerário: Fátima → Nazaré → Óbidos → Almoço. */
   stopImages: [
@@ -95,7 +94,7 @@ export const tresDestinosTour = {
         "Descubra três dos locais mais icónicos de Portugal: o Santuário de Fátima, Nazaré com o seu farol e museu do surf, e a vila medieval de Óbidos, num tour privado que combina espiritualidade, natureza e tradição",
       aboutHtml: [
         "Embarque numa jornada única por três dos destinos mais emblemáticos de Portugal. <strong>Visite o Santuário de Fátima, descubra o Farol e museu do surf em Nazaré e explore as muralhas e ruas medievais da vila histórica de Óbidos.</strong>",
-        "Com o nosso guia local experiente e o icónico UMM Alter II 4x4, terá acesso a perspetivas únicas, histórias locais autênticas e momentos inesquecíveis. Cada paragem é cuidadosamente planeada para maximizar a sua experiência, com muito tempo para explorar, fotografar e absorver a atmosfera única de cada local.",
+        "Com o nosso guia local experiente e a Mercedes-Benz Vito 116 CDI Select, a mesma da página Executive, terá acesso a perspetivas únicas, histórias locais autênticas e momentos inesquecíveis. Cada paragem é cuidadosamente planeada para maximizar a sua experiência, com muito tempo para explorar, fotografar e absorver a atmosfera única de cada local.",
       ],
       highlightTitle: "Fátima, Nazaré e Óbidos",
       highlightText:
@@ -128,7 +127,7 @@ export const tresDestinosTour = {
       ],
       included: [
         "Guia local experiente",
-        "Transporte em UMM Alter II",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Seguro de viagem",
         "Paradas fotográficas",
         "Recomendações locais",
@@ -162,7 +161,7 @@ export const tresDestinosTour = {
         "Discover three of Portugal's most iconic locations: the Sanctuary of Fátima, Nazaré with its lighthouse and surf museum, and the medieval village of Óbidos, on a private tour that combines spirituality, nature and tradition",
       aboutHtml: [
         "Embark on a unique journey through three of Portugal's most emblematic destinations. <strong>Visit the Sanctuary of Fátima, discover the Lighthouse and surf museum in Nazaré and explore the medieval walls and streets of the historic village of Óbidos.</strong>",
-        "With our experienced local guide and the iconic UMM Alter II 4x4, you'll have access to unique perspectives, authentic local stories and unforgettable moments. Each stop is carefully planned to maximize your experience, with plenty of time to explore, photograph and absorb the unique atmosphere of each location.",
+        "With our experienced local guide and the Mercedes-Benz Vito 116 CDI Select — the same van as the Executive page — you'll have access to unique perspectives, authentic local stories and unforgettable moments. Each stop is carefully planned to maximize your experience, with plenty of time to explore, photograph and absorb the unique atmosphere of each location.",
       ],
       highlightTitle: "Fátima, Nazaré and Óbidos",
       highlightText:
@@ -195,7 +194,7 @@ export const tresDestinosTour = {
       ],
       included: [
         "Experienced local guide",
-        "Transport in UMM Alter II",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Travel insurance",
         "Photographic stops",
         "Local recommendations",
@@ -229,12 +228,12 @@ export const tresDestinosTour = {
       title:
         "Tour 3 Destinos — Fátima, Nazaré & Óbidos | DiscoverLixboaTours",
       description:
-        "Tour privado por Fátima, Nazaré e Óbidos. Até 8 passageiros. A partir de €250 por grupo privado. Espiritualidade, natureza e tradição.",
+        "Tour privado por Fátima, Nazaré e Óbidos. Até 8 passageiros. A partir de €71 por pessoa (€570 o grupo de 8). Espiritualidade, natureza e tradição.",
     },
     en: {
       title: "Private Fátima, Nazaré & Óbidos Day Trip from Lisbon",
       description:
-        "Private day trip from Lisbon to Fátima, Nazaré and Óbidos. English-speaking local driver-guide, hotel pickup. Spirituality, big waves and a medieval town. From €250/group.",
+        "Private day trip from Lisbon to Fátima, Nazaré and Óbidos. English-speaking local driver-guide, hotel pickup. Spirituality, big waves and a medieval town. From €71/person (€570 for 8 guests).",
     },
   },
 } as const satisfies TourDefinition;

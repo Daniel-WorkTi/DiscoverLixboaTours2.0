@@ -112,7 +112,7 @@ export const algarveTour = {
         },
       ],
       included: [
-        "Transporte privado em veículo confortável com ar-condicionado",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Guia profissional local",
         "Música ambiente personalizada",
         "Paragens fotográficas nos melhores spots",
@@ -178,7 +178,7 @@ export const algarveTour = {
         },
       ],
       included: [
-        "Private transport in comfortable air-conditioned vehicle",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Professional local guide",
         "Personalized ambient music",
         "Photographic stops at the best spots",

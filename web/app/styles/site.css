@@ -4871,7 +4871,7 @@ iframe.goog-te-menu-frame {
     }
     
     /* Ritmo vertical: menos “apertado” que 3rem fixo em secções densas */
-    section:not(.hero):not(.explore-video-section):not(.why-us-section) {
+    section:not(.hero):not(.explore-video-section):not(.why-us-section):not(.br-panel) {
         padding: 2.75rem 0 !important;
     }
 
@@ -5253,7 +5253,7 @@ iframe.goog-te-menu-frame {
     }
     
     /* Extra Small Mobile - Refined Spacing */
-    section:not(.hero):not(.explore-video-section):not(.why-us-section) {
+    section:not(.hero):not(.explore-video-section):not(.why-us-section):not(.br-panel) {
         padding: 2.5rem 0 !important;
     }
 

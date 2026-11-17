@@ -11,7 +11,7 @@
 | Lisboa 250→550 | ✅ content + home deriva do content |
 | Arrábida tabela Mike 2–8 (280→680) | ✅ (mín. 2; home €85/pessoa) |
 | Home sem preços hardcoded | ✅ `getCardFromPrice(tour)` |
-| 3 Destinos conflito €280/€85 | ✅ resolvido como **€250/grupo** 1–8 (van completa Mike + capacidade 8 sem tier novo) |
+| 3 Destinos tabela | ✅ **€450** (1–2), **€420** (3), **€440** (4), **€480** (5), **€510** (6), **€540** (7), **€570** (8). |
 
 ## Ainda depende do Mike
 
@@ -19,7 +19,7 @@
 |------|------|
 | Monsanto Included | 🟡 manter lista actual até ele enviar a nova |
 | Fátima & Tomar tabela completa | 🟡 content tem 310/400/490/590 — cruzar com msg original |
-| 3 Destinos preço do 8.º | 🟡 usámos o mesmo €250 da van; confirmar se ok |
+| 3 Destinos preço do 8.º | ✅ €570 total (€71,25/pessoa) |
 | Porto (€700–€800 vs antigo €800/€900) | ⚠️ confirmar mensagem mais recente |
 | Algarve preço do 8.º (€800 vs antigo até 7 = €700) | ⚠️ confirmar |
 
@@ -31,4 +31,4 @@ No `/reservar` (ou `/en/reservar`), escolher o tour e o nº de pessoas:
 - Lisboa 8 → €550
 - Monsanto 8 → €900
 - Arrábida 8 → €680
-- 3 Destinos qualquer → €250
+- 3 Destinos 8 → €570

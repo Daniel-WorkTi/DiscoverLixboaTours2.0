@@ -118,7 +118,7 @@ export const aveiroTour = {
         },
       ],
       included: [
-        "Veículo privado",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Guia local",
         "Pick-up e drop-off no hotel",
         "Experiência de dia completo",
@@ -192,7 +192,7 @@ export const aveiroTour = {
         },
       ],
       included: [
-        "Private vehicle",
+        "Mercedes-Benz Vito 116 CDI Select",
         "Local guide",
         "Hotel pick-up & drop-off",
         "Full-day experience",
