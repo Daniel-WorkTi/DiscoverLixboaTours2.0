@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Sintra & Cascais — tour privado, totais por grupo (fonte comercial 2026).
@@ -311,4 +311,4 @@ export const sintraCascaisTour = {
         "Private Sintra & Cascais day trip with an English-speaking local driver-guide. Pena Palace, Regaleira, Cabo da Roca. Free pickup in Sintra; Lisbon hotel pickup on request. From €250/group, up to 8 guests.",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

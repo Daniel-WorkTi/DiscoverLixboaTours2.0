@@ -8,22 +8,24 @@ import { monsantoTour } from "./monsanto";
 import { portoTour } from "./porto";
 import { sintraCascaisTour } from "./sintra-cascais";
 import { tresDestinosTour } from "./3-destinos";
+import { finalizeTour } from "./finalize-tour";
 import type { TourDefinition } from "./types";
 
 /**
  * Tours migrados para App Router (SSR por locale).
+ * ES é derivado do EN quando o ficheiro ainda não tem bloco `es`.
  */
 export const migratedTours = {
-  lisboa: lisboaTour,
-  "sintra-cascais": sintraCascaisTour,
-  "fatima-tomar": fatimaTomarTour,
-  monsanto: monsantoTour,
-  porto: portoTour,
-  algarve: algarveTour,
-  arraabida: arraabidaTour,
-  aveiro: aveiroTour,
-  alentejo: alentejoTour,
-  "3-destinos": tresDestinosTour,
+  lisboa: finalizeTour(lisboaTour),
+  "sintra-cascais": finalizeTour(sintraCascaisTour),
+  "fatima-tomar": finalizeTour(fatimaTomarTour),
+  monsanto: finalizeTour(monsantoTour),
+  porto: finalizeTour(portoTour),
+  algarve: finalizeTour(algarveTour),
+  arraabida: finalizeTour(arraabidaTour),
+  aveiro: finalizeTour(aveiroTour),
+  alentejo: finalizeTour(alentejoTour),
+  "3-destinos": finalizeTour(tresDestinosTour),
 } as const satisfies Record<string, TourDefinition>;
 
 export type MigratedTourSlug = keyof typeof migratedTours;

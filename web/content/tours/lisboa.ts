@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Lisboa — tour privado, totais por grupo (fonte comercial 2026).
@@ -255,4 +255,4 @@ export const lisboaTour = {
         "Private Lisbon sightseeing tour with an English-speaking local guide and private vehicle. Belém, Alfama, viewpoints and more. Hotel pickup. From €250/group, up to 8 guests.",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

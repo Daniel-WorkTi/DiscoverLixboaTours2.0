@@ -39,6 +39,7 @@ export async function generateMetadata({
   const canonical = SITE_ORIGIN + withLocalePrefix(bare, locale);
   const pt = SITE_ORIGIN + bare;
   const en = SITE_ORIGIN + `/en${bare}`;
+  const es = SITE_ORIGIN + `/es${bare}`;
 
   return {
     title: { absolute: seo.title },
@@ -52,12 +53,21 @@ export async function generateMetadata({
             "English speaking guide",
             "hotel pickup Lisbon",
           ]
-        : undefined,
+        : locale === "es"
+          ? [
+              "tour privado Portugal",
+              "excursión desde Lisboa",
+              tour.slug.replace(/-/g, " "),
+              "guía local",
+              "recogida hotel Lisboa",
+            ]
+          : undefined,
     alternates: {
       canonical,
       languages: {
         "pt-PT": pt,
         en,
+        es,
         "x-default": en,
       },
     },
@@ -95,7 +105,7 @@ export default async function TourSlugPage({ params }: PageProps) {
     description: tour.seo[locale].description,
     image: heroAbs,
     url: pageUrl,
-    inLanguage: locale === "en" ? "en" : "pt-PT",
+    inLanguage: locale === "en" ? "en" : locale === "es" ? "es" : "pt-PT",
     brand: { "@type": "Brand", name: BRAND_NAME },
     provider: {
       "@type": "TravelAgency",

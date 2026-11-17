@@ -21,6 +21,11 @@ export const SEO_HOME = {
     description:
       "Book private day trips from Lisbon: Sintra & Cascais, Fátima, Porto, Arrábida and more. English-speaking local driver-guide, hotel or airport pickup. Small groups up to 8.",
   },
+  es: {
+    title: "Tours Privados en Portugal desde Lisboa | DiscoverLixboaTours",
+    description:
+      "Reserva excursiones privadas desde Lisboa: Sintra y Cascais, Fátima, Oporto, Arrábida y más. Conductor-guía local, recogida en hotel o aeropuerto. Grupos de hasta 8.",
+  },
 } as const;
 
 /**
@@ -43,8 +48,18 @@ export function socialMetadata(input: {
       description: input.description,
       url: input.url,
       siteName: BRAND_NAME,
-      locale: input.locale === "en" ? "en_US" : "pt_PT",
-      alternateLocale: input.locale === "en" ? ["pt_PT"] : ["en_US"],
+      locale:
+        input.locale === "en"
+          ? "en_US"
+          : input.locale === "es"
+            ? "es_ES"
+            : "pt_PT",
+      alternateLocale:
+        input.locale === "en"
+          ? ["pt_PT", "es_ES"]
+          : input.locale === "es"
+            ? ["pt_PT", "en_US"]
+            : ["en_US", "es_ES"],
       type: "website",
       images: images.map((url) => ({ url, alt: BRAND_NAME })),
     },

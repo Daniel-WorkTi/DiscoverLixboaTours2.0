@@ -101,7 +101,8 @@ export function ObrigadoThankYouClient({
   const [receiptErr, setReceiptErr] = useState<ReceiptErr | null>(null);
   const [receiptLoading, setReceiptLoading] = useState(false);
 
-  const dateLocale = locale === "en" ? "en-GB" : "pt-PT";
+  const dateLocale =
+    locale === "en" ? "en-GB" : locale === "es" ? "es-ES" : "pt-PT";
 
   const obrigadoAria = useMemo(() => {
     if (locale === "en") {
@@ -109,6 +110,13 @@ export function ObrigadoThankYouClient({
         details: "Booking details",
         badges: "Payment security",
         lottie: "Booking confirmation animation",
+      };
+    }
+    if (locale === "es") {
+      return {
+        details: "Detalles de la reserva",
+        badges: "Seguridad del pago",
+        lottie: "Animación de confirmación de la reserva",
       };
     }
     return {

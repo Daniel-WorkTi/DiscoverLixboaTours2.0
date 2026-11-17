@@ -248,7 +248,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const tourHero = tourDef?.heroImage ?? null;
   const tourHighlights = useMemo(() => {
     if (TOUR_PLACE_LINE[tourId]) return TOUR_PLACE_LINE[tourId];
-    const content = tourDef?.content[locale === "en" ? "en" : "pt"];
+    const content = tourDef?.content[locale];
     const badges = (content?.itinerary ?? [])
       .map((stop) => stop.badge?.trim())
       .filter((b): b is string => Boolean(b));
@@ -339,7 +339,8 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         ? m.booking.pickupFree
         : transportSummaryLabel(transportPolicy.summaryKey);
 
-  const dateLocale = locale === "en" ? "en-GB" : "pt-PT";
+  const dateLocale =
+    locale === "en" ? "en-GB" : locale === "es" ? "es-ES" : "pt-PT";
 
   const monthLabel = useMemo(() => {
     const raw = new Date(viewYear, viewMonth, 1).toLocaleDateString(dateLocale, {
@@ -434,23 +435,43 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
         pickupZone: zoneForCheckout,
         dropOffLisbonHotel: sintraTour ? dropOffLisbonHotel : false,
       },
-      locale === "en" ? "en" : "pt",
+      locale,
     );
     const vehicleNote =
       locale === "en"
         ? `Vehicle: ${resolvedVehicle === "jeep" ? "Open-top UMM Alter II jeep" : "Mercedes-Benz Vito 116 CDI Select van"}`
-        : `Veículo: ${resolvedVehicle === "jeep" ? "Jeep UMM Alter II conversível" : "Van Mercedes-Benz Vito 116 CDI Select"}`;
+        : locale === "es"
+          ? `Vehículo: ${resolvedVehicle === "jeep" ? "Jeep UMM Alter II descapotable" : "Van Mercedes-Benz Vito 116 CDI Select"}`
+          : `Veículo: ${resolvedVehicle === "jeep" ? "Jeep UMM Alter II conversível" : "Van Mercedes-Benz Vito 116 CDI Select"}`;
     const combinedNotes = [
       vehicleNote,
       ...transportLines,
       pickupClean
-        ? `${locale === "en" ? "Pickup / meeting point" : "Pickup / ponto de encontro"}: ${pickupClean}`
+        ? `${
+            locale === "en"
+              ? "Pickup / meeting point"
+              : locale === "es"
+                ? "Recogida / punto de encuentro"
+                : "Pickup / ponto de encontro"
+          }: ${pickupClean}`
         : null,
       timeClean
-        ? `${locale === "en" ? "Pickup time" : "Horário de pickup"}: ${timeClean}`
+        ? `${
+            locale === "en"
+              ? "Pickup time"
+              : locale === "es"
+                ? "Horario de recogida"
+                : "Horário de pickup"
+          }: ${timeClean}`
         : null,
       notesClean
-        ? `${locale === "en" ? "Preferences" : "Preferências"}: ${notesClean}`
+        ? `${
+            locale === "en"
+              ? "Preferences"
+              : locale === "es"
+                ? "Preferencias"
+                : "Preferências"
+          }: ${notesClean}`
         : null,
     ]
       .filter(Boolean)
@@ -896,7 +917,7 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
                   }
                 }}
                 placeholder={m.booking.pickupPh}
-                lang={locale === "en" ? "en" : "pt"}
+                lang={locale === "en" ? "en" : locale === "es" ? "es" : "pt"}
                 invalid={
                   error?.kind === "i18n" && error.key === "errPickup" && pickup.trim().length < 2
                 }

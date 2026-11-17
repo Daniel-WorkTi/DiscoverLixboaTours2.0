@@ -22,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
       languages: {
         "pt-PT": `${SITE_ORIGIN}/`,
         en: `${SITE_ORIGIN}/en`,
+        es: `${SITE_ORIGIN}/es`,
         "x-default": `${SITE_ORIGIN}/en`,
       },
     },

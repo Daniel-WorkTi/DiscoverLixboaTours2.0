@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Aveiro & Costa Nova — totais por grupo; display por pessoa (fonte comercial 2026).
@@ -244,4 +244,4 @@ export const aveiroTour = {
         "Private Aveiro day trip from Lisbon — canals, moliceiro boats and Costa Nova striped houses. English-speaking driver-guide, hotel pickup. From €100/person (min. 2).",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

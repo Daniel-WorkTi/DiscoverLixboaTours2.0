@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Fátima & Tomar — tour privado, totais por grupo (fonte comercial 2026).
@@ -241,4 +241,4 @@ export const fatimaTomarTour = {
         "Private pilgrimage and history day trip from Lisbon to Fátima Sanctuary and Tomar (Knights Templar). English-speaking guide, hotel pickup. From €310/group, up to 8 guests.",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Arrábida, Setúbal & Sesimbra — totais por grupo (última tabela Mike).
@@ -230,4 +230,4 @@ export const arraabidaTour = {
         "Private Arrábida Natural Park day trip from Lisbon with Setúbal and Sesimbra. Atlantic views, beaches and local food. English-speaking guide. From €85/person.",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

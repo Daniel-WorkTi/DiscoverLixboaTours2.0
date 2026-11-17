@@ -17,7 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     locale === "en"
       ? `${m.booking.lead} Sintra, Cascais, Fátima, Porto and more, with hotel pickup.`
-      : m.booking.lead;
+      : locale === "es"
+        ? `${m.booking.lead} Sintra, Cascais, Fátima, Oporto y más, con recogida en hotel.`
+        : m.booking.lead;
   const canonical = SITE_ORIGIN + withLocalePrefix("/reservar", locale);
   return {
     title: { absolute: title },
@@ -27,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       languages: {
         "pt-PT": `${SITE_ORIGIN}/reservar`,
         en: `${SITE_ORIGIN}/en/reservar`,
+        es: `${SITE_ORIGIN}/es/reservar`,
         "x-default": `${SITE_ORIGIN}/en/reservar`,
       },
     },

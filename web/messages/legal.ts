@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/types";
+import { localizeDeepEnToEs } from "@/lib/i18n/localize-en-es";
 
 export type LegalMessages = {
   back: string;
@@ -350,6 +351,10 @@ const legalEn: LegalMessages = {
   },
 };
 
+const legalEs: LegalMessages = localizeDeepEnToEs(legalEn);
+
 export function getLegalMessages(locale: Locale): LegalMessages {
-  return locale === "en" ? legalEn : legalPt;
+  if (locale === "en") return legalEn;
+  if (locale === "es") return legalEs;
+  return legalPt;
 }

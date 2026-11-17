@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Fátima, Nazaré & Óbidos (3-destinos) — totais de grupo atualizados.
@@ -246,4 +246,4 @@ export const tresDestinosTour = {
         "Private day trip from Lisbon to Fátima, Nazaré and Óbidos. English-speaking local driver-guide, hotel pickup. Spirituality, big waves and a medieval town. From €71/person (€570 for 8 guests).",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

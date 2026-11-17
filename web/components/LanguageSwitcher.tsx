@@ -6,6 +6,7 @@ import {
   withLocalePrefix,
   stripLocalePrefix,
   LOCALE_COOKIE,
+  documentLang,
   type AppLocale,
 } from "@/lib/i18n/locale";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -13,6 +14,7 @@ import { useLocale } from "@/lib/i18n/LocaleProvider";
 const OPTIONS: { locale: AppLocale; short: string; label: string }[] = [
   { locale: "pt", short: "PT", label: "Português" },
   { locale: "en", short: "EN", label: "English" },
+  { locale: "es", short: "ES", label: "Español" },
 ];
 
 function persistPreference(locale: AppLocale) {
@@ -22,7 +24,7 @@ function persistPreference(locale: AppLocale) {
   } catch {
     /* ignore */
   }
-  document.documentElement.lang = locale === "en" ? "en" : "pt-PT";
+  document.documentElement.lang = documentLang(locale);
   document.documentElement.setAttribute("data-lang", locale);
 }
 
@@ -81,6 +83,9 @@ export function LanguageSwitcher() {
     };
   }, [open]);
 
+  const ariaLabel =
+    current === "en" ? "Language" : current === "es" ? "Idioma" : "Idioma";
+
   return (
     <div
       className={`language-selector${open ? " language-selector--open" : ""}`}
@@ -112,7 +117,7 @@ export function LanguageSwitcher() {
           id={listId}
           className="language-selector__menu"
           role="listbox"
-          aria-label={current === "en" ? "Language" : "Idioma"}
+          aria-label={ariaLabel}
         >
           {OPTIONS.map((option) => (
             <li key={option.locale} role="presentation">

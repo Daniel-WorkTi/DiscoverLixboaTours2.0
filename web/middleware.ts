@@ -37,7 +37,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Evita 2ª passagem após rewrite /en → / (senão o locale volta a PT).
+  // Evita 2ª passagem após rewrite /en|/es → / (senão o locale volta a PT).
   const already = req.headers.get(LOCALE_HEADER);
   if (isAppLocale(already)) {
     return NextResponse.next();
@@ -49,14 +49,14 @@ export function middleware(req: NextRequest) {
   requestHeaders.set(LOCALE_HEADER, locale);
   requestHeaders.set(PATH_HEADER, barePath);
 
-  // /en/... → rewrite interno para path PT (URLs indexadas PT intactas; /en é alias EN)
-  if (locale === "en") {
+  // /en/... e /es/... → rewrite interno para path PT
+  if (locale === "en" || locale === "es") {
     const url = req.nextUrl.clone();
     url.pathname = barePath;
     const res = NextResponse.rewrite(url, {
       request: { headers: requestHeaders },
     });
-    res.cookies.set(LOCALE_COOKIE, "en", {
+    res.cookies.set(LOCALE_COOKIE, locale, {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,
       sameSite: "lax",

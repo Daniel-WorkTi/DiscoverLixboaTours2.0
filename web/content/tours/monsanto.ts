@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Monsanto & Centro de Portugal — totais por grupo; display por pessoa (fonte comercial 2026).
@@ -254,4 +254,4 @@ export const monsantoTour = {
         "Private day trip from Lisbon to Monsanto — one of Portugal’s most unique stone villages. English-speaking local guide, hotel pickup. From €300/person (min. 2).",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

@@ -15,7 +15,7 @@ type Props = {
   onChange: (value: string) => void;
   onPlaceSelect?: (place: PickupPlaceChoice) => void;
   placeholder: string;
-  lang: "pt" | "en";
+  lang: "pt" | "en" | "es";
   invalid?: boolean;
   labels: Pick<
     Messages["booking"],

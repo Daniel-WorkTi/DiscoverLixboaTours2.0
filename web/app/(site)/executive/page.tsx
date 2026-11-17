@@ -11,7 +11,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title:
       locale === "en"
         ? "DiscoverLixboaTours | Private Tours & Concierge — Executive"
-        : "DiscoverLixboaTours | Tours Privados & Concierge — Executive",
+        : locale === "es"
+          ? "DiscoverLixboaTours | Tours Privados & Concierge — Executive"
+          : "DiscoverLixboaTours | Tours Privados & Concierge — Executive",
     description: `${m.executive.heroH1}. ${m.executive.heroValue}`,
   };
 }

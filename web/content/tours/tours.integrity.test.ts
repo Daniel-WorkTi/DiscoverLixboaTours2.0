@@ -15,15 +15,22 @@ describe("migrated tours content integrity", () => {
     describe(`tour ${slug}`, () => {
       const tour = getMigratedTour(slug)!;
 
-      it("has PT and EN content", () => {
+      it("has PT, EN and ES content", () => {
         expect(tour.content.pt.title.length).toBeGreaterThan(3);
         expect(tour.content.en.title.length).toBeGreaterThan(3);
+        expect(tour.content.es.title.length).toBeGreaterThan(3);
         expect(tour.content.pt.itinerary.length).toBeGreaterThan(0);
         expect(tour.content.en.itinerary.length).toBe(
           tour.content.pt.itinerary.length,
         );
+        expect(tour.content.es.itinerary.length).toBe(
+          tour.content.pt.itinerary.length,
+        );
         expect(tour.content.pt.included.length).toBeGreaterThan(0);
         expect(tour.content.en.included.length).toBe(
+          tour.content.pt.included.length,
+        );
+        expect(tour.content.es.included.length).toBe(
           tour.content.pt.included.length,
         );
       });
@@ -49,11 +56,13 @@ describe("migrated tours content integrity", () => {
         }
       });
 
-      it("has SEO for both locales", () => {
+      it("has SEO for PT, EN and ES", () => {
         expect(tour.seo.pt.title.length).toBeGreaterThan(20);
         expect(tour.seo.pt.description.length).toBeGreaterThan(40);
         expect(tour.seo.en.title.length).toBeGreaterThan(20);
         expect(tour.seo.en.description.length).toBeGreaterThan(80);
+        expect(tour.seo.es.title.length).toBeGreaterThan(20);
+        expect(tour.seo.es.description.length).toBeGreaterThan(40);
         // EN titles target tourist search intent (day trip / private / Lisbon)
         expect(/private|day trip|tour/i.test(tour.seo.en.title)).toBe(true);
         expect(/lisbon|portugal|english/i.test(tour.seo.en.description)).toBe(
@@ -66,14 +75,20 @@ describe("migrated tours content integrity", () => {
         expect(tour.content.en.notIncluded.length).toBe(
           tour.content.pt.notIncluded.length,
         );
+        expect(tour.content.es.notIncluded.length).toBe(
+          tour.content.pt.notIncluded.length,
+        );
         expect(tour.content.pt.pickupItems?.length ?? 0).toBeGreaterThan(0);
         expect(tour.content.en.pickupItems?.length).toBe(
+          tour.content.pt.pickupItems?.length,
+        );
+        expect(tour.content.es.pickupItems?.length).toBe(
           tour.content.pt.pickupItems?.length,
         );
       });
 
       it("keeps Portela exclusive to sintra-cascais; Lisboa/Sintra/Cascais included elsewhere", () => {
-        for (const locale of ["pt", "en"] as const) {
+        for (const locale of ["pt", "en", "es"] as const) {
           const titles = (tour.content[locale].pickupItems ?? []).map((p) =>
             p.title.toLowerCase(),
           );

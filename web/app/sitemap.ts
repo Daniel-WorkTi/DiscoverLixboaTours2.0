@@ -29,9 +29,11 @@ const STATIC = [
 function languageAlternates(bare: string) {
   const pt = bare === "/" ? `${origin}/` : `${origin}${bare}`;
   const en = bare === "/" ? `${origin}/en` : `${origin}/en${bare}`;
+  const es = bare === "/" ? `${origin}/es` : `${origin}/es${bare}`;
   return {
     "pt-PT": pt,
     en,
+    es,
     "x-default": en,
   };
 }
@@ -44,23 +46,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const bare = path || "/";
     const ptUrl = bare === "/" ? `${origin}/` : `${origin}${bare}`;
     const enUrl = bare === "/" ? `${origin}/en` : `${origin}/en${bare}`;
+    const esUrl = bare === "/" ? `${origin}/es` : `${origin}/es${bare}`;
     const priority = bare === "/" ? 1 : bare === "/reservar" ? 0.9 : 0.55;
-    const changeFrequency = bare === "/" || bare === "/reservar" ? "weekly" : "monthly";
+    const changeFrequency =
+      bare === "/" || bare === "/reservar" ? "weekly" : "monthly";
+    const alts = languageAlternates(bare);
 
-    // PT + EN como URLs indexáveis (hreflang aponta x-default → EN para gringos)
     entries.push({
       url: ptUrl,
       lastModified: now,
       changeFrequency,
       priority,
-      alternates: { languages: languageAlternates(bare) },
+      alternates: { languages: alts },
     });
     entries.push({
       url: enUrl,
       lastModified: now,
       changeFrequency,
       priority: bare === "/" ? 1 : priority,
-      alternates: { languages: languageAlternates(bare) },
+      alternates: { languages: alts },
+    });
+    entries.push({
+      url: esUrl,
+      lastModified: now,
+      changeFrequency,
+      priority: bare === "/" ? 1 : priority,
+      alternates: { languages: alts },
     });
   }
 
@@ -76,6 +87,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
     entries.push({
       url: `${origin}/en${bare}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+      alternates: { languages: alts },
+    });
+    entries.push({
+      url: `${origin}/es${bare}`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,

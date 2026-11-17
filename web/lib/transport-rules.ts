@@ -200,7 +200,7 @@ export function resolveTransportPolicy(
 export function formatTransportNotes(
   tourId: string,
   input: TransportRequestInput,
-  locale: "pt" | "en",
+  locale: "pt" | "en" | "es",
 ): string[] {
   const policy = resolveTransportPolicy(tourId, input);
   const zoneLabel = zoneLabelFor(input.pickupZone, locale);
@@ -211,6 +211,12 @@ export function formatTransportNotes(
     lines.push(`Transport status: ${statusLabelEn(policy)}`);
     if (input.dropOffLisbonHotel && isSintraCascaisTour(tourId)) {
       lines.push("Drop-off: Lisbon hotel (extra fee on request)");
+    }
+  } else if (locale === "es") {
+    lines.push(`Zona de recogida: ${zoneLabel}`);
+    lines.push(`Estado del transporte: ${statusLabelEs(policy)}`);
+    if (input.dropOffLisbonHotel && isSintraCascaisTour(tourId)) {
+      lines.push("Llegada: hotel en Lisboa (coste adicional bajo consulta)");
     }
   } else {
     lines.push(`Zona de recolha: ${zoneLabel}`);
@@ -223,7 +229,10 @@ export function formatTransportNotes(
   return lines;
 }
 
-function zoneLabelFor(zone: TransportZone, locale: "pt" | "en"): string {
+function zoneLabelFor(
+  zone: TransportZone,
+  locale: "pt" | "en" | "es",
+): string {
   const pt: Record<TransportZone, string> = {
     lisboa: "Lisboa",
     sintra: "Sintra",
@@ -238,7 +247,16 @@ function zoneLabelFor(zone: TransportZone, locale: "pt" | "en"): string {
     portela_sintra: "Portela Sintra station",
     other: "Other location",
   };
-  return locale === "en" ? en[zone] : pt[zone];
+  const es: Record<TransportZone, string> = {
+    lisboa: "Lisboa",
+    sintra: "Sintra",
+    cascais: "Cascais",
+    portela_sintra: "Estación Portela de Sintra",
+    other: "Otra ubicación",
+  };
+  if (locale === "en") return en[zone];
+  if (locale === "es") return es[zone];
+  return pt[zone];
 }
 
 function statusLabelPt(policy: TransportPolicy): string {
@@ -264,5 +282,18 @@ function statusLabelEn(policy: TransportPolicy): string {
       return "extra fee on request";
     case "outside_policy":
       return "outside standard policy — on request";
+  }
+}
+
+function statusLabelEs(policy: TransportPolicy): string {
+  switch (policy.status) {
+    case "included":
+      return "incluido en el precio";
+    case "free":
+      return "sin coste adicional";
+    case "on_request":
+      return "coste adicional bajo consulta";
+    case "outside_policy":
+      return "fuera de la política estándar — bajo consulta";
   }
 }

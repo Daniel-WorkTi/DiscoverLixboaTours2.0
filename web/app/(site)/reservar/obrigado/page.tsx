@@ -20,7 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title:
       locale === "en"
         ? "Booking confirmed | Discover Lixboa Tours"
-        : "Reserva confirmada | Discover Lixboa Tours",
+        : locale === "es"
+          ? "Reserva confirmada | Discover Lixboa Tours"
+          : "Reserva confirmada | Discover Lixboa Tours",
     description: m.obrigado.leadBody,
   };
 }

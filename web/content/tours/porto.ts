@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Porto — tour privado, totais por grupo (fonte comercial 2026).
@@ -217,4 +217,4 @@ export const portoTour = {
         "Private full-day Porto tour from Lisbon with local driver-guide. Ribeira, historic center and Port wine tasting. Hotel pickup. From €700/group, up to 8 guests.",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

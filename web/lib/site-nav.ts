@@ -11,7 +11,9 @@ export function getSiteNavVariant(pathname: string): SiteNavVariant {
 export function getSiteNavBase(
   variant: SiteNavVariant,
   locale: AppLocale = "pt",
-): "" | "/" | "/en" {
+): "" | "/" | "/en" | "/es" {
   if (variant === "home") return "";
-  return locale === "en" ? "/en" : "/";
+  if (locale === "en") return "/en";
+  if (locale === "es") return "/es";
+  return "/";
 }

@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n/types";
+import { localizeDeepEnToEs } from "@/lib/i18n/localize-en-es";
 
 export type Messages = {
   nav: {
@@ -1601,6 +1602,10 @@ export const messagesEn: Messages = {
   },
 };
 
+const messagesEs: Messages = localizeDeepEnToEs(messagesEn);
+
 export function getMessages(locale: Locale): Messages {
-  return locale === "en" ? messagesEn : messagesPt;
+  if (locale === "en") return messagesEn;
+  if (locale === "es") return messagesEs;
+  return messagesPt;
 }

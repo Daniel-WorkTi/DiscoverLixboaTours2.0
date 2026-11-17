@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Premium Alentejo — totais de grupo convertidos de per_person × n (fonte comercial 2026).
@@ -239,4 +239,4 @@ export const alentejoTour = {
         "Private Alentejo wine, food and culture tour from Lisbon: Évora, Estremoz and Arraiolos. English-speaking guide, hotel pickup. From €145/person (min. 2).",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;

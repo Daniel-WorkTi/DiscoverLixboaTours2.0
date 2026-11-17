@@ -1,4 +1,4 @@
-import type { TourDefinition } from "./types";
+import type { TourDefinitionInput } from "./finalize-tour";
 
 /**
  * Algarve — tour privado, totais por grupo (fonte comercial 2026).
@@ -231,4 +231,4 @@ export const algarveTour = {
         "Private Algarve day trip from Lisbon: Marinha Beach, Benagil Cave and Lagos. English-speaking local driver-guide, hotel pickup. From €600/group, up to 8 guests.",
     },
   },
-} as const satisfies TourDefinition;
+} as const satisfies TourDefinitionInput;
