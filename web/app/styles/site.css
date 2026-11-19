@@ -126,6 +126,7 @@ body:not(:has(.hero, .destino-hero, .exec-hero)) .main-header .header-cta {
     flex-shrink: 0;
     object-fit: contain;
     object-position: center;
+    border-radius: 12px;
 }
 
 .header-logo .logo-wordmark {
@@ -3396,7 +3397,7 @@ body:not(:has(.hero, .destino-hero, .exec-hero)) .main-header .header-cta {
 .profile-pic {
     width: 80px;
     height: 80px;
-    border-radius: 0;
+    border-radius: 16px;
     object-fit: contain;
     object-position: center;
     border: none;
@@ -4683,6 +4684,8 @@ body:not(:has(.hero, .destino-hero, .exec-hero)) .main-header .header-cta {
     display: block;
     flex-shrink: 0;
     object-fit: contain;
+    object-position: center;
+    border-radius: 10px;
 }
 
 .footer-logo-wordmark {

@@ -23,7 +23,7 @@ export function SiteFooter({ variant = "home", locale = "pt" }: SiteFooterProps)
             <Link href={withLocalePrefix("/", locale)} className="footer-logo-link">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/assets/images/newlogosvg.svg"
+                src="/assets/images/brand/logo-mark.png?v=2"
                 alt=""
                 width={44}
                 height={44}

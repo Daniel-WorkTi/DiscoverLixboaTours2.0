@@ -43,16 +43,16 @@ export const metadata: Metadata = {
   category: "travel",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.png", type: "image/png", sizes: "48x48" },
+      { url: "/favicon.ico?v=2", sizes: "any" },
+      { url: "/icon.png?v=2", type: "image/png", sizes: "48x48" },
       {
-        url: "/assets/images/brand/favicon-512.png",
+        url: "/assets/images/brand/favicon-512.png?v=2",
         type: "image/png",
         sizes: "512x512",
       },
     ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-icon.png?v=2", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico?v=2",
   },
   openGraph: {
     title: SEO_HOME.en.title,

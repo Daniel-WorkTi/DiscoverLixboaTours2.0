@@ -74,10 +74,9 @@ export function SiteHeader({
       <div className="header-content">
         <div className="header-logo">
           <Link href={withLocalePrefix("/", locale)} className="header-logo-link">
-            {/* SVG direto — sem Next/Image para não comprimir */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/assets/images/newlogosvg.svg"
+              src="/assets/images/brand/logo-mark.png?v=2"
               alt=""
               width={52}
               height={52}

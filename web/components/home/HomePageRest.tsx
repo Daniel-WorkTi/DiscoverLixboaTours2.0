@@ -99,10 +99,9 @@ export function HomePageRest({ instagramPhotos, testimonialAuthors }: Props) {
         <div className="instagram-container">
           <div className="instagram-header">
             <div className="instagram-profile">
-              {/* SVG direto — sem Next/Image para não comprimir */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/assets/images/newlogosvg.svg"
+                src="/assets/images/brand/logo-mark.png?v=2"
                 alt="DiscoverLixboaTours Logo"
                 width={80}
                 height={80}
