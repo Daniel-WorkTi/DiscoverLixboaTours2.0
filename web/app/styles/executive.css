@@ -370,7 +370,18 @@
 
 @media (max-width: 899px) {
   .exec-abordo__chips {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: min(100%, 18.5rem);
+    margin-inline: auto;
+    gap: 0.5rem;
+  }
+
+  .exec-abordo__chip {
+    width: 100%;
     justify-content: center;
+    box-sizing: border-box;
+    text-align: center;
   }
 }
 
@@ -1698,7 +1709,7 @@ main.exec-main .exec-cta {
   font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--exec-ink);
+  color: var(--exec-orange);
 }
 
 .exec-contact-item dd a {

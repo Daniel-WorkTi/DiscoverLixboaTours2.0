@@ -32,8 +32,8 @@ const EXEC_HERO_MOBILE_V = process.env.NEXT_PUBLIC_EXEC_HERO_MOBILE_V?.trim() ||
 const EXECUTIVE_STORY_IMAGE = "/assets/images/executive/car.png";
 const EXECUTIVE_STORY_IMAGE_MOBILE =
   process.env.NEXT_PUBLIC_EXEC_STORY_MOBILE_IMAGE?.trim() ||
-  "/assets/images/executive/mobile-img/banner.png";
-const EXEC_STORY_MOBILE_V = process.env.NEXT_PUBLIC_EXEC_STORY_MOBILE_V?.trim() || "1";
+  "/assets/images/couple.jpg";
+const EXEC_STORY_MOBILE_V = process.env.NEXT_PUBLIC_EXEC_STORY_MOBILE_V?.trim() || "3";
 const EXECUTIVE_TRANSFERS_VISUAL =
   process.env.NEXT_PUBLIC_EXEC_TRANSFERS_VISUAL?.trim() || "/assets/images/executive/famili.png";
 const EXECUTIVE_CTA_ATTENDANT =
