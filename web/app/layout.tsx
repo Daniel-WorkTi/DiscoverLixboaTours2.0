@@ -44,9 +44,15 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/assets/images/brand/logo-mark.png", type: "image/png", sizes: "128x128" },
+      { url: "/icon.png", type: "image/png", sizes: "48x48" },
+      {
+        url: "/assets/images/brand/favicon-512.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
     ],
-    apple: "/assets/images/brand/logo-mark.png",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
   openGraph: {
     title: SEO_HOME.en.title,

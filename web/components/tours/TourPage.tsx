@@ -146,7 +146,7 @@ export function TourPage({ tour, locale }: Props) {
   });
 
   return (
-    <div className="tour-page-root">
+    <div className="tour-page-root" data-tour={tour.slug}>
       <section className="destino-hero">
         <div className="destino-hero-image">
           <Image
@@ -158,7 +158,7 @@ export function TourPage({ tour, locale }: Props) {
             sizes="100vw"
             style={{ objectFit: "cover" }}
           />
-          <div className="destino-hero-overlay" />
+          <div className="destino-hero-overlay" aria-hidden />
         </div>
         <div className="destino-hero-content">
           <div className="destino-hero-text">
