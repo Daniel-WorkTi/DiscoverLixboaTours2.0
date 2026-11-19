@@ -3,7 +3,11 @@
  * Totais em cêntimos EUR.
  */
 
-import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
+import {
+  MAX_TOUR_PASSENGERS,
+  maxPassengersForVehicle,
+  type BookingVehicle,
+} from "@/lib/vehicle-capacity";
 import { pricingRuleFromMigratedSlug } from "@/lib/tour-pricing-from-content";
 import { getMigratedTour } from "@/content/tours";
 
@@ -36,11 +40,15 @@ function guestLabel(q: number): string {
 }
 
 /**
- * Máximo de passageiros com preço comercial definido.
- * Capacidade física do van = MAX_TOUR_PASSENGERS (8) em todos os tours.
+ * Máximo de passageiros reserváveis.
+ * Van = 8; jeep (Lisboa / Sintra / Arrábida) = 7.
+ * Sem veículo → van (máximo da tabela de preços).
  */
-export function getMaxBookablePassengers(_tourId: string): number {
-  return MAX_TOUR_PASSENGERS;
+export function getMaxBookablePassengers(
+  _tourId: string,
+  vehicle: BookingVehicle = "van",
+): number {
+  return Math.min(MAX_TOUR_PASSENGERS, maxPassengersForVehicle(vehicle));
 }
 
 /** Mínimo comercialmente reservável (vindo do tour migrado). */

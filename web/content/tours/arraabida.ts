@@ -103,7 +103,7 @@ export const arraabidaTour = {
         },
       ],
       included: [
-        "Jeep UMM Alter II conversível + guia",
+        "Jeep UMM Alter II (até 7) ou van Mercedes-Benz Vito (até 8) — à escolha",
         "Pick-up e drop-off no hotel",
         "Água a bordo",
         "Guia local com histórias e dicas",
@@ -181,7 +181,7 @@ export const arraabidaTour = {
         },
       ],
       included: [
-        "Open-top UMM Alter II jeep + experienced guide",
+        "UMM Alter II jeep (up to 7) or Mercedes-Benz Vito van (up to 8) — your choice",
         "Hotel pick-up and drop-off",
         "Water on board",
         "Local guide with stories and tips",

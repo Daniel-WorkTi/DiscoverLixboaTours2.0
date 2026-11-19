@@ -116,7 +116,7 @@ export const lisboaTour = {
         },
       ],
       included: [
-        "Jeep UMM Alter II conversível",
+        "Jeep UMM Alter II (até 7) ou van Mercedes-Benz Vito (até 8) — à escolha",
         "Guia / motorista local profissional",
         "Pick-up e drop-off no seu hotel em Lisboa",
         "Wi-Fi e água engarrafada a bordo",
@@ -205,7 +205,7 @@ export const lisboaTour = {
         },
       ],
       included: [
-        "Open-top UMM Alter II jeep",
+        "UMM Alter II jeep (up to 7) or Mercedes-Benz Vito van (up to 8) — your choice",
         "Professional local guide / driver",
         "Hotel pick-up and drop-off in Lisbon",
         "Wi-Fi and bottled water on board",

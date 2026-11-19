@@ -39,7 +39,7 @@ const EXECUTIVE_TRANSFERS_VISUAL =
 const EXECUTIVE_CTA_ATTENDANT =
   process.env.NEXT_PUBLIC_EXEC_CTA_IMAGE?.trim() || "/assets/images/executive/Man01.png";
 
-const STORY_STATS_NUMS = ["500+", "9", "20+"] as const;
+const STORY_STATS_NUMS = ["500+", "8", "20+"] as const;
 
 const SHOWCASE_HORIZONTAL = [
   {

@@ -664,7 +664,8 @@ section#experiencia .exec-section--surface {
   font-size: clamp(1.75rem, 4.8vw, 2.85rem);
   font-weight: 700;
   line-height: 1.08;
-  letter-spacing: -0.035em;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: #fff;
   margin: 0 0 1rem;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
@@ -799,6 +800,11 @@ main.exec-main .exec-section {
   line-height: 1.22;
   margin: 0 0 0.75rem;
   color: var(--exec-ink);
+}
+
+#transfers .exec-section__head h2 {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .exec-section__head p {

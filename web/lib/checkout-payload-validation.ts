@@ -8,13 +8,14 @@ import {
   type TransportPolicy,
   type TransportZone,
 } from "@/lib/transport-rules";
-import { MAX_TOUR_PASSENGERS } from "@/lib/vehicle-capacity";
+import {
+  MAX_TOUR_PASSENGERS,
+  canChooseVehicle,
+  isJeepTour,
+  type BookingVehicle,
+} from "@/lib/vehicle-capacity";
 
-/** Tours onde o cliente pode escolher jeep ou van no checkout. */
-const VEHICLE_CHOICE_TOUR_IDS = new Set(["lisboa", "sintra-cascais"]);
-const JEEP_DEFAULT_TOUR_IDS = new Set(["lisboa", "sintra-cascais", "arraabida"]);
-
-export type BookingVehicle = "jeep" | "van";
+export type { BookingVehicle };
 
 export type ValidatedCheckoutPayload = {
   tourId: string;
@@ -36,10 +37,10 @@ function resolveBookingVehicle(
   raw: unknown,
 ): BookingVehicle {
   const requested = raw === "jeep" || raw === "van" ? raw : null;
-  if (VEHICLE_CHOICE_TOUR_IDS.has(tourId)) {
+  if (canChooseVehicle(tourId)) {
     return requested ?? "jeep";
   }
-  if (JEEP_DEFAULT_TOUR_IDS.has(tourId)) return "jeep";
+  if (isJeepTour(tourId)) return "jeep";
   return "van";
 }
 
@@ -136,7 +137,7 @@ export function validateCheckoutPayload(
 
   const maxBookable = Math.min(
     MAX_TOUR_PASSENGERS,
-    getMaxBookablePassengers(tourId),
+    getMaxBookablePassengers(tourId, vehicle),
   );
   const minBookable = getMinBookablePassengers(tourId);
   const rawQty = Number(b.quantity);

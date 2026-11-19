@@ -63,22 +63,48 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     ).toBe(false);
   });
 
-  it("aceita 8 passageiros em todos os tours bookable e rejeita 9 (clamp)", () => {
-    const lisboa8 = validateCheckoutPayload({ ...baseGood, quantity: 8 });
-    expect(lisboa8.ok).toBe(true);
-    if (lisboa8.ok) expect(lisboa8.data.quantity).toBe(8);
-
-    const highSintra = validateCheckoutPayload({
+  it("jeep Lisboa/Sintra/Arrábida: máx 7; van: máx 8; qty 9 faz clamp", () => {
+    const lisboaJeep7 = validateCheckoutPayload({
       ...baseGood,
-      tourId: "sintra-cascais",
-      quantity: 8,
+      quantity: 7,
+      vehicle: "jeep",
     });
-    expect(highSintra.ok).toBe(true);
-    if (highSintra.ok) expect(highSintra.data.quantity).toBe(8);
+    expect(lisboaJeep7.ok).toBe(true);
+    if (lisboaJeep7.ok) {
+      expect(lisboaJeep7.data.vehicle).toBe("jeep");
+      expect(lisboaJeep7.data.quantity).toBe(7);
+    }
+
+    const lisboaJeep8 = validateCheckoutPayload({
+      ...baseGood,
+      quantity: 8,
+      vehicle: "jeep",
+    });
+    expect(lisboaJeep8.ok).toBe(false);
+
+    const lisboaVan8 = validateCheckoutPayload({
+      ...baseGood,
+      quantity: 8,
+      vehicle: "van",
+    });
+    expect(lisboaVan8.ok).toBe(true);
+    if (lisboaVan8.ok) {
+      expect(lisboaVan8.data.vehicle).toBe("van");
+      expect(lisboaVan8.data.quantity).toBe(8);
+    }
+
+    const arrabidaChoice = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "arraabida",
+      quantity: 2,
+      vehicle: "van",
+    });
+    expect(arrabidaChoice.ok).toBe(true);
+    if (arrabidaChoice.ok) expect(arrabidaChoice.data.vehicle).toBe("van");
 
     const overflow = validateCheckoutPayload({
       ...baseGood,
-      tourId: "sintra-cascais",
+      tourId: "porto",
       quantity: 9,
     });
     expect(overflow.ok).toBe(true);
@@ -144,7 +170,7 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     if (!r.ok) expect(r.failure.body.code).toBe("TRANSPORT_FEE_NOT_ALLOWED");
   });
 
-  it("permite escolher jeep ou van só em Lisboa e Sintra", () => {
+  it("permite escolher jeep ou van em Lisboa, Sintra e Arrábida", () => {
     const lisboaVan = validateCheckoutPayload({
       ...baseGood,
       tourId: "lisboa",
@@ -169,11 +195,20 @@ describe("validateCheckoutPayload (QA + segurança)", () => {
     expect(portoForcedVan.ok).toBe(true);
     if (portoForcedVan.ok) expect(portoForcedVan.data.vehicle).toBe("van");
 
-    const arraabidaJeep = validateCheckoutPayload({
+    const arraabidaVan = validateCheckoutPayload({
       ...baseGood,
       tourId: "arraabida",
       quantity: 2,
       vehicle: "van",
+    });
+    expect(arraabidaVan.ok).toBe(true);
+    if (arraabidaVan.ok) expect(arraabidaVan.data.vehicle).toBe("van");
+
+    const arraabidaJeep = validateCheckoutPayload({
+      ...baseGood,
+      tourId: "arraabida",
+      quantity: 2,
+      vehicle: "jeep",
     });
     expect(arraabidaJeep.ok).toBe(true);
     if (arraabidaJeep.ok) expect(arraabidaJeep.data.vehicle).toBe("jeep");

@@ -24,6 +24,7 @@ export type YTNamespace = {
       events?: {
         onReady?: (e: { target: YTPlayer }) => void;
         onStateChange?: (e: { data: number; target: YTPlayer }) => void;
+        onError?: (e: { data: number; target: YTPlayer }) => void;
       };
     },
   ) => YTPlayer;

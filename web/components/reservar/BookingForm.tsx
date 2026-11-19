@@ -24,6 +24,11 @@ import { PaymentBadges } from "@/components/reservar/PaymentBadges";
 import { PickupField } from "@/components/reservar/PickupField";
 import { useLocale, useMessages } from "@/lib/i18n/LocaleProvider";
 import { withLocalePrefix } from "@/lib/i18n/locale";
+import {
+  canChooseVehicle as tourAllowsVehicleChoice,
+  isJeepTour,
+  type BookingVehicle,
+} from "@/lib/vehicle-capacity";
 import type { Messages } from "@/messages";
 
 const MAX_NAME_LEN = 120;
@@ -32,13 +37,6 @@ const MAX_NOTES_LEN = 500;
 
 /** Se o servidor / Stripe não responder, o fetch não deve ficar “a carregar” para sempre. */
 const CHECKOUT_FETCH_TIMEOUT_MS = 55_000;
-
-/** Jeep disponível nestes tours. Nos restantes vai a van Mercedes. */
-const JEEP_TOUR_IDS = new Set(["lisboa", "sintra-cascais", "arraabida"]);
-/** No checkout, Lisboa e Sintra permitem escolher jeep ou van. */
-const VEHICLE_CHOICE_TOUR_IDS = new Set(["lisboa", "sintra-cascais"]);
-
-type BookingVehicle = "jeep" | "van";
 
 /** Badge “Preço de grupo” só para tours comercialmente flat/grupo (não Aveiro/Monsanto exact-total). */
 const GROUP_PRICE_TOUR_IDS = new Set([
@@ -236,10 +234,10 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
   const tourLabelFallback = toursBooking.find((t) => t.id === tourId)?.label ?? "";
   const tourMsgKey = TOUR_MSG_KEYS[tourId];
   const tourLabel = (tourMsgKey ? m.booking.tours[tourMsgKey] : null) ?? tourLabelFallback;
-  const canChooseVehicle = VEHICLE_CHOICE_TOUR_IDS.has(tourId);
+  const canChooseVehicle = tourAllowsVehicleChoice(tourId);
   const resolvedVehicle: BookingVehicle = canChooseVehicle
     ? vehicleChoice
-    : JEEP_TOUR_IDS.has(tourId)
+    : isJeepTour(tourId)
       ? "jeep"
       : "van";
   const vehicleLabel =
@@ -254,16 +252,19 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
       .filter((b): b is string => Boolean(b));
     return [...new Set(badges)].slice(0, 3).join(" · ");
   }, [tourDef, locale, tourId]);
+  const maxTravelers = useMemo(
+    () => getMaxBookablePassengers(tourId, resolvedVehicle),
+    [tourId, resolvedVehicle],
+  );
   const capacityLabel = m.booking.vehicleCapacity.replace(
     "{n}",
-    String(getMaxBookablePassengers(tourId)),
+    String(maxTravelers),
   );
   const vehicleBadge = `${vehicleLabel} (${capacityLabel})`;
   function labelForTour(id: string): string {
     const key = TOUR_MSG_KEYS[id];
     return (key ? m.booking.tours[key] : null) ?? toursBooking.find((t) => t.id === id)?.label ?? id;
   }
-  const maxTravelers = useMemo(() => getMaxBookablePassengers(tourId), [tourId]);
   const minTravelers = useMemo(() => getMinBookablePassengers(tourId), [tourId]);
   const estimate = useMemo(() => estimateFromTable(tourId, quantity), [tourId, quantity]);
   const totalLabel = estimate ? formatEurFromCents(estimate.totalCents) : null;
@@ -293,9 +294,9 @@ export function BookingForm({ initialTourId }: BookingFormProps) {
     if (!isSintraCascaisTour(tourId)) {
       setDropOffLisbonHotel(false);
     }
-    if (VEHICLE_CHOICE_TOUR_IDS.has(tourId)) {
+    if (tourAllowsVehicleChoice(tourId)) {
       setVehicleChoice((v) => v);
-    } else if (JEEP_TOUR_IDS.has(tourId)) {
+    } else if (isJeepTour(tourId)) {
       setVehicleChoice("jeep");
     } else {
       setVehicleChoice("van");

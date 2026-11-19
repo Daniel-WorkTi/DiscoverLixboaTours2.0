@@ -536,7 +536,7 @@ export const messagesPt: Messages = {
     modalTitle: "Reserve o seu tour privado",
     sectionDate: "Data do tour",
     travelers: "Participantes",
-    travelersHint: "Escolhe quantas pessoas vão no tour (máx. 8 passageiros)",
+    travelersHint: "Escolhe quantas pessoas vão no tour (máx. {n} passageiros)",
     perPerson: "Por pessoa",
     total: "Total",
     totalGroup: "Total",
@@ -592,9 +592,9 @@ export const messagesPt: Messages = {
     vehicleVan: "Mercedes-Benz Vito",
     vehicleJeep: "Jeep UMM Alter II",
     vehicleJeepName: "UMM Alter II",
-    vehicleJeepDesc: "Jeep clássico · Aventura",
+    vehicleJeepDesc: "Jeep clássico · até 7 pessoas",
     vehicleVanName: "Mercedes-Benz Vito",
-    vehicleVanDesc: "Van executiva · Conforto",
+    vehicleVanDesc: "Van executiva · até 8 pessoas",
     vehicleChoice: "Escolha o veículo",
     vehicleChoiceHint: "Escolhe o jeep conversível ou a van Mercedes.",
     summaryDate: "Data",
@@ -831,7 +831,7 @@ export const messagesPt: Messages = {
         },
         {
           q: "Quantas pessoas cabem no veículo?",
-          a: "Tanto o jeep como a van levam até 8 pessoas. O jeep UMM Alter II é só nos tours de Lisboa, Sintra e Arrábida & Sesimbra. Nos outros destinos o transporte é a Mercedes-Benz Vito 116 CDI Select.",
+          a: "O jeep UMM Alter II leva até 7 pessoas; a van Mercedes-Benz Vito até 8. Em Lisboa, Sintra e Arrábida & Sesimbra podes escolher jeep ou van. Nos outros destinos o transporte é a Mercedes-Benz Vito 116 CDI Select.",
         },
         {
           q: "Os tours são personalizáveis?",
@@ -854,21 +854,21 @@ export const messagesPt: Messages = {
   },
   executive: {
     badge: "Concierge · Corporate · Family",
-    heroH1: "O padrão ouro de viagem privada em Portugal",
+    heroH1: "O PADRÃO OURO DE VIAGEM PRIVADA EM PORTUGAL",
     heroValue: "Experiência · Sofisticação · Exclusividade",
     heroCta: "Reserve a sua experiência",
     heroWa: "Falar com o CEO",
     storyTitleA: "As nossas histórias",
     storyTitleB: "com viajantes exigentes",
     storyP1:
-      "Na <strong>DiscoverLixboaTours</strong> unimos hospitalidade de alto nível com transporte de luxo. Na nossa <strong>Mercedes-Benz Vito 116 CDI Select</strong> (modelo recente), cada quilómetro é vivido com conforto, discrição e atenção ao detalhe.",
+      "Na <strong>DiscoverLixboaTours</strong> unimos hospitalidade de alto nível com transporte de luxo. Na nossa <strong>Mercedes-Benz Vito 116 CDI Select</strong> (modelo recente), cada Quilómetro é vivido com conforto, discrição e atenção ao detalhe.",
     storyP2:
-      "Lounge móvel com lugar para 8 passageiros e condutor (9 no total), estofos premium e serviço personalizado — para viajar por Portugal com conforto e discrição.",
+      "Lounge móvel com 8 lugares no total, estofos Premium e serviço personalizado — para viajar por Portugal com conforto e discrição.",
     waSchedule: "Agendar Executive no WhatsApp",
     waScheduleShort: "Agendar no WhatsApp",
-    stats: ["Jornadas premium", "Lugares no total", "Destinos em Portugal"],
+    stats: ["Jornadas Premium", "Lugares no total", "Destinos em Portugal"],
     abordoKicker: "A bordo",
-    abordoH2: "Hospitalidade premium, quilómetro a quilómetro",
+    abordoH2: "Hospitalidade Premium, Quilómetro a Quilómetro",
     abordoLead:
       "<strong>Turismo privado</strong> e <strong>mobilidade executiva</strong> em Portugal — cada detalhe pensado para quem viaja em descoberta ou em negócio, com discrição e liberdade de roteiro.",
     chipTours: "Tours & experiências",
@@ -877,8 +877,8 @@ export const messagesPt: Messages = {
     specs: [
       {
         k: "Capacidade",
-        v: "8 passageiros + condutor",
-        hint: "9 lugares na Mercedes-Benz Vito",
+        v: "8 lugares no total",
+        hint: "Mercedes-Benz Vito",
       },
       {
         k: "Veículo",
@@ -911,7 +911,7 @@ export const messagesPt: Messages = {
       },
     },
     transferKicker: "Mobilidade",
-    transferH2: "Transfers, shuttle e eventos VIP",
+    transferH2: "TRANSFERS, SHUTTLE E EVENTOS VIP",
     transferLead: "Eficiência e elegância em cada deslocação.",
     tfAirport: {
       title: "Transfers aeroporto",
@@ -1121,7 +1121,7 @@ export const messagesEn: Messages = {
     modalTitle: "Book Your Private Tour",
     sectionDate: "Tour date",
     travelers: "Guests",
-    travelersHint: "Choose how many people on the tour (max. 8 passengers)",
+    travelersHint: "Choose how many people on the tour (max. {n} passengers)",
     perPerson: "Per person",
     total: "Total",
     totalGroup: "Total",
@@ -1177,9 +1177,9 @@ export const messagesEn: Messages = {
     vehicleVan: "Mercedes-Benz Vito",
     vehicleJeep: "UMM Alter II jeep",
     vehicleJeepName: "UMM Alter II",
-    vehicleJeepDesc: "Classic jeep · Adventure",
+    vehicleJeepDesc: "Classic jeep · up to 7 people",
     vehicleVanName: "Mercedes-Benz Vito",
-    vehicleVanDesc: "Executive van · Comfort",
+    vehicleVanDesc: "Executive van · up to 8 people",
     vehicleChoice: "Choose the vehicle",
     vehicleChoiceHint: "Choose the open-top jeep or the Mercedes van.",
     summaryDate: "Date",
@@ -1416,7 +1416,7 @@ export const messagesEn: Messages = {
         },
         {
           q: "How many people fit in the vehicle?",
-          a: "Both the jeep and the van take up to 8 guests. The UMM Alter II jeep is only on the Lisbon, Sintra and Arrábida & Sesimbra tours. Other destinations use the Mercedes-Benz Vito 116 CDI Select.",
+          a: "The UMM Alter II jeep takes up to 7 guests; the Mercedes-Benz Vito van up to 8. On Lisbon, Sintra and Arrábida & Sesimbra you can choose jeep or van. Other destinations use the Mercedes-Benz Vito 116 CDI Select.",
         },
         {
           q: "Are the tours customizable?",
@@ -1439,21 +1439,21 @@ export const messagesEn: Messages = {
   },
   executive: {
     badge: "Concierge · Corporate · Family",
-    heroH1: "The gold standard of private travel in Portugal",
+    heroH1: "THE GOLD STANDARD OF PRIVATE TRAVEL IN PORTUGAL",
     heroValue: "Experience · Sophistication · Exclusivity",
     heroCta: "Book your experience",
     heroWa: "Speak with the CEO",
     storyTitleA: "Our stories",
     storyTitleB: "with discerning travellers",
     storyP1:
-      "At <strong>DiscoverLixboaTours</strong> we combine high-end hospitality with luxury transport. In our <strong>Mercedes-Benz Vito 116 CDI Select</strong> (recent model), every kilometre is lived with comfort, discretion and attention to detail.",
+      "At <strong>DiscoverLixboaTours</strong> we combine high-end hospitality with luxury transport. In our <strong>Mercedes-Benz Vito 116 CDI Select</strong> (recent model), every Kilometre is lived with comfort, discretion and attention to detail.",
     storyP2:
-      "A mobile lounge for 8 passengers plus driver (9 in total), premium upholstery and personalised service — travel across Portugal in comfort and discretion.",
+      "A mobile lounge with 8 seats in total, Premium upholstery and personalised service — travel across Portugal in comfort and discretion.",
     waSchedule: "Schedule Executive on WhatsApp",
     waScheduleShort: "Schedule on WhatsApp",
     stats: ["Premium journeys", "Total seats", "Destinations in Portugal"],
     abordoKicker: "On board",
-    abordoH2: "Premium hospitality, kilometre after kilometre",
+    abordoH2: "Premium hospitality, Kilometre after Kilometre",
     abordoLead:
       "<strong>Private tourism</strong> and <strong>executive mobility</strong> in Portugal — every detail for those travelling for discovery or business, with discretion and route freedom.",
     chipTours: "Tours & experiences",
@@ -1462,8 +1462,8 @@ export const messagesEn: Messages = {
     specs: [
       {
         k: "Capacity",
-        v: "8 passengers + driver",
-        hint: "9 seats in the Mercedes-Benz Vito",
+        v: "8 seats in total",
+        hint: "Mercedes-Benz Vito",
       },
       {
         k: "Vehicle",
@@ -1496,7 +1496,7 @@ export const messagesEn: Messages = {
       },
     },
     transferKicker: "Mobility",
-    transferH2: "Airport transfers, shuttle & VIP events",
+    transferH2: "AIRPORT TRANSFERS, SHUTTLE & VIP EVENTS",
     transferLead: "Efficiency and elegance on every move.",
     tfAirport: {
       title: "Airport transfers",

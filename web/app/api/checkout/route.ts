@@ -123,7 +123,7 @@ export async function POST(req: Request) {
 
   // Tours com tabela dinâmica: quantidade sem regra NÃO cai para Stripe legado
   if (!tableRule && tourHasDynamicPricingTable(tourId)) {
-    const maxBookable = getMaxBookablePassengers(tourId);
+    const maxBookable = getMaxBookablePassengers(tourId, vehicle);
     return NextResponse.json(
       {
         error: `Esta quantidade não está disponível para este tour (máx. ${maxBookable} pessoas).`,

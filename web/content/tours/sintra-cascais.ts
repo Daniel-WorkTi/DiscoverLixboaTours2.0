@@ -144,7 +144,7 @@ export const sintraCascaisTour = {
         },
       ],
       included: [
-        "Jeep UMM Alter II conversível",
+        "Jeep UMM Alter II (até 7) ou van Mercedes-Benz Vito (até 8) — à escolha",
         "Seguro obrigatório (lei portuguesa)",
         "Degustação de doces tradicionais de Sintra",
         "Degustação de Vinho do Porto Reserva",
@@ -256,7 +256,7 @@ export const sintraCascaisTour = {
         },
       ],
       included: [
-        "Open-top UMM Alter II jeep",
+        "UMM Alter II jeep (up to 7) or Mercedes-Benz Vito van (up to 8) — your choice",
         "Mandatory insurance (Portuguese law)",
         "Tasting of traditional Sintra sweets",
         "Porto Reserve Liqueur Wine tasting",
