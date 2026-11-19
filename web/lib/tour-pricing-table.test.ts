@@ -42,14 +42,14 @@ const ALGARVE_TOTALS: Record<number, number> = {
 };
 
 const PORTO_TOTALS: Record<number, number> = {
-  1: 70000,
-  2: 70000,
-  3: 70000,
-  4: 70000,
+  1: 75000,
+  2: 75000,
+  3: 75000,
+  4: 75000,
   5: 75000,
   6: 75000,
-  7: 80000,
-  8: 80000,
+  7: 75000,
+  8: 75000,
 };
 
 describe("Sintra & Cascais — preço total por grupo (privado)", () => {
@@ -125,16 +125,12 @@ describe("Porto — preço total por grupo", () => {
     }
   });
 
-  it("8 passageiros não usam o preço de 7 (ambos €800, mas 6 ≠ 7)", () => {
-    expect(getPricingRuleFromTable("porto", 6)).toMatchObject({
-      centsTotal: 75000,
-    });
-    expect(getPricingRuleFromTable("porto", 7)).toMatchObject({
-      centsTotal: 80000,
-    });
-    expect(getPricingRuleFromTable("porto", 8)).toMatchObject({
-      centsTotal: 80000,
-    });
+  it("preço único €750 para 1–8 passageiros", () => {
+    for (const q of [1, 4, 6, 7, 8] as const) {
+      expect(getPricingRuleFromTable("porto", q)).toMatchObject({
+        centsTotal: 75000,
+      });
+    }
   });
 
   it("estimativa = total do grupo", () => {
